@@ -1,6 +1,9 @@
-<aside class="min-h-screen border-r">
-    <div class="h-16 border-b">
-        Logo
+<aside x-data="openSidebar" class="min-h-screen border-r">
+    <div class="flex">
+        <div class="flex items-center w-full h-16 bg-red-500 border-b">
+            Logo
+        </div>
+        
     </div>
     <div class="mt-6 font-semibold">
         <ul>
@@ -17,10 +20,11 @@
                     <x-slot name="title">Dashboard</x-slot>
                 </x-side-link>
             </li>
+            @can('view_superadmin_menu')
             <li>
-                <x-side-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
+                <x-side-link>
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#18181b" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="9" cy="7" r="4"></circle>
                             <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
@@ -34,20 +38,21 @@
             <li>
                 <x-side-link>
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <polyline points="3 7 9 4 15 7 21 4 21 17 15 20 9 17 3 20 3 7"></polyline>
                             <line x1="9" y1="4" x2="9" y2="17"></line>
                             <line x1="15" y1="7" x2="15" y2="20"></line>
-                         </svg>
+                        </svg>
                     </x-slot>
                     <x-slot name="title">Kecamatan</x-slot>
                 </x-side-link>
             </li>
+            @endcan
             <li>
                 <x-side-link>
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-category-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-category-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#d97706" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M14 4h6v6h-6z"></path>
                             <path d="M4 14h6v6h-6z"></path>
@@ -61,7 +66,7 @@
             <li>
                 <x-side-link>
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="12" cy="11" r="3"></circle>
                             <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
@@ -73,7 +78,7 @@
             <li>
                 <x-side-link>
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="12" cy="11" r="3"></circle>
                             <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>

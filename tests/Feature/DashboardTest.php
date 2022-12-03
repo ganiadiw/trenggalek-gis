@@ -22,4 +22,25 @@ class DashboardTest extends TestCase
         $response->assertRedirect(route('login'));
         $this->assertGuest();
     }
+
+    public function test_an_superadmin_can_see_all_menu()
+    {
+        $user = User::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get('/dashboard');
+        $response->assertStatus(200);
+        $response->assertSeeTextInOrder(['Dashboard', 'Administrator WebGIS', 'Kecamatan', 'Kategori Destinasi Wisata', 'Destinasi Wisata', 'Desa Wisata']);
+    }
+
+    public function test_an_webgis_admin_cannot_see_superadmin_menu()
+    {
+        $user = User::make(['is_admin' => 0]);
+
+        $this->assertEquals(0, $user->is_admin);
+        $response = $this->actingAs($user)->get('/dashboard');
+        $response->assertStatus(200);
+        $response->assertDontSeeText('Administrator WebGIS');
+        $response->assertDontSeeText('Kecamatan');
+    }
 }

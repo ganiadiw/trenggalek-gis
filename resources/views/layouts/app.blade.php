@@ -10,11 +10,16 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
+        <!-- Leaflet -->
+        <link rel="stylesheet" href="{{ asset('assets/css/leaflet.css') }}">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="{{ asset('assets/js/leaflet/leaflet.js') }}"></script>
+        <script src="{{ asset('assets/js/alpine.js') }}"></script>
     </head>
     <body class="font-sans antialiased">
-        <div class="flex min-h-screen">
+        <div x-data="openSidebar" class="flex min-h-screen">
             <div class="bg-white w-96">
                 @include('layouts.sidebar')
             </div>

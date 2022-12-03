@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-white border-b">
     <!-- Primary Navigation Menu -->
-    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div x-data="openSidebar" class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="flex justify-end h-16">
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">

@@ -6,8 +6,8 @@
                 : 'hidden';
 
     $classes = ($active ?? false)
-                ? 'flex items-center w-full h-12 pl-6 hover:bg-gray-300'
-                : 'flex items-center w-full h-12 pl-6 hover:bg-gray-300 ml-1 text-gray-700'
+                ? 'flex items-center w-full h-12 pl-6 hover:bg-gray-300 hover:bg-white'
+                : 'flex items-center w-full h-12 pl-6 hover:bg-gray-300 mx-1 text-gray-700 hover:rounded-lg'
 @endphp
 
 <span {{ $attributes->merge(['class' => $spanClasses]) }}></span>
