@@ -8,7 +8,11 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
+        {{-- <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap"> --}}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        {{-- <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> --}}
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"rel="stylesheet"/>
 
         <!-- Leaflet -->
         <link rel="stylesheet" href="{{ asset('assets/css/leaflet.css') }}">
@@ -19,8 +23,8 @@
         <script src="{{ asset('assets/js/alpine.js') }}"></script>
     </head>
     <body class="font-sans antialiased">
-        <div x-data="openSidebar" class="flex min-h-screen">
-            <div class="bg-white w-96">
+        <div class="flex min-h-screen">
+            <div class="hidden bg-white w-85 lg:block">
                 @include('layouts.sidebar')
             </div>
             <div class="w-full bg-gray-100">
