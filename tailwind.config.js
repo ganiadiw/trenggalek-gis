@@ -11,11 +11,14 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
             height: {
                 '128': '32rem',
-            }
+            },
+            width: {
+                '85': '22rem',
+            },
         },
     },
 

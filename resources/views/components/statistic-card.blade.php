@@ -1,10 +1,10 @@
-<div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+<div class="flex items-center p-3 bg-white border rounded-md shadow-lg">
     {{ $svgIcon }}
     <div>
-        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+        <p class="mb-2 text-sm text-gray-800">
             {{ $title }}
         </p>
-        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+        <p class="text-lg font-semibold text-black">
             {{ $value }}
         </p>
     </div>

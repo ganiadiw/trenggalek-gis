@@ -1,11 +1,9 @@
-<aside x-data="openSidebar" class="min-h-screen border-r">
-    <div class="flex">
-        <div class="flex items-center w-full h-16 bg-red-500 border-b">
-            Logo
-        </div>
-        
+<aside class="min-h-screen border-r">
+    <div class="flex items-center w-full h-16 ml-3 border-b">
+        <img class="w-11 h-11" src="{{ asset('assets/images/trenggalek.png') }}" alt="Trenggalek">
+        <h1 class="ml-3 text-sm font-bold text-black">Sistem Informasi Geografis Wisata Trenggalek</h1>
     </div>
-    <div class="mt-6 font-semibold">
+    <div class="pr-2 mt-6 text-sm font-semibold text-gray-600">
         <ul>
             <li class="flex">
                 <x-side-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
