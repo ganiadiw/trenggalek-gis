@@ -1,15 +1,14 @@
 <nav x-data="{ open: false, openSidebar: false }" class="bg-white border-b">
     <!-- Primary Navigation Menu -->
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 lg:justify-end">
-            <div @click="openSidebar = ! openSidebar" class="lg:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <line x1="4" y1="6" x2="20" y2="6"></line>
-                    <line x1="4" y1="12" x2="20" y2="12"></line>
-                    <line x1="4" y1="18" x2="20" y2="18"></line>
-                 </svg>
-            </div>
+        <div class="flex items-center justify-between h-16 xl:justify-end">
+            <button @click="openSidebar = ! openSidebar" class="inline-flex items-center justify-center p-2 text-gray-400 transition duration-150 ease-in-out rounded-md xl:hidden hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500">
+                <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                    <path :class="{'hidden': openSidebar, 'inline-flex': ! openSidebar }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    <path :class="{'hidden': ! openSidebar, 'inline-flex': openSidebar }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
@@ -47,30 +46,20 @@
             <!-- Hamburger -->
             <div class="flex items-center -mr-2 sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 text-gray-400 transition duration-150 ease-in-out rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500">
-                    <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path :class="{'hidden': open, 'inline-flex': ! open }" stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path :class="{'hidden': open, 'inline-flex': ! open }" d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
+                        <circle :class="{'hidden': open, 'inline-flex': ! open }" cx="12" cy="12" r="3"></circle>
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                     </svg>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Responsive Sidebar Menu -->
-    <aside
-        x-show="openSidebar"
-        x-transition:enter="transition ease-in-out duration-150"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in-out duration-150"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        @click.outside="openSidebar = false"
-    >
-        <div class="flex items-center w-full h-16 ml-3 border-b">
-            <img class="w-11 h-11" src="{{ asset('assets/images/trenggalek.png') }}" alt="Trenggalek">
-            <h1 class="ml-3 text-sm font-bold text-black">Sistem Informasi Geografis Wisata Trenggalek</h1>
-        </div>
+    <div :class="{'block': openSidebar, 'hidden': ! openSidebar}" class="hidden xl:hidden">
+        <!-- Responsive Settings Options -->
         <div class="pr-2 mt-6 text-sm font-semibold text-gray-600">
             <ul>
                 <li class="flex">
@@ -87,8 +76,8 @@
                     </x-side-link>
                 </li>
                 @can('view_superadmin_menu')
-                <li>
-                    <x-side-link>
+                <li class="flex">
+                    <x-side-link :href="route('users.index')" :active="request()->routeIs('users*')">
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#18181b" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -101,7 +90,7 @@
                         <x-slot name="title">Administrator WebGIS</x-slot>
                     </x-side-link>
                 </li>
-                <li>
+                <li class="flex">
                     <x-side-link>
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -111,11 +100,11 @@
                                 <line x1="15" y1="7" x2="15" y2="20"></line>
                             </svg>
                         </x-slot>
-                        <x-slot name="title">Kecamatan</x-slot>
+                        <x-slot name="title">Data Kecamatan</x-slot>
                     </x-side-link>
                 </li>
                 @endcan
-                <li>
+                <li class="flex">
                     <x-side-link>
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-category-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#d97706" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -129,7 +118,7 @@
                         <x-slot name="title">Kategori Destinasi Wisata</x-slot>
                     </x-side-link>
                 </li>
-                <li>
+                <li class="flex">
                     <x-side-link>
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -141,7 +130,7 @@
                         <x-slot name="title">Destinasi Wisata</x-slot>
                     </x-side-link>
                 </li>
-                <li>
+                <li class="flex">
                     <x-side-link>
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -155,16 +144,10 @@
                 </li>
             </ul>
         </div>
-    </aside>
+    </div>
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
-
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">

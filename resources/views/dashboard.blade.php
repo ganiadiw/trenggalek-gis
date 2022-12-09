@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="mt-3 text-black">
-                    <div x-show="current == 1" class="block xl:flex">
+                    <div x-show="current == 1" class="block static xl:flex">
                         <div id="touristMap" class="w-full border xl:w-3/4 h-128"></div>
                         <div class="w-full mt-5 ml-4 space-y-4 overflow-y-auto xl:mt-0 xl:w-1/4 scrollbar h-128">
                             @for ($i = 0; $i < 5; $i++)

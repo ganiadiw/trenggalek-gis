@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Factories\WebgisAdminFactory;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
@@ -35,12 +36,17 @@ class DashboardTest extends TestCase
 
     public function test_an_webgis_admin_cannot_see_superadmin_menu()
     {
-        $user = User::make(['is_admin' => 0]);
+        $user = User::factory()->make([
+            'name' => 'John Doe',
+            'username' => 'johndoe',
+            'email' => 'johdoe@example.com',
+            'is_admin' => 0
+        ]);
 
         $this->assertEquals(0, $user->is_admin);
         $response = $this->actingAs($user)->get('/dashboard');
         $response->assertStatus(200);
         $response->assertDontSeeText('Administrator WebGIS');
-        $response->assertDontSeeText('Kecamatan');
+        $response->assertDontSeeText('Data Kecamatan');
     }
 }

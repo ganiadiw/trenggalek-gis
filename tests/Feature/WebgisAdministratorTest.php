@@ -1,0 +1,283 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class WebgisAdministratorTest extends TestCase
+{
+    public function test_an_superadmin_can_see_webgis_administrator_management_page()
+    {
+        $user = User::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get('/dashboard/users');
+        $response->assertStatus(200);
+        $response->assertSeeText('Kelola Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
+    }
+
+    public function test_a_create_page_can_be_rendered()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('users.create'));
+        $response->assertStatus(200);
+        $response->assertSeeText('Tambah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
+    }
+
+    public function test_an_superadmin_can_create_new_webgis_administrator()
+    {
+        $user = User::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->post(route('users.store', [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'johndoe@example.com',
+            'username' => 'johndoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'is_admin' => 0,
+            'password' => 'password',
+        ]));
+        $response->assertValid();
+        $response->assertRedirect();
+    }
+
+    public function test_correct_data_must_be_provided_to_create_new_webgis_administrator()
+    {
+        $user = User::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->post(route('users.store', [
+            'first_name' => '',
+            'last_name' => '',
+            'email' => '',
+            'username' => '',
+            'gender' => '',
+            'password' => '',
+        ]));
+        $response->assertInvalid();
+    }
+
+    public function test_a_edit_page_can_be_rendered()
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'username' => 'johdoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'johdoe@example.com',
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get(route('users.edit', ['user' => $otherUser->username]));
+        $response->assertStatus(200);
+        $response->assertSeeText('Ubah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
+    }
+
+    public function test_an_superadmin_can_update_webgis_administrator()
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'username' => 'johdoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'johndoe@example.com',
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->put(route('users.update', ['user' => $otherUser->username]), [
+            'first_name' => 'Michael',
+            'last_name' => 'John Doe',
+            'username' => 'johdoe_mic',
+            'address' => 'Desa Sumberbening, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'michaeljohndoe@example.com',
+        ]);
+        $response->assertValid();
+        $response->assertRedirect();
+    }
+
+    public function test_correct_data_must_be_provided_to_update_webgis_administrator()
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'username' => 'johdoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'johndoe@example.com',
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->put(route('users.update', ['user' => $otherUser->username]), [
+            'first_name' => '',
+            'last_name' => '',
+            'username' => '',
+            'email' => '',
+            'username' => '',
+            'gender' => '',
+        ]);
+        $response->assertInvalid();
+    }
+
+    public function test_an_superadmin_can_delete_webgis_administrator()
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'username' => 'johdoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'johndoe@example.com',
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->delete(route('users.destroy', ['user' => $otherUser->username]));
+        $response->assertRedirect();
+    }
+
+    public function test_an_webgis_administrator_cannot_create_new_webgis_administrator()
+    {
+        $user = User::factory()->create([
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(0, $user->is_admin);
+        $response = $this->actingAs($user)->post(route('users.store', [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'johndoe@example.com',
+            'username' => 'johndoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'is_admin' => 0,
+            'password' => 'password',
+        ]));
+        $response->assertForbidden();
+    }
+
+    public function test_an_webgis_administrator_cannot_update_webgis_administrator()
+    {
+        $user = User::factory()->create([
+            'is_admin' => 0,
+        ]);
+        $otherUser = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'username' => 'johdoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'johndoe@example.com',
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(0, $user->is_admin);
+        $response = $this->actingAs($user)->put(route('users.update', ['user' => $otherUser->username]), [
+            'first_name' => 'Michael',
+            'last_name' => 'John Doe',
+            'username' => 'johdoe_mic',
+            'address' => 'Desa Sumberbening, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'michaeljohndoe@example.com',
+        ]);
+        $response->assertForbidden();
+    }
+
+    public function test_an_webgis_administrator_cannot_delete_webgis_administrator()
+    {
+        $user = User::factory()->create([
+            'is_admin' => 0,
+        ]);
+        $otherUser = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'username' => 'johdoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'johndoe@example.com',
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(0, $user->is_admin);
+        $response = $this->actingAs($user)->delete(route('users.destroy', ['user' => $otherUser->username]));
+        $response->assertForbidden();
+    }
+
+    public function test_an_guest_cannot_create_new_webgis_administrator()
+    {
+        $response = $this->post(route('users.store', [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'johndoe@example.com',
+            'username' => 'johndoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'is_admin' => 0,
+            'password' => 'password',
+        ]));
+        $this->assertGuest();
+        $response->assertRedirect();
+    }
+
+    public function test_an_guest_cannot_update_webgis_administrator()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->put(route('users.update', ['user' => $user->id]), [
+            'first_name' => 'Michael',
+            'last_name' => 'John Doe',
+            'username' => 'johdoe_mic',
+            'address' => 'Desa Sumberbening, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'michaeljohndoe@example.com',
+        ]);
+        $this->assertGuest();
+        $response->assertRedirect();
+    }
+
+    public function test_an_guest_cannot_delete_webgis_administrator()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->delete(route('users.update', ['user' => $user->id]));
+        $this->assertGuest();
+        $response->assertRedirect();
+    }
+
+    public function test_an_superadmin_can_see_webgis_administrator_profile()
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'username' => 'johdoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'johndoe@example.com',
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get(route('users.show', ['user' => $otherUser->username]));
+        $response->assertStatus(200);
+        $response->assertSeeText($otherUser->username);
+        $response->assertSeeTextInOrder([$otherUser->first_name, $otherUser->last_name, $otherUser->username, $otherUser->email]);
+    }
+}

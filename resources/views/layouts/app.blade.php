@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="icon" href="{{ asset('assets/icon/Paomedia-Small-N-Flat-Map.svg') }}">
 
         <!-- Fonts -->
         {{-- <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap"> --}}
@@ -16,6 +17,11 @@
 
         <!-- Leaflet -->
         <link rel="stylesheet" href="{{ asset('assets/css/leaflet.css') }}">
+        <style>
+            [x-cloak] {
+              display: none !important;
+           }
+        </style>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -24,7 +30,7 @@
     </head>
     <body class="font-sans antialiased">
         <div class="flex min-h-screen">
-            <div class="hidden bg-white w-85 lg:block">
+            <div class="hidden bg-white w-85 xl:block">
                 @include('layouts.sidebar')
             </div>
             <div class="w-full bg-gray-100">
@@ -34,5 +40,15 @@
                 </main>
             </div>
         </div>
+
+        <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
+        <script>
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        </script>
+        @yield('script')
     </body>
 </html>
