@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="mt-3 text-black">
-                    <div x-show="current == 1" class="block xl:flex">
+                    <div x-show="current == 1" class="static block xl:flex">
                         <div id="touristMap" class="w-full border xl:w-3/4 h-128"></div>
                         <div class="w-full mt-5 ml-4 space-y-4 overflow-y-auto xl:mt-0 xl:w-1/4 scrollbar h-128">
                             @for ($i = 0; $i < 5; $i++)
@@ -110,9 +110,14 @@
         let touristMap = L.map('touristMap').setView([-8.13593475, 111.64019829777817], 11);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
+            maxZoom: 15,
+            minZoom: 10,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(touristMap);
+
+        L.control.zoom({
+            position: 'topright'
+        }).addTo(touristMap)
 
         let villageMap = L.map('villageMap').setView([-8.13593475, 111.64019829777817], 13);
 

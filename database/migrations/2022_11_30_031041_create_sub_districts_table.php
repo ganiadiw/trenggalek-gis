@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('sub_districts', function (Blueprint $table) {
             $table->id();
+            $table->integer('code')->unique();
+            $table->string('name');
             $table->timestamps();
         });
     }

@@ -1,7 +1,7 @@
 <aside class="min-h-screen border-r">
-    <div class="flex items-center w-full h-16 ml-3 border-b">
+    <div class="relative flex items-center w-full h-16 ml-3 border-b">
         <img class="w-11 h-11" src="{{ asset('assets/images/trenggalek.png') }}" alt="Trenggalek">
-        <h1 class="ml-3 text-sm font-bold text-black">Sistem Informasi Geografis Wisata Trenggalek</h1>
+        <h1 class="absolute mr-3 text-sm font-bold text-black ml-14">Sistem Informasi Geografis Wisata Trenggalek</h1>
     </div>
     <div class="pr-2 mt-6 text-sm font-semibold text-gray-600">
         <ul>
@@ -19,8 +19,8 @@
                 </x-side-link>
             </li>
             @can('view_superadmin_menu')
-            <li>
-                <x-side-link>
+            <li class="flex">
+                <x-side-link :href="route('users.index')" :active="request()->routeIs('users*')">
                     <x-slot name="svgIcon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#18181b" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -33,7 +33,7 @@
                     <x-slot name="title">Administrator WebGIS</x-slot>
                 </x-side-link>
             </li>
-            <li>
+            <li class="flex">
                 <x-side-link>
                     <x-slot name="svgIcon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -43,11 +43,11 @@
                             <line x1="15" y1="7" x2="15" y2="20"></line>
                         </svg>
                     </x-slot>
-                    <x-slot name="title">Kecamatan</x-slot>
+                    <x-slot name="title">Data Kecamatan</x-slot>
                 </x-side-link>
             </li>
             @endcan
-            <li>
+            <li class="flex">
                 <x-side-link>
                     <x-slot name="svgIcon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-category-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#d97706" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -61,7 +61,7 @@
                     <x-slot name="title">Kategori Destinasi Wisata</x-slot>
                 </x-side-link>
             </li>
-            <li>
+            <li class="flex">
                 <x-side-link>
                     <x-slot name="svgIcon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -73,7 +73,7 @@
                     <x-slot name="title">Destinasi Wisata</x-slot>
                 </x-side-link>
             </li>
-            <li>
+            <li class="flex">
                 <x-side-link>
                     <x-slot name="svgIcon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
