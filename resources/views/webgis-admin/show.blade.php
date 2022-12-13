@@ -83,11 +83,6 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- {{ $user->first_name }}
-                {{ $user->last_name }}
-                {{ $user->username }}
-                {{ $user->email }} --}}
             </div>
         </div>
     </div>

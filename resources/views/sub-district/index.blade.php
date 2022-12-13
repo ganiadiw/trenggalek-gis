@@ -1,0 +1,87 @@
+<x-app-layout>
+    <div class="py-8">
+        <div class="static mx-auto max-w-7xl sm:px-6 lg:px-8">
+            @include('components.alert')
+            <div class="relative shadow-md sm:rounded-lg">
+                <div class="px-5 pt-5 pb-10 text-lg font-semibold text-left text-gray-700 bg-white">
+                    <h1>Kelola Data Kecamatan</h1>
+                    <div class="justify-between block mt-2 md:flex">
+                        <a href="{{ route('sub-districts.create') }}" type="button" class="py-2.5 w-2.5/12 px-2 mr-2 mb-2 mt-3 text-sm font-medium text-gray-700 focus:outline-none bg-gray-300 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-gray-200">Tambah Data Kecamatan</a>
+                        <div class="h-10 mt-3 mb-2 w-2.5/12 md:w-5/12">
+                            <form action="{{ route('sub-districts.search') }}" method="GET">
+                                <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+                                <div class="relative w-full">
+                                    <input type="search" name="search" id="search-dropdown" value="{{ request('search') }}" @keyup.enter="submit" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" required placeholder="Cari nama" autocomplete="off">
+                                    <button type="submit" class="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                                        <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                        <span class="sr-only">Search</span>
+                                    </button>
+                                </div>
+                            </form>
+                            <a href="{{ route('sub-districts.index') }}" class="flex justify-end mt-3 text-sm text-blue-500 hover:underline">
+                                Reset pencarian
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    @if (!$subDistricts->count())
+                        <div class="flex justify-center pt-10 font-semibold text-gray-500">
+                            Data tidak tersedia
+                        </div>
+                    @else
+                        <table class="relative w-full text-sm text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        No
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Nama Kecamatan
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Kode Kecamatan
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Koordinat Tengah (Latitude, Longitude)
+                                    </th>
+                                    <th scope="col" class="flex justify-center px-6 py-3">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($subDistricts as $key => $subDistrict)
+                                    <tr class="bg-white border-b">
+                                        <td class="px-6 py-4">
+                                            {{ $key + $subDistricts->firstItem() }}
+                                        </td>
+                                        <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <a href="{{ route('sub-districts.show', ['sub_district' => $subDistrict]) }}" class="hover:underline hover:underline-offset-4">{{ $subDistrict->name }}</a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $subDistrict->code }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $subDistrict->center_coordinate }}
+                                        </td>
+                                        <div>
+                                            <td class="px-6 py-4">
+                                                <x-action-button :value="$subDistrict->name" :href="route('sub-districts.edit', ['sub_district' => $subDistrict])" :action="route('sub-districts.destroy', ['sub_district' => $subDistrict])"/>
+                                            </td>
+                                        </div>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+                <div class="py-5 mx-10 mt-1">
+                    {{ $subDistricts->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

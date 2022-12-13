@@ -3,40 +3,34 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSubDistrictRequest;
 use App\Models\SubDistrict;
 use Illuminate\Http\Request;
 
 class SubDistrictController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $subDistricts = SubDistrict::orderBy('code', 'asc')->paginate(10);
+
+        return view('sub-district.index', compact('subDistricts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('sub-district.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreSubDistrictRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $geojson = $validated['geojson'];
+        $validated['geojson_name'] = $geojson->getClientOriginalName();
+        $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
+        SubDistrict::create($validated);
+
+        return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil ditambahkan']);
     }
 
     /**
@@ -47,7 +41,7 @@ class SubDistrictController extends Controller
      */
     public function show(SubDistrict $subDistrict)
     {
-        //
+        return view('sub-district.show', compact('subDistrict'));
     }
 
     /**

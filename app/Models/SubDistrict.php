@@ -11,6 +11,21 @@ class SubDistrict extends Model
 
     protected $fillable = [
         'code',
-        'name'
+        'name',
+        'latitude',
+        'longitude',
+        'geojson_path',
+        'geojson_name',
+        'fill_color',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+    public function getCenterCoordinateAttribute()
+    {
+        return "{$this->latitude}, {$this->longitude}";
+    }
 }

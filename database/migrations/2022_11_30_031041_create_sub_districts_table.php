@@ -17,6 +17,11 @@ return new class extends Migration
             $table->id();
             $table->integer('code')->unique();
             $table->string('name');
+            $table->string('latitude');
+            $table->string('longitude');
+            $table->string('geojson_path')->nullable();
+            $table->string('geojson_name')->nullable();
+            $table->string('fill_color')->default('#0ea5e9');
             $table->timestamps();
         });
     }

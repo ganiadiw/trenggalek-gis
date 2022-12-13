@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SubDistrictController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/', DashboardController::class)->name('dashboard');
         Route::get('users/search', [UserController::class, 'search'])->name('users.search');
         Route::resource('users', UserController::class)->middleware('admin');
+
+        Route::get('sub-districts/search', [SubDistrictController::class, 'search'])->name('sub-districts.search');
+        Route::resource('sub-districts', SubDistrictController::class)->middleware('admin');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

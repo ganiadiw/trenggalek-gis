@@ -25,6 +25,7 @@ class WebgisAdministratorTest extends TestCase
     {
         $user = User::factory()->create();
 
+        $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->get(route('users.create'));
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');

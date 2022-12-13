@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SubDistrictTest extends TestCase
@@ -14,8 +15,49 @@ class SubDistrictTest extends TestCase
         $user = User::factory()->create();
 
         $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->get('/dashboard/sub-districts');
+        $response = $this->actingAs($user)->get(route('sub-districts.index'));
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Kecamatan');
+    }
+
+    public function test_a_create_page_can_be_rendered()
+    {
+        $user = User::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get(route('sub-districts.create'));
+        $response->assertStatus(200);
+        $response->assertSeeText('Tambah Data Kecamatan');
+    }
+
+    public function test_an_superadmin_can_create_new_sub_district_management()
+    {
+        $user = User::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->post(route('sub-districts.store', [
+            'code' => '3503010',
+            'name' => 'Panggul',
+            'latitude' => -8.2402961,
+            'longitude' => 111.4484781,
+            'fill_color' => '#0ea5e9'
+        ]));
+        $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
+        $response->assertRedirect();
+    }
+
+    public function test_correct_data_must_be_provided_to_create_new_webgis_administrator()
+    {
+        $user = User::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->post(route('sub-districts.store', [
+            'code' => '',
+            'name' => '',
+            'latitude' => '',
+            'longitude' => '',
+            'fill_color' => ''
+        ]));
+        $response->assertInvalid();
     }
 }

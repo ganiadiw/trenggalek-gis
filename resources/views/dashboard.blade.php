@@ -106,24 +106,33 @@
         </div>
     </div>
 
-    <script>
-        let touristMap = L.map('touristMap').setView([-8.13593475, 111.64019829777817], 11);
+    @section('script')
+        <script>
+            let touristMap = L.map('touristMap').setView([-8.13593475, 111.64019829777817], 11);
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 15,
-            minZoom: 10,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(touristMap);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 15,
+                minZoom: 10,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(touristMap);
 
-        L.control.zoom({
-            position: 'topright'
-        }).addTo(touristMap)
+            function popUp(f,l){
+                var out = [];
+                if (f.properties){
+                    for(key in f.properties){
+                        out.push(key+": "+f.properties[key]);
+                    }
+                    l.bindPopup(out.join("<br />"));
+                }
+            }
+            var jsonTest = new L.GeoJSON.AJAX(['{{ asset('assets/geojson/3503.geojson')}}'],{onEachFeature:popUp}).addTo(touristMap);
 
-        let villageMap = L.map('villageMap').setView([-8.13593475, 111.64019829777817], 13);
+            let villageMap = L.map('villageMap').setView([-8.13593475, 111.64019829777817], 13);
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(villageMap);
-    </script>
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(villageMap);
+        </script>
+    @endsection
 </x-app-layout>
