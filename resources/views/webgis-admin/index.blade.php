@@ -59,16 +59,18 @@
                                         <td class="px-6 py-4">
                                             {{ $key + $users->firstItem() }}
                                         </td>
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             <div class="relative inline-flex items-center justify-center w-10 h-10 mr-3 overflow-hidden bg-gray-100 rounded-full">
-                                                @if ($user->image_path)
-                                                    <span><img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300" src="/docs/images/people/profile-picture-5.jpg" alt="Bordered avatar"></span>
+                                                @if ($user->avatar_path)
+                                                    <span><img class="w-10 h-10 rounded-full" src="{{ asset('storage/avatars/' . $user->avatar_name) }}" alt="Bordered avatar"></span>
                                                 @else
                                                     <span class="font-medium text-gray-600">{{ Str::substr($user->first_name, 0, 1) . Str::substr($user->last_name, 0, 1) }}</span>
                                                 @endif
                                             </div>
-                                            <a href="{{ route('users.show', ['user' => $user]) }}" class="hover:underline hover:underline-offset-4">{{ $user->full_name }}</a>
-                                        </th>
+                                            <div class="flex items-center">
+                                                <a href="{{ route('users.show', ['user' => $user]) }}" class="hover:underline hover:underline-offset-4">{{ $user->full_name }}</a>
+                                            </div>
+                                        </td>
                                         <td class="px-6 py-4">
                                             {{ $user->username }}
                                         </td>

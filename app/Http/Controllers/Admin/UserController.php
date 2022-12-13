@@ -9,6 +9,8 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -65,6 +67,16 @@ class UserController extends Controller
         $this->authorize('update', $user);
         $validated = $request->validated();
 
+        if ($request->file('avatar')) {
+            $avatar = $validated['avatar'];
+            $validated['avatar_name'] = $avatar->hashName();
+            $validated['avatar_path'] = $avatar->storeAs('public/avatars', $validated['avatar_name']);
+
+            if ($user->avatar_path != null) {
+                Storage::delete($user->avatar_path);
+            }
+        }
+
         if (isset($validated['new_password']) == null || isset($validated['new_password']) == '') {
             $validated['password'] = $user->password;
             $user->update($validated);
@@ -85,6 +97,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         abort_if($user->is_admin, 403);
+        Storage::delete($user->avatar_path);
         $user->delete();
 
         return redirect(route('users.index'))->with(['success' => 'Data berhasil dihapus']);

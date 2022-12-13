@@ -24,16 +24,16 @@ class UserUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        // dd($this->route('users.show', ['user' => $this->username]));
         return [
-            'first_name' => ['required'],
-            'last_name' => ['nullable'],
-            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->username)],
-            'username' => ['required', Rule::unique('users', 'username')->ignore($this->id)],
-            'new_password' => ['nullable', 'min:8'],
-            'password_confirmation' => ['nullable', 'min:8'],
-            'address' => ['required'],
-            'phone_number' => ['required'],
+            'first_name' => ['required', 'max:255'],
+            'last_name' => ['nullable', 'max:255'],
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user), 'max:255'],
+            'username' => ['required', Rule::unique('users', 'username')->ignore($this->user)], 'max:255',
+            'new_password' => ['nullable', 'min:8', 'max:255'],
+            'password_confirmation' => ['nullable', 'min:8', 'max:255'],
+            'address' => ['required', 'max:255'],
+            'phone_number' => ['required', 'max:255'],
+            'avatar' => ['mimes:png,jpg,jpeg', 'max:2048']
         ];
     }
 
@@ -50,6 +50,8 @@ class UserUpdateRequest extends FormRequest
             'password_confirmation.min' => 'Password minimal 8 karakter',
             'alamat.required' => 'Alamat harus diisi',
             'phone_number.required' => 'Nomor telepon depan harus diisi',
+            'avatar.image' => 'Foto profil harus berformat gambar dengan ekstensi .png atau .jpg',
+            'avatr.max' => "Ukuran maksimal foto profil adalah 2048KB atau 2MB"
         ];
     }
 }

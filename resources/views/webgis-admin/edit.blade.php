@@ -2,7 +2,7 @@
     <div class="py-8">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-24">
             <h1 class="mb-5 font-bold text-gray-700">Ubah Data Administrator Sistem Informasi Geografis Wisata Trenggalek</h1>
-            <form class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST" action="{{ route('users.update', ['user' => $user]) }}">
+            <form class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST" action="{{ route('users.update', ['user' => $user]) }} " enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <x-input-text-floating-label type="text" name="first_name" :value="old('first_name', $user->first_name)" labelTitle="Nama Depan*" error='first_name'/>
@@ -11,7 +11,24 @@
                 <x-input-text-floating-label type="text" name="username" :value="old('username',$user->username)" labelTitle="Username*" error='username'/>
                 <x-input-text-floating-label type="text" name="address" :value="old('address', $user->address)" labelTitle="Alamat*" error='address'/>
                 <x-input-text-floating-label class="mb-3" type="text" name="phone_number" :value="old('phone_number', $user->phone_number)" labelTitle="Nomor Handphone*" error='phone_number'/>
-                <p class="mb-4 text-sm text-red-500">* Wajib diisi</p>
+                <div class="mb-3">
+                    <label class="block mb-2 text-sm text-gray-700 " for="file_input">Upload Foto Profil <span class="font-semibold text-black">(Isi hanya jika ingin mengubahnya)</span></label>
+                    <input class="block w-full h-10 px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 focus:outline-none" name="avatar" aria-describedby="file_input_help" id="file_input" type="file">
+                    <p class="mt-1 text-sm text-gray-500" id="file_input_help">PNG, JPG (MAX. 2048KB / 2MB).</p>
+                    @error('avatar')
+                        <p id="standard_error_help" class="flex items-center mt-2 text-xs text-yellow-700">
+                            <span class="mr-3 font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-circle" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                    <polyline points="11 12 12 12 12 16 13 16"></polyline>
+                                </svg>
+                            </span>
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
                 <div class="p-6 mb-4 bg-gray-200 rounded-lg shadow-lg">
                     <p class="mb-4 text-sm font-semibold text-red-500">Hanya diisi jika ingin mengubah password</p>
                     <div class="grid md:grid-cols-2 md:gap-6">

@@ -27,7 +27,8 @@ class User extends Authenticatable
         'email',
         'address',
         'phone_number',
-        'image_path',
+        'avatar_path',
+        'avatar_name',
         'password',
         'is_admin',
     ];
