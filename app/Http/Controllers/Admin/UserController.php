@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::paginate(10);
+        $users = User::orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')->paginate(10);
 
         return view('webgis-admin.index', compact('users'));
     }
@@ -25,7 +23,8 @@ class UserController extends Controller
     {
         $users = User::where('first_name', 'like', '%' . $request->search . '%')
                 ->orWhere('last_name', 'like', '%' . $request->search . '%')
-                ->orderBy('is_admin', 'desc')->paginate(10)->withQueryString();
+                ->orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')
+                ->paginate(10)->withQueryString();
 
         if (!$request) {
             $users = User::orderBy('is_admin', 'desc')->paginate(10);
@@ -97,7 +96,9 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         abort_if($user->is_admin, 403);
-        Storage::delete($user->avatar_path);
+        if ($user->avatar_path != null) {
+            Storage::delete($user->avatar_path);
+        }
         $user->delete();
 
         return redirect(route('users.index'))->with(['success' => 'Data berhasil dihapus']);

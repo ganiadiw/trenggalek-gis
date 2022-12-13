@@ -42,6 +42,7 @@
         </div>
 
         <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
+        <script src="{{ asset('assets/js/leaflet/leaflet.ajax.js') }}"></script>
         <script>
             $.ajaxSetup({
                 headers: {

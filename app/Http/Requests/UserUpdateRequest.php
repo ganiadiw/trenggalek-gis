@@ -33,7 +33,7 @@ class UserUpdateRequest extends FormRequest
             'password_confirmation' => ['nullable', 'min:8', 'max:255'],
             'address' => ['required', 'max:255'],
             'phone_number' => ['required', 'max:255'],
-            'avatar' => ['mimes:png,jpg,jpeg', 'max:2048']
+            'avatar' => ['image', 'mimes:png,jpg,jpeg', 'max:2048']
         ];
     }
 
