@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\SubDistrict;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -59,5 +60,34 @@ class SubDistrictTest extends TestCase
             'fill_color' => ''
         ]));
         $response->assertInvalid();
+    }
+
+    public function test_a_edit_page_can_be_rendered()
+    {
+        $user = User::factory()->create();
+        $subDistrict = SubDistrict::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get(route('sub-districts.edit', ['sub_district' => $subDistrict]));
+        $response->assertStatus(200);
+        $response->assertSeeText('Ubah Data Kecamatan');
+    }
+
+    public function test_an_superadmin_can_update_webgis_administrator()
+    {
+        $user = User::factory()->create();
+        $subDistrict = SubDistrict::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+
+        $response = $this->actingAs($user)->put(route('sub-districts.update', ['sub_district' => $subDistrict]), [
+            'code' => '3503020',
+            'name' => 'KECAMATAN MUNJUNGAN',
+            'latitude' => '-8.3030696',
+            'longitude' => '111.5768607',
+            'fill_color' => '#059669'
+        ]);
+        $response->assertValid();
+        $response->assertRedirect();
     }
 }

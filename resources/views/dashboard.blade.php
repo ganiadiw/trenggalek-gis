@@ -125,7 +125,14 @@
                     l.bindPopup(out.join("<br />"));
                 }
             }
-            var jsonTest = new L.GeoJSON.AJAX(['{{ asset('assets/geojson/3503.geojson')}}'],{onEachFeature:popUp}).addTo(touristMap);
+
+            @foreach ($subDistricts as $subDistrict)
+                new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'],{onEachFeature:popUp, style:{
+                    'color': '{{ $subDistrict->fill_color }}',
+                    'weight': 2,
+                    'opacity': 0.4,
+                }}).addTo(touristMap);
+            @endforeach
 
             let villageMap = L.map('villageMap').setView([-8.13593475, 111.64019829777817], 13);
 

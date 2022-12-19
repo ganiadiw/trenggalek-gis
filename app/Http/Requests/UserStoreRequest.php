@@ -45,7 +45,7 @@ class UserStoreRequest extends FormRequest
             'username.unique' => 'Username sudah terdaftar',
             'password.required' => 'Password harus diisi',
             'password.min' => 'Password minimal 8 karakter',
-            'alamat.required' => 'Alamat harus diisi',
+            'address.required' => 'Alamat harus diisi',
             'phone_number.required' => 'Nomor telepon depan harus diisi',
         ];
     }

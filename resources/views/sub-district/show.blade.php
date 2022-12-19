@@ -19,8 +19,8 @@
 
             let mapStyle = {
                 'color': '{{ $subDistrict->fill_color }}',
-                'weight': 3,
-                'opacity': 0.65,
+                'weight': 2,
+                'opacity': 0.4,
             }
 
             function popUp(f,l){
@@ -32,7 +32,8 @@
                     l.bindPopup(out.join("<br />"));
                 }
             }
-            var jsonTest = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'],{onEachFeature:popUp, style:mapStyle}).addTo(subDistrictMap);
+            L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(subDistrictMap)
+            new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'],{onEachFeature:popUp, style:mapStyle}).addTo(subDistrictMap);
         </script>
     @endsection
 </x-app-layout>

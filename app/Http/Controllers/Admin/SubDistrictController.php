@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSubDistrictRequest;
+use App\Http\Requests\UpdateSubDistrictRequest;
 use App\Models\SubDistrict;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SubDistrictController extends Controller
 {
@@ -26,55 +29,51 @@ class SubDistrictController extends Controller
         $validated = $request->validated();
 
         $geojson = $validated['geojson'];
-        $validated['geojson_name'] = $geojson->getClientOriginalName();
+        $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
         $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
         SubDistrict::create($validated);
 
         return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil ditambahkan']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\SubDistrict  $subDistrict
-     * @return \Illuminate\Http\Response
-     */
     public function show(SubDistrict $subDistrict)
     {
         return view('sub-district.show', compact('subDistrict'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\SubDistrict  $subDistrict
-     * @return \Illuminate\Http\Response
-     */
     public function edit(SubDistrict $subDistrict)
     {
-        //
+        return view('sub-district.edit', compact('subDistrict'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SubDistrict  $subDistrict
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, SubDistrict $subDistrict)
+    public function update(UpdateSubDistrictRequest $request, SubDistrict $subDistrict)
     {
-        //
+        $validated = $request->validated();
+
+        if ($request->file('geojson')) {
+            $geojson = $validated['geojson'];
+            $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
+            $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
+
+            if ($subDistrict->geojson_path != null) {
+                Storage::delete($subDistrict->geojson_path);
+            }
+        }
+
+        $subDistrict->update($validated);
+
+        return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil diperbarui']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\SubDistrict  $subDistrict
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(SubDistrict $subDistrict)
     {
-        //
+        abort_if(!auth()->user()->is_admin, 403);
+
+        if ($subDistrict->geojson_path != null) {
+            Storage::delete($subDistrict->geojson_path);
+        }
+        $subDistrict->delete();
+
+        return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil dihapus']);
     }
 }

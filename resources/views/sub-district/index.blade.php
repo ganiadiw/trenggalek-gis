@@ -4,10 +4,19 @@
             @include('components.alert')
             <div class="relative shadow-md sm:rounded-lg">
                 <div class="px-5 pt-5 pb-10 text-lg font-semibold text-left text-gray-700 bg-white">
-                    <h1>Kelola Data Kecamatan</h1>
-                    <div class="justify-between block mt-2 md:flex">
-                        <a href="{{ route('sub-districts.create') }}" type="button" class="py-2.5 w-2.5/12 px-2 mr-2 mb-2 mt-3 text-sm font-medium text-gray-700 focus:outline-none bg-gray-300 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-gray-200">Tambah Data Kecamatan</a>
-                        <div class="h-10 mt-3 mb-2 w-2.5/12 md:w-5/12">
+                <h1 class="font-bold">Kelola Data Kecamatan</h1>
+                    <div class="justify-between block mt-5 md:flex">
+                        <a href="{{ route('sub-districts.create') }}" type="button" class="flex items-center py-2.5 w-2.5/12 px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
+                            Tambah Data
+                            <span class="flex items-center ml-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="20" height="20" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                 </svg>
+                            </span>
+                        </a>
+                        <div class="h-10 mt-3 mb-2 md:w-4/12">
                             <form action="{{ route('sub-districts.search') }}" method="GET">
                                 <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                                 <div class="relative w-full">
