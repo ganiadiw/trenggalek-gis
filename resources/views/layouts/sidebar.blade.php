@@ -8,7 +8,7 @@
             <li class="flex">
                 <x-side-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#0ea5e9" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#0ea5e9" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
                             <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
@@ -22,7 +22,7 @@
             <li class="flex">
                 <x-side-link :href="route('users.index')" :active="request()->routeIs('users*')">
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#18181b" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#18181b" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="9" cy="7" r="4"></circle>
                             <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
@@ -36,7 +36,7 @@
             <li class="flex">
                 <x-side-link :href="route('sub-districts.index')" :active="request()->routeIs('sub-districts*')">
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <polyline points="3 7 9 4 15 7 21 4 21 17 15 20 9 17 3 20 3 7"></polyline>
                             <line x1="9" y1="4" x2="9" y2="17"></line>
@@ -50,7 +50,7 @@
             <li class="flex">
                 <x-side-link>
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-category-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#d97706" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-category-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#d97706" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M14 4h6v6h-6z"></path>
                             <path d="M4 14h6v6h-6z"></path>
@@ -64,7 +64,7 @@
             <li class="flex">
                 <x-side-link>
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="12" cy="11" r="3"></circle>
                             <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
@@ -76,13 +76,27 @@
             <li class="flex">
                 <x-side-link>
                     <x-slot name="svgIcon">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="12" cy="11" r="3"></circle>
                             <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
                          </svg>
                     </x-slot>
                     <x-slot name="title">Desa Wisata</x-slot>
+                </x-side-link>
+            </li>
+            <li class="flex">
+                <x-side-link>
+                    <x-slot name="svgIcon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brush" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#292524" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 21v-4a4 4 0 1 1 4 4h-4"></path>
+                            <path d="M21 3a16 16 0 0 0 -12.8 10.2"></path>
+                            <path d="M21 3a16 16 0 0 1 -10.2 12.8"></path>
+                            <path d="M10.6 9a9 9 0 0 1 4.4 4.4"></path>
+                         </svg>
+                    </x-slot>
+                    <x-slot name="title">Map Drawer</x-slot>
                 </x-side-link>
             </li>
         </ul>

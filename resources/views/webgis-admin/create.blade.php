@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="py-8">
-        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-24">
+    <div class="py-4">
+        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <form class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST" action="{{ route('users.store') }}">
                 @csrf
                 <h1 class="mb-5 text-lg font-bold text-gray-700">Tambah Data Administrator Sistem Informasi Geografis Wisata Trenggalek</h1>

@@ -54,7 +54,7 @@
                     </x-statistic-card>
                 </div>
             </div>
-            <div x-data="{ current: 1 }" class="p-3 bg-white border-2 rounded-md shadow-lg border-slate-300">
+            <div x-data="{ current: $persist(1) }" class="p-3 bg-white border-2 rounded-md shadow-lg border-slate-300">
                 <div class="text-sm text-center text-gray-700 border-b border-gray-400">
                     <ul class="flex flex-wrap -mb-px">
                         <li class="mr-2">

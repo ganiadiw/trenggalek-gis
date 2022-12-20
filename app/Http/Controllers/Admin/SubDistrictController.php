@@ -14,7 +14,8 @@ class SubDistrictController extends Controller
 {
     public function index()
     {
-        $subDistricts = SubDistrict::orderBy('code', 'asc')->paginate(10);
+        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
+                        ->orderBy('code', 'asc')->paginate(10);
 
         return view('sub-district.index', compact('subDistricts'));
     }

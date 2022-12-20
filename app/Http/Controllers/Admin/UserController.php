@@ -14,7 +14,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')->paginate(10);
+        $users = User::select('first_name', 'last_name', 'avatar_path', 'username', 'email')
+                ->orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')->paginate(10);
 
         return view('webgis-admin.index', compact('users'));
     }
