@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', DashboardController::class)->name('dashboard');
         Route::get('users/search', [UserController::class, 'search'])->name('users.search');
-        Route::resource('users', UserController::class)->middleware('admin');
+        Route::resource('users', UserController::class)->middleware(['admin', 'preventBackHistory']);
 
         Route::get('sub-districts/search', [SubDistrictController::class, 'search'])->name('sub-districts.search');
         Route::resource('sub-districts', SubDistrictController::class)->middleware('admin');

@@ -21,7 +21,7 @@ class SubDistrictFactory extends Factory
             'name' => 'MUNJUNGAN',
             'latitude' => '-8.3030696',
             'longitude' => '111.5768607',
-            'fill_color' => '#16a34a'
+            'fill_color' => '#16a34a',
         ];
     }
 }

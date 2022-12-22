@@ -16,6 +16,9 @@
         <!-- Pickr -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/>
 
+        <!-- Toastr.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+
         <!-- Leaflet -->
         <link rel="stylesheet" href="{{ asset('assets/css/leaflet.css') }}">
         <style>
@@ -45,12 +48,18 @@
         <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
         <script src="{{ asset('assets/js/leaflet/leaflet.ajax.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script>
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            @if (session()->has('success'))
+                toastr.success("{{ session()->get('success') }}")
+                {{ session()->forget('success') }}
+            @endif
         </script>
         @yield('script')
     </body>

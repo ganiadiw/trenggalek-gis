@@ -30,10 +30,27 @@
 
                     <div x-data="{ current: $persist(1) }" class="p-3 mb-3 bg-white border-2 rounded-md shadow-lg border-slate-300">
                         <div>
-                            <p class="text-sm font-semibold text-black">Unggah Peta Kecamatan* <span class="text-red-600">(Pilih salah satu)</span></p>
+                            <p class="text-sm font-semibold text-black">Unggah Peta Kecamatan*</p>
+                            <p class="flex items-center mt-2 text-sm font-semibold text-red-600 gap-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-octagon" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M8.7 3h6.6c.3 0 .5 .1 .7 .3l4.7 4.7c.2 .2 .3 .4 .3 .7v6.6c0 .3 -.1 .5 -.3 .7l-4.7 4.7c-.2 .2 -.4 .3 -.7 .3h-6.6c-.3 0 -.5 -.1 -.7 -.3l-4.7 -4.7c-.2 -.2 -.3 -.4 -.3 -.7v-6.6c0 -.3 .1 -.5 .3 -.7l4.7 -4.7c.2 -.2 .4 -.3 .7 -.3z"></path>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                Pilih salah satu dari dua metode unggah peta!
+                            </p>
                             <p class="my-2 text-sm italic text-yellow-600">File atau text geojson dapat diperoleh dari website
                                 <a class="inline-flex items-center text-blue-500 underline" target="_blank" href="https://geojson.io/#map=2/0/20">
                                         geojson.io
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-up-right" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <line x1="17" y1="7" x2="7" y2="17"></line>
+                                        <polyline points="8 7 17 7 17 16"></polyline>
+                                    </svg>
+                                </a>,
+                                <a class="inline-flex items-center text-blue-500 underline" target="_blank" href="https://geoman.io/geojson-editor">
+                                    geoman.io
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-up-right" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <line x1="17" y1="7" x2="7" y2="17"></line>
@@ -104,15 +121,18 @@
 
                     <div class="mb-3 lg:flex lg:gap-x-2">
                         <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">
-                            <h2 class="font-semibold text-black ">Pilih koordinat titik tengah peta kecamatan</h2>
-                            <p class="mb-3 text-xs text-red-500">Titik tengah koordinat peta akan otomatis ditentukan saat file geojson telah dipilih, atau juga dapat ditentukan dengan klik pada peta</p>
+                            <h2 class="font-semibold text-black ">Tentukan koordinat titik tengah peta kecamatan</h2>
+                            <p class="mb-3 text-xs text-red-500">Titik tengah koordinat peta akan otomatis ditentukan saat file geojson telah dipilih atau text geosjon telah di preview pada peta, atau juga dapat ditentukan dengan klik pada peta</p>
                             <x-input-default-form class="cursor-not-allowed" type="text" name="latitude" :value="old('latitude')" id="latitude" labelTitle="Latitude*" error='latitude' placeholder="-8.2402961" readonly="true"></x-input-default-form>
                             <x-input-default-form class="cursor-not-allowed" type="text" name="longitude" :value="old('longitude')" id="longitude" labelTitle="Longitude*" error='longitude' placeholder="111.4484781" readonly="true"></x-input-default-form>
                         </div>
                         <div id="subDistrictMap" class="mt-5 border rounded-lg lg:w-2/4 lg:mt-0 h-120"></div>
                     </div>
                 </div>
-                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Simpan</button>
+                <div class="flex gap-x-2">
+                    <a href="{{ route('sub-districts.index') }}" class="text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kembali</a>
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Simpan</button>
+                </div>
             </form>
         </div>
     </div>
@@ -120,6 +140,14 @@
     @section('script')
         <script>
             let subDistrictFillColor = document.getElementById('subDistrictFillColor')
+            let subDistrictMap = L.map('subDistrictMap').setView([-8.13593475, 111.64019829777817], 11);
+            let layer
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 15,
+                minZoom: 10,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(subDistrictMap);
 
             const pickr = Pickr.create({
                 el: '.color-picker',
@@ -157,16 +185,15 @@
             pickr.on('save', (color, instance) => {
                 const hexColor = color.toHEXA().toString()
                 subDistrictFillColor.value = hexColor
+                layer.setStyle({
+                    'color': hexColor,
+                    'weight': 2,
+                    'opacity': 0.4,
+                })
                 pickr.hide()
             })
 
-            let subDistrictMap = L.map('subDistrictMap').setView([-8.13593475, 111.64019829777817], 11);
 
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 15,
-                minZoom: 10,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(subDistrictMap);
 
             subDistrictMap.on('click', onMapClick)
 
@@ -188,7 +215,6 @@
                 longitudeInput.value=longitude
             }
 
-            let layer
             function previewGeoJSONToMap(geoJSON) {
                 const data = JSON.parse(geoJSON)
 

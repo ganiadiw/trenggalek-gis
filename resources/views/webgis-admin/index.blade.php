@@ -1,12 +1,11 @@
 <x-app-layout>
     <div class="py-8">
         <div class="static mx-auto max-w-7xl sm:px-6 lg:px-8">
-            @include('components.alert')
             <div class="relative shadow-md sm:rounded-lg">
                 <div class="px-5 pt-5 pb-10 text-lg font-semibold text-left text-gray-700 bg-white">
                     <h1 class="font-bold">Kelola Data Administrator Sistem Informasi Geografis Wisata Trenggalek</h1>
-                    <div class="justify-between block mt-5 md:flex">
-                        <a href="{{ route('users.create') }}" type="button" class="flex items-center py-2.5 w-2.5/12 px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
+                    <div class="block mt-5 md:justify-between md:flex">
+                        <a href="{{ route('users.create') }}" type="button" class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
                             Tambah Data
                             <span class="flex items-center ml-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="20" height="20" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -70,7 +69,7 @@
                                         </td>
                                         <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             <div class="relative inline-flex items-center justify-center w-10 h-10 mr-3 overflow-hidden bg-gray-100 rounded-full">
-                                                @if ($user->avatar_path)
+                                                @if ($user->avatar_name)
                                                     <span><img class="w-10 h-10 rounded-full" src="{{ asset('storage/avatars/' . $user->avatar_name) }}" alt="Bordered avatar"></span>
                                                 @else
                                                     <span class="font-medium text-gray-600">{{ Str::substr($user->first_name, 0, 1) . Str::substr($user->last_name, 0, 1) }}</span>

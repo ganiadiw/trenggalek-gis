@@ -33,7 +33,7 @@ class UserUpdateRequest extends FormRequest
             'password_confirmation' => ['nullable', 'min:8', 'max:255'],
             'address' => ['required', 'max:255'],
             'phone_number' => ['required', 'max:255'],
-            'avatar' => ['image', 'mimes:png,jpg,jpeg', 'max:2048']
+            'avatar' => ['image', 'mimes:png,jpg,jpeg', 'max:2048'],
         ];
     }
 
@@ -51,7 +51,7 @@ class UserUpdateRequest extends FormRequest
             'alamat.required' => 'Alamat harus diisi',
             'phone_number.required' => 'Nomor telepon depan harus diisi',
             'avatar.image' => 'Foto profil harus berformat gambar dengan ekstensi .png atau .jpg',
-            'avatr.max' => "Ukuran maksimal foto profil adalah 2048KB atau 2MB"
+            'avatr.max' => 'Ukuran maksimal foto profil adalah 2048KB atau 2MB',
         ];
     }
 }

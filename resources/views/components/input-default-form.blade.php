@@ -1,8 +1,11 @@
-@props(['type', 'name', 'value' => null, 'labelTitle', 'error', 'id' => null, 'placeholder' => ' ', 'readonly' => false])
+@props(['type', 'name' => null, 'value' => null, 'labelTitle', 'error' => null, 'id' => null, 'placeholder' => ' ', 'readonly' => false, 'disabled' => false, 'desc' => null])
 
 <div {{ $attributes->merge(['class' => 'mb-3']) }}>
     <label for="{{ $id }}" class="block mb-2 text-sm font-medium text-gray-900">{{ $labelTitle }}</label>
-    <input type="{{ $type }}" name="{{ $name }}" value="{{ $value }}" id="{{ $id }}" @readonly($readonly == true) {{ $attributes->merge(['class' => 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4']) }}  placeholder="{{ $placeholder }}" autocomplete="off">
+    <input type="{{ $type }}" name="{{ $name }}" value="{{ $value }}" id="{{ $id }}" @readonly($readonly == true) @disabled($disabled == true) {{ $attributes->merge(['class' => 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4']) }}  placeholder="{{ $placeholder }}" autocomplete="off">
+    @if ($desc)
+        <p class="mt-1 text-sm text-gray-500 ">{{ $desc }}</p>
+    @endif
     @error($error)
         <p id="standard_error_help" class="flex items-center mt-2 text-xs text-yellow-700">
             <span class="mr-3 font-medium">

@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\SubDistrict;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -58,34 +56,34 @@ class SubDistrictTest extends TestCase
         $user = User::factory()->create();
         Storage::fake('geojson');
         $geojsonText = json_encode([
-            "type" => "FeatureCollection",
-            "features" => [
-                "type" => "Feature",
-                "properties" => [
-                    "name" => "KECAMATAN PANGGUL"
+            'type' => 'FeatureCollection',
+            'features' => [
+                'type' => 'Feature',
+                'properties' => [
+                    'name' => 'KECAMATAN PANGGUL',
                 ],
-                "geometry" => [
+                'geometry' => [
                     [
                         [
-                          111.45021038517558,
-                          -8.243895803050165
+                            111.45021038517558,
+                            -8.243895803050165,
                         ],
                         [
-                          111.43831334905423,
-                          -8.24928391384077
+                            111.43831334905423,
+                            -8.24928391384077,
                         ],
                         [
-                          111.45175632772282,
-                          -8.253308319040656
+                            111.45175632772282,
+                            -8.253308319040656,
                         ],
                         [
-                          111.45021038517558,
-                          -8.243895803050165
-                        ]
-                    ]
+                            111.45021038517558,
+                            -8.243895803050165,
+                        ],
+                    ],
                 ],
-                "type" => "Polygon"
-            ]
+                'type' => 'Polygon',
+            ],
         ]);
 
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503010.geojson', 25, 'application/json');
@@ -123,6 +121,21 @@ class SubDistrictTest extends TestCase
             'geojson_text_area' => '',
         ]));
         $response->assertInvalid();
+    }
+
+    public function test_an_superadmin_can_see_sub_district_show_page()
+    {
+        $user = User::factory()->create();
+        $subDistrict = SubDistrict::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get(route('sub-districts.show', ['sub_district' => $subDistrict]));
+        $data = $response->getOriginalContent()->getData();
+        $response->assertStatus(200);
+        $this->assertEquals('3503020', $subDistrict->code);
+        $this->assertEquals('MUNJUNGAN', $subDistrict->name);
+        $this->assertEquals('-8.3030696', $subDistrict->latitude);
+        $this->assertEquals('111.5768607', $subDistrict->longitude);
     }
 
     public function test_a_edit_page_can_be_rendered()
@@ -165,34 +178,34 @@ class SubDistrictTest extends TestCase
         $subDistrict = SubDistrict::factory()->create();
         Storage::fake('geojson');
         $geojsonText = json_encode([
-            "type" => "FeatureCollection",
-            "features" => [
-                "type" => "Feature",
-                "properties" => [
-                    "name" => "KECAMATAN MUNJUNGAN"
+            'type' => 'FeatureCollection',
+            'features' => [
+                'type' => 'Feature',
+                'properties' => [
+                    'name' => 'KECAMATAN MUNJUNGAN',
                 ],
-                "geometry" => [
+                'geometry' => [
                     [
                         [
-                          111.45021038517558,
-                          -8.243895803050165
+                            111.45021038517558,
+                            -8.243895803050165,
                         ],
                         [
-                          111.43831334905423,
-                          -8.24928391384077
+                            111.43831334905423,
+                            -8.24928391384077,
                         ],
                         [
-                          111.45175632772282,
-                          -8.253308319040656
+                            111.45175632772282,
+                            -8.253308319040656,
                         ],
                         [
-                          111.45021038517558,
-                          -8.243895803050165
-                        ]
-                    ]
+                            111.45021038517558,
+                            -8.243895803050165,
+                        ],
+                    ],
                 ],
-                "type" => "Polygon"
-            ]
+                'type' => 'Polygon',
+            ],
         ]);
 
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
@@ -211,6 +224,35 @@ class SubDistrictTest extends TestCase
         ]);
         $response->assertValid();
         $this->assertJson($geojsonText);
+        $response->assertRedirect();
+    }
+
+    public function test_correct_data_must_be_provided_to_update_sub_district()
+    {
+        $user = User::factory()->create();
+        $subDistrict = SubDistrict::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->put(route('sub-districts.update', ['sub_district' => $subDistrict]), [
+            'code' => '',
+            'name' => '',
+            'latitude' => '',
+            'longitude' => '',
+            'fill_color' => '',
+            'geojson_name' => '',
+            'geojson_path' => '',
+            'geojson_text_area' => '',
+        ]);
+        $response->assertInvalid();
+    }
+
+    public function test_an_superadmin_can_delete_sub_district()
+    {
+        $user = User::factory()->create();
+        $subDistrict = SubDistrict::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->delete(route('sub-districts.update', ['sub_district' => $subDistrict]));
         $response->assertRedirect();
     }
 }

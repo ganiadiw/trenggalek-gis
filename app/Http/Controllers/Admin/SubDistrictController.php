@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSubDistrictRequest;
 use App\Http\Requests\UpdateSubDistrictRequest;
 use App\Models\SubDistrict;
-use Illuminate\Http\File;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -32,14 +30,14 @@ class SubDistrictController extends Controller
 
         if ($request->file('geojson')) {
             $geojson = $validated['geojson'];
-            $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
+            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2).'-'.Str::random(5).'-'.$geojson->getClientOriginalName();
             $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
         } else {
-            $validated['geojson_name'] = Str::random((5)) . '-' . $validated['code'] . '.geojson';
-            Storage::put('public/geojson/' . $validated['geojson_name'], $request->geojson_text_area);
-            $validated['geojson_path'] = 'public/geojson/' . $validated['geojson_name'];
+            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2).'-'.Str::random((5)).'-'.$validated['code'].'.geojson';
+            Storage::put('public/geojson/'.$validated['geojson_name'], $request->geojson_text_area);
+            $validated['geojson_path'] = 'public/geojson/'.$validated['geojson_name'];
         }
-        
+
         SubDistrict::create($validated);
 
         return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil ditambahkan']);
@@ -61,8 +59,17 @@ class SubDistrictController extends Controller
 
         if ($request->file('geojson')) {
             $geojson = $validated['geojson'];
-            $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
+            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2).'-'.Str::random(5).'-'.$geojson->getClientOriginalName();
             $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
+
+            if ($subDistrict->geojson_path != null) {
+                Storage::delete($subDistrict->geojson_path);
+            }
+        }
+        if ($request->geojson_text_area != null) {
+            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2).'-'.Str::random((5)).'-'.$validated['code'].'.geojson';
+            Storage::put('public/geojson/'.$validated['geojson_name'], $request->geojson_text_area);
+            $validated['geojson_path'] = 'public/geojson/'.$validated['geojson_name'];
 
             if ($subDistrict->geojson_path != null) {
                 Storage::delete($subDistrict->geojson_path);
@@ -76,13 +83,15 @@ class SubDistrictController extends Controller
 
     public function destroy(SubDistrict $subDistrict)
     {
-        abort_if(!auth()->user()->is_admin, 403);
+        abort_if(! auth()->user()->is_admin, 403);
 
         if ($subDistrict->geojson_path != null) {
             Storage::delete($subDistrict->geojson_path);
         }
         $subDistrict->delete();
 
-        return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil dihapus']);
+        session()->flash('success', 'Data berhasil dihapus');
+
+        return redirect(route('sub-districts.index'));
     }
 }
