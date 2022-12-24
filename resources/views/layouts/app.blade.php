@@ -48,18 +48,14 @@
         <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
         <script src="{{ asset('assets/js/leaflet/leaflet.ajax.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+        <script src="{{ asset('assets/js/function.js') }}"></script>
         <script>
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
-            @if (session()->has('success'))
-                toastr.success("{{ session()->get('success') }}")
-                {{ session()->forget('success') }}
-            @endif
         </script>
         @yield('script')
     </body>

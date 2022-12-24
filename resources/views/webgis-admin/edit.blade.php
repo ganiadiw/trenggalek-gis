@@ -5,12 +5,27 @@
                 @csrf
                 @method('PUT')
                 <h1 class="text-lg font-bold text-gray-700">Ubah Data Administrator Sistem Informasi Geografis Wisata Trenggalek</h1>
-                <div class="flex justify-center mt-10 mb-10">
-                    @if ($user->avatar_name)
-                        <img id="avatar" class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64" src="{{ asset('storage/avatars/' . $user->avatar_name) }}" alt="Bordered avatar">
-                    @else
-                        <span class="flex items-center justify-center text-3xl font-medium text-gray-600 bg-gray-200 rounded-full w-44 h-44 lg:w-64 lg:h-64">{{ Str::substr($user->first_name, 0, 1) . Str::substr($user->last_name, 0, 1) }}</span>
-                    @endif
+                <div x-data="{ open: false }">
+                    <div class="flex justify-center mt-10 mb-10">
+                        <div class="relative">
+                             <img id="avatar" class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64" src="{{ $user->avatar_name ? asset('storage/avatars/' . $user->avatar_name) : Avatar::create($user->full_name)->setDimension(400, 400)->setFontSize(150)->toBase64()}}" alt="Bordered avatar">
+                             <input x-on:change="open = true" type="file" id="avatarUpload" name="avatar" hidden>
+                             <label for="avatarUpload" data-tooltip-target="tooltip-animation" data-tooltip-placement="right" class="absolute bottom-0 rounded-full ring-2 ring-offset-1 ring-white right-5 lg:right-10">
+                                 <div class="w-full p-2 bg-blue-500 rounded-full hover:brightness-[.80]">
+                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-camera" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                         <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"></path>
+                                         <circle cx="12" cy="13" r="3"></circle>
+                                     </svg>
+                                 </div>
+                             </label>
+                             <div id="tooltip-animation" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-blue-500 rounded-lg shadow-sm opacity-0 w-fit tooltip">
+                                 Ubah foto
+                                 <div class="tooltip-arrow" data-popper-arrow></div>
+                             </div>
+                        </div>
+                     </div>
+                     <p x-show="open" class="flex justify-center mb-10 -mt-5 text-sm text-green-500">Klik simpan untuk menyimpan gambar</p>
                 </div>
                 <div class="grid gap-x-5 md:grid-cols-2">
                     <x-input-default-form type="text" name="first_name" :value="old('first_name', $user->first_name)" id="first_name" labelTitle="Nama Depan*" error='first_name' placeholder="John"></x-input-default-form>
@@ -19,7 +34,6 @@
                     <x-input-default-form type="text" name="username" :value="old('username', $user->username)" id="username" labelTitle="Username*" error='username' placeholder="johndoe123"></x-input-default-form>
                     <x-input-default-form type="text" name="address" :value="old('address', $user->address)" id="address" labelTitle="Alamat*" error='address' placeholder="RT/RW 002/001, Desa Panggul, Kecamatan Panggul"></x-input-default-form>
                     <x-input-default-form type="text" name="phone_number" :value="old('phone_number', $user->phone_number)" id="phone_number" labelTitle="Nomor Handphone*" error='phone_number' placeholder="081234567889"></x-input-default-form>
-                    <x-input-default-form type="file" name="avatar" id="avatarInput" labelTitle="Upload Foto Profil (Upload hanya jika ingin mengubahnya)" error='avatar' desc="Format PNG, JPG (MAX. 2048KB / 2MB)."></x-input-default-form>
                 </div>
                 <div class="p-6 mb-4 bg-gray-200 rounded-lg shadow-lg">
                     <p class="mb-4 text-sm font-semibold text-red-500">Hanya diisi jika ingin mengubah password</p>
@@ -60,19 +74,9 @@
     @section('script')
         <script>
             let avatar = document.getElementById('avatar')
-            let avatarInput = document.getElementById('avatarInput')
+            const avatarUpload = document.getElementById('avatarUpload')
 
-            avatarInput.addEventListener('change', function() {
-                let file = this.files[0]
-
-                if (file.type.match(/image\/*/)) {
-                    let reader = new FileReader()
-                    reader.onload = function() {
-                        avatar.src = reader.result
-                    }
-                    reader.readAsDataURL(file)
-                }
-            })
+            previewAvatar(avatar, avatarUpload, 'change')
         </script>
     @endsection
 </x-app-layout>
