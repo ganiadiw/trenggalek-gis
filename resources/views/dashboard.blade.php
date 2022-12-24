@@ -54,7 +54,7 @@
                     </x-statistic-card>
                 </div>
             </div>
-            <div x-data="{ current: 1 }" class="p-3 bg-white border-2 rounded-md shadow-lg border-slate-300">
+            <div x-data="{ current: $persist(1) }" class="p-3 bg-white border-2 rounded-md shadow-lg border-slate-300">
                 <div class="text-sm text-center text-gray-700 border-b border-gray-400">
                     <ul class="flex flex-wrap -mb-px">
                         <li class="mr-2">
@@ -106,24 +106,40 @@
         </div>
     </div>
 
-    <script>
-        let touristMap = L.map('touristMap').setView([-8.13593475, 111.64019829777817], 11);
+    @section('script')
+        <script>
+            let touristMap = L.map('touristMap').setView([-8.13593475, 111.64019829777817], 11);
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 15,
-            minZoom: 10,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(touristMap);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 15,
+                minZoom: 10,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(touristMap);
 
-        L.control.zoom({
-            position: 'topright'
-        }).addTo(touristMap)
+            function popUp(f,l){
+                var out = [];
+                if (f.properties){
+                    for(key in f.properties){
+                        out.push(key+": "+f.properties[key]);
+                    }
+                    l.bindPopup(out.join("<br />"));
+                }
+            }
 
-        let villageMap = L.map('villageMap').setView([-8.13593475, 111.64019829777817], 13);
+            @foreach ($subDistricts as $subDistrict)
+                new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'],{onEachFeature:popUp, style:{
+                    'color': '{{ $subDistrict->fill_color }}',
+                    'weight': 2,
+                    'opacity': 0.4,
+                }}).addTo(touristMap);
+            @endforeach
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(villageMap);
-    </script>
+            let villageMap = L.map('villageMap').setView([-8.13593475, 111.64019829777817], 13);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(villageMap);
+        </script>
+    @endsection
 </x-app-layout>

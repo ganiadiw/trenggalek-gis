@@ -9,24 +9,26 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Laravolt\Avatar\Facade as Avatar;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')->paginate(10);
+        $users = User::select('first_name', 'last_name', 'avatar_name', 'username', 'email')
+                ->orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')->paginate(10);
 
         return view('webgis-admin.index', compact('users'));
     }
 
     public function search(Request $request)
     {
-        $users = User::where('first_name', 'like', '%' . $request->search . '%')
-                ->orWhere('last_name', 'like', '%' . $request->search . '%')
+        $users = User::where('first_name', 'like', '%'.$request->search.'%')
+                ->orWhere('last_name', 'like', '%'.$request->search.'%')
                 ->orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')
                 ->paginate(10)->withQueryString();
 
-        if (!$request) {
+        if (! $request) {
             $users = User::orderBy('is_admin', 'desc')->paginate(10);
         }
 

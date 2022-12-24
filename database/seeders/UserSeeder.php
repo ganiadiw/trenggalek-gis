@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Faker\Factory as Faker;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -30,7 +29,7 @@ class UserSeeder extends Seeder
 
         $faker = Faker::create('id_ID');
 
-        for ($i=0; $i < 20; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             User::create([
                 'first_name' => $faker->firstName(),
                 'last_name' => $faker->lastName(),

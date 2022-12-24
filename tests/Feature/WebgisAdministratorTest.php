@@ -3,10 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class WebgisAdministratorTest extends TestCase
@@ -25,6 +21,7 @@ class WebgisAdministratorTest extends TestCase
     {
         $user = User::factory()->create();
 
+        $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->get(route('users.create'));
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
@@ -267,7 +264,7 @@ class WebgisAdministratorTest extends TestCase
         $otherUser = User::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'username' => 'johdoe',
+            'username' => 'johndoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
             'phone_number' => '081234567890',
             'email' => 'johndoe@example.com',
@@ -277,7 +274,12 @@ class WebgisAdministratorTest extends TestCase
         $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->get(route('users.show', ['user' => $otherUser->username]));
         $response->assertStatus(200);
-        $response->assertSeeText($otherUser->username);
-        $response->assertSeeTextInOrder([$otherUser->first_name, $otherUser->last_name, $otherUser->username, $otherUser->email]);
+        $this->assertEquals('John', $otherUser->first_name);
+        $this->assertEquals('Doe', $otherUser->last_name);
+        $this->assertEquals('johndoe', $otherUser->username);
+        $this->assertEquals('Desa Cakul, Kecamatan Dongko', $otherUser->address);
+        $this->assertEquals('081234567890', $otherUser->phone_number);
+        $this->assertEquals('johndoe@example.com', $otherUser->email);
+        $this->assertEquals(0, $otherUser->is_admin);
     }
 }

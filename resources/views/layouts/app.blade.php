@@ -9,11 +9,15 @@
         <link rel="icon" href="{{ asset('assets/icon/Paomedia-Small-N-Flat-Map.svg') }}">
 
         <!-- Fonts -->
-        {{-- <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap"> --}}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        {{-- <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> --}}
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"rel="stylesheet"/>
+
+        <!-- Pickr -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/>
+
+        <!-- Toastr.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 
         <!-- Leaflet -->
         <link rel="stylesheet" href="{{ asset('assets/css/leaflet.css') }}">
@@ -43,6 +47,9 @@
 
         <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
         <script src="{{ asset('assets/js/leaflet/leaflet.ajax.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+        <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+        <script src="{{ asset('assets/js/function.js') }}"></script>
         <script>
             $.ajaxSetup({
                 headers: {

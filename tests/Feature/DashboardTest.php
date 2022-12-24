@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Database\Factories\WebgisAdminFactory;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
@@ -40,7 +39,7 @@ class DashboardTest extends TestCase
             'name' => 'John Doe',
             'username' => 'johndoe',
             'email' => 'johdoe@example.com',
-            'is_admin' => 0
+            'is_admin' => 0,
         ]);
 
         $this->assertEquals(0, $user->is_admin);

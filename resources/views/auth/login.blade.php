@@ -2,8 +2,13 @@
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
-                <x-application-logo class="w-20 h-20 text-gray-500 fill-current" />
+                {{-- <x-application-logo class="w-20 h-20 text-gray-500 fill-current" /> --}}
+                <img class="w-36 h-36" src="{{ asset('assets/images/trenggalek.png') }}" alt="Kabupaten Trenggalek">
             </a>
+        </x-slot>
+
+        <x-slot name="title">
+            <h1 class="my-5 text-xl font-bold text-gray-700">Login - Sistem Informasi Pemetaan Destinasi Wisata Kabupaten Trenggalek</h1>
         </x-slot>
 
         <!-- Session Status -->

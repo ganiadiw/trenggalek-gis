@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\SubDistrict;
 
 class DashboardController extends Controller
 {
     public function __invoke()
     {
-        return view('dashboard');
+        $subDistricts = SubDistrict::all();
+
+        return view('dashboard', compact('subDistricts'));
     }
 }

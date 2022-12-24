@@ -1,4 +1,4 @@
-<div class="flex items-center p-3 bg-white border rounded-md shadow-lg">
+<div class="flex items-center p-3 bg-white border rounded-lg shadow-lg">
     {{ $svgIcon }}
     <div>
         <p class="mb-2 text-sm text-gray-800">
