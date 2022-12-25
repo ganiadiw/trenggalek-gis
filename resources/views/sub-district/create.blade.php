@@ -91,7 +91,7 @@
 
                         <div class="mt-3 text-black">
                             <div x-cloak x-show="current == 1" class="static block">
-                                <x-input-default-form class="w-full" type="file" name="geojson" id="geojsonFile" labelTitle="Upload Peta (Format .geojson)*" error='geojson'></x-input-default-form>
+                                <x-input-default-form class="py-0" type="file" name="geojson" id="geojsonFile" labelTitle="Upload Peta (Format .geojson)*" error='geojson'></x-input-default-form>
                             </div>
                             <div x-show="current == 2" class="block">
                                 <div class="w-full mb-4 bg-gray-100 border border-gray-200 rounded-lg">
