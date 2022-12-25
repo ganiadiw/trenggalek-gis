@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div x-data="{ current: $persist(1) }" class="p-3 bg-white border-2 rounded-md shadow-lg border-slate-300">
-                <div class="text-sm text-center text-gray-700 border-b border-gray-400">
+                {{-- <div class="text-sm text-center text-gray-700 border-b border-gray-400">
                     <ul class="flex flex-wrap -mb-px">
                         <li class="mr-2">
                             <button @click="current = 1" class="inline-flex items-center p-2 py-3 transition duration-200 ease-in-out delay-50 hover:scale-110 hover:text-gray-900" x-bind:class="{ 'active text-blue-600 border-b-2 border-blue-600 transition-none hover:scale-100 hover:text-blue-600' : current === 1 }">
@@ -76,11 +76,31 @@
                             </button>
                         </li>
                     </ul>
+                </div> --}}
+                <div>
+                    <ul class="flex space-x-5 text-sm text-center text-gray-400 border-b">
+                        <li>
+                            <button @click="current = 1" class="inline-flex items-center px-6 py-2 hover:text-gray-600" x-bind:class="{ 'active text-black border-b-[1px] border-black transition-none hover:text-black' : current === 1 }">
+                                Peta Destinasi Wisata
+                            </button>
+                        </li>
+                        <li>
+                            <button @click="current = 2" class="px-6 py-2 hover:text-gray-600" x-bind:class="{ 'active text-black border-b-[1px] border-black transition-none hover:text-black' : current === 2 }">
+                                Peta Desa Wisata
+                            </button>
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="mt-3 text-black">
-                    <div x-show="current == 1" class="static block xl:flex">
-                        <div id="touristMap" class="w-full border xl:w-3/4 h-128"></div>
+                    <div
+                        x-show="current == 1"
+                        x-transition:enter="transform duration-500"
+                        x-transition:enter-start="opacity-0 translate-y-6"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        class="static block xl:flex"
+                        >
+                        <div id="touristMap" class="w-full rounded-lg xl:w-3/4 h-128"></div>
                         <div class="w-full mt-5 ml-4 space-y-4 overflow-y-auto xl:mt-0 xl:w-1/4 scrollbar h-128">
                             @for ($i = 0; $i < 5; $i++)
                                 <div class="items-center block h-16">
@@ -90,8 +110,14 @@
                             @endfor
                         </div>
                     </div>
-                    <div x-show="current == 2" class="block xl:flex">
-                        <div id="villageMap" class="w-full border xl:w-3/4 h-128"></div>
+                    <div
+                        x-show="current == 2"
+                        x-transition:enter="transform duration-500"
+                        x-transition:enter-start="opacity-0 translate-y-6"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        class="block xl:flex"
+                        >
+                        <div id="villageMap" class="w-full rounded-lg xl:w-3/4 h-128"></div>
                         <div class="w-full ml-4 space-y-4 overflow-y-auto xl:mt-0 sm:mt-5 xl:w-1/4 scrollbar h-128">
                             @for ($i = 0; $i < 10; $i++)
                                 <div class="items-center block h-16">

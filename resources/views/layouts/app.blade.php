@@ -49,7 +49,7 @@
         <script src="{{ asset('assets/js/leaflet/leaflet.ajax.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
         <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
-        <script src="{{ asset('assets/js/function.js') }}"></script>
+        <script src="{{ asset('assets/js/general-function.js') }}"></script>
         <script>
             $.ajaxSetup({
                 headers: {
