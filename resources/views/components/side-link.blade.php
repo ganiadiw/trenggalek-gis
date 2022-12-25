@@ -1,4 +1,4 @@
-@props(['active'])
+@props(['active', 'svgIcon' => null])
 
 @php
     $spanClasses = ($active ?? false)
@@ -7,7 +7,7 @@
 
     $classes = ($active ?? false)
                 ? 'flex items-center w-full h-12 pl-4 hover:bg-gray-300 hover:bg-white text-black font-bold'
-                : 'flex items-center w-full h-12 pl-4 hover:bg-gray-300 mx-1 hover:rounded-lg hover:text-gray-900 '
+                : 'flex items-center w-full h-12 pl-4 hover:bg-gray-300 mx-1 hover:rounded-lg hover:text-gray-900'
 @endphp
 
 <span {{ $attributes->merge(['class' => $spanClasses]) }}></span>
