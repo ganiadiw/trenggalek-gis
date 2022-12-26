@@ -38,27 +38,16 @@ class TouristDestinationCategoryController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\TouristDestinationCategory  $touristDestinationCategory
-     * @return \Illuminate\Http\Response
-     */
     public function edit(TouristDestinationCategory $touristDestinationCategory)
     {
-        //
+        return view('tourist-destination-category.edit', compact('touristDestinationCategory'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateTouristDestinationCategoryRequest  $request
-     * @param  \App\Models\TouristDestinationCategory  $touristDestinationCategory
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateTouristDestinationCategoryRequest $request, TouristDestinationCategory $touristDestinationCategory)
+    public function update(TouristDestinationCategoryRequest $request, TouristDestinationCategory $touristDestinationCategory)
     {
-        //
+        $touristDestinationCategory->update($request->validated());
+
+        return redirect(route('tourist-destination-categories.index'))->with('success', 'Data berhasil diperbarui');
     }
 
     /**

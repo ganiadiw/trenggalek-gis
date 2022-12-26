@@ -52,8 +52,31 @@ class TouristDestinationCategoryTest extends TestCase
         $user = User::factory()->create();
         $touristDestinationCategory = TouristDestinationCategory::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('tourist-destination-categories.edit', ['tourist_destination_categories' => $touristDestinationCategory]));
+        $response = $this->actingAs($user)->get(route('tourist-destination-categories.edit', ['tourist_destination_category' => $touristDestinationCategory]));
         $response->assertStatus(200);
         $response->assertSeeText('Ubah Data Kategori Destinasi Wisata');
+    }
+
+    public function test_an_authenticated_user_can_update_tourist_destination_category()
+    {
+        $user = User::factory()->create();
+        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
+
+        $response = $this->actingAs($user)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $touristDestinationCategory]), [
+            'name' => 'Wisata Bahari',
+        ]);
+        $response->assertValid();
+        $response->assertRedirect(route('tourist-destination-categories.index'));
+    }
+
+    public function test_correct_data_must_be_provided_to_tourist_destination_category()
+    {
+        $user = User::factory()->create();
+        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
+
+        $response = $this->actingAs($user)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $touristDestinationCategory]), [
+            'name' => '',
+        ]);
+        $response->assertInvalid();
     }
 }
