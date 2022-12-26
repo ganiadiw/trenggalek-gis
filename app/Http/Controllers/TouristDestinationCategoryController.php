@@ -16,14 +16,9 @@ class TouristDestinationCategoryController extends Controller
         return view('tourist-destination-category.index', compact('touristDestinationCategories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('tourist-destination-category.create');
     }
 
     /**
