@@ -17,7 +17,7 @@ class TouristDestinationCategoryFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => 'Wisata Pantai',
         ];
     }
 }
