@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTouristDestinationCategoryRequest extends FormRequest
+class TouristDestinationCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateTouristDestinationCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,7 @@ class UpdateTouristDestinationCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'max:255'],
         ];
     }
 }

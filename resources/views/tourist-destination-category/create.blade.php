@@ -5,7 +5,7 @@
                 @csrf
                 <h1 class="mb-5 text-lg font-bold text-gray-700">Tambah Data Kategori Destinasi Wisata</h1>
                 <div class="grid mb-5 gap-x-5 md:grid-cols-2">
-                    <x-input-default-form type="text" name="name" :value="old('name')" id="name" labelTitle="Nama Kategori*" error='name' placeholder="John"></x-input-default-form>
+                    <x-input-default-form type="text" name="name" :value="old('name')" id="name" labelTitle="Nama Kategori*" error='name' placeholder="Wisata Pantai"></x-input-default-form>
                 </div>
                 <div class="flex gap-x-2">
                     <a href="{{ route('tourist-destination-categories.index') }}" class="text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kembali</a>

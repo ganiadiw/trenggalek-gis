@@ -63,12 +63,12 @@
                                         </td>
                                         <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             <div class="flex items-center">
-                                                <a href="{{ route('tourist-destination-categories.show', ['tourist-destination-category' => $touristDestinationCategory]) }}" class="hover:underline hover:underline-offset-4">{{ $touristDestinationCategory->name }}</a>
+                                                <a href="{{ route('tourist-destination-categories.show', ['tourist_destination_category' => $touristDestinationCategory]) }}" class="hover:underline hover:underline-offset-4">{{ $touristDestinationCategory->name }}</a>
                                             </div>
                                         </td>
                                         <div>
                                             <td class="px-6 py-4">
-                                                <x-action-button :value="$touristDestinationCategory->name" :href="route('sub-districts.edit', ['sub_district' => $touristDestinationCategory])" :action="route('sub-districts.destroy', ['sub_district' => $touristDestinationCategory])"/>
+                                                <x-action-button :value="$touristDestinationCategory->name" :href="route('tourist-destination-categories.edit', ['tourist_destination_category' => $touristDestinationCategory])" :action="route('tourist-destination-categories.destroy', ['tourist_destination_category' => $touristDestinationCategory])"/>
                                             </td>
                                         </div>
                                     </tr>

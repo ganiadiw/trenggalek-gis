@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTouristDestinationCategoryRequest;
-use App\Http\Requests\UpdateTouristDestinationCategoryRequest;
+use App\Http\Requests\TouristDestinationCategoryRequest;
 use App\Models\TouristDestinationCategory;
 
 class TouristDestinationCategoryController extends Controller
@@ -21,15 +20,11 @@ class TouristDestinationCategoryController extends Controller
         return view('tourist-destination-category.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTouristDestinationCategoryRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreTouristDestinationCategoryRequest $request)
+    public function store(TouristDestinationCategoryRequest $request)
     {
-        //
+        TouristDestinationCategory::create($request->validated());
+
+        return redirect(route('tourist-destination-categories.index'))->with('success', 'Data berhasil ditambahkan');
     }
 
     /**
