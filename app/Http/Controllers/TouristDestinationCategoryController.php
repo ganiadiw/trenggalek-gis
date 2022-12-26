@@ -27,15 +27,9 @@ class TouristDestinationCategoryController extends Controller
         return redirect(route('tourist-destination-categories.index'))->with('success', 'Data berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TouristDestinationCategory  $touristDestinationCategory
-     * @return \Illuminate\Http\Response
-     */
     public function show(TouristDestinationCategory $touristDestinationCategory)
     {
-        //
+        return view('tourist-destination-category.show', compact('touristDestinationCategory'));
     }
 
     public function edit(TouristDestinationCategory $touristDestinationCategory)
@@ -50,14 +44,10 @@ class TouristDestinationCategoryController extends Controller
         return redirect(route('tourist-destination-categories.index'))->with('success', 'Data berhasil diperbarui');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\TouristDestinationCategory  $touristDestinationCategory
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(TouristDestinationCategory $touristDestinationCategory)
     {
-        //
+        $touristDestinationCategory->delete();
+
+        return redirect(route('tourist-destination-categories.index'))->with('success', 'Data berhasil dihapus');
     }
 }
