@@ -47,6 +47,16 @@ class TouristDestinationCategoryTest extends TestCase
         $response->assertInvalid();
     }
 
+    public function test_an_authenticated_user_can_see_tourist_destination_category_show_page()
+    {
+        $user = User::factory()->create();
+        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('tourist-destination-categories.show', ['tourist_destination_category' => $touristDestinationCategory]));
+        $response->assertStatus(200);
+        $this->assertEquals('Wisata Pantai', $touristDestinationCategory->name);
+    }
+
     public function test_a_edit_page_can_be_rendered()
     {
         $user = User::factory()->create();
@@ -69,7 +79,7 @@ class TouristDestinationCategoryTest extends TestCase
         $response->assertRedirect(route('tourist-destination-categories.index'));
     }
 
-    public function test_correct_data_must_be_provided_to_tourist_destination_category()
+    public function test_correct_data_must_be_provided_to_update_tourist_destination_category()
     {
         $user = User::factory()->create();
         $touristDestinationCategory = TouristDestinationCategory::factory()->create();
@@ -78,5 +88,14 @@ class TouristDestinationCategoryTest extends TestCase
             'name' => '',
         ]);
         $response->assertInvalid();
+    }
+
+    public function test_an_authenticated_user_can_delete_tourist_destination_category()
+    {
+        $user = User::factory()->create();
+        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
+
+        $response = $this->actingAs($user)->delete(route('tourist-destination-categories.destroy', ['tourist_destination_category' => $touristDestinationCategory]));
+        $response->assertRedirect(route('tourist-destination-categories.index'));
     }
 }
