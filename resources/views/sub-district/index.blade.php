@@ -2,8 +2,8 @@
     <div class="py-8">
         <div class="static mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="relative shadow-md sm:rounded-lg">
-                <div class="px-5 pt-5 pb-10 text-lg font-semibold text-left text-gray-700 bg-white">
-                <h1 class="font-bold">Kelola Data Kecamatan</h1>
+                <div class="px-5 pt-5 pb-5 text-lg font-semibold text-left text-gray-900 bg-white">
+                    <h1 class="font-bold">Kelola Data Kecamatan</h1>
                     <div class="justify-between block mt-5 md:flex">
                         <a href="{{ route('sub-districts.create') }}" type="button" class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
                             Tambah Data
@@ -39,6 +39,9 @@
                         </div>
                     @else
                         <table class="relative w-full text-sm text-left text-gray-500">
+                            <caption class="p-5 text-lg font-semibold text-left text-gray-800 bg-white">
+                                <p class="w-5/6 mt-1 text-sm font-normal text-gray-700">Berisi daftar kecamatan di Kabupaten Trenggalek. Anda dapat melakukan penelusuran dan melakukan tindakan terhadapnya</p>
+                            </caption>
                             <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
@@ -60,7 +63,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($subDistricts as $key => $subDistrict)
-                                    <tr class="bg-white border-b">
+                                    <tr class="bg-white border-b hover:bg-gray-100">
                                         <td class="px-6 py-4">
                                             {{ $key + $subDistricts->firstItem() }}
                                         </td>
