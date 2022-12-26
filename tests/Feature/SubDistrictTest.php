@@ -52,23 +52,23 @@ class SubDistrictTest extends TestCase
                 [
                     [
                         111.45942887011313,
-                        -8.237330319885928
+                        -8.237330319885928,
                     ],
                     [
                         111.44650869322885,
-                        -8.254595843964069
+                        -8.254595843964069,
                     ],
                     [
                         111.46789633067027,
-                        -8.26203640203876
+                        -8.26203640203876,
                     ],
                     [
                         111.46935623766348,
-                        -8.245927055829426
+                        -8.245927055829426,
                     ],
                     [
                         111.45942887011313,
-                        -8.237330319885928
+                        -8.237330319885928,
                     ],
                 ],
             ],
@@ -138,7 +138,7 @@ class SubDistrictTest extends TestCase
 
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
         $this->assertJson(json_encode(self::$createGeoJson));
-        $response->assertRedirect();
+        $response->assertRedirect(route('sub-districts.index'));
     }
 
     public function test_correct_data_must_be_provided_to_create_new_sub_district()
@@ -204,7 +204,7 @@ class SubDistrictTest extends TestCase
             'geojson_path' => $gojsonFile->path(),
         ]);
         $response->assertValid();
-        $response->assertRedirect();
+        $response->assertRedirect(route('sub-districts.index'));
     }
 
     public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_text()
@@ -229,7 +229,7 @@ class SubDistrictTest extends TestCase
         ]);
         $response->assertValid();
         $this->assertJson(json_encode(self::$updateGeoJson));
-        $response->assertRedirect();
+        $response->assertRedirect(route('sub-districts.index'));
     }
 
     public function test_correct_data_must_be_provided_to_update_sub_district()
@@ -258,7 +258,7 @@ class SubDistrictTest extends TestCase
 
         $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->delete(route('sub-districts.update', ['sub_district' => $subDistrict]));
-        $response->assertRedirect();
+        $response->assertRedirect(route('sub-districts.index'));
     }
 
     public function test_an_superadmin_cannot_create_new_sub_district()
@@ -334,7 +334,7 @@ class SubDistrictTest extends TestCase
             'geojson_text_area' => json_encode(self::$createGeoJson),
         ]));
         $this->assertGuest();
-        $response->assertRedirect();
+        $response->assertRedirect(route('login'));
     }
 
     public function test_an_guest_cannot_update_sub_district()
@@ -353,7 +353,7 @@ class SubDistrictTest extends TestCase
             'geojson_text_area' => json_encode(self::$updateGeoJson),
         ]);
         $this->assertGuest();
-        $response->assertRedirect();
+        $response->assertRedirect(route('login'));
     }
 
     public function test_an_guest_cannot_delete_sub_district()
