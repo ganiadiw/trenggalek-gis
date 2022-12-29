@@ -95,13 +95,13 @@
                                                         alt="Bordered avatar">
                                                 @else
                                                     <img class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64"
-                                                        src="{{ Avatar::create($user->full_name)->setDimension(100, 800)->toBase64() }}"
-                                                        alt="{{ $user->full_name }}">
+                                                        src="{{ Avatar::create($user->name)->setDimension(100, 800)->toBase64() }}"
+                                                        alt="{{ $user->name }}">
                                                 @endif
                                             </div>
                                             <div class="flex items-center">
                                                 <a href="{{ route('users.show', ['user' => $user]) }}"
-                                                    class="hover:underline hover:underline-offset-4">{{ $user->full_name }}</a>
+                                                    class="hover:underline hover:underline-offset-4">{{ $user->name }}</a>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
@@ -120,7 +120,7 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 @if ($user->is_admin == 0)
-                                                    <x-action-button :value="$user->full_name" :href="route('users.edit', ['user' => $user])"
+                                                    <x-action-button :value="$user->name" :href="route('users.edit', ['user' => $user])"
                                                         :action="route('users.destroy', ['user' => $user])" />
                                                 @endif
                                             </td>

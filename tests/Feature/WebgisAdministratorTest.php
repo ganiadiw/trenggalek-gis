@@ -12,12 +12,12 @@ class WebgisAdministratorTest extends TestCase
         $user = User::factory()->create();
 
         $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->get('/dashboard/users');
+        $response = $this->actingAs($user)->get(route('users.index'));
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
     }
 
-    public function test_a_create_page_can_be_rendered()
+    public function test_a_webgis_administrator_create_page_can_be_rendered()
     {
         $user = User::factory()->create();
 
@@ -33,8 +33,7 @@ class WebgisAdministratorTest extends TestCase
 
         $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->post(route('users.store', [
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'username' => 'johndoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
@@ -52,8 +51,7 @@ class WebgisAdministratorTest extends TestCase
 
         $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->post(route('users.store', [
-            'first_name' => '',
-            'last_name' => '',
+            'name' => '',
             'email' => '',
             'username' => '',
             'gender' => '',
@@ -66,8 +64,7 @@ class WebgisAdministratorTest extends TestCase
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'username' => 'johdoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -85,8 +82,7 @@ class WebgisAdministratorTest extends TestCase
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'username' => 'johdoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -96,8 +92,7 @@ class WebgisAdministratorTest extends TestCase
 
         $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->put(route('users.update', ['user' => $otherUser->username]), [
-            'first_name' => 'Michael',
-            'last_name' => 'John Doe',
+            'name' => 'Micahel John Doe',
             'username' => 'johdoe_mic',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -111,8 +106,7 @@ class WebgisAdministratorTest extends TestCase
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'username' => 'johdoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -122,8 +116,7 @@ class WebgisAdministratorTest extends TestCase
 
         $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->put(route('users.update', ['user' => $otherUser->username]), [
-            'first_name' => '',
-            'last_name' => '',
+            'name' => '',
             'username' => '',
             'email' => '',
             'username' => '',
@@ -136,8 +129,7 @@ class WebgisAdministratorTest extends TestCase
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'username' => 'johdoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -158,8 +150,7 @@ class WebgisAdministratorTest extends TestCase
 
         $this->assertEquals(0, $user->is_admin);
         $response = $this->actingAs($user)->post(route('users.store', [
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'username' => 'johndoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
@@ -176,8 +167,7 @@ class WebgisAdministratorTest extends TestCase
             'is_admin' => 0,
         ]);
         $otherUser = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'username' => 'johdoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -187,8 +177,7 @@ class WebgisAdministratorTest extends TestCase
 
         $this->assertEquals(0, $user->is_admin);
         $response = $this->actingAs($user)->put(route('users.update', ['user' => $otherUser->username]), [
-            'first_name' => 'Michael',
-            'last_name' => 'John Doe',
+            'name' => 'Micahel John Doe',
             'username' => 'johdoe_mic',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -203,8 +192,7 @@ class WebgisAdministratorTest extends TestCase
             'is_admin' => 0,
         ]);
         $otherUser = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'username' => 'johdoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -220,8 +208,7 @@ class WebgisAdministratorTest extends TestCase
     public function test_an_guest_cannot_create_new_webgis_administrator()
     {
         $response = $this->post(route('users.store', [
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'username' => 'johndoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
@@ -238,8 +225,7 @@ class WebgisAdministratorTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->put(route('users.update', ['user' => $user->id]), [
-            'first_name' => 'Michael',
-            'last_name' => 'John Doe',
+            'name' => 'Micahel John Doe',
             'username' => 'johdoe_mic',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -262,8 +248,7 @@ class WebgisAdministratorTest extends TestCase
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'username' => 'johndoe',
             'address' => 'Desa Cakul, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -274,8 +259,7 @@ class WebgisAdministratorTest extends TestCase
         $this->assertEquals(1, $user->is_admin);
         $response = $this->actingAs($user)->get(route('users.show', ['user' => $otherUser->username]));
         $response->assertStatus(200);
-        $this->assertEquals('John', $otherUser->first_name);
-        $this->assertEquals('Doe', $otherUser->last_name);
+        $this->assertEquals('John Doe', $otherUser->name);
         $this->assertEquals('johndoe', $otherUser->username);
         $this->assertEquals('Desa Cakul, Kecamatan Dongko', $otherUser->address);
         $this->assertEquals('081234567890', $otherUser->phone_number);

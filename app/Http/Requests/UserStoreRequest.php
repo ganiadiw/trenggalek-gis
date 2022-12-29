@@ -24,8 +24,7 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => ['required', 'max:255'],
-            'last_name' => ['nullable', 'max:255'],
+            'name' => ['required', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email', 'max:255'],
             'username' => ['required', 'unique:users,username', 'max:255'],
             'password' => ['required', 'min:8', 'max:255'],
@@ -37,7 +36,7 @@ class UserStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'first_name.required' => 'Nama depan harus diisi',
+            'name.required' => 'Nama harus diisi',
             'email.required' => 'Email harus diisi',
             'email.eamil' => 'Email tidak valid',
             'email.unique' => 'Email sudah terdaftar',
@@ -46,7 +45,7 @@ class UserStoreRequest extends FormRequest
             'password.required' => 'Password harus diisi',
             'password.min' => 'Password minimal 8 karakter',
             'address.required' => 'Alamat harus diisi',
-            'phone_number.required' => 'Nomor telepon depan harus diisi',
+            'phone_number.required' => 'Nomor telepon harus diisi',
         ];
     }
 }

@@ -12,8 +12,9 @@
                             <img class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64"
                                 src="{{ asset('storage/avatars/' . $user->avatar_name) }}" alt="Bordered avatar">
                         @else
-                            <span
-                                class="flex items-center justify-center text-3xl font-medium text-gray-600 bg-gray-200 rounded-full w-44 h-44 lg:w-64 lg:h-64">{{ Str::substr($user->first_name, 0, 1) . Str::substr($user->last_name, 0, 1) }}</span>
+                            <img class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64"
+                                src="{{ Avatar::create($user->name)->setDimension(500, 500)->setFontSize(230)->toBase64() }}"
+                                alt="{{ $user->name }}">
                         @endif
                     </div>
                     <div class="grid mb-5 justify-items-center">
@@ -34,10 +35,8 @@
                         </a>
                     </div>
                     <div class="grid gap-x-5 md:grid-cols-2">
-                        <x-input-default-form type="text" value="{{ $user->first_name }}" id="first_name"
-                            labelTitle="Nama Depan" disabled="true"></x-input-default-form>
-                        <x-input-default-form type="text" value="{{ $user->last_name }}" id="last_name"
-                            labelTitle="Nama Belakang" disabled="true"></x-input-default-form>
+                        <x-input-default-form type="text" value="{{ $user->name }}" id="name"
+                            labelTitle="Nama Lengkap" disabled="true"></x-input-default-form>
                         @if ($user->is_admin == 1)
                             <x-input-default-form type="text" value="Super Admin" labelTitle="Level Hak Akses"
                                 disabled="true"></x-input-default-form>

@@ -14,20 +14,19 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::select('first_name', 'last_name', 'avatar_name', 'username', 'email', 'is_admin')
-                ->orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')->paginate(10);
+        $users = User::select('name', 'avatar_name', 'username', 'email', 'is_admin')
+            ->orderBy('is_admin', 'desc')->orderBy('name', 'asc')->paginate(10);
 
         return view('webgis-admin.index', compact('users'));
     }
 
     public function search(Request $request)
     {
-        $users = User::where('first_name', 'like', '%'.$request->search.'%')
-                ->orWhere('last_name', 'like', '%'.$request->search.'%')
-                ->orderBy('is_admin', 'desc')->orderBy('first_name', 'asc')
-                ->paginate(10)->withQueryString();
+        $users = User::where('name', 'like', '%' . $request->search . '%')
+            ->orderBy('is_admin', 'desc')->orderBy('name', 'asc')
+            ->paginate(10)->withQueryString();
 
-        if (! $request) {
+        if (!$request) {
             $users = User::orderBy('is_admin', 'desc')->paginate(10);
         }
 

@@ -4,13 +4,11 @@
             <form class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST"
                 action="{{ route('users.store') }}">
                 @csrf
-                <h1 class="mb-5 text-lg font-bold text-gray-700">Tambah Data Administrator Sistem Informasi Geografis
-                    Wisata Trenggalek</h1>
+                <h1 class="mb-5 text-lg font-bold text-gray-700">
+                    Tambah Data Administrator Sistem Informasi Geografis Wisata Trenggalek</h1>
                 <div class="grid gap-x-5 md:grid-cols-2">
-                    <x-input-default-form type="text" name="first_name" :value="old('first_name')" id="first_name"
-                        labelTitle="Nama Depan*" error='first_name' placeholder="John"></x-input-default-form>
-                    <x-input-default-form type="text" name="last_name" :value="old('last_name')" id="last_name"
-                        labelTitle="Nama Belakang" error='last_name' placeholder="Doe"></x-input-default-form>
+                    <x-input-default-form type="text" name="name" :value="old('name')" id="name"
+                        labelTitle="Nama Lengkap*" error='name' placeholder="John"></x-input-default-form>
                     <x-input-default-form type="email" name="email" :value="old('email')" id="email"
                         labelTitle="Email*" error='email' placeholder="johndoe@mail.com"></x-input-default-form>
                     <x-input-default-form type="text" name="username" :value="old('username')" id="username"

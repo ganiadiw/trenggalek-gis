@@ -25,8 +25,7 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => ['required', 'max:255'],
-            'last_name' => ['nullable', 'max:255'],
+            'name' => ['required', 'max:255'],
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user), 'max:255'],
             'username' => ['required', Rule::unique('users', 'username')->ignore($this->user), 'max:255'],
             'new_password' => ['nullable', 'min:8', 'max:255'],
@@ -40,7 +39,7 @@ class UserUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'first_name.required' => 'Nama depan harus diisi',
+            'name.required' => 'Namaharus diisi',
             'email.required' => 'Email harus diisi',
             'email.eamil' => 'Email tidak valid',
             'email.unique' => 'Email sudah terdaftar',
@@ -49,7 +48,7 @@ class UserUpdateRequest extends FormRequest
             'new_password.min' => 'Password minimal 8 karakter',
             'password_confirmation.min' => 'Password minimal 8 karakter',
             'alamat.required' => 'Alamat harus diisi',
-            'phone_number.required' => 'Nomor telepon depan harus diisi',
+            'phone_number.required' => 'Nomor telepon harus diisi',
             'avatar.image' => 'Foto profil harus berformat gambar dengan ekstensi .png atau .jpg',
             'avatr.max' => 'Ukuran maksimal foto profil adalah 2048KB atau 2MB',
         ];

@@ -5,14 +5,14 @@
                 action="{{ route('users.update', ['user' => $user]) }} " enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <h1 class="text-lg font-bold text-gray-700">Ubah Data Administrator Sistem Informasi Geografis Wisata
-                    Trenggalek</h1>
+                <h1 class="text-lg font-bold text-gray-700">
+                    Ubah Data Administrator Sistem Informasi Geografis Wisata Trenggalek</h1>
                 <div x-data="{ open: false }">
                     <div class="flex justify-center mt-10 mb-10">
                         <div class="relative">
                             <img id="avatar"
                                 class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64"
-                                src="{{ $user->avatar_name? asset('storage/avatars/' . $user->avatar_name): Avatar::create($user->full_name)->setDimension(400, 400)->setFontSize(150)->toBase64() }}"
+                                src="{{ $user->avatar_name? asset('storage/avatars/' . $user->avatar_name): Avatar::create($user->name)->setDimension(500, 500)->setFontSize(230)->toBase64() }}"
                                 alt="Bordered avatar">
                             <input x-on:change="open = true" type="file" id="avatarUpload" name="avatar" hidden>
                             <label for="avatarUpload" data-tooltip-target="tooltip-animation"
@@ -41,10 +41,8 @@
                         menyimpan gambar</p>
                 </div>
                 <div class="grid gap-x-5 md:grid-cols-2">
-                    <x-input-default-form type="text" name="first_name" :value="old('first_name', $user->first_name)" id="first_name"
-                        labelTitle="Nama Depan*" error='first_name' placeholder="John"></x-input-default-form>
-                    <x-input-default-form type="text" name="last_name" :value="old('last_name', $user->last_name)" id="last_name"
-                        labelTitle="Nama Belakang" error='last_name' placeholder="Doe"></x-input-default-form>
+                    <x-input-default-form type="text" name="name" :value="old('name', $user->name)" id="name"
+                        labelTitle="Nama Lengkap*" error='name' placeholder="John"></x-input-default-form>
                     <x-input-default-form type="email" name="email" :value="old('email', $user->email)" id="email"
                         labelTitle="Email*" error='email' placeholder="johndoe@mail.com"></x-input-default-form>
                     <x-input-default-form type="text" name="username" :value="old('username', $user->username)" id="username"
