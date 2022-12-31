@@ -120,9 +120,7 @@ class SubDistrictTest extends TestCase
         Storage::fake('geojson');
 
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503010.geojson', 25, 'application/json');
-
-        $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->post(route('sub-districts.store', [
+        $data = [
             'code' => '3503010',
             'name' => 'Panggul',
             'latitude' => -8.2402961,
@@ -130,9 +128,15 @@ class SubDistrictTest extends TestCase
             'fill_color' => '#0ea5e9',
             'geojson_name' => $gojsonFile->name,
             'geojson_path' => $gojsonFile->path(),
-        ]));
+        ];
+
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->post(route('sub-districts.store', $data));
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
         $response->assertRedirect();
+        // $this->assertDatabaseHas('sub_districts', [
+        //     'code' => '3503010',
+        // ]);
     }
 
     public function test_an_superadmin_can_create_new_sub_district_with_geojson_text()
@@ -257,6 +261,7 @@ class SubDistrictTest extends TestCase
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->delete(route('sub-districts.update', ['sub_district' => $this->subDistrict]));
+        $this->assertModelMissing($this->subDistrict);
         $response->assertRedirect(route('sub-districts.index'));
     }
 
