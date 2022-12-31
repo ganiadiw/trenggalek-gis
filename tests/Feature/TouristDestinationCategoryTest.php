@@ -34,6 +34,14 @@ class TouristDestinationCategoryTest extends TestCase
         $response->assertSeeText('Tambah Data Kategori Destinasi Wisata');
     }
 
+    public function test_correct_data_must_be_provided_to_create_new_tourist_destination_category()
+    {
+        $response = $this->actingAs($this->user)->post(route('tourist-destination-categories.store', [
+            'name' => '',
+        ]));
+        $response->assertInvalid();
+    }
+
     public function test_an_authenticated_user_can_create_new_tourist_destination_category()
     {
         $response = $this->actingAs($this->user)->post(route('tourist-destination-categories.store', [
@@ -41,14 +49,6 @@ class TouristDestinationCategoryTest extends TestCase
         ]));
         $response->assertValid();
         $response->assertRedirect();
-    }
-
-    public function test_correct_data_must_be_provided_to_create_new_tourist_destination_category()
-    {
-        $response = $this->actingAs($this->user)->post(route('tourist-destination-categories.store', [
-            'name' => '',
-        ]));
-        $response->assertInvalid();
     }
 
     public function test_an_authenticated_user_can_see_tourist_destination_category_show_page()
@@ -65,6 +65,14 @@ class TouristDestinationCategoryTest extends TestCase
         $response->assertSeeText('Ubah Data Kategori Destinasi Wisata');
     }
 
+    public function test_correct_data_must_be_provided_to_update_tourist_destination_category()
+    {
+        $response = $this->actingAs($this->user)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $this->category]), [
+            'name' => '',
+        ]);
+        $response->assertInvalid();
+    }
+
     public function test_an_authenticated_user_can_update_tourist_destination_category()
     {
         $response = $this->actingAs($this->user)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $this->category]), [
@@ -72,14 +80,6 @@ class TouristDestinationCategoryTest extends TestCase
         ]);
         $response->assertValid();
         $response->assertRedirect(route('tourist-destination-categories.index'));
-    }
-
-    public function test_correct_data_must_be_provided_to_update_tourist_destination_category()
-    {
-        $response = $this->actingAs($this->user)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $this->category]), [
-            'name' => '',
-        ]);
-        $response->assertInvalid();
     }
 
     public function test_an_authenticated_user_can_delete_tourist_destination_category()

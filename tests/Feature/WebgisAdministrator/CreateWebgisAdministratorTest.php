@@ -43,6 +43,7 @@ class CreateWebgisAdministratorTest extends TestCase
             'password' => '',
         ]));
         $response->assertInvalid();
+        $response->assertRedirect(url()->previous());
     }
 
     public function test_an_superadmin_can_create_new_webgis_administrator()

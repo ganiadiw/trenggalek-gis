@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-// Test case for update user password` (Webgis Administrator)
+// Test case for update user password (Webgis Administrator)
 class PasswordUpdateTest extends TestCase
 {
     private User $superAdmin; // Super Admin

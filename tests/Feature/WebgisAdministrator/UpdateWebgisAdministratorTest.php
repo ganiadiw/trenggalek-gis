@@ -59,6 +59,7 @@ class UpdateWebgisAdministratorTest extends TestCase
             'username' => '',
         ]);
         $response->assertInvalid();
+        $response->assertRedirect(url()->previous());
     }
 
     public function test_an_superadmin_can_update_webgis_administrator_without_change_avatar_and_password()

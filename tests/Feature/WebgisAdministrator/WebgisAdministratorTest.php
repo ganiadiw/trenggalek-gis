@@ -21,9 +21,6 @@ class WebgisAdministratorTest extends TestCase
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'address' => 'Desa Panggul, Kecamatan Panggul',
-            'phone_number' => '081234567890',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'is_admin' => 0,
         ]);
     }
@@ -45,16 +42,16 @@ class WebgisAdministratorTest extends TestCase
         $response->assertSeeText($this->webgisAdmin->name);
     }
 
-    // public function test_an_superadmin_can_search_contains_no_webgis_administrator_data()
-    // {
-    //     $user = User::factory()->create();
-
-    //     $this->assertEquals(1, $user->is_admin);
-    //     $response = $this->actingAs($user)->get(route('users.search'), [
-    //         'search' => 'W',
-    //     ]);
-    //     $response->assertSeeText('Data tidak tersedia');
-    // }
+    public function test_an_superadmin_cannot_search_contains_no_webgis_administrator_data()
+    {
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $this->actingAs($this->superAdmin)->get(route('users.search'), [
+            'search' => 'John',
+        ]);
+        $this->assertDatabaseMissing('users', [
+            'name' => 'John',
+        ]);
+    }
 
     public function test_an_superadmin_can_see_webgis_administrator_profile()
     {
