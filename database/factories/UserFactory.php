@@ -18,8 +18,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'first_name' => 'Gani Adi',
-            'last_name' => 'Wiranata',
+            'name' => 'Gani Adi Wiranata',
             'username' => 'ganiadiw',
             'email' => 'ganiadiw@example.com',
             'address' => 'Desa Gayam, Kecamatan Panggul',

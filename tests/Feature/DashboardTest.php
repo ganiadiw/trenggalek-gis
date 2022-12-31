@@ -11,14 +11,14 @@ class DashboardTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/dashboard');
+        $response = $this->actingAs($user)->get(route('dashboard'));
         $response->assertStatus(200);
         $response->assertSeeText('Dashboard');
     }
 
     public function test_an_unauthenticated_user_cannot_see_dashboard_page()
     {
-        $response = $this->get('/dashboard');
+        $response = $this->get(route('dashboard'));
         $response->assertRedirect(route('login'));
         $this->assertGuest();
     }
@@ -28,7 +28,7 @@ class DashboardTest extends TestCase
         $user = User::factory()->create();
 
         $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->get('/dashboard');
+        $response = $this->actingAs($user)->get(route('dashboard'));
         $response->assertStatus(200);
         $response->assertSeeTextInOrder(['Dashboard', 'Administrator WebGIS', 'Kecamatan', 'Kategori Destinasi Wisata', 'Destinasi Wisata', 'Desa Wisata']);
     }
@@ -43,7 +43,7 @@ class DashboardTest extends TestCase
         ]);
 
         $this->assertEquals(0, $user->is_admin);
-        $response = $this->actingAs($user)->get('/dashboard');
+        $response = $this->actingAs($user)->get(route('dashboard'));
         $response->assertStatus(200);
         $response->assertDontSeeText('Administrator WebGIS');
         $response->assertDontSeeText('Data Kecamatan');

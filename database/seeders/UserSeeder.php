@@ -17,8 +17,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'first_name' => 'Gani Adi',
-            'last_name' => 'Wiranata',
+            'name' => 'Gani Adi Wiranata',
             'email' => 'ganiadiw@example.com',
             'username' => 'ganiadiw',
             'address' => 'Desa Gayam, Kecamatan Panggul',
@@ -31,8 +30,7 @@ class UserSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             User::create([
-                'first_name' => $faker->firstName(),
-                'last_name' => $faker->lastName(),
+                'name' => $faker->name(),
                 'email' => $faker->safeEmail(),
                 'username' => $faker->userName(),
                 'address' => $faker->address(),

@@ -14,7 +14,8 @@ class SubDistrictController extends Controller
     public function index()
     {
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
-                        ->orderBy('code', 'asc')->paginate(10);
+            ->orderBy('code', 'asc')
+            ->paginate(10);
 
         return view('sub-district.index', compact('subDistricts'));
     }
@@ -30,12 +31,12 @@ class SubDistrictController extends Controller
 
         if ($request->file('geojson')) {
             $geojson = $validated['geojson'];
-            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2).'-'.Str::random(5).'-'.$geojson->getClientOriginalName();
+            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2) . '-' . Str::random(5) . '-' . $geojson->getClientOriginalName();
             $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
         } else {
-            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2).'-'.Str::random((5)).'-'.$validated['code'].'.geojson';
-            Storage::put('public/geojson/'.$validated['geojson_name'], $request->geojson_text_area);
-            $validated['geojson_path'] = 'public/geojson/'.$validated['geojson_name'];
+            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2) . '-' . Str::random(5) . '-' . $validated['code'] . '.geojson';
+            Storage::put('public/geojson/' . $validated['geojson_name'], $request->geojson_text_area);
+            $validated['geojson_path'] = 'public/geojson/' . $validated['geojson_name'];
         }
 
         SubDistrict::create($validated);
@@ -59,7 +60,7 @@ class SubDistrictController extends Controller
 
         if ($request->file('geojson')) {
             $geojson = $validated['geojson'];
-            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2).'-'.Str::random(5).'-'.$geojson->getClientOriginalName();
+            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2) . '-' . Str::random(5) . '-' . $geojson->getClientOriginalName();
             $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
 
             if ($subDistrict->geojson_path != null) {
@@ -67,9 +68,9 @@ class SubDistrictController extends Controller
             }
         }
         if ($request->geojson_text_area != null) {
-            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2).'-'.Str::random((5)).'-'.$validated['code'].'.geojson';
-            Storage::put('public/geojson/'.$validated['geojson_name'], $request->geojson_text_area);
-            $validated['geojson_path'] = 'public/geojson/'.$validated['geojson_name'];
+            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2) . '-' . Str::random(5) . '-' . $validated['code'] . '.geojson';
+            Storage::put('public/geojson/' . $validated['geojson_name'], $request->geojson_text_area);
+            $validated['geojson_path'] = 'public/geojson/' . $validated['geojson_name'];
 
             if ($subDistrict->geojson_path != null) {
                 Storage::delete($subDistrict->geojson_path);
