@@ -15,5 +15,19 @@ class TouristDestinationCategorySeeder extends Seeder
     public function run()
     {
         TouristDestinationCategory::factory()->create();
+
+        collect([
+            [
+                'name' => 'Wisata Pertanian',
+            ],
+            [
+                'name' => 'Wisata Cagar Alam',
+            ],
+            [
+                'name' => 'Wisata Ziarah',
+            ],
+        ])->each(function ($category) {
+            TouristDestinationCategory::create($category);
+        });
     }
 }
