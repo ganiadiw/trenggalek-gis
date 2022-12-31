@@ -73,20 +73,19 @@ class UserController extends Controller
         }
 
         if (isset($validated['new_password']) == null || isset($validated['new_password']) == '') {
-            $validated['password'] = $user->password;
             $user->update($validated);
 
-            return redirect(route('users.index'))->with(['success' => 'Data berhasil diperbarui']);
+            return redirect(route('users.index'));
         }
 
         if ($validated['password_confirmation'] != $validated['new_password']) {
             return back()->with(['error' => 'Konfirmasi password tidak sesuai'])->withInput();
+        } else {
+            $validated['password'] = Hash::make($validated['new_password']);
+            $user->update($validated);
+
+            return redirect(route('users.index'))->with(['success' => 'Data berhasil diperbarui']);
         }
-
-        $validated['password'] = Hash::make($validated['new_password']);
-        $user->update($validated);
-
-        return redirect(route('users.index'))->with(['success' => 'Data berhasil diperbarui']);
     }
 
     public function destroy(User $user)
