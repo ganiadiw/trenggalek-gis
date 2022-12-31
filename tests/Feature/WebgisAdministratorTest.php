@@ -27,6 +27,36 @@ class WebgisAdministratorTest extends TestCase
         $response->assertSeeText('Tambah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
     }
 
+    public function test_an_superadmin_can_search_contains_webgis_administrator_data()
+    {
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create([
+            'name' => 'John Doe',
+            'username' => 'johdoe',
+            'address' => 'Desa Cakul, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'email' => 'johdoe@example.com',
+            'is_admin' => 0,
+        ]);
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get(route('users.search'), [
+            'search' => $otherUser->name,
+        ]);
+        $response->assertSeeText($otherUser->name);
+    }
+
+    // public function test_an_superadmin_can_search_contains_no_webgis_administrator_data()
+    // {
+    //     $user = User::factory()->create();
+
+    //     $this->assertEquals(1, $user->is_admin);
+    //     $response = $this->actingAs($user)->get(route('users.search'), [
+    //         'search' => 'W',
+    //     ]);
+    //     $response->assertSeeText('Data tidak tersedia');
+    // }
+
     public function test_an_superadmin_can_create_new_webgis_administrator()
     {
         $user = User::factory()->create();
@@ -265,5 +295,14 @@ class WebgisAdministratorTest extends TestCase
         $this->assertEquals('081234567890', $otherUser->phone_number);
         $this->assertEquals('johndoe@example.com', $otherUser->email);
         $this->assertEquals(0, $otherUser->is_admin);
+    }
+
+    public function test_an_superadmin_redirect_to_profile_update_route_if_want_to_change_the_data_itself()
+    {
+        $user = User::factory()->create();
+
+        $this->assertEquals(1, $user->is_admin);
+        $response = $this->actingAs($user)->get(route('users.edit', ['user' => $user->username]));
+        $response->assertRedirect(route('profile.edit'));
     }
 }

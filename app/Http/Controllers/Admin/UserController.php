@@ -26,10 +26,6 @@ class UserController extends Controller
             ->orderBy('is_admin', 'desc')->orderBy('name', 'asc')
             ->paginate(10)->withQueryString();
 
-        if (!$request) {
-            $users = User::orderBy('is_admin', 'desc')->paginate(10);
-        }
-
         return view('webgis-admin.index', compact('users'));
     }
 

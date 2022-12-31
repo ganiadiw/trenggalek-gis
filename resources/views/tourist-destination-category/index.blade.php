@@ -19,7 +19,7 @@
                             </span>
                         </a>
                         <div class="h-10 mt-3 mb-2 md:w-4/12">
-                            <form action="{{ route('sub-districts.search') }}" method="GET">
+                            <form action="{{ route('tourist-destination-categories.index') }}" method="GET">
                                 <label for="default-search"
                                     class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                                 <div class="relative w-full">

@@ -69,15 +69,19 @@
                     <ul class="flex space-x-5 text-sm text-center text-gray-400 border-b">
                         <li>
                             <button @click="current = 1" class="inline-flex items-center px-6 py-2 hover:text-gray-600"
-                                x-bind:class="{ 'active text-black border-b-[1px] border-black transition-none hover:text-black': current ===
-                                        1 }">
+                                x-bind:class="{
+                                    'active text-black border-b-[1px] border-black transition-none hover:text-black': current ===
+                                        1
+                                }">
                                 Peta Destinasi Wisata
                             </button>
                         </li>
                         <li>
                             <button @click="current = 2" class="px-6 py-2 hover:text-gray-600"
-                                x-bind:class="{ 'active text-black border-b-[1px] border-black transition-none hover:text-black': current ===
-                                        2 }">
+                                x-bind:class="{
+                                    'active text-black border-b-[1px] border-black transition-none hover:text-black': current ===
+                                        2
+                                }">
                                 Peta Desa Wisata
                             </button>
                         </li>

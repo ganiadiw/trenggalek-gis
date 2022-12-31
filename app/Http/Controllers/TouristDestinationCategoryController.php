@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TouristDestinationCategoryRequest;
 use App\Models\TouristDestinationCategory;
+use Illuminate\Http\Request;
 
 class TouristDestinationCategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $touristDestinationCategories = TouristDestinationCategory::select('id', 'name')
-                                        ->orderBy('name', 'asc')->paginate(10);
+            ->orderBy('name', 'asc')->paginate(10);
 
         return view('tourist-destination-category.index', compact('touristDestinationCategories'));
     }
