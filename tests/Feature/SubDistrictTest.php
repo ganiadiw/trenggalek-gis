@@ -10,7 +10,13 @@ use Tests\TestCase;
 
 class SubDistrictTest extends TestCase
 {
-    public static $createGeoJson = [
+    private User $superAdmin; // Super Admin
+
+    private User $webgisAdmin; // Webgis Administrator
+
+    private SubDistrict $subDistrict;
+
+    private $createGeoJson = [
         'type' => 'FeatureCollection',
         'features' => [
             'type' => 'Feature',
@@ -41,7 +47,7 @@ class SubDistrictTest extends TestCase
         ],
     ];
 
-    public static $updateGeoJson = [
+    private $updateGeoJson = [
         'type' => 'FeatureCollection',
         'features' => [
             'type' => 'Feature',
@@ -76,35 +82,47 @@ class SubDistrictTest extends TestCase
         ],
     ];
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->superAdmin = User::factory()->create();
+        $this->webgisAdmin = User::factory()->create([
+            'name' => 'Hugo First',
+            'username' => 'hugofirst',
+            'email' => 'hugofirst@example.com',
+            'address' => 'Desa Panggul, Kecamatan Panggul',
+            'phone_number' => '081234567890',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'is_admin' => 0,
+        ]);
+        $this->subDistrict = SubDistrict::factory()->create();
+    }
+
     public function test_an_superadmin_can_see_sub_district_management_page()
     {
-        $user = User::factory()->create();
-
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->get(route('sub-districts.index'));
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->get(route('sub-districts.index'));
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Kecamatan');
     }
 
     public function test_a_create_page_can_be_rendered()
     {
-        $user = User::factory()->create();
-
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->get(route('sub-districts.create'));
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->get(route('sub-districts.create'));
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Kecamatan');
     }
 
     public function test_an_superadmin_can_create_new_sub_district_with_uploaded_geojson_file()
     {
-        $user = User::factory()->create();
         Storage::fake('geojson');
 
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503010.geojson', 25, 'application/json');
 
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->post(route('sub-districts.store', [
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->post(route('sub-districts.store', [
             'code' => '3503010',
             'name' => 'Panggul',
             'latitude' => -8.2402961,
@@ -119,13 +137,12 @@ class SubDistrictTest extends TestCase
 
     public function test_an_superadmin_can_create_new_sub_district_with_geojson_text()
     {
-        $user = User::factory()->create();
         Storage::fake('geojson');
 
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503010.geojson', 25, 'application/json');
 
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->post(route('sub-districts.store', [
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->post(route('sub-districts.store', [
             'code' => '3503010',
             'name' => 'Panggul',
             'latitude' => -8.2402961,
@@ -133,20 +150,18 @@ class SubDistrictTest extends TestCase
             'fill_color' => '#0ea5e9',
             'geojson_name' => $gojsonFile->name,
             'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode(self::$createGeoJson),
+            'geojson_text_area' => json_encode($this->createGeoJson),
         ]));
 
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
-        $this->assertJson(json_encode(self::$createGeoJson));
+        $this->assertJson(json_encode($this->createGeoJson));
         $response->assertRedirect(route('sub-districts.index'));
     }
 
     public function test_correct_data_must_be_provided_to_create_new_sub_district()
     {
-        $user = User::factory()->create();
-
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->post(route('sub-districts.store', [
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->post(route('sub-districts.store', [
             'code' => '',
             'name' => '',
             'latitude' => '',
@@ -161,40 +176,32 @@ class SubDistrictTest extends TestCase
 
     public function test_an_superadmin_can_see_sub_district_show_page()
     {
-        $user = User::factory()->create();
-        $subDistrict = SubDistrict::factory()->create();
-
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->get(route('sub-districts.show', ['sub_district' => $subDistrict]));
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->get(route('sub-districts.show', ['sub_district' => $this->subDistrict]));
         $response->assertStatus(200);
-        $this->assertEquals('3503020', $subDistrict->code);
-        $this->assertEquals('MUNJUNGAN', $subDistrict->name);
-        $this->assertEquals('-8.3030696', $subDistrict->latitude);
-        $this->assertEquals('111.5768607', $subDistrict->longitude);
+        $this->assertEquals('3503020', $this->subDistrict->code);
+        $this->assertEquals('MUNJUNGAN', $this->subDistrict->name);
+        $this->assertEquals('-8.3030696', $this->subDistrict->latitude);
+        $this->assertEquals('111.5768607', $this->subDistrict->longitude);
     }
 
     public function test_a_edit_page_can_be_rendered()
     {
-        $user = User::factory()->create();
-        $subDistrict = SubDistrict::factory()->create();
-
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->get(route('sub-districts.edit', ['sub_district' => $subDistrict]));
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->get(route('sub-districts.edit', ['sub_district' => $this->subDistrict]));
         $response->assertStatus(200);
         $response->assertSeeText('Ubah Data Kecamatan');
     }
 
     public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_file()
     {
-        $user = User::factory()->create();
-        $subDistrict = SubDistrict::factory()->create();
         Storage::fake('geojson');
 
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
 
-        $this->assertEquals(1, $user->is_admin);
+        $this->assertEquals(1, $this->superAdmin->is_admin);
 
-        $response = $this->actingAs($user)->put(route('sub-districts.update', ['sub_district' => $subDistrict]), [
+        $response = $this->actingAs($this->superAdmin)->put(route('sub-districts.update', ['sub_district' => $this->subDistrict]), [
             'code' => '3503020',
             'name' => 'KECAMATAN MUNJUNGAN',
             'latitude' => '-8.3030696',
@@ -209,15 +216,13 @@ class SubDistrictTest extends TestCase
 
     public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_text()
     {
-        $user = User::factory()->create();
-        $subDistrict = SubDistrict::factory()->create();
         Storage::fake('geojson');
 
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
 
-        $this->assertEquals(1, $user->is_admin);
+        $this->assertEquals(1, $this->superAdmin->is_admin);
 
-        $response = $this->actingAs($user)->put(route('sub-districts.update', ['sub_district' => $subDistrict]), [
+        $response = $this->actingAs($this->superAdmin)->put(route('sub-districts.update', ['sub_district' => $this->subDistrict]), [
             'code' => '3503020',
             'name' => 'KECAMATAN MUNJUNGAN',
             'latitude' => '-8.3030696',
@@ -225,20 +230,17 @@ class SubDistrictTest extends TestCase
             'fill_color' => '#059669',
             'geojson_name' => $gojsonFile->name,
             'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode(self::$updateGeoJson),
+            'geojson_text_area' => json_encode($this->updateGeoJson),
         ]);
         $response->assertValid();
-        $this->assertJson(json_encode(self::$updateGeoJson));
+        $this->assertJson(json_encode($this->updateGeoJson));
         $response->assertRedirect(route('sub-districts.index'));
     }
 
     public function test_correct_data_must_be_provided_to_update_sub_district()
     {
-        $user = User::factory()->create();
-        $subDistrict = SubDistrict::factory()->create();
-
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->put(route('sub-districts.update', ['sub_district' => $subDistrict]), [
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->put(route('sub-districts.update', ['sub_district' => $this->subDistrict]), [
             'code' => '',
             'name' => '',
             'latitude' => '',
@@ -253,23 +255,17 @@ class SubDistrictTest extends TestCase
 
     public function test_an_superadmin_can_delete_sub_district()
     {
-        $user = User::factory()->create();
-        $subDistrict = SubDistrict::factory()->create();
-
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->delete(route('sub-districts.update', ['sub_district' => $subDistrict]));
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->delete(route('sub-districts.update', ['sub_district' => $this->subDistrict]));
         $response->assertRedirect(route('sub-districts.index'));
     }
 
-    public function test_an_superadmin_cannot_create_new_sub_district()
+    public function test_an_webgis_administrator_cannot_create_new_sub_district()
     {
-        $user = User::factory()->create([
-            'is_admin' => 0,
-        ]);
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503010.geojson', 25, 'application/json');
 
-        $this->assertEquals(0, $user->is_admin);
-        $response = $this->actingAs($user)->post(route('sub-districts.store', [
+        $this->assertEquals(0, $this->webgisAdmin->is_admin);
+        $response = $this->actingAs($this->webgisAdmin)->post(route('sub-districts.store', [
             'code' => '3503010',
             'name' => 'Panggul',
             'latitude' => -8.2402961,
@@ -277,24 +273,20 @@ class SubDistrictTest extends TestCase
             'fill_color' => '#0ea5e9',
             'geojson_name' => $gojsonFile->name,
             'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode(self::$createGeoJson),
+            'geojson_text_area' => json_encode($this->createGeoJson),
         ]));
         $response->assertForbidden();
     }
 
-    public function test_an_superadmin_cannot_update_sub_district()
+    public function test_an_webgis_administrator_cannot_update_sub_district()
     {
-        $user = User::factory()->create([
-            'is_admin' => 0,
-        ]);
-        $subDistrict = SubDistrict::factory()->create();
         Storage::fake('geojson');
 
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
 
-        $this->assertEquals(0, $user->is_admin);
+        $this->assertEquals(0, $this->webgisAdmin->is_admin);
 
-        $response = $this->actingAs($user)->put(route('sub-districts.update', ['sub_district' => $subDistrict]), [
+        $response = $this->actingAs($this->webgisAdmin)->put(route('sub-districts.update', ['sub_district' => $this->subDistrict]), [
             'code' => '3503020',
             'name' => 'KECAMATAN MUNJUNGAN',
             'latitude' => '-8.3030696',
@@ -302,20 +294,15 @@ class SubDistrictTest extends TestCase
             'fill_color' => '#059669',
             'geojson_name' => $gojsonFile->name,
             'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode(self::$updateGeoJson),
+            'geojson_text_area' => json_encode($this->updateGeoJson),
         ]);
         $response->assertForbidden();
     }
 
-    public function test_an_superadmin_cannot_delete_sub_district()
+    public function test_an_webgis_administrator_cannot_delete_sub_district()
     {
-        $user = User::factory()->create([
-            'is_admin' => 0,
-        ]);
-        $subDistrict = SubDistrict::factory()->create();
-
-        $this->assertEquals(0, $user->is_admin);
-        $response = $this->actingAs($user)->delete(route('sub-districts.update', ['sub_district' => $subDistrict]));
+        $this->assertEquals(0, $this->webgisAdmin->is_admin);
+        $response = $this->actingAs($this->webgisAdmin)->delete(route('sub-districts.update', ['sub_district' => $this->subDistrict]));
         $response->assertForbidden();
     }
 
@@ -331,7 +318,7 @@ class SubDistrictTest extends TestCase
             'fill_color' => '#0ea5e9',
             'geojson_name' => $gojsonFile->name,
             'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode(self::$createGeoJson),
+            'geojson_text_area' => json_encode($this->createGeoJson),
         ]));
         $this->assertGuest();
         $response->assertRedirect(route('login'));
@@ -339,10 +326,9 @@ class SubDistrictTest extends TestCase
 
     public function test_an_guest_cannot_update_sub_district()
     {
-        $subDistrict = SubDistrict::factory()->create();
         $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
 
-        $response = $this->put(route('sub-districts.update', ['sub_district' => $subDistrict]), [
+        $response = $this->put(route('sub-districts.update', ['sub_district' => $this->subDistrict]), [
             'code' => '3503020',
             'name' => 'KECAMATAN MUNJUNGAN',
             'latitude' => '-8.3030696',
@@ -350,7 +336,7 @@ class SubDistrictTest extends TestCase
             'fill_color' => '#059669',
             'geojson_name' => $gojsonFile->name,
             'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode(self::$updateGeoJson),
+            'geojson_text_area' => json_encode($this->updateGeoJson),
         ]);
         $this->assertGuest();
         $response->assertRedirect(route('login'));
@@ -358,9 +344,7 @@ class SubDistrictTest extends TestCase
 
     public function test_an_guest_cannot_delete_sub_district()
     {
-        $subDistrict = SubDistrict::factory()->create();
-
-        $response = $this->delete(route('sub-districts.update', ['sub_district' => $subDistrict]));
+        $response = $this->delete(route('sub-districts.update', ['sub_district' => $this->subDistrict]));
         $this->assertGuest();
         $response->assertRedirect();
     }

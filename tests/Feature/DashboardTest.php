@@ -7,11 +7,18 @@ use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     public function test_an_authenticated_user_can_see_dashboard_page()
     {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response = $this->actingAs($this->user)->get(route('dashboard'));
         $response->assertStatus(200);
         $response->assertSeeText('Dashboard');
     }
@@ -25,25 +32,23 @@ class DashboardTest extends TestCase
 
     public function test_an_superadmin_can_see_all_menu()
     {
-        $user = User::factory()->create();
-
-        $this->assertEquals(1, $user->is_admin);
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $this->assertEquals(1, $this->user->is_admin);
+        $response = $this->actingAs($this->user)->get(route('dashboard'));
         $response->assertStatus(200);
         $response->assertSeeTextInOrder(['Dashboard', 'Administrator WebGIS', 'Kecamatan', 'Kategori Destinasi Wisata', 'Destinasi Wisata', 'Desa Wisata']);
     }
 
     public function test_an_webgis_admin_cannot_see_superadmin_menu()
     {
-        $user = User::factory()->make([
+        $webgisAdmin = User::factory()->create([
             'name' => 'John Doe',
             'username' => 'johndoe',
             'email' => 'johdoe@example.com',
             'is_admin' => 0,
         ]);
 
-        $this->assertEquals(0, $user->is_admin);
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $this->assertEquals(0, $webgisAdmin->is_admin);
+        $response = $this->actingAs($webgisAdmin)->get(route('dashboard'));
         $response->assertStatus(200);
         $response->assertDontSeeText('Administrator WebGIS');
         $response->assertDontSeeText('Data Kecamatan');
