@@ -246,11 +246,13 @@
             pickr.on('save', (color, instance) => {
                 const hexColor = color.toHEXA().toString()
                 subDistrictFillColor.value = hexColor
-                layer.setStyle({
-                    'color': hexColor,
-                    'weight': 2,
-                    'opacity': 0.4,
-                })
+                if (layer) {
+                    layer.setStyle({
+                        'color': hexColor,
+                        'weight': 2,
+                        'opacity': 0.4,
+                    })
+                }
                 pickr.hide()
             })
 
