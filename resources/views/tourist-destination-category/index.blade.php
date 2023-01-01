@@ -19,7 +19,7 @@
                             </span>
                         </a>
                         <div class="h-10 mt-3 mb-2 md:w-4/12">
-                            <form action="{{ route('tourist-destination-categories.index') }}" method="GET">
+                            <form action="{{ route('tourist-destination-categories.search') }}" method="GET">
                                 <label for="default-search"
                                     class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                                 <div class="relative w-full">
@@ -38,7 +38,7 @@
                                     </button>
                                 </div>
                             </form>
-                            <a href="{{ route('sub-districts.index') }}"
+                            <a href="{{ route('tourist-destination-categories.index') }}"
                                 class="flex justify-end mt-3 text-sm text-blue-500 hover:underline">
                                 Reset pencarian
                             </a>

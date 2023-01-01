@@ -8,94 +8,125 @@ use Tests\TestCase;
 
 class TouristDestinationCategoryTest extends TestCase
 {
+    private User $superAdmin;
+
+    private TouristDestinationCategory $category;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->superAdmin = User::factory()->create();
+        $this->category = TouristDestinationCategory::factory()->create();
+    }
+
     public function test_an_authenticated_user_can_see_tourist_destination_category_management_page()
     {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('tourist-destination-categories.index'));
+        $response = $this->actingAs($this->superAdmin)->get(route('tourist-destination-categories.index'));
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Kategori Destinasi Wisata');
     }
 
     public function test_a_create_page_can_be_rendered()
     {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('tourist-destination-categories.create'));
+        $response = $this->actingAs($this->superAdmin)->get(route('tourist-destination-categories.create'));
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Kategori Destinasi Wisata');
     }
 
-    public function test_an_authenticated_user_can_create_new_tourist_destination_category()
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->post(route('tourist-destination-categories.store', [
-            'name' => 'Wisata Pantai',
-        ]));
-        $response->assertValid();
-        $response->assertRedirect();
-    }
-
     public function test_correct_data_must_be_provided_to_create_new_tourist_destination_category()
     {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->post(route('tourist-destination-categories.store', [
+        $response = $this->actingAs($this->superAdmin)->post(route('tourist-destination-categories.store', [
             'name' => '',
         ]));
         $response->assertInvalid();
+    }
+
+    public function test_an_authenticated_user_can_create_new_tourist_destination_category()
+    {
+        $response = $this->actingAs($this->superAdmin)->post(route('tourist-destination-categories.store', [
+            'name' => 'Wisata Pantai',
+        ]));
+        $response->assertValid();
+        $response->assertRedirect(route('tourist-destination-categories.index'));
+        $response->assertSessionHasNoErrors();
     }
 
     public function test_an_authenticated_user_can_see_tourist_destination_category_show_page()
     {
-        $user = User::factory()->create();
-        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('tourist-destination-categories.show', ['tourist_destination_category' => $touristDestinationCategory]));
+        $response = $this->actingAs($this->superAdmin)->get(route('tourist-destination-categories.show', ['tourist_destination_category' => $this->category]));
         $response->assertStatus(200);
-        $this->assertEquals('Wisata Pantai', $touristDestinationCategory->name);
+        $this->assertEquals('Wisata Pantai', $this->category->name);
     }
 
     public function test_a_edit_page_can_be_rendered()
     {
-        $user = User::factory()->create();
-        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
-
-        $response = $this->actingAs($user)->get(route('tourist-destination-categories.edit', ['tourist_destination_category' => $touristDestinationCategory]));
+        $response = $this->actingAs($this->superAdmin)->get(route('tourist-destination-categories.edit', ['tourist_destination_category' => $this->category]));
         $response->assertStatus(200);
         $response->assertSeeText('Ubah Data Kategori Destinasi Wisata');
     }
 
-    public function test_an_authenticated_user_can_update_tourist_destination_category()
-    {
-        $user = User::factory()->create();
-        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
-
-        $response = $this->actingAs($user)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $touristDestinationCategory]), [
-            'name' => 'Wisata Bahari',
-        ]);
-        $response->assertValid();
-        $response->assertRedirect(route('tourist-destination-categories.index'));
-    }
-
     public function test_correct_data_must_be_provided_to_update_tourist_destination_category()
     {
-        $user = User::factory()->create();
-        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
-
-        $response = $this->actingAs($user)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $touristDestinationCategory]), [
+        $response = $this->actingAs($this->superAdmin)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $this->category]), [
             'name' => '',
         ]);
         $response->assertInvalid();
+        $response->assertSessionHasErrors();
+        $response->assertRedirect(url()->previous());
+    }
+
+    public function test_an_authenticated_user_can_update_tourist_destination_category()
+    {
+        $response = $this->actingAs($this->superAdmin)->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $this->category]), [
+            'name' => 'Wisata Bahari',
+        ]);
+        $response->assertValid();
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('tourist-destination-categories.index'));
     }
 
     public function test_an_authenticated_user_can_delete_tourist_destination_category()
     {
-        $user = User::factory()->create();
-        $touristDestinationCategory = TouristDestinationCategory::factory()->create();
-
-        $response = $this->actingAs($user)->delete(route('tourist-destination-categories.destroy', ['tourist_destination_category' => $touristDestinationCategory]));
+        $response = $this->actingAs($this->superAdmin)->delete(route('tourist-destination-categories.destroy', ['tourist_destination_category' => $this->category]));
         $response->assertRedirect(route('tourist-destination-categories.index'));
+    }
+
+    public function test_a_guest_cannot_create_new_tourist_destination_category()
+    {
+        $response = $this->post(route('tourist-destination-categories.store', [
+            'name' => 'Wisata Pantai',
+        ]));
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_a_guest_cannot_update_new_tourist_destination_category()
+    {
+        $response = $this->put(route('tourist-destination-categories.update', ['tourist_destination_category' => $this->category]), [
+            'name' => 'Wisata Bahari',
+        ]);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_a_guest_cannot_delete_new_tourist_destination_category()
+    {
+        $response = $this->delete(route('tourist-destination-categories.destroy', ['tourist_destination_category' => $this->category]));
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_an_superadmin_can_search_contains_tourist_destination_category_data()
+    {
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->get(route('tourist-destination-categories.search'), [
+            'search' => $this->category->name,
+        ]);
+        $response->assertStatus(200);
+        $response->assertSeeText($this->category->name);
     }
 }

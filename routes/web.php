@@ -28,9 +28,10 @@ Route::middleware('auth')->group(function () {
         Route::get('users/search', [UserController::class, 'search'])->name('users.search')->middleware(['admin']);
         Route::resource('users', UserController::class)->middleware(['admin']);
 
-        Route::get('sub-districts/search', [SubDistrictController::class, 'search'])->name('sub-districts.search');
+        Route::get('sub-districts/search', [SubDistrictController::class, 'search'])->name('sub-districts.search')->middleware(['admin']);
         Route::resource('sub-districts', SubDistrictController::class)->middleware('admin');
 
+        Route::get('tourist-destination-categories/search', [TouristDestinationCategoryController::class, 'search'])->name('tourist-destination-categories.search');
         Route::resource('tourist-destination-categories', TouristDestinationCategoryController::class);
     });
 

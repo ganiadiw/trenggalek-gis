@@ -6,16 +6,31 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSubDistrictRequest;
 use App\Http\Requests\UpdateSubDistrictRequest;
 use App\Models\SubDistrict;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SubDistrictController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
-            ->orderBy('code', 'asc')
-            ->paginate(10);
+            ->orderBy('code', 'asc')->paginate(10);
+
+        if ($request->search) {
+            $subDistricts = SubDistrict::where('name', 'like', '%' . $request->search . '%')
+                ->select('name', 'code', 'latitude', 'longitude')
+                ->orderBy('code', 'asc')->paginate(10)->withQueryString();
+        }
+
+        return view('sub-district.index', compact('subDistricts'));
+    }
+
+    public function search(Request $request)
+    {
+        $subDistricts = SubDistrict::where('name', 'like', '%' . $request->search . '%')
+            ->select('name', 'code', 'latitude', 'longitude')
+            ->orderBy('code', 'asc')->paginate(10)->withQueryString();
 
         return view('sub-district.index', compact('subDistricts'));
     }
