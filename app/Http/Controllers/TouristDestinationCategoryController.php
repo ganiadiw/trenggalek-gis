@@ -19,7 +19,7 @@ class TouristDestinationCategoryController extends Controller
     public function search(Request $request)
     {
         $touristDestinationCategories = TouristDestinationCategory::where('name', 'like', '%' . $request->search . '%')
-            -> select('id', 'name')->orderBy('name', 'asc')->paginate(10)->withQueryString();
+            ->select('id', 'name')->orderBy('name', 'asc')->paginate(10)->withQueryString();
 
         return view('tourist-destination-category.index', compact('touristDestinationCategories'));
     }
