@@ -22,6 +22,6 @@ class TouristDestinationTest extends TestCase
     {
         $response = $this->actingAs($this->user)->get(route('tourist-destinations.index'));
         $response->assertStatus(200);
-        $response->assertSeeText('Kelola Data Destinasi Wisata')
+        $response->assertSeeText('Kelola Data Destinasi Wisata');
     }
 }
