@@ -350,4 +350,13 @@ class SubDistrictTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect();
     }
+
+    public function test_an_superadmin_can_search_contains_sub_district_data()
+    {
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->get(route('sub-districts.search'), [
+            'search' => $this->subDistrict->name,
+        ]);
+        $response->assertSeeText($this->subDistrict->name);
+    }
 }
