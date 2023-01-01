@@ -134,9 +134,6 @@ class SubDistrictTest extends TestCase
         $response = $this->actingAs($this->superAdmin)->post(route('sub-districts.store', $data));
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
         $response->assertRedirect();
-        // $this->assertDatabaseHas('sub_districts', [
-        //     'code' => '3503010',
-        // ]);
     }
 
     public function test_an_superadmin_can_create_new_sub_district_with_geojson_text()

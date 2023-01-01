@@ -20,6 +20,9 @@ class DeleteWebgisAdministratorTest extends TestCase
     {
         parent::setUp();
 
+        Storage::fake('avatars');
+        $avatar = UploadedFile::fake()->image('avatar.png');
+
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
@@ -28,9 +31,6 @@ class DeleteWebgisAdministratorTest extends TestCase
             'is_admin' => 0,
         ]);
 
-        Storage::fake('avatars');
-
-        $avatar = UploadedFile::fake()->image('avatar.png');
         $this->webgisAdmin2 = User::factory()->create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',

@@ -60,7 +60,7 @@ class WebgisAdministratorTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals('Hugo First', $this->webgisAdmin->name);
         $this->assertEquals('hugofirst', $this->webgisAdmin->username);
-        $this->assertEquals('Desa Panggul, Kecamatan Panggul', $this->webgisAdmin->address);
+        $this->assertEquals('Desa Gayam, Kecamatan Panggul', $this->webgisAdmin->address);
         $this->assertEquals('081234567890', $this->webgisAdmin->phone_number);
         $this->assertEquals('hugofirst@example.com', $this->webgisAdmin->email);
         $this->assertEquals(0, $this->webgisAdmin->is_admin);

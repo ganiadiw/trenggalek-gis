@@ -20,17 +20,19 @@ class UpdateWebgisAdministratorTest extends TestCase
     {
         parent::setUp();
 
+        Storage::fake('avatars');
+        $avatar = UploadedFile::fake()->image('avatar.png');
+
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
+            'avatar_path' => $avatar->path(),
+            'avatar_name' => $avatar->hashName(),
             'is_admin' => 0,
         ]);
 
-        Storage::fake('avatars');
-
-        $avatar = UploadedFile::fake()->image('avatar.png');
         $this->webgisAdmin2 = User::factory()->create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
@@ -97,9 +99,10 @@ class UpdateWebgisAdministratorTest extends TestCase
             'username' => 'hugofirsttime',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
+            'avatar' => $avatar,
         ];
 
-        if ($avatar) {
+        if ($updateData['avatar']) {
             $updateData['avatar_path'] = $avatar->path();
             $updateData['avatar_name'] = $avatar->hashName();
 
