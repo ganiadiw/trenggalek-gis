@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\SubDistrictController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TouristDestinationCategoryController;
+use App\Http\Controllers\TouristDestinationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('tourist-destination-categories/search', [TouristDestinationCategoryController::class, 'search'])->name('tourist-destination-categories.search');
         Route::resource('tourist-destination-categories', TouristDestinationCategoryController::class);
+
+        Route::resource('tourist-destinations', TouristDestinationController::class);
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

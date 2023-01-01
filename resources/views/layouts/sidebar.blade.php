@@ -108,7 +108,7 @@
                             </x-side-link>
                         </li>
                         <li class="flex">
-                            <x-side-link class="pl-9"
+                            <x-side-link :href="route('tourist-destinations.index')" class="pl-9" :active="request()->routeIs('tourist-destinations*')"
                                 spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
                                 <x-slot name="title">Destinasi Wisata</x-slot>
                             </x-side-link>
