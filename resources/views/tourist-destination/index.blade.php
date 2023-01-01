@@ -74,7 +74,7 @@
                                         Jarak Dari Pusat Kota
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Koordinat Tengah (Latitude, Longitude)
+                                        Koordinat (Latitude, Longitude)
                                     </th>
                                     <th scope="col" class="flex justify-center px-6 py-3">
                                         Aksi
@@ -87,30 +87,34 @@
                                         <td class="px-6 py-4">
                                             {{ $key + $touristDestinations->firstItem() }}
                                         </td>
-                                        <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             <div class="flex items-center">
-                                                <a href="{{ route('sub-districts.show', ['sub_district' => $touristDestination]) }}"
+                                                <a href="{{ route('tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"
                                                     class="hover:underline hover:underline-offset-4">{{ $touristDestination->name }}</a>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ $touristDestination->name }}
+                                            {{ $touristDestination->address }}
                                         </td>
-                                        {{-- <div>
+                                        <td class="px-6 py-4">
+                                            {{ $touristDestination->manager }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $touristDestination->distance_from_city_center }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $touristDestination->coordinate }}
+                                        </td>
+                                        <div>
                                             <td class="px-6 py-4">
-                                                @if ($user->is_admin == 1)
-                                                    Super Admin
-                                                @else
-                                                    Webgis Administrator
-                                                @endif
+                                                <x-action-button :value="$touristDestination->name" :href="route('tourist-destinations.edit', [
+                                                    'tourist_destination' => $touristDestination,
+                                                ])"
+                                                    :action="route('tourist-destinations.destroy', [
+                                                        'tourist_destination' => $touristDestination,
+                                                    ])" />
                                             </td>
-                                            <td class="px-6 py-4">
-                                                @if ($user->is_admin == 0)
-                                                    <x-action-button :value="$user->name" :href="route('users.edit', ['user' => $user])"
-                                                        :action="route('users.destroy', ['user' => $user])" />
-                                                @endif
-                                            </td>
-                                        </div> --}}
+                                        </div>
                                     </tr>
                                 @endforeach
                             </tbody>

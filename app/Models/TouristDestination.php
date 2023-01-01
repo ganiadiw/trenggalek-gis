@@ -11,6 +11,7 @@ class TouristDestination extends Model
 
     protected $fillable = [
         'sub_district_id',
+        'tourist_destination_category_id',
         'name',
         'slug',
         'address',
@@ -22,4 +23,24 @@ class TouristDestination extends Model
         'latitude',
         'longitude',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function getCoordinateAttribute()
+    {
+        return "{$this->latitude}, {$this->longitude}";
+    }
+
+    public function subDistrict()
+    {
+        return $this->belongsTo(SubDistrict::class);
+    }
+
+    public function TouristDestinationCategory()
+    {
+        return $this->belongsTo(TouristDestinationCategory::class);
+    }
 }

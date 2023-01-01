@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UserSeeder::class);
+        $this->call(SubDistrictSeeder::class);
         $this->call(TouristDestinationCategorySeeder::class);
-        // $this->call(SubDistrictSeeder::class);
+        $this->call(TouristDestinationSeeder::class);
     }
 }

@@ -17,12 +17,6 @@ class SubDistrictController extends Controller
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
             ->orderBy('code', 'asc')->paginate(10);
 
-        if ($request->search) {
-            $subDistricts = SubDistrict::where('name', 'like', '%' . $request->search . '%')
-                ->select('name', 'code', 'latitude', 'longitude')
-                ->orderBy('code', 'asc')->paginate(10)->withQueryString();
-        }
-
         return view('sub-district.index', compact('subDistricts'));
     }
 

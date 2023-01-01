@@ -10,7 +10,7 @@ class TouristDestinationController extends Controller
 {
     public function index()
     {
-        $touristDestinations = TouristDestination::select('name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
+        $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
             ->orderBy('name', 'asc')->paginate(10);
 
         return view('tourist-destination.index', compact('touristDestinations'));
