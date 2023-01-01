@@ -8,10 +8,18 @@ use Illuminate\Http\Request;
 
 class TouristDestinationCategoryController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $touristDestinationCategories = TouristDestinationCategory::select('id', 'name')
             ->orderBy('name', 'asc')->paginate(10);
+
+        return view('tourist-destination-category.index', compact('touristDestinationCategories'));
+    }
+
+    public function search(Request $request)
+    {
+        $touristDestinationCategories = TouristDestinationCategory::where('name', 'like', '%' . $request->search . '%')
+            -> select('id', 'name')->orderBy('name', 'asc')->paginate(10)->withQueryString();
 
         return view('tourist-destination-category.index', compact('touristDestinationCategories'));
     }
