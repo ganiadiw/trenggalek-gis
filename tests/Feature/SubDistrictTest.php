@@ -43,7 +43,6 @@ class SubDistrictTest extends TestCase
                     ],
                 ],
             ],
-            'type' => 'Polygon',
         ],
     ];
 
@@ -78,7 +77,6 @@ class SubDistrictTest extends TestCase
                     ],
                 ],
             ],
-            'type' => 'Polygon',
         ],
     ];
 

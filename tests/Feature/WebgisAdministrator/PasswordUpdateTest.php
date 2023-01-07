@@ -24,13 +24,6 @@ class PasswordUpdateTest extends TestCase
             'email' => 'hugofirst@example.com',
             'is_admin' => 0,
         ]);
-
-        $this->webgisAdmin2 = User::factory()->create([
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'username' => 'johndoe',
-            'is_admin' => 0,
-        ]);
     }
 
     public function test_an_superadmin_cannot_update_webgis_administrator_with_incorrect_password()

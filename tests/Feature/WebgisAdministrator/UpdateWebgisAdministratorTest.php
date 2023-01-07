@@ -58,7 +58,6 @@ class UpdateWebgisAdministratorTest extends TestCase
             'name' => '',
             'username' => '',
             'email' => '',
-            'username' => '',
         ]);
         $response->assertInvalid();
         $response->assertRedirect(url()->previous());
