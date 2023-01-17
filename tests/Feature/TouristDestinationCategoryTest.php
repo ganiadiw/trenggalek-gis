@@ -27,7 +27,7 @@ class TouristDestinationCategoryTest extends TestCase
         $response->assertSeeText('Kelola Data Kategori Destinasi Wisata');
     }
 
-    public function test_a_create_page_can_be_rendered()
+    public function test_a_tourist_destination_category_create_page_can_be_rendered()
     {
         $response = $this->actingAs($this->user)->get(route('tourist-destination-categories.create'));
         $response->assertStatus(200);
@@ -59,7 +59,7 @@ class TouristDestinationCategoryTest extends TestCase
         $this->assertEquals('Wisata Pantai', $this->category->name);
     }
 
-    public function test_a_edit_page_can_be_rendered()
+    public function test_a_tourist_destination_category_edit_page_can_be_rendered()
     {
         $response = $this->actingAs($this->user)->get(route('tourist-destination-categories.edit', ['tourist_destination_category' => $this->category]));
         $response->assertStatus(200);

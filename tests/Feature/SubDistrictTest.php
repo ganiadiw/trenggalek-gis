@@ -105,7 +105,7 @@ class SubDistrictTest extends TestCase
         $response->assertSeeText('Kelola Data Kecamatan');
     }
 
-    public function test_a_create_page_can_be_rendered()
+    public function test_a_sub_district_create_page_can_be_rendered()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get(route('sub-districts.create'));
@@ -184,7 +184,7 @@ class SubDistrictTest extends TestCase
         $this->assertEquals('111.5768607', $this->subDistrict->longitude);
     }
 
-    public function test_a_edit_page_can_be_rendered()
+    public function test_a_sub_district_edit_page_can_be_rendered()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get(route('sub-districts.edit', ['sub_district' => $this->subDistrict]));
