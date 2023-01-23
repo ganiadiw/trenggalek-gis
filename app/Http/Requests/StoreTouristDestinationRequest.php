@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class StoreTouristDestinationRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class StoreTouristDestinationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,25 @@ class StoreTouristDestinationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required'],
+            'slug' => ['required'],
+            'tourist_destination_category_id' => ['required'],
+            'sub_district_id' => ['required'],
+            'address' => ['required'],
+            'manager' => ['required'],
+            'distance_from_city_center' => ['required'],
+            'transportation_access' => ['required'],
+            'facility' => ['required'],
+            'latitude' => ['required'],
+            'longitude' => ['required'],
+            'description' => ['required'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'slug' => Str::slug($this->name),
+        ]);
     }
 }

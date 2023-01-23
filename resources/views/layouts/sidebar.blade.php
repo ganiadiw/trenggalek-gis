@@ -54,7 +54,7 @@
                 </li>
             @endcan
             <li x-data="{
-                toggleDropdown: '{{ request()->routeIs('tourist-destination-categories*') }}',
+                toggleDropdown: '{{ request()->routeIs('tourist-destination-categories*') || request()->routeIs('tourist-destinations*') }}',
                 get isDropdownOpen() { return this.toggleDropdown },
                 toggleTheDropdown() { this.toggleDropdown = !this.toggleDropdown },
             }" class="mr-2">
@@ -74,7 +74,7 @@
                     </div>
                     <div class="flex items-center justify-between w-full pr-2 ml-4">
                         Kelola Destinasi Wisata
-                        @if (request()->routeIs('tourist-destination-categories*'))
+                        @if (request()->routeIs('tourist-destination-categories*') || request()->routeIs('tourist-destinations*'))
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-down"
                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"

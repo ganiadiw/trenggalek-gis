@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTouristDestinationRequest;
 use App\Http\Requests\UpdateTouristDestinationRequest;
+use App\Models\SubDistrict;
 use App\Models\TouristDestination;
+use App\Models\TouristDestinationCategory;
 
 class TouristDestinationController extends Controller
 {
@@ -16,25 +18,20 @@ class TouristDestinationController extends Controller
         return view('tourist-destination.index', compact('touristDestinations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $subDistricts = SubDistrict::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $categories = TouristDestinationCategory::select('id', 'name')->orderBy('name', 'ASC')->get();
+
+        return view('tourist-destination.create', compact('subDistricts', 'categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTouristDestinationRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreTouristDestinationRequest $request)
     {
-        //
+        $validated = $request->validated();
+        TouristDestination::create($validated);
+
+        return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil ditambahkan']);
     }
 
     /**
