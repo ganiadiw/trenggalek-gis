@@ -10,7 +10,7 @@
         <p class="mt-1 text-sm text-gray-500 ">{{ $desc }}</p>
     @endif
     @error($error)
-        <p id="standard_error_help" class="flex items-center mt-2 text-xs text-yellow-700">
+        <p class="flex items-center mt-2 text-xs text-yellow-700">
             <span class="mr-3 font-medium">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-circle" width="20"
                     height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
