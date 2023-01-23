@@ -179,9 +179,11 @@
                     <div class="mb-3 lg:flex lg:gap-x-2">
                         <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">
                             <h2 class="font-semibold text-black ">Tentukan koordinat titik tengah peta kecamatan</h2>
-                            <p class="mb-3 text-xs text-red-500">Titik tengah koordinat peta akan otomatis ditentukan
+                            <blockquote class="p-2 my-2 border-l-4 border-yellow-300 rounded-sm bg-gray-50">
+                                <p class="text-[13px] font-medium italic leading-relaxed text-yellow-500">Titik tengah koordinat peta akan otomatis ditentukan
                                 saat file geojson telah dipilih atau text geosjon telah di preview pada peta, atau juga
                                 dapat ditentukan dengan klik pada peta</p>
+                            </blockquote>
                             <x-input-default-form class="cursor-not-allowed" type="text" name="latitude"
                                 :value="old('latitude', $subDistrict->latitude)" id="latitude" labelTitle="Latitude*" error='latitude'
                                 placeholder="-8.2402961" readonly="true"></x-input-default-form>
