@@ -8,7 +8,7 @@
                     <x-statistic-card>
                         <x-slot name='svgIcon'>
                             <div
-                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-green-500">
+                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                                     <path
@@ -22,7 +22,7 @@
                     <x-statistic-card>
                         <x-slot name='svgIcon'>
                             <div
-                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-green-500">
+                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-building-cottage" width="16" height="16"
                                     viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none"
