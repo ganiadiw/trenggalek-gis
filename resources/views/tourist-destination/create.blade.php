@@ -144,7 +144,8 @@
             const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
-                xhr.open('POST', 'postAcceptor.php');
+                xhr.open('POST', "{{ route('tourist-destination-description-image-media.store') }}");
+                xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
 
                 xhr.upload.onprogress = (e) => {
                     progress(e.loaded / e.total * 100);
@@ -152,23 +153,23 @@
 
                 xhr.onload = () => {
                     if (xhr.status === 403) {
-                    reject({ message: 'HTTP Error: ' + xhr.status, remove: true });
-                    return;
+                        reject({ message: 'HTTP Error: ' + xhr.status, remove: true });
+                        return;
                     }
 
                     if (xhr.status < 200 || xhr.status >= 300) {
-                    reject('HTTP Error: ' + xhr.status);
-                    return;
+                        reject('HTTP Error: ' + xhr.status);
+                        return;
                     }
 
                     const json = JSON.parse(xhr.responseText);
 
-                    if (!json || typeof json.location != 'string') {
-                    reject('Invalid JSON: ' + xhr.responseText);
-                    return;
+                    if (!json || typeof json.url != 'string') {
+                        reject('Invalid JSON: ' + xhr.responseText);
+                        return;
                     }
 
-                    resolve(json.location);
+                    resolve(json.url);
                 };
 
                 xhr.onerror = () => {
@@ -183,8 +184,8 @@
 
             tinymce.init({
                 selector: 'textarea#description',
-                plugins: 'autosave anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount fullscreen preview save',
-                toolbar: 'save cancel undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap visualblocks | removeformat fullscreen preview',
+                plugins: 'autosave anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount fullscreen preview',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap visualblocks | removeformat fullscreen preview',
                 referrer_policy: 'origin',
                 promotion: false,
                 image_title: true,
@@ -194,7 +195,21 @@
                 image_advtab: true,
                 image_description: false,
                 image_uploadtab: false,
+                images_file_types: 'png,jpg,jpeg',
+                image_caption: true,
                 automatic_uploads: true,
+                autosave_retention: '0m',
+                autosave_interval: '0s',
+                removed_menuitems: 'restoredraft',
+                color_map: [
+                    '000000', 'Black',
+                    '808080', 'Gray',
+                    'FFFFFF', 'White',
+                    'FF0000', 'Red',
+                    'FFFF00', 'Yellow',
+                    '008000', 'Green',
+                    '0000FF', 'Blue'
+                ],
                 file_picker_callback: (cb, value, meta) => {
                     const input = document.createElement('input');
                     input.setAttribute('type', 'file');
@@ -205,12 +220,7 @@
 
                         const reader = new FileReader();
                         reader.addEventListener('load', () => {
-                            /*
-                            Note: Now we need to register the blob in TinyMCEs image blob
-                            registry. In the next release this part hopefully won't be
-                            necessary, as we are looking to handle it internally.
-                            */
-                            const id = 'blobid' + (new Date()).getTime();
+                            const id = 'image' + (new Date()).getTime();
                             const blobCache =  tinymce.activeEditor.editorUpload.blobCache;
                             const base64 = reader.result.split(',')[1];
                             const blobInfo = blobCache.create(id, file, base64);

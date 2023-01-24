@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SubDistrictController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ImageMediaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TouristDestinationCategoryController;
 use App\Http\Controllers\TouristDestinationController;
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('tourist-destination-categories', TouristDestinationCategoryController::class);
 
         Route::resource('tourist-destinations', TouristDestinationController::class);
+
+        Route::post('tourist-destination-description-image-media', [ImageMediaController::class, 'touristDestinationDescriptionStore'])->name('tourist-destination-description-image-media.store');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
