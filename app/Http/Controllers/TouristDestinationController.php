@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTouristDestinationRequest;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class TouristDestinationController extends Controller
 {
@@ -28,8 +29,17 @@ class TouristDestinationController extends Controller
 
     public function store(StoreTouristDestinationRequest $request)
     {
-        $validated = $request->validated();
-        TouristDestination::create($validated);
+        $tourisDestination = TouristDestination::create($request->safe()->except(['media_filenames']));
+        $mediaFilenames = $request->safe()->only('media_filenames');
+        $media = json_decode($mediaFilenames['media_filenames']);
+
+        if ($media) {
+            foreach ($media as $item) {
+                Media::where('file_name', $item->imgFilename)->update([
+                    'model_id' => $tourisDestination->id,
+                ]);
+            }
+        }
 
         return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil ditambahkan']);
     }

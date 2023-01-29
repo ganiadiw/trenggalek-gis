@@ -11,10 +11,10 @@ class ImageMediaController extends Controller
         $touristDestination = new TouristDestination();
         $touristDestination->id = 0;
         $touristDestination->exists = true;
-        $image = $touristDestination->addMediaFromRequest('image')->toMediaCollection('tourist-destinations');
+        $image = $touristDestination->addMediaFromRequest('file')->toMediaCollection('tourist-destinations');
 
         return response()->json([
-            'url' => $image->getUrl(),
+            'location' => $image->getUrl(),
         ]);
     }
 }

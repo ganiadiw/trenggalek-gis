@@ -37,13 +37,14 @@ class StoreTouristDestinationRequest extends FormRequest
             'latitude' => ['required'],
             'longitude' => ['required'],
             'description' => ['required'],
+            'media_filenames' => ['nullable'],
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => Str::slug($this->name),
+            'slug' => Str::slug($this->name) . '-' . Str::random(5),
         ]);
     }
 }

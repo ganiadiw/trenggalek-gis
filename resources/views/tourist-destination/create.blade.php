@@ -87,6 +87,10 @@
                     </div>
                 </div>
 
+                <div>
+                    <input type="hidden" name="media_filenames" id="media_filenames">
+                </div>
+
                 <div class="flex gap-x-2">
                     <a href="{{ route('tourist-destinations.index') }}"
                         class="text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kembali</a>
@@ -164,12 +168,12 @@
 
                     const json = JSON.parse(xhr.responseText);
 
-                    if (!json || typeof json.url != 'string') {
+                    if (!json || typeof json.location != 'string') {
                         reject('Invalid JSON: ' + xhr.responseText);
                         return;
                     }
 
-                    resolve(json.url);
+                    resolve(json.location);
                 };
 
                 xhr.onerror = () => {
@@ -177,17 +181,37 @@
                 };
 
                 const formData = new FormData();
-                formData.append('image', blobInfo.blob(), blobInfo.filename());
+                formData.append('file', blobInfo.blob(), blobInfo.filename());
 
                 xhr.send(formData);
             });
 
+            let media_filenames = document.getElementById('media_filenames');
+
             tinymce.init({
                 selector: 'textarea#description',
                 plugins: 'autosave anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount fullscreen preview',
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap visualblocks | removeformat fullscreen preview',
+                toolbar: 'fullscreen undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap visualblocks | removeformat preview',
                 referrer_policy: 'origin',
                 promotion: false,
+                setup: (editor) => {
+                    editor.on('blur', () => {
+                        let imageFiles = [];
+                        let editorContent = tinymce.activeEditor.getContent();
+                        $(editorContent).find('img').each(function(){
+                            let imgSrc = $(this).attr('src');
+                            let imgTitle = $(this).attr('title');
+                            let imgFilename = imgSrc.split('/').pop();
+                            imageFiles.push({
+                                imgFilename: imgFilename
+                            });
+                        });
+                        media_filenames.value = JSON.stringify(imageFiles);
+                    });
+                },
+                // init_instance_callback: function (editor) {
+                //     editor.setContent('');
+                // },
                 image_title: true,
                 automatic_uploads: true,
                 file_picker_types: 'image',
@@ -195,12 +219,8 @@
                 image_advtab: true,
                 image_description: false,
                 image_uploadtab: false,
-                images_file_types: 'png,jpg,jpeg',
+                images_file_types: 'png,jpg,jpeg,gif',
                 image_caption: true,
-                automatic_uploads: true,
-                autosave_retention: '0m',
-                autosave_interval: '0s',
-                removed_menuitems: 'restoredraft',
                 color_map: [
                     '000000', 'Black',
                     '808080', 'Gray',
@@ -235,12 +255,9 @@
                     input.click();
                 },
                 content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-                save_oncancelcallback: () => {
-                    console.log('Save canceled');
-                },
-                save_onsavecallback: () => {
-                    console.log('Saved');
-                }
+                iframe_template_callback: (data) =>
+                    `<iframe title="${data.title}" width="${data.width}" height="${data.height}" src="${data.source}"></iframe>`,
+
             });
         </script>
     @endsection
