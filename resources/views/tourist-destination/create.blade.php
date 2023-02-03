@@ -88,7 +88,7 @@
                 </div>
 
                 <div>
-                    <input type="hidden" name="media_filenames" id="media_filenames">
+                    <input type="hidden" name="media_files" id="mediaFiles">
                 </div>
 
                 <div class="flex gap-x-2">
@@ -174,6 +174,7 @@
                     }
 
                     resolve(json.location);
+                    // add image to array
                 };
 
                 xhr.onerror = () => {
@@ -181,12 +182,12 @@
                 };
 
                 const formData = new FormData();
-                formData.append('file', blobInfo.blob(), blobInfo.filename());
+                formData.append('image', blobInfo.blob(), blobInfo.filename());
 
                 xhr.send(formData);
             });
 
-            let media_filenames = document.getElementById('media_filenames');
+            let mediaFiles = document.getElementById('mediaFiles');
 
             tinymce.init({
                 selector: 'textarea#description',
@@ -201,17 +202,18 @@
                         $(editorContent).find('img').each(function(){
                             let imgSrc = $(this).attr('src');
                             let imgTitle = $(this).attr('title');
-                            let imgFilename = imgSrc.split('/').pop();
+                            let filename = imgSrc.split('/').pop();
                             imageFiles.push({
-                                imgFilename: imgFilename
+                                filename: filename
                             });
                         });
-                        media_filenames.value = JSON.stringify(imageFiles);
+                        mediaFiles.value = JSON.stringify({images: imageFiles});
+                        console.log(mediaFiles.value);
+                    });
+                    editor.on('init', () => {
+                        editor.setContent('');
                     });
                 },
-                // init_instance_callback: function (editor) {
-                //     editor.setContent('');
-                // },
                 image_title: true,
                 automatic_uploads: true,
                 file_picker_types: 'image',

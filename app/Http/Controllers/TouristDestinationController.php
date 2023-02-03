@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTouristDestinationRequest;
 use App\Http\Requests\UpdateTouristDestinationRequest;
 use App\Models\SubDistrict;
+use App\Models\TemporaryFile;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use DOMDocument;
 
 class TouristDestinationController extends Controller
 {
@@ -29,16 +30,38 @@ class TouristDestinationController extends Controller
 
     public function store(StoreTouristDestinationRequest $request)
     {
-        $tourisDestination = TouristDestination::create($request->safe()->except(['media_filenames']));
-        $mediaFilenames = $request->safe()->only('media_filenames');
-        $media = json_decode($mediaFilenames['media_filenames']);
+        $touristDestination = TouristDestination::create($request->safe()->except(['media_files']));
+        $mediaFiles = $request->safe()->only('media_files');
+        $media = json_decode($mediaFiles['media_files']);
 
-        if ($media) {
-            foreach ($media as $item) {
-                Media::where('file_name', $item->imgFilename)->update([
-                    'model_id' => $tourisDestination->id,
-                ]);
+        if ($media->images != null) {
+            $newImageSources = [];
+
+            foreach ($media->images as $item) {
+                $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
+                $newImageSource = $touristDestination->addMedia(storage_path('app/public/tmp/media/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
+                    ->toMediaCollection('tourist-destinations');
+                rmdir(public_path('/storage/tmp/media/' . $temporaryFile->foldername));
+                $temporaryFile->delete();
+                array_push($newImageSources, $newImageSource->getUrl());
             }
+
+            $dom = new DOMDocument();
+            $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $imageTags = $dom->getElementsByTagName('img');
+
+            $index = 0;
+            foreach ($imageTags as $imageTag) {
+                $newSrc = $newImageSources[$index];
+                $imageTag->setAttribute('src', $newSrc);
+                $index++;
+            }
+
+            $content = $dom->saveHTML();
+
+            TouristDestination::where('id', $touristDestination->id)->update([
+                'description' => $content,
+            ]);
         }
 
         return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil ditambahkan']);

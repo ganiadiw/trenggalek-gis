@@ -37,7 +37,7 @@ class StoreTouristDestinationRequest extends FormRequest
             'latitude' => ['required'],
             'longitude' => ['required'],
             'description' => ['required'],
-            'media_filenames' => ['nullable'],
+            'media_files' => ['nullable'],
         ];
     }
 

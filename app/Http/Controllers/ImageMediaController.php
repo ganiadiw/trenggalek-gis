@@ -2,19 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TemporaryFile;
 use App\Models\TouristDestination;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ImageMediaController extends Controller
 {
-    public function touristDestinationDescriptionStore()
+    public function touristDestinationDescriptionStore(Request $request)
     {
-        $touristDestination = new TouristDestination();
-        $touristDestination->id = 0;
-        $touristDestination->exists = true;
-        $image = $touristDestination->addMediaFromRequest('file')->toMediaCollection('tourist-destinations');
-
-        return response()->json([
-            'location' => $image->getUrl(),
+        $this->validate($request, [
+            'image' => ['image', 'mimes:png,jpg,jpeg,gif'],
         ]);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = $image->getClientOriginalName();
+            $folder = uniqid() . '-' . now()->timestamp;
+            $path = $image->storeAs('public/tmp/media/' . $folder, $filename);
+
+            TemporaryFile::create([
+                'foldername' => $folder,
+                'filename' => $filename,
+            ]);
+
+            return response()->json([
+                'location' => Storage::url($path),
+            ]);
+        }
     }
 }
