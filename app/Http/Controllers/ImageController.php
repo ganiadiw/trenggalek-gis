@@ -6,9 +6,9 @@ use App\Models\TemporaryFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ImageMediaController extends Controller
+class ImageController extends Controller
 {
-    public function touristDestinationDescriptionStore(Request $request)
+    public function store(Request $request)
     {
         $this->validate($request, [
             'image' => ['image', 'mimes:png,jpg,jpeg,gif'],
@@ -30,5 +30,16 @@ class ImageMediaController extends Controller
                 'filename' => $filename,
             ]);
         }
+    }
+
+    public function destroy($filename)
+    {
+        $temporaryFile = TemporaryFile::where('filename', $filename)->first();
+        Storage::delete($temporaryFile->foldername . '/' . $temporaryFile->filename);
+        $temporaryFile->delete();
+
+        return response()->json([
+            'message' => 'Delete temporary file was successfully',
+        ]);
     }
 }

@@ -35,10 +35,10 @@ class TouristDestinationController extends Controller
         $mediaFiles = $request->safe()->only('media_files');
         $media = json_decode($mediaFiles['media_files']);
 
-        if ($media->images != null) {
+        if ($media->used_images != null) {
             $newImageSources = [];
 
-            foreach ($media->images as $item) {
+            foreach ($media->used_images as $item) {
                 $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
                 $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
                     ->toMediaCollection('tourist-destinations');
