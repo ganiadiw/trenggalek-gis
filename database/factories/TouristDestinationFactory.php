@@ -24,7 +24,7 @@ class TouristDestinationFactory extends Factory
             'slug' => Str::slug('Pantai Konang') . '-' . Str::random(5),
             'manager' => 'LDMH',
             'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => 'Terkenal dengan keindahan pantai dan kuliner ikan bakar',
+            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner ikan bakar</p>',
             'distance_from_city_center' => '56 KM',
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
             'facility' => 'MCK, Mushola, Lahan Parkir',
