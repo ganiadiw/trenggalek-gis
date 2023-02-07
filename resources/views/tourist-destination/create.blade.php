@@ -145,6 +145,7 @@
                 }
             })
 
+            let uploadedImage = [];
             const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
@@ -174,7 +175,7 @@
                     }
 
                     resolve(json.location);
-                    // add image to array
+                    uploadedImage.push(json.filename);
                 };
 
                 xhr.onerror = () => {
@@ -199,19 +200,20 @@
                     editor.on('blur', () => {
                         let imageFiles = [];
                         let editorContent = tinymce.activeEditor.getContent();
+
                         $(editorContent).find('img').each(function(){
                             let imgSrc = $(this).attr('src');
                             let imgTitle = $(this).attr('title');
-                            let filename = imgSrc.split('/').pop();
-                            imageFiles.push({
-                                filename: filename
-                            });
+                            let imgFilename = imgSrc.split('/').pop();
+                            imageFiles.push(imgFilename);
                         });
-                        mediaFiles.value = JSON.stringify({images: imageFiles});
-                        console.log(mediaFiles.value);
-                    });
-                    editor.on('init', () => {
-                        editor.setContent('');
+
+                        let unusedImages = uploadedImage.filter(item => !imageFiles.includes(item));
+
+                        mediaFiles.value = JSON.stringify({
+                            images: imageFiles.map(item => ({filename: item})),
+                            unused_images: unusedImages.map(item => ({filename: item}))
+                        });
                     });
                 },
                 image_title: true,

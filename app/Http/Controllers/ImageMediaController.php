@@ -18,8 +18,8 @@ class ImageMediaController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $filename = $image->getClientOriginalName();
-            $folder = uniqid() . '-' . now()->timestamp;
-            $path = $image->storeAs('public/tmp/media/' . $folder, $filename);
+            $folder = 'public/tmp/media/images';
+            $path = $image->storeAs($folder, $filename);
 
             TemporaryFile::create([
                 'foldername' => $folder,
@@ -28,6 +28,7 @@ class ImageMediaController extends Controller
 
             return response()->json([
                 'location' => Storage::url($path),
+                'filename' => $filename,
             ]);
         }
     }

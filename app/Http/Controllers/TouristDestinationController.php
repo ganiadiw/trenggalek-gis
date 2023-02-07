@@ -9,6 +9,7 @@ use App\Models\TemporaryFile;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
 use DOMDocument;
+use Illuminate\Support\Facades\Storage;
 
 class TouristDestinationController extends Controller
 {
@@ -39,9 +40,8 @@ class TouristDestinationController extends Controller
 
             foreach ($media->images as $item) {
                 $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
-                $newImageSource = $touristDestination->addMedia(storage_path('app/public/tmp/media/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
+                $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
                     ->toMediaCollection('tourist-destinations');
-                rmdir(public_path('/storage/tmp/media/' . $temporaryFile->foldername));
                 $temporaryFile->delete();
                 array_push($newImageSources, $newImageSource->getUrl());
             }
@@ -62,6 +62,14 @@ class TouristDestinationController extends Controller
             TouristDestination::where('id', $touristDestination->id)->update([
                 'description' => $content,
             ]);
+        }
+
+        if ($media->unused_images != null) {
+            foreach ($media->unused_images as $item) {
+                $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
+                Storage::delete($temporaryFile->foldername . '/' . $temporaryFile->filename);
+                $temporaryFile->delete();
+            }
         }
 
         return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil ditambahkan']);
