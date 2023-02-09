@@ -87,60 +87,6 @@
                     </div>
                 </div>
 
-                <div class="mt-5 mb-3">
-                    <label for="touristAttractions" class="block mb-2 text-sm font-medium text-gray-900">Atraksi Wisata</label>
-                    <div id="touristAttractions" x-data="handler()" class="relative w-full px-3 py-3 overflow-x-auto bg-gray-100 shadow-md sm:rounded-lg">
-                        <template x-for="(field, index) in fields" :key="index">
-                            <div class="flex w-full mb-2 space-x-4">
-                                <div class="ml-3">
-                                    <div>#</div>
-                                    <div x-text="index + 1" class="flex items-center mt-2"></div>
-                                    <div>
-                                        <button type="button" @click="removeField(index)" class="items-center mt-2 -ml-2 lg:hidden">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                                            </svg>
-                                    </button>
-                                    </div>
-                                </div>
-                                <div class="block w-full px-3 lg:space-x-4 lg:flex">
-                                    <div class="lg:w-3/12">
-                                        <label for="touristAttractionName" class="block mb-2 text-sm font-medium text-gray-900">Atraksi Wisata</label>
-                                        <input x-model="field.txt1" type="text" id="touristAttractionName" name="txt1[]"
-                                                class="block w-full px-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-                                    <div class="lg:w-3/12">
-                                        <label for="touristAttractionName" class="block mb-2 text-sm font-medium text-gray-900">Gambar</label>
-                                        <input x-model="field.txt3" type="file" name="txt3[]"
-                                                    class="block w-full px-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-                                    <div class="lg:w-5/12">
-                                        <label for="touristAttractionName" class="block mb-2 text-sm font-medium text-gray-900">Keterangan Gambar</label>
-                                        <input x-model="field.txt2" type="text" name="txt2[]"
-                                                class="block w-full px-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-                                    <div>
-                                        <button type="button" @click="removeField(index)" class="items-center hidden lg:flex mt-9">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <hr class="h-[2px] mt-4 bg-gray-400 border-0 rounded-md">
-                                </div>
-                            </div>
-                        </template>
-                        <div class="flex justify-end mr-5">
-                            <button type="button"
-                                class="my-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2.5 text-center" @click="addNewField()">+ Tambah Data</button>
-                        </div>
-                    </div>
-                </div>
-
                 <div>
                     <input type="hidden" name="media_files" id="mediaFiles">
                 </div>
@@ -318,22 +264,6 @@
                     `<iframe title="${data.title}" width="${data.width}" height="${data.height}" src="${data.source}"></iframe>`,
 
             });
-
-            function handler() {
-                return {
-                    fields: [''],
-                    addNewField() {
-                        this.fields.push({
-                            txt1: '',
-                            txt2: '',
-                            txt3: ''
-                        });
-                        },
-                        removeField(index) {
-                        this.fields.splice(index, 1);
-                        }
-                }
-            }
 
             window.addEventListener('beforeunload', (event) => {
                 if (tinymce.activeEditor.isDirty()) {
