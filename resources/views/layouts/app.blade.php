@@ -63,6 +63,7 @@
             }
         });
     </script>
+    @yield('component-script')
     @yield('script')
 </body>
 
