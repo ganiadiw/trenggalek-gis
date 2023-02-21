@@ -190,7 +190,9 @@
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2.5 text-center">Cari
                                 pada peta</button>
                         </div>
-                        <div id="map" class="mt-5 border rounded-lg lg:w-2/4 lg:mt-0 h-120"></div>
+                        <div class="mt-5 lg:w-2/4 lg:mt-0 h-120">
+                            <x-head.leaflet-init />
+                        </div>
                     </div>
                 </div>
                 <div class="flex gap-x-2">
@@ -204,8 +206,7 @@
     </div>
 
     @section('script')
-        @include('components.leaflet-init')
-        @include('components.leaflet-find-marker')
+        @include('js.leaflet-find-marker')
         <script>
             let subDistrictFillColor = document.getElementById('subDistrictFillColor')
 

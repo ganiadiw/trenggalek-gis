@@ -62,7 +62,7 @@
                             pada peta</button>
                     </div>
                     <div class="mt-5 lg:w-2/4 lg:mt-0 h-120">
-                        <x-leaflet.leaflet-init />
+                        <x-head.leaflet-init />
                     </div>
                 </div>
 
@@ -114,7 +114,7 @@
     </div>
 
     @section('script')
-        @include('components.leaflet-find-marker')
-        @include('components.tinymce')
+        @include('js.leaflet-find-marker')
+        @include('js.tinymce')
     @endsection
 </x-app-layout>

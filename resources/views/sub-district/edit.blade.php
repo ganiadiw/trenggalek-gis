@@ -194,7 +194,9 @@
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2.5 text-center">Cari
                                 pada peta</button>
                         </div>
-                        <div id="subDistrictMap" class="mt-5 border rounded-lg lg:w-2/4 lg:mt-0 h-120"></div>
+                        <div class="mt-5 lg:w-2/4 lg:mt-0 h-120">
+                            <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" />
+                        </div>
                     </div>
                 </div>
                 <div class="flex gap-x-2">
@@ -208,24 +210,17 @@
     </div>
 
     @section('script')
+        @include('js.leaflet-find-marker')
         <script>
-            let subDistrictMap = L.map('subDistrictMap').setView([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}],
-                11);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 15,
-                minZoom: 10,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(subDistrictMap);
-
             let subDistrictFillColor = document.getElementById('subDistrictFillColor')
-            let mapStyle = {
-                'color': '{{ $subDistrict->fill_color }}',
-                'weight': 2,
-                'opacity': 0.4,
-            }
-            let layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
-                style: mapStyle
-            }).addTo(subDistrictMap);
+            layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
+                style: {
+                    'color': '{{ $subDistrict->fill_color }}',
+                    'weight': 2,
+                    'opacity': 0.4,
+                }
+            }).addTo(map);
+            marker = L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(map)
 
             const pickr = Pickr.create({
                 el: '.color-picker',
@@ -271,41 +266,12 @@
                 pickr.hide()
             })
 
-            subDistrictMap.on('click', onMapClick)
-
-            let marker = L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(subDistrictMap)
-            let latitudeInput = document.getElementById('latitude')
-            let longitudeInput = document.getElementById('longitude')
-            let buttonFindOnMap = document.getElementById('buttonFindOnMap')
-
-            function onMapClick(e) {
-                let latitude = e.latlng.lat
-                let longitude = e.latlng.lng
-
-                if (!marker) {
-                    marker = L.marker(e.latlng).addTo(subDistrictMap)
-                } else {
-                    marker.setLatLng(e.latlng)
-                }
-
-                latitudeInput.value = latitude
-                longitudeInput.value = longitude
-            }
-
-            buttonFindOnMap.addEventListener('click', function() {
-                if (!marker) {
-                    marker = L.marker([latitudeInput.value, longitudeInput.value]).addTo(map)
-                } else {
-                    marker.setLatLng([latitudeInput.value, longitudeInput.value])
-                }
-            })
-
             function previewGeoJSONToMap(geoJSON) {
                 const data = JSON.parse(geoJSON)
 
                 if (layer) {
-                    subDistrictMap.removeLayer(layer)
-                    subDistrictMap.removeLayer(marker)
+                    map.removeLayer(layer)
+                    map.removeLayer(marker)
                 }
 
                 layer = L.geoJSON(data, {
@@ -316,12 +282,12 @@
                             opacity: 0.4,
                         }
                     }
-                }).addTo(subDistrictMap)
+                }).addTo(map)
 
                 let bounds = layer.getBounds()
-                subDistrictMap.fitBounds(bounds)
+                map.fitBounds(bounds)
                 let center = bounds.getCenter()
-                marker = L.marker(center).addTo(subDistrictMap)
+                marker = L.marker(center).addTo(map)
                 latitudeInput.value = center.lat
                 longitudeInput.value = center.lng
             }

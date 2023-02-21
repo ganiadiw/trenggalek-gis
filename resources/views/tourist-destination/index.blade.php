@@ -131,12 +131,10 @@
                 <div class="font-semibold text-gray-700">
                     <h1>Peta Sebaran Destinasi Wisata Kabupaten Trenggalek</h1>
                 </div>
-                <div id="map" class="w-full mt-5 border rounded-lg h-120"></div>
+                <div class="w-full mt-5 border rounded-lg h-120">
+                    <x-head.leaflet-init />
+                </div>
             </div>
         </div>
     </div>
-
-    @section('script')
-        @include('components.leaflet-init')
-    @endsection
 </x-app-layout>
