@@ -5,19 +5,21 @@
                 <div class="px-5 pt-5 pb-5 text-lg font-semibold text-left text-gray-900 bg-white">
                     <h1 class="font-bold">Kelola Data Destinasi Wisata</h1>
                     <div class="block mt-5 md:justify-between md:flex">
-                        <a href="{{ route('tourist-destinations.create') }}" type="button"
-                            class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
-                            Tambah Data
-                            <span class="flex items-center ml-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus"
-                                    width="20" height="20" viewBox="0 0 24 24" stroke-width="3"
-                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
-                            </span>
-                        </a>
+                        <div>
+                            <a href="{{ route('tourist-destinations.create') }}" type="button"
+                                class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
+                                Tambah Data
+                                <span class="flex items-center ml-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus"
+                                        width="20" height="20" viewBox="0 0 24 24" stroke-width="3"
+                                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
                         <div class="h-10 mt-3 mb-2 md:w-4/12">
                             <form action="" method="GET">
                                 <label for="default-search"
@@ -125,6 +127,16 @@
                     {{ $touristDestinations->links() }}
                 </div>
             </div>
+            <div class="px-5 py-5 mt-5 bg-white rounded-lg">
+                <div class="font-semibold text-gray-700">
+                    <h1>Peta Sebaran Destinasi Wisata Kabupaten Trenggalek</h1>
+                </div>
+                <div id="map" class="w-full mt-5 border rounded-lg h-120"></div>
+            </div>
         </div>
     </div>
+
+    @section('script')
+        @include('components.leaflet-init')
+    @endsection
 </x-app-layout>
