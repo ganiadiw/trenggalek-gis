@@ -4,7 +4,6 @@
     <label for="{{ $id }}" class="block mb-2 text-sm font-medium text-gray-900">{{ $labelTitle }}</label>
     <select id="{{ $id }}" name="{{ $name }}"
         class="w-full text-sm py-2.5 px-4 text-gray-900 border-gray-300 rounded-md bg-gray-50">
-        <option class="text-sm font-normal text-gray-500 bg-gray-300" disabled selected>{{ $disabledSelected }}</option>
         {{ $options }}
     </select>
     @error($error)
