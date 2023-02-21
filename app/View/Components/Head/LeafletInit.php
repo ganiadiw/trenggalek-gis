@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Leaflet;
+namespace App\View\Components\Head;
 
 use Illuminate\View\Component;
 
@@ -28,6 +28,6 @@ class LeafletInit extends Component
      */
     public function render()
     {
-        return view('components.leaflet.leaflet-init');
+        return view('components.head.leaflet-init');
     }
 }
