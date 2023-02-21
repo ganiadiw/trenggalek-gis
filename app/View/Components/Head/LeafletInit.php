@@ -10,15 +10,18 @@ class LeafletInit extends Component
 
     public $longitude;
 
+    public $zoomLevel;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($latitude = -8.13593475, $longitude = 111.64019829777817)
+    public function __construct($latitude = -8.13593475, $longitude = 111.64019829777817, $zoomLevel = 11)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
+        $this->zoomLevel = $zoomLevel;
     }
 
     /**
