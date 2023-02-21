@@ -28,8 +28,6 @@ class ImageController extends Controller
             'location' => Storage::url($path),
             'filename' => $filename,
         ]);
-        // if ($request->file('image')) {
-        // }
     }
 
     public function destroy($filename)
