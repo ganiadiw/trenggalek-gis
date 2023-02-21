@@ -180,14 +180,17 @@
                                 saat file geojson telah dipilih atau text geosjon telah di preview pada peta, atau juga
                                 dapat ditentukan dengan klik pada peta</p>
                             </blockquote>
-                            <x-input-default-form class="cursor-not-allowed" type="text" name="latitude"
+                            <x-input-default-form type="text" name="latitude"
                                 :value="old('latitude')" id="latitude" labelTitle="Latitude*" error='latitude'
-                                placeholder="-8.2402961" readonly="true"></x-input-default-form>
-                            <x-input-default-form class="cursor-not-allowed" type="text" name="longitude"
+                                placeholder="-8.2402961"></x-input-default-form>
+                            <x-input-default-form type="text" name="longitude"
                                 :value="old('longitude')" id="longitude" labelTitle="Longitude*" error='longitude'
-                                placeholder="111.4484781" readonly="true"></x-input-default-form>
+                                placeholder="111.4484781"></x-input-default-form>
+                            <button type="button" id="buttonFindOnMap"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2.5 text-center">Cari
+                                pada peta</button>
                         </div>
-                        <div id="subDistrictMap" class="mt-5 border rounded-lg lg:w-2/4 lg:mt-0 h-120"></div>
+                        <div id="map" class="mt-5 border rounded-lg lg:w-2/4 lg:mt-0 h-120"></div>
                     </div>
                 </div>
                 <div class="flex gap-x-2">
@@ -201,16 +204,10 @@
     </div>
 
     @section('script')
+        @include('components.leaflet-init')
+        @include('components.leaflet-find-marker')
         <script>
             let subDistrictFillColor = document.getElementById('subDistrictFillColor')
-            let subDistrictMap = L.map('subDistrictMap').setView([-8.13593475, 111.64019829777817], 11);
-            let layer
-
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 15,
-                minZoom: 10,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(subDistrictMap);
 
             const pickr = Pickr.create({
                 el: '.color-picker',
@@ -258,32 +255,14 @@
                 pickr.hide()
             })
 
-            subDistrictMap.on('click', onMapClick)
-
-            let marker
-            let latitudeInput = document.getElementById('latitude')
-            let longitudeInput = document.getElementById('longitude')
-
-            function onMapClick(event) {
-                let latitude = event.latlng.lat
-                let longitude = event.latlng.lng
-
-                if (!marker) {
-                    marker = L.marker(event.latlng).addTo(subDistrictMap)
-                } else {
-                    marker.setLatLng(event.latlng)
-                }
-
-                latitudeInput.value = latitude
-                longitudeInput.value = longitude
-            }
+            map.on('click', onMapClick)
 
             function previewGeoJSONToMap(geoJSON) {
                 const data = JSON.parse(geoJSON)
 
                 if (layer) {
-                    subDistrictMap.removeLayer(layer)
-                    subDistrictMap.removeLayer(marker)
+                   map.removeLayer(layer)
+                   map.removeLayer(marker)
                 }
 
                 layer = L.geoJSON(data, {
@@ -294,12 +273,12 @@
                             opacity: 0.4,
                         }
                     }
-                }).addTo(subDistrictMap)
+                }).addTo(map)
 
                 let bounds = layer.getBounds()
-                subDistrictMap.fitBounds(bounds)
+                map.fitBounds(bounds)
                 let center = bounds.getCenter()
-                marker = L.marker(center).addTo(subDistrictMap)
+                marker = L.marker(center).addTo(map)
                 latitudeInput.value = center.lat
                 longitudeInput.value = center.lng
             }
