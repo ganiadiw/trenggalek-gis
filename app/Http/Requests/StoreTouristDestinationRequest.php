@@ -25,17 +25,17 @@ class StoreTouristDestinationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
+            'name' => ['required', 'max:255'],
             'slug' => ['required'],
             'tourist_destination_category_id' => ['required'],
             'sub_district_id' => ['required'],
-            'address' => ['required'],
-            'manager' => ['required'],
-            'distance_from_city_center' => ['required'],
+            'address' => ['required', 'max:255'],
+            'manager' => ['required', 'max:255'],
+            'distance_from_city_center' => ['required', 'max:10'],
             'transportation_access' => ['required'],
             'facility' => ['required'],
-            'latitude' => ['required'],
-            'longitude' => ['required'],
+            'latitude' => ['required', 'max:50'],
+            'longitude' => ['required', 'max:50'],
             'description' => ['required'],
             'media_files' => ['nullable'],
         ];
@@ -46,5 +46,28 @@ class StoreTouristDestinationRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug($this->name) . '-' . Str::random(5),
         ]);
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Nama destinasi wisata harus diisi',
+            'name.max' => 'Jumlah karakter maksimal 255',
+            'tourist_destination_category_id.required' => 'Pilih kategori destinasi wisata',
+            'sub_district_id.required' => 'Pilih kecamatan',
+            'address.required' => 'Alamat harus diisi',
+            'address.max' => 'Jumlah karakter maksimal 255',
+            'manager.required' => 'Pengelola harus diisi',
+            'manager.max' => 'Jumlah karakter maksimal 255',
+            'distance_from_city_center.required' => 'Jarak harus diisi',
+            'distance_from_city_center.max' => 'Jumlah karakter maksimal 10',
+            'transportation_access.required' => 'Akses transportasi harus diisi',
+            'facility.required' => 'Fasilitas harus diisi',
+            'latitude.required' => 'Latitude harus diisi',
+            'latitude.max' => 'Jumlah karakter maksimal 50',
+            'longitude.required' => 'Longitude harus diisi',
+            'longitude.max' => 'Jumlah karakter maksimal 50',
+            'description.required' => 'Deskripsi harus diisi',
+        ];
     }
 }
