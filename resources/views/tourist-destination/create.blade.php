@@ -43,6 +43,8 @@
                     <x-input-default-form type="text" name="facility" :value="old('facility')" id="facility"
                         labelTitle="Fasilitas*" error="facility"
                         placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus" />
+                    <x-input-default-form class="py-0" type="file" name="cover_image" id="coverImage"
+                        labelTitle="Foto Sampul*" error='cover_image' />
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
                     <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">

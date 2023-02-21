@@ -31,11 +31,19 @@ class TouristDestinationController extends Controller
 
     public function store(StoreTouristDestinationRequest $request)
     {
-        $touristDestination = TouristDestination::create($request->safe()->except(['media_files']));
+        $validated = $request->safe()->except(['media_files']);
+
+        if ($request->file('cover_image')) {
+            $imageCover = $validated['cover_image'];
+            $validated['cover_image_name'] = $imageCover->hashName();
+            $validated['cover_image_path'] = $imageCover->storeAs('public/cover-images', $validated['cover_image_name']);
+        }
+
+        $touristDestination = TouristDestination::create($validated);
         $mediaFiles = $request->safe()->only('media_files');
         $media = json_decode($mediaFiles['media_files']);
 
-        if ($media->used_images != null) {
+        if ($media != null && $media->used_images != null) {
             $newImageSources = [];
 
             foreach ($media->used_images as $item) {
@@ -64,7 +72,7 @@ class TouristDestinationController extends Controller
             ]);
         }
 
-        if ($media->unused_images != null) {
+        if ($media != null && $media->unused_images != null) {
             foreach ($media->unused_images as $item) {
                 $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
                 Storage::delete($temporaryFile->foldername . '/' . $temporaryFile->filename);
@@ -75,15 +83,9 @@ class TouristDestinationController extends Controller
         return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil ditambahkan']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TouristDestination  $touristDestination
-     * @return \Illuminate\Http\Response
-     */
     public function show(TouristDestination $touristDestination)
     {
-        //
+        return view('tourist-destination.show', compact('touristDestination'));
     }
 
     /**

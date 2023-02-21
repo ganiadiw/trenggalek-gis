@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('distance_from_city_center', 10);
             $table->longText('transportation_access');
             $table->longText('facility');
+            $table->string('cover_image_name');
+            $table->string('cover_image_path');
             $table->string('latitude', 50);
             $table->string('longitude', 50);
             $table->timestamps();

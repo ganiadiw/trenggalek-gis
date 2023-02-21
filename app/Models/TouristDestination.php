@@ -22,6 +22,8 @@ class TouristDestination extends Model implements HasMedia
         'distance_from_city_center',
         'transportation_access',
         'facility',
+        'cover_image_name',
+        'cover_image_path',
         'latitude',
         'longitude',
     ];
