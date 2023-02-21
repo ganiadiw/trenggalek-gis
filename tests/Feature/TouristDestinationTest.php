@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\SubDistrict;
+use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Tests\TestCase;
@@ -15,6 +16,8 @@ class TouristDestinationTest extends TestCase
 
     private SubDistrict $subDistrict;
 
+    private TouristDestination $touristDestination;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,6 +25,7 @@ class TouristDestinationTest extends TestCase
         $this->user = User::factory()->create();
         $this->touristDestinationCategory = TouristDestinationCategory::factory()->create();
         $this->subDistrict = SubDistrict::factory()->create();
+        $this->touristDestination = TouristDestination::factory()->create();
     }
 
     public function test_an_authenticated_user_can_see_tourist_destination_management_page()
@@ -38,23 +42,69 @@ class TouristDestinationTest extends TestCase
         $response->assertSeeText('Tambah Data Destinasi Wisata');
     }
 
+    public function test_correct_data_must_be_provided_to_create_new_tourist_destination()
+    {
+        $response = $this->actingAs($this->user)->post(route('tourist-destinations.store', [
+            'name' => '',
+        ]));
+        $response->assertInvalid();
+    }
+
     public function test_an_authenticated_user_can_create_new_tourist_destination()
     {
         $response = $this->actingAs($this->user)->post(route('tourist-destinations.store', [
-            'name' => 'Pantai Konang',
+            'name' => 'Pantai Pelang',
             'sub_district_id' => $this->subDistrict->id,
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'manager' => 'LMDH',
+            'address' => 'Desa Wonocoyo, Kecamatan Panggul',
+            'manager' => 'DISPARBUD',
             'distance_from_city_center' => '56 KM',
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir',
-            'latitude' => '-8.274668036926231',
-            'longitude' => '111.4529735413945',
-            'description' => 'Terkenal dengan keindahan pantai dan kuliner ikan bakar',
+            'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
+            'latitude' => '-8.257023266748266, 111.42379872584968',
+            'longitude' => '111.42379872584968',
+            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'media_files' => json_encode([
+                'used_images' => null,
+                'unused_images' => null,
+            ]),
         ]));
         $response->assertValid();
         $response->assertRedirect(route('tourist-destinations.index'));
         $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('tourist_destinations', [
+            'name' => 'Pantai Pelang',
+            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+        ]);
+    }
+
+    public function test_an_guest_cannot_create_new_tourist_destination()
+    {
+        $response = $this->post(route('tourist-destinations.store', [
+            'name' => 'Pantai Pelang',
+            'sub_district_id' => $this->subDistrict->id,
+            'tourist_destination_category_id' => $this->touristDestinationCategory->id,
+            'address' => 'Desa Wonocoyo, Kecamatan Panggul',
+            'manager' => 'DISPARBUD',
+            'distance_from_city_center' => '56 KM',
+            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
+            'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
+            'latitude' => '-8.257023266748266',
+            'longitude' => '111.42379872584968',
+            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'media_files' => json_encode([
+                'used_images' => null,
+                'unused_images' => null,
+            ]),
+        ]));
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_an_authenticated_user_can_see_tourist_destinations_show_page()
+    {
+        $response = $this->actingAs($this->user)->get(route('tourist-destinations.show', ['tourist_destination' => $this->touristDestination]));
+        $response->assertStatus(200);
+        $this->assertEquals('Pantai Konang', $this->touristDestination->name);
     }
 }
