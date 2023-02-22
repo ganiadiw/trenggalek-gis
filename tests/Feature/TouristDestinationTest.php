@@ -115,4 +115,15 @@ class TouristDestinationTest extends TestCase
         $response->assertSeeText('Ubah Data Destinasi Wisata');
         $this->assertEquals('Pantai Konang', $this->touristDestination->name);
     }
+
+    public function test_correct_data_must_be_provided_to_update_tourist_destination()
+    {
+        $response = $this->actingAs($this->user)->put(route('tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
+            'name' => '',
+        ]);
+        $response->assertInvalid();
+        $response->assertSessionHasErrors();
+        $response->assertRedirect(url()->previous());
+    }
+
 }
