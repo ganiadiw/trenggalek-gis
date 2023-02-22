@@ -135,4 +135,10 @@ class TouristDestinationTest extends TestCase
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('tourist-destinations.index'));
     }
+
+    public function test_an_authenticated_user_can_delete_tourist_destination()
+    {
+        $response = $this->actingAs($this->user)->delete(route('tourist-destinations.destroy', ['tourist_destination' => $this->touristDestination]));
+        $response->assertRedirect(route('tourist-destinations.index'));
+    }
 }
