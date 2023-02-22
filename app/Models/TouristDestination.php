@@ -43,7 +43,7 @@ class TouristDestination extends Model implements HasMedia
         return $this->belongsTo(SubDistrict::class);
     }
 
-    public function TouristDestinationCategory()
+    public function touristDestinationCategory()
     {
         return $this->belongsTo(TouristDestinationCategory::class);
     }
