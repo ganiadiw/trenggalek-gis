@@ -106,11 +106,9 @@
     </div>
 
     @section('script')
+        @include('js.image-preview')
         <script>
-            let avatar = document.getElementById('avatar')
-            const avatarUpload = document.getElementById('avatarUpload')
-
-            previewAvatar(avatar, avatarUpload, 'change')
+            imagePreview(document.getElementById('avatar'), document.getElementById('avatarUpload'), 'change')
         </script>
     @endsection
 </x-app-layout>
