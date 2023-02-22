@@ -126,4 +126,13 @@ class TouristDestinationTest extends TestCase
         $response->assertRedirect(url()->previous());
     }
 
+    public function test_an_authenticated_user_can_update_tourist_destination()
+    {
+        $response = $this->actingAs($this->user)->put(route('tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
+            'name' => 'Pantai Konang-Konang',
+        ]);
+        $response->assertValid();
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('tourist-destinations.index'));
+    }
 }
