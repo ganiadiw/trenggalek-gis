@@ -107,4 +107,12 @@ class TouristDestinationTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals('Pantai Konang', $this->touristDestination->name);
     }
+
+    public function test_a_tourist_destination_edit_page_can_be_rendered()
+    {
+        $response = $this->actingAs($this->user)->get(route('tourist-destinations.edit', ['tourist_destination' => $this->touristDestination]));
+        $response->assertStatus(200);
+        $response->assertSeeText('Ubah Data Destinasi Wisata');
+        $this->assertEquals('Pantai Konang', $this->touristDestination->name);
+    }
 }
