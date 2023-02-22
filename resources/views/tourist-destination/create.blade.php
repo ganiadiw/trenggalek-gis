@@ -10,9 +10,9 @@
                     <x-input-default-form type="text" name="name" :value="old('name')" id="name"
                         labelTitle="Nama Destinasi Wisata*" error="name" placeholder="Pantai Prigi" />
                     <x-input-select-option labelTitle="Pilih Kategori*" id="category"
-                        name="tourist_destination_category_id" disabledSelected="Pilih Kategori" error="category">
+                        name="tourist_destination_category_id" error="category">
                         <x-slot name="options">
-                            @foreach ($categories as $category)
+                            @foreach ($categories as $key => $category)
                                 <option value="{{ $category->id }}" @selected(old('category') == $category->id)
                                     class="text-sm font-normal text-gray-900">
                                     {{ $category->name }}</option>
@@ -20,7 +20,7 @@
                         </x-slot>
                     </x-input-select-option>
                     <x-input-select-option labelTitle="Pilih Kecamatan*" id="sub_district" name="sub_district_id"
-                        disabledSelected="Pilih Kecamatan" error="sub_district">
+                        error="sub_district">
                         <x-slot name="options">
                             @foreach ($subDistricts as $key => $subDistrict)
                                 <option value="{{ $subDistrict->id }}" @selected(old('sub_district') == $subDistrict->id)
@@ -43,8 +43,14 @@
                     <x-input-default-form type="text" name="facility" :value="old('facility')" id="facility"
                         labelTitle="Fasilitas*" error="facility"
                         placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus" />
-                    <x-input-default-form class="py-0" type="file" name="cover_image" id="coverImage"
+                    <div x-data="{ open: false }">
+                        <div x-show="open" x-cloak class="mb-3">
+                            <label for="coverImagePreview" class="block mb-2 text-sm italic font-medium text-gray-900">Pratinjau Foto Sampul</label>
+                            <img id="coverImagePreview" src="#" alt="Cover Image Preview" height="300">
+                        </div>
+                        <x-input-default-form x-on:change="open = true" class="py-0" type="file" name="cover_image" id="coverImage"
                         labelTitle="Foto Sampul*" error='cover_image' />
+                    </div>
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
                     <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">
@@ -118,5 +124,9 @@
     @section('script')
         @include('js.leaflet-find-marker')
         @include('js.tinymce')
+        @include('js.image-preview')
+        <script>
+            imagePreview(document.getElementById('coverImagePreview'), document.getElementById('coverImage'), 'change');
+        </script>
     @endsection
 </x-app-layout>
