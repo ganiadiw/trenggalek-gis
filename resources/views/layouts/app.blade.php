@@ -31,7 +31,6 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="{{ asset('assets/js/jquery-3.6.1.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/tinymce/tinymce.min.js') }}"></script> --}}
     <script src="https://cdn.tiny.cloud/1/3e5fngs61v628hiv11876o7vhcv1akokhq9ybh6fihse10me/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 
@@ -55,7 +54,6 @@
     <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
     <script src="{{ asset('assets/js/leaflet/leaflet.js') }}"></script>
     <script src="{{ asset('assets/js/leaflet/leaflet.ajax.js') }}"></script>
-    <script src="{{ asset('assets/js/general-function.js') }}"></script>
     <script>
         $.ajaxSetup({
             headers: {
