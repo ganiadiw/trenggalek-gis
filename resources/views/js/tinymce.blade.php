@@ -85,7 +85,9 @@
                     let filterredArray1 = imageFilesInit.filter(item => !imageFiles.includes(item));
 
                     if (filterredArray1.length > 0) {
-                        unusedImages.push(filterredArray1);
+                        filterredArray1.forEach(item => {
+                            unusedImages.push(item);
+                        })
                     }
                 }
 
@@ -93,7 +95,9 @@
                     let filterredArray2 = JSON.parse(localStorage.getItem('uploaded-images')).filter(item => !imageFiles.includes(item));
 
                     if (filterredArray2.length > 0) {
-                        unusedImages.push(filterredArray2);
+                        filterredArray2.forEach(item => {
+                            unusedImages.push(item);
+                        })
                     }
                 }
 
