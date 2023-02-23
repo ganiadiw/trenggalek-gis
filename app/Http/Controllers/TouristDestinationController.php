@@ -136,6 +136,7 @@ class TouristDestinationController extends Controller
                 $dom = new DOMDocument();
                 $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
                 $imageTags = $dom->getElementsByTagName('img');
+
                 $index = 0;
                 foreach ($imageTags as $imageTag) {
                     if (pathinfo($imageTag->getAttribute('src'), PATHINFO_FILENAME) == pathinfo($newImageSources[$index], PATHINFO_FILENAME)) {
