@@ -173,4 +173,11 @@ class TouristDestinationController extends Controller
 
         return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil diperbarui']);
     }
+
+    public function destroy(TouristDestination $touristDestination)
+    {
+        $touristDestination->delete();
+
+        return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil dihapus']);
+    }
 }
