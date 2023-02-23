@@ -101,7 +101,6 @@ class TouristDestinationController extends Controller
         return view('tourist-destination.edit', compact('touristDestination', 'subDistricts', 'categories'));
     }
 
-
     public function update(UpdateTouristDestinationRequest $request, TouristDestination $touristDestination)
     {
         $validated = $request->safe()->except(['media_files']);
@@ -124,7 +123,7 @@ class TouristDestinationController extends Controller
             foreach ($media->used_images as $item) {
                 $mediaLibrary = Media::where('file_name', $item->filename)->first();
 
-                if (!$mediaLibrary) {
+                if (! $mediaLibrary) {
                     $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
                     $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
                         ->toMediaCollection('tourist-destinations');
@@ -133,7 +132,7 @@ class TouristDestinationController extends Controller
                 }
             }
 
-            if (!empty($newImageSources)) {
+            if (! empty($newImageSources)) {
                 $dom = new DOMDocument();
                 $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
                 $imageTags = $dom->getElementsByTagName('img');
