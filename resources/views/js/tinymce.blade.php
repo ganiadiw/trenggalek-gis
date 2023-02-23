@@ -56,8 +56,22 @@
         referrer_policy: 'origin',
         promotion: false,
         setup: (editor) => {
+            let imageFilesInit = [];
+            let editorContentInit;
+            editor.on('init', () => {
+                editorContentInit = tinymce.activeEditor.getContent();
+
+                $(editorContentInit).find('img').each(function(){
+                    let imgSrcInit = $(this).attr('src');
+                    let imgTitleInit = $(this).attr('title');
+                    let imgFilenameInit = imgSrcInit.split('/').pop();
+                    imageFilesInit.push(imgFilenameInit);
+                });
+            });
+
             editor.on('blur', () => {
                 let imageFiles = [];
+                let unusedImages = [];
                 let editorContent = tinymce.activeEditor.getContent();
 
                 $(editorContent).find('img').each(function(){
@@ -67,7 +81,21 @@
                     imageFiles.push(imgFilename);
                 });
 
-                let unusedImages = JSON.parse(localStorage.getItem('uploaded-images')).filter(item => !imageFiles.includes(item));
+                if (imageFilesInit.length > 0) {
+                    let filterredArray1 = imageFilesInit.filter(item => !imageFiles.includes(item));
+
+                    if (filterredArray1.length > 0) {
+                        unusedImages.push(filterredArray1);
+                    }
+                }
+
+                if (localStorage.getItem('uploaded-images') != null) {
+                    let filterredArray2 = JSON.parse(localStorage.getItem('uploaded-images')).filter(item => !imageFiles.includes(item));
+
+                    if (filterredArray2.length > 0) {
+                        unusedImages.push(filterredArray2);
+                    }
+                }
 
                 mediaFiles.value = JSON.stringify({
                     used_images: imageFiles.map(item => ({filename: item})),
