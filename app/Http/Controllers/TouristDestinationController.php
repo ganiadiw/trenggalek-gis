@@ -88,37 +88,15 @@ class TouristDestinationController extends Controller
         return view('tourist-destination.show', compact('touristDestination'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\TouristDestination  $touristDestination
-     * @return \Illuminate\Http\Response
-     */
     public function edit(TouristDestination $touristDestination)
     {
-        //
-    }
+        $touristDestination->load([
+            'touristDestinationCategory:id,name',
+            'subDistrict:id,name',
+        ]);
+        $subDistricts = SubDistrict::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $categories = TouristDestinationCategory::select('id', 'name')->orderBy('name', 'ASC')->get();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateTouristDestinationRequest  $request
-     * @param  \App\Models\TouristDestination  $touristDestination
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateTouristDestinationRequest $request, TouristDestination $touristDestination)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\TouristDestination  $touristDestination
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TouristDestination $touristDestination)
-    {
-        //
+        return view('tourist-destination.edit', compact('touristDestination', 'subDistricts', 'categories'));
     }
 }
