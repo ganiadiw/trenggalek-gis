@@ -129,7 +129,21 @@ class TouristDestinationTest extends TestCase
     public function test_an_authenticated_user_can_update_tourist_destination()
     {
         $response = $this->actingAs($this->user)->put(route('tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
-            'name' => 'Pantai Konang-Konang',
+            'name' => 'Pantai Pelang',
+            'sub_district_id' => $this->subDistrict->id,
+            'tourist_destination_category_id' => $this->touristDestinationCategory->id,
+            'address' => 'Desa Wonocoyo, Kecamatan Panggul',
+            'manager' => 'DISPARBUD',
+            'distance_from_city_center' => '56 KM',
+            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
+            'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
+            'latitude' => '-8.257023266748266, 111.42379872584968',
+            'longitude' => '111.42379872584968',
+            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'media_files' => json_encode([
+                'used_images' => null,
+                'unused_images' => null,
+            ]),
         ]);
         $response->assertValid();
         $response->assertSessionHasNoErrors();
