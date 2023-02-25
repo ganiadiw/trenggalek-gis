@@ -100,8 +100,7 @@
                                                 @endif
                                             </div>
                                             <div class="flex items-center">
-                                                <a href="{{ route('users.show', ['user' => $user]) }}"
-                                                    class="hover:underline hover:underline-offset-4">{{ $user->name }}</a>
+                                                {{ $user->name }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
@@ -120,8 +119,12 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 @if ($user->is_admin == 0)
-                                                    <x-action-button :value="$user->name" :href="route('users.edit', ['user' => $user])"
-                                                        :action="route('users.destroy', ['user' => $user])" />
+                                                    <x-action-button
+                                                        :value="$user->name"
+                                                        :showURL="route('users.show', ['user' => $user])"
+                                                        :editURL="route('users.edit', ['user' => $user])"
+                                                        :deleteURL="route('users.destroy', ['user' => $user])"
+                                                    />
                                                 @endif
                                             </td>
                                         </div>

@@ -83,10 +83,7 @@
                                             {{ $key + $subDistricts->firstItem() }}
                                         </td>
                                         <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <a href="{{ route('sub-districts.show', ['sub_district' => $subDistrict]) }}"
-                                                    class="hover:underline hover:underline-offset-4">{{ $subDistrict->name }}</a>
-                                            </div>
+                                            {{ $subDistrict->name }}
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ $subDistrict->code }}
@@ -96,12 +93,12 @@
                                         </td>
                                         <div>
                                             <td class="px-6 py-4">
-                                                <x-action-button :value="$subDistrict->name" :href="route('sub-districts.edit', [
-                                                    'sub_district' => $subDistrict,
-                                                ])"
-                                                    :action="route('sub-districts.destroy', [
-                                                        'sub_district' => $subDistrict,
-                                                    ])" />
+                                                <x-action-button
+                                                    :value="$subDistrict->name"
+                                                    :showURL="route('sub-districts.show', ['sub_district' => $subDistrict])"
+                                                    :editURL="route('sub-districts.edit', ['sub_district' => $subDistrict])"
+                                                    :deleteURL="route('sub-districts.destroy', ['sub_district' => $subDistrict])"
+                                                />
                                             </td>
                                         </div>
                                     </tr>

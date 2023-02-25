@@ -67,6 +67,11 @@
     "mem" "^8.0.0"
     "php-parser" "^3.1.2"
 
+"@ryangjchandler/alpine-tooltip@^1.2.0":
+  "integrity" "sha512-PzShzyYPoDTMvfayQRoNAnoxOkcfVYrrYrtiqX/Dg09Jp2qpNDB8IkcShs3BQwK0D4RnaYFtFXCqtXGhGU0dPA=="
+  "resolved" "https://registry.npmjs.org/@ryangjchandler/alpine-tooltip/-/alpine-tooltip-1.2.0.tgz"
+  "version" "1.2.0"
+
 "@shufo/prettier-plugin-blade@^1.8.3":
   "integrity" "sha512-JG6X1Z235YmIemsrAnxRpVwz32wbksjjvrYeXA7QyKzKmvdNurjjg4lgpEcKomK3tDU87iy/u8UfU+80IPUGYQ=="
   "resolved" "https://registry.npmjs.org/@shufo/prettier-plugin-blade/-/prettier-plugin-blade-1.8.3.tgz"
