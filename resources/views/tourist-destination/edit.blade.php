@@ -43,20 +43,15 @@
                     <x-input-default-form type="text" name="facility" :value="old('facility', $touristDestination->facility)" id="facility"
                         labelTitle="Fasilitas*" error="facility"
                         placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus" />
-                    <div x-data="{ open: false }">
+                    <div>
                         @if ($touristDestination->cover_image_name != null)
                             <div class="mb-3">
-                                <label for="coverImagePreview" class="block mb-2 text-sm italic font-medium text-gray-900">Pratinjau Foto Sampul</label>
-                                <img id="coverImagePreview" src="{{ $touristDestination->cover_image_name ? asset('storage/cover-images/' . $touristDestination->cover_image_name) : '#' }}" alt="Cover Image {{ $touristDestination->name }}" height="300">
-                            </div>
-                        @else
-                            <div x-show="open" x-cloak class="mb-3">
-                                <label for="coverImagePreview" class="block mb-2 text-sm italic font-medium text-gray-900">Pratinjau Foto Sampul</label>
-                                <img id="coverImagePreview" src="#" alt="Cover Image Preview" height="300">
+                                <label for="coverImagePreview" class="block mb-2 text-sm italic font-medium text-gray-900">Foto Sampul Saat Ini</label>
+                                <img class="max-h-80" id="coverImagePreview" src="{{ asset('storage/cover-images/' . $touristDestination->cover_image_name) }}" alt="{{ $touristDestination->cover_image_name }}">
                             </div>
                         @endif
-                        <x-input-default-form x-on:change="open = true" class="py-0" type="file" name="cover_image" id="coverImage"
-                        labelTitle="Foto Sampul" error='cover_image' />
+                        <x-input-default-form type="file" name="cover_image" id="coverImage"
+                            labelTitle="Foto Sampul*" error='cover_image' />
                     </div>
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
@@ -128,13 +123,34 @@
         </div>
     </div>
 
+    @push('cdn-script')
+        <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+        <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+    @endpush
+
     @section('script')
         @include('js.leaflet-find-marker')
         @include('js.tinymce')
-        @include('js.image-preview')
         <script>
-            imagePreview(document.getElementById('coverImagePreview'), document.getElementById('coverImage'), 'change');
-            marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}]).addTo(map);
+            FilePond.registerPlugin(
+                FilePondPluginImagePreview,
+                FilePondPluginFileValidateType,
+                FilePondPluginFileValidateSize,
+            );
+
+            const inputCoverImage = document.querySelector('input[id="coverImage"]');
+            const pond = FilePond.create(inputCoverImage, {
+                storeAsFile: true,
+                acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+                labelFileTypeNotAllowed: 'Format gambar tidak didukung, gunakan  .png, .jpg atau .jpeg',
+                fileValidateTypeLabelExpectedTypes: '',
+                labelMaxFileSizeExceeded: 'Ukuran gambar terlalu besar',
+                maxFileSize: '2048KB',
+                labelMaxFileSize: 'Maksimal berukuran 2048 KB',
+            });
+
         </script>
     @endsection
 </x-app-layout>
