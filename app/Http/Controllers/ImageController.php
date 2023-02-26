@@ -33,11 +33,14 @@ class ImageController extends Controller
     public function destroy($filename)
     {
         $temporaryFile = TemporaryFile::where('filename', $filename)->first();
-        Storage::delete($temporaryFile->foldername . '/' . $temporaryFile->filename);
-        $temporaryFile->delete();
 
-        return response()->json([
-            'message' => 'Delete temporary file was successfully',
-        ]);
+        if ($temporaryFile) {
+            Storage::delete($temporaryFile->foldername . '/' . $temporaryFile->filename);
+            $temporaryFile->delete();
+
+            return response()->json([
+                'message' => 'Delete temporary file was successfully',
+            ]);
+        }
     }
 }
