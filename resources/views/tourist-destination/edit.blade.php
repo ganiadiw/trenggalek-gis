@@ -51,7 +51,7 @@
                             </div>
                         @endif
                         <x-input-default-form type="file" name="cover_image" id="coverImage"
-                            labelTitle="Foto Sampul*" error='cover_image' />
+                            labelTitle="Foto Sampul" error='cover_image' />
                     </div>
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
