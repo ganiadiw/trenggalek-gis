@@ -61,6 +61,10 @@
             editor.on('init', () => {
                 editorContentInit = tinymce.activeEditor.getContent();
 
+                if (localStorage.getItem('uploaded-images')) {
+                    localStorage.removeItem('uploaded-images');
+                }
+
                 $(editorContentInit).find('img').each(function(){
                     let imgSrcInit = $(this).attr('src');
                     let imgTitleInit = $(this).attr('title');
