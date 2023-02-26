@@ -133,45 +133,49 @@ class TouristDestinationController extends Controller
             }
 
             if (! empty($newImageSources)) {
-                $dom = new DOMDocument();
-                $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-                $imageTags = $dom->getElementsByTagName('img');
-
-                $index = 0;
-                foreach ($imageTags as $imageTag) {
-                    if (pathinfo($imageTag->getAttribute('src'), PATHINFO_FILENAME) == pathinfo($newImageSources[$index], PATHINFO_FILENAME)) {
-                        $newSrc = $newImageSources[$index];
-                        $imageTag->setAttribute('src', $newSrc);
-                        $index++;
-                    }
-                }
-
-                $content = $dom->saveHTML();
-
-                $touristDestination->update([
-                    'description' => $content,
-                ]);
+                $this->changeImageSource($newImageSources, $touristDestination);
             }
         }
 
         if ($media != null && $media->unused_images != null) {
-            foreach ($media->unused_images as $item) {
-                $mediaLibrary = Media::where('file_name', $item->filename)->first();
-
-                if ($mediaLibrary) {
-                    $mediaLibrary->delete();
-                }
-
-                $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
-
-                if ($temporaryFile) {
-                    Storage::delete($temporaryFile->foldername . '/' . $temporaryFile->filename);
-                    $temporaryFile->delete();
-                }
-            }
+            $this->deleteUnusedImage($media->unused_images);
         }
 
         return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil diperbarui']);
+    }
+
+    public function changeImageSource($newImageSources, $touristDestination)
+    {
+        $dom = new DOMDocument();
+        $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $imageTags = $dom->getElementsByTagName('img');
+
+        $index = 0;
+        foreach ($imageTags as $imageTag) {
+            if (pathinfo($imageTag->getAttribute('src'), PATHINFO_FILENAME) == pathinfo($newImageSources[$index], PATHINFO_FILENAME)) {
+                $newSrc = $newImageSources[$index];
+                $imageTag->setAttribute('src', $newSrc);
+                $index++;
+            }
+        }
+
+        $touristDestination->update([
+            'description' => $dom->saveHTML(),
+        ]);
+    }
+
+    public function deleteUnusedImage($unusedImages)
+    {
+        collect($unusedImages)->map(function ($item) {
+            $media = Media::where('file_name', $item->filename)->first();
+
+            if ($media) {
+                Storage::delete('app/public/media/' . $media->id . '/' . $media->file_name);
+                $media->delete();
+            }
+
+            (new ImageController)->destroy($item->filename);
+        });
     }
 
     public function destroy(TouristDestination $touristDestination)
