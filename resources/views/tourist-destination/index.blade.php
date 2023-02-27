@@ -6,7 +6,7 @@
                     <h1 class="font-bold">Kelola Data Destinasi Wisata</h1>
                     <div class="block mt-5 md:justify-between md:flex">
                         <div>
-                            <a href="{{ route('tourist-destinations.create') }}" type="button"
+                            <a href="{{ route('dashboard.tourist-destinations.create') }}" type="button"
                                 class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
                                 Tambah Data
                                 <span class="flex items-center ml-1">
@@ -40,7 +40,7 @@
                                     </button>
                                 </div>
                             </form>
-                            <a href="{{ route('tourist-destinations.index') }}"
+                            <a href="{{ route('dashboard.tourist-destinations.index') }}"
                                 class="flex justify-end mt-3 text-sm text-blue-500 hover:underline">
                                 Reset pencarian
                             </a>
@@ -108,9 +108,9 @@
                                             <td class="px-6 py-4">
                                                 <x-action-button
                                                     :value="$touristDestination->name"
-                                                    :showURL="route('tourist-destinations.show', ['tourist_destination' => $touristDestination])"
-                                                    :editURL="route('tourist-destinations.edit', ['tourist_destination' => $touristDestination])"
-                                                    :deleteURL="route('tourist-destinations.destroy', ['tourist_destination' => $touristDestination])"
+                                                    :showURL="route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination])"
+                                                    :editURL="route('dashboard.tourist-destinations.edit', ['tourist_destination' => $touristDestination])"
+                                                    :deleteURL="route('dashboard.tourist-destinations.destroy', ['tourist_destination' => $touristDestination])"
                                                 />
                                             </td>
                                         </div>

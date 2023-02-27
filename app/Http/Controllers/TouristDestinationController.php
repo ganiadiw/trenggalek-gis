@@ -81,7 +81,7 @@ class TouristDestinationController extends Controller
             }
         }
 
-        return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil ditambahkan']);
+        return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil ditambahkan']);
     }
 
     public function show(TouristDestination $touristDestination)
@@ -141,7 +141,7 @@ class TouristDestinationController extends Controller
             $this->deleteUnusedImage($media->unused_images);
         }
 
-        return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil diperbarui']);
+        return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil diperbarui']);
     }
 
     public function changeImageSource($newImageSources, $touristDestination)
@@ -182,6 +182,6 @@ class TouristDestinationController extends Controller
     {
         $touristDestination->delete();
 
-        return redirect(route('tourist-destinations.index'))->with(['success' => 'Data berhasil dihapus']);
+        return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil dihapus']);
     }
 }

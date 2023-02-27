@@ -25,8 +25,8 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('dashboard')->group(function () {
-        Route::get('/', DashboardController::class)->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::name('dashboard.')->prefix('dashboard')->group(function () {
         Route::get('users/search', [UserController::class, 'search'])->name('users.search')->middleware(['admin']);
         Route::resource('users', UserController::class)->middleware(['admin']);
 

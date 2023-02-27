@@ -50,7 +50,7 @@ class SubDistrictController extends Controller
 
         SubDistrict::create($validated);
 
-        return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil ditambahkan']);
+        return redirect(route('dashboard.sub-districts.index'))->with(['success' => 'Data berhasil ditambahkan']);
     }
 
     public function show(SubDistrict $subDistrict)
@@ -88,7 +88,7 @@ class SubDistrictController extends Controller
 
         $subDistrict->update($validated);
 
-        return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil diperbarui']);
+        return redirect(route('dashboard.sub-districts.index'))->with(['success' => 'Data berhasil diperbarui']);
     }
 
     public function destroy(SubDistrict $subDistrict)
@@ -102,6 +102,6 @@ class SubDistrictController extends Controller
 
         session()->flash('success', 'Data berhasil dihapus');
 
-        return redirect(route('sub-districts.index'));
+        return redirect(route('dashboard.sub-districts.index'));
     }
 }

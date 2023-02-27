@@ -22,7 +22,7 @@
             </li>
             @can('view_superadmin_menu')
                 <li class="flex">
-                    <x-side-link :href="route('users.index')" :active="request()->routeIs('users*')">
+                    <x-side-link :href="route('dashboard.users.index')" :active="request()->routeIs('users*')">
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users"
                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#18181b"
@@ -38,7 +38,7 @@
                     </x-side-link>
                 </li>
                 <li class="flex">
-                    <x-side-link :href="route('sub-districts.index')" :active="request()->routeIs('sub-districts*')">
+                    <x-side-link :href="route('dashboard.sub-districts.index')" :active="request()->routeIs('sub-districts*')">
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map" width="24"
                                 height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none"
@@ -102,13 +102,13 @@
                     class="w-full my-1 ml-1 mr-1 bg-gray-200 rounded-md">
                     <ul>
                         <li class="flex mt-1">
-                            <x-side-link :href="route('tourist-destination-categories.index')" class="pl-9" :active="request()->routeIs('tourist-destination-categories*')"
+                            <x-side-link :href="route('dashboard.tourist-destination-categories.index')" class="pl-9" :active="request()->routeIs('tourist-destination-categories*')"
                                 spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
                                 <x-slot name="title">Kategori Destinasi Wisata</x-slot>
                             </x-side-link>
                         </li>
                         <li class="flex">
-                            <x-side-link :href="route('tourist-destinations.index')" class="pl-9" :active="request()->routeIs('tourist-destinations*')"
+                            <x-side-link :href="route('dashboard.tourist-destinations.index')" class="pl-9" :active="request()->routeIs('tourist-destinations*')"
                                 spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
                                 <x-slot name="title">Destinasi Wisata</x-slot>
                             </x-side-link>

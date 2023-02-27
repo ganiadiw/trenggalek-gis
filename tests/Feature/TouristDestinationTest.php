@@ -30,21 +30,21 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_authenticated_user_can_see_tourist_destination_management_page()
     {
-        $response = $this->actingAs($this->user)->get(route('tourist-destinations.index'));
+        $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.index'));
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Destinasi Wisata');
     }
 
     public function test_a_tourist_destination_create_page_can_be_rendered()
     {
-        $response = $this->actingAs($this->user)->get(route('tourist-destinations.create'));
+        $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.create'));
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Destinasi Wisata');
     }
 
     public function test_correct_data_must_be_provided_to_create_new_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->post(route('tourist-destinations.store', [
+        $response = $this->actingAs($this->user)->post(route('dashboard.tourist-destinations.store', [
             'name' => '',
         ]));
         $response->assertInvalid();
@@ -52,7 +52,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_authenticated_user_can_create_new_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->post(route('tourist-destinations.store', [
+        $response = $this->actingAs($this->user)->post(route('dashboard.tourist-destinations.store', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => $this->subDistrict->id,
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
@@ -70,7 +70,7 @@ class TouristDestinationTest extends TestCase
             ]),
         ]));
         $response->assertValid();
-        $response->assertRedirect(route('tourist-destinations.index'));
+        $response->assertRedirect(route('dashboard.tourist-destinations.index'));
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
@@ -80,7 +80,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_guest_cannot_create_new_tourist_destination()
     {
-        $response = $this->post(route('tourist-destinations.store', [
+        $response = $this->post(route('dashboard.tourist-destinations.store', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => $this->subDistrict->id,
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
@@ -103,14 +103,14 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_authenticated_user_can_see_tourist_destinations_show_page()
     {
-        $response = $this->actingAs($this->user)->get(route('tourist-destinations.show', ['tourist_destination' => $this->touristDestination]));
+        $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.show', ['tourist_destination' => $this->touristDestination]));
         $response->assertStatus(200);
         $this->assertEquals('Pantai Konang', $this->touristDestination->name);
     }
 
     public function test_a_tourist_destination_edit_page_can_be_rendered()
     {
-        $response = $this->actingAs($this->user)->get(route('tourist-destinations.edit', ['tourist_destination' => $this->touristDestination]));
+        $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.edit', ['tourist_destination' => $this->touristDestination]));
         $response->assertStatus(200);
         $response->assertSeeText('Ubah Data Destinasi Wisata');
         $this->assertEquals('Pantai Konang', $this->touristDestination->name);
@@ -118,7 +118,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_correct_data_must_be_provided_to_update_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->put(route('tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
+        $response = $this->actingAs($this->user)->put(route('dashboard.tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
             'name' => '',
         ]);
         $response->assertInvalid();
@@ -128,7 +128,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_authenticated_user_can_update_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->put(route('tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
+        $response = $this->actingAs($this->user)->put(route('dashboard.tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
             'name' => 'Pantai Pelang',
             'sub_district_id' => $this->subDistrict->id,
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
@@ -147,12 +147,12 @@ class TouristDestinationTest extends TestCase
         ]);
         $response->assertValid();
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect(route('tourist-destinations.index'));
+        $response->assertRedirect(route('dashboard.tourist-destinations.index'));
     }
 
     public function test_an_authenticated_user_can_delete_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->delete(route('tourist-destinations.destroy', ['tourist_destination' => $this->touristDestination]));
-        $response->assertRedirect(route('tourist-destinations.index'));
+        $response = $this->actingAs($this->user)->delete(route('dashboard.tourist-destinations.destroy', ['tourist_destination' => $this->touristDestination]));
+        $response->assertRedirect(route('dashboard.tourist-destinations.index'));
     }
 }

@@ -40,7 +40,7 @@ class PasswordUpdateTest extends TestCase
         ];
 
         if ($updateData['password_confirmation'] != $updateData['new_password']) {
-            $response = $this->actingAs($this->superAdmin)->put(route('users.update', ['user' => $this->webgisAdmin]), $updateData);
+            $response = $this->actingAs($this->superAdmin)->put(route('dashboard.users.update', ['user' => $this->webgisAdmin]), $updateData);
             $response->assertRedirect(url()->previous());
         }
     }
@@ -60,9 +60,9 @@ class PasswordUpdateTest extends TestCase
 
         if ($updateData['password_confirmation'] == $updateData['new_password']) {
             $updateData['password'] = Hash::make($updateData['new_password']);
-            $response = $this->actingAs($this->superAdmin)->put(route('users.update', ['user' => $this->webgisAdmin]), $updateData);
+            $response = $this->actingAs($this->superAdmin)->put(route('dashboard.users.update', ['user' => $this->webgisAdmin]), $updateData);
             $response->assertValid();
-            $response->assertRedirect(route('users.index'));
+            $response->assertRedirect(route('dashboard.users.index'));
         }
 
         $this->assertDatabaseHas('users', [

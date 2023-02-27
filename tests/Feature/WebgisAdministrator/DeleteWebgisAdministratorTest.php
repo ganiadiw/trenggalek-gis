@@ -44,13 +44,13 @@ class DeleteWebgisAdministratorTest extends TestCase
     public function test_an_superadmin_can_delete_webgis_administrator()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->delete(route('users.destroy', ['user' => $this->webgisAdmin2]));
+        $response = $this->actingAs($this->superAdmin)->delete(route('dashboard.users.destroy', ['user' => $this->webgisAdmin2]));
 
         if ($this->webgisAdmin2['avatar_path'] != null) {
             Storage::disk('avatars')->delete($this->webgisAdmin2['avatar_path']);
         }
 
-        $response->assertRedirect(route('users.index'));
+        $response->assertRedirect(route('dashboard.users.index'));
         $response->assertSessionHasNoErrors();
         $this->assertModelMissing($this->webgisAdmin2);
         Storage::disk('avatars')->assertMissing('avatar.png');
@@ -59,13 +59,13 @@ class DeleteWebgisAdministratorTest extends TestCase
     public function test_an_webgis_administrator_cannot_delete_webgis_administrator()
     {
         $this->assertEquals(0, $this->webgisAdmin1->is_admin);
-        $response = $this->actingAs($this->webgisAdmin1)->delete(route('users.destroy', ['user' => $this->webgisAdmin2]));
+        $response = $this->actingAs($this->webgisAdmin1)->delete(route('dashboard.users.destroy', ['user' => $this->webgisAdmin2]));
         $response->assertForbidden();
     }
 
     public function test_an_guest_cannot_delete_webgis_administrator()
     {
-        $response = $this->delete(route('users.update', ['user' => $this->webgisAdmin1]));
+        $response = $this->delete(route('dashboard.users.update', ['user' => $this->webgisAdmin1]));
         $this->assertGuest();
         $response->assertRedirect(route('login'));
     }

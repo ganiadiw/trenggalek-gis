@@ -5,7 +5,7 @@
                 <div class="px-5 pt-5 pb-10 text-lg font-semibold text-left text-gray-700 bg-white">
                     <h1 class="font-bold">Kelola Data Kategori Destinasi Wisata</h1>
                     <div class="justify-between block mt-5 md:flex">
-                        <a href="{{ route('tourist-destination-categories.create') }}" type="button"
+                        <a href="{{ route('dashboard.tourist-destination-categories.create') }}" type="button"
                             class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
                             Tambah Data
                             <span class="flex items-center ml-1">
@@ -19,7 +19,7 @@
                             </span>
                         </a>
                         <div class="h-10 mt-3 mb-2 md:w-4/12">
-                            <form action="{{ route('tourist-destination-categories.search') }}" method="GET">
+                            <form action="{{ route('dashboard.tourist-destination-categories.search') }}" method="GET">
                                 <label for="default-search"
                                     class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                                 <div class="relative w-full">
@@ -38,7 +38,7 @@
                                     </button>
                                 </div>
                             </form>
-                            <a href="{{ route('tourist-destination-categories.index') }}"
+                            <a href="{{ route('dashboard.tourist-destination-categories.index') }}"
                                 class="flex justify-end mt-3 text-sm text-blue-500 hover:underline">
                                 Reset pencarian
                             </a>
@@ -83,9 +83,9 @@
                                             <td class="px-6 py-4">
                                                 <x-action-button
                                                     :value="$touristDestinationCategory->name"
-                                                    :showURL="route('tourist-destination-categories.show', ['tourist_destination_category' => $touristDestinationCategory])"
-                                                    :editURL="route('tourist-destination-categories.edit', ['tourist_destination_category' => $touristDestinationCategory])"
-                                                    :deleteURL="route('tourist-destination-categories.destroy', ['tourist_destination_category' => $touristDestinationCategory])"
+                                                    :showURL="route('dashboard.tourist-destination-categories.show', ['tourist_destination_category' => $touristDestinationCategory])"
+                                                    :editURL="route('dashboard.tourist-destination-categories.edit', ['tourist_destination_category' => $touristDestinationCategory])"
+                                                    :deleteURL="route('dashboard.tourist-destination-categories.destroy', ['tourist_destination_category' => $touristDestinationCategory])"
                                                 />
                                             </td>
                                         </div>

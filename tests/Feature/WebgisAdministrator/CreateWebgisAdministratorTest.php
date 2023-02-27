@@ -28,7 +28,7 @@ class CreateWebgisAdministratorTest extends TestCase
     public function test_a_webgis_administrator_create_page_can_be_rendered()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('users.create'));
+        $response = $this->actingAs($this->superAdmin)->get(route('dashboard.users.create'));
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
     }
@@ -36,7 +36,7 @@ class CreateWebgisAdministratorTest extends TestCase
     public function test_correct_data_must_be_provided_to_create_new_webgis_administrator()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->post(route('users.store', [
+        $response = $this->actingAs($this->superAdmin)->post(route('dashboard.users.store', [
             'name' => '',
             'email' => '',
             'username' => '',
@@ -49,7 +49,7 @@ class CreateWebgisAdministratorTest extends TestCase
     public function test_an_superadmin_can_create_new_webgis_administrator()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->post(route('users.store', [
+        $response = $this->actingAs($this->superAdmin)->post(route('dashboard.users.store', [
             'name' => 'Lois Di Nominator',
             'email' => 'loisdinominator@example.com',
             'username' => 'loisdinominator',
@@ -59,7 +59,7 @@ class CreateWebgisAdministratorTest extends TestCase
             'password' => 'password',
         ]));
         $response->assertValid();
-        $response->assertRedirect(route('users.index'));
+        $response->assertRedirect(route('dashboard.users.index'));
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('users', [
             'email' => 'loisdinominator@example.com',
@@ -70,7 +70,7 @@ class CreateWebgisAdministratorTest extends TestCase
     public function test_an_webgis_administrator_cannot_create_new_webgis_administrator()
     {
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
-        $response = $this->actingAs($this->webgisAdmin)->post(route('users.store', [
+        $response = $this->actingAs($this->webgisAdmin)->post(route('dashboard.users.store', [
             'name' => 'Lois Di Nominator',
             'email' => 'loisdinominator@example.com',
             'username' => 'loisdinominator',
@@ -84,7 +84,7 @@ class CreateWebgisAdministratorTest extends TestCase
 
     public function test_an_guest_cannot_create_new_webgis_administrator()
     {
-        $response = $this->post(route('users.store', [
+        $response = $this->post(route('dashboard.users.store', [
             'name' => 'Lois Di Nominator',
             'email' => 'loisdinominator@example.com',
             'username' => 'loisdinominator',

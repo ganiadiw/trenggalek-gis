@@ -40,7 +40,7 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         User::create($validated);
 
-        return redirect(route('users.index'))->with(['success' => 'Data berhasil ditambahkan']);
+        return redirect(route('dashboard.users.index'))->with(['success' => 'Data berhasil ditambahkan']);
     }
 
     public function show(User $user)
@@ -75,7 +75,7 @@ class UserController extends Controller
         if (isset($validated['new_password']) == null || isset($validated['new_password']) == '') {
             $user->update($validated);
 
-            return redirect(route('users.index'));
+            return redirect(route('dashboard.users.index'));
         }
 
         if ($validated['password_confirmation'] != $validated['new_password']) {
@@ -84,7 +84,7 @@ class UserController extends Controller
             $validated['password'] = Hash::make($validated['new_password']);
             $user->update($validated);
 
-            return redirect(route('users.index'))->with(['success' => 'Data berhasil diperbarui']);
+            return redirect(route('dashboard.users.index'))->with(['success' => 'Data berhasil diperbarui']);
         }
     }
 
@@ -96,6 +96,6 @@ class UserController extends Controller
         }
         $user->delete();
 
-        return redirect(route('users.index'))->with(['success' => 'Data berhasil dihapus']);
+        return redirect(route('dashboard.users.index'))->with(['success' => 'Data berhasil dihapus']);
     }
 }

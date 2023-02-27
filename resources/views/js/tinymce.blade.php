@@ -7,7 +7,7 @@
     const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.withCredentials = false;
-        xhr.open('POST', "{{ route('images.store') }}");
+        xhr.open('POST', "{{ route('dashboard.images.store') }}");
         xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
 
         xhr.upload.onprogress = (e) => {
