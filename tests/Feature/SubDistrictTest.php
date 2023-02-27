@@ -255,7 +255,7 @@ class SubDistrictTest extends TestCase
     public function test_an_superadmin_can_delete_sub_district()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->delete(route('dashboard.sub-districts.update', ['sub_district' => $this->subDistrict]));
+        $response = $this->actingAs($this->superAdmin)->delete(route('dashboard.sub-districts.destroy', ['sub_district' => $this->subDistrict]));
         $this->assertModelMissing($this->subDistrict);
         $response->assertRedirect(route('dashboard.sub-districts.index'));
     }
@@ -302,7 +302,7 @@ class SubDistrictTest extends TestCase
     public function test_an_webgis_administrator_cannot_delete_sub_district()
     {
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
-        $response = $this->actingAs($this->webgisAdmin)->delete(route('dashboard.sub-districts.update', ['sub_district' => $this->subDistrict]));
+        $response = $this->actingAs($this->webgisAdmin)->delete(route('dashboard.sub-districts.destroy', ['sub_district' => $this->subDistrict]));
         $response->assertForbidden();
     }
 
@@ -344,7 +344,7 @@ class SubDistrictTest extends TestCase
 
     public function test_an_guest_cannot_delete_sub_district()
     {
-        $response = $this->delete(route('dashboard.sub-districts.update', ['sub_district' => $this->subDistrict]));
+        $response = $this->delete(route('dashboard.sub-districts.destroy', ['sub_district' => $this->subDistrict]));
         $this->assertGuest();
         $response->assertRedirect();
     }
