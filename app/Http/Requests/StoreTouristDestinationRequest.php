@@ -34,7 +34,7 @@ class StoreTouristDestinationRequest extends FormRequest
             'distance_from_city_center' => ['required', 'max:10'],
             'transportation_access' => ['required'],
             'facility' => ['required'],
-            'cover_image' => ['required', 'image', 'mimes:png,jpg,jpeg' , 'max:2048'],
+            'cover_image' => ['required', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
             'latitude' => ['required', 'max:50'],
             'longitude' => ['required', 'max:50'],
             'description' => ['required'],
