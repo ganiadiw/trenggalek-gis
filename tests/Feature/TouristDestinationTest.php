@@ -6,6 +6,8 @@ use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class TouristDestinationTest extends TestCase
@@ -52,6 +54,9 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_authenticated_user_can_create_new_tourist_destination()
     {
+        // Storage::fake('tourist-destinations');
+        // dd(UploadedFile::fake()->image('image-cover.jpg'));
+
         $response = $this->actingAs($this->user)->post(route('dashboard.tourist-destinations.store', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => $this->subDistrict->id,
@@ -61,6 +66,7 @@ class TouristDestinationTest extends TestCase
             'distance_from_city_center' => '56 KM',
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
             'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
+            'cover_image' => asset('assets/images/trenggalek.png'),
             'latitude' => '-8.257023266748266, 111.42379872584968',
             'longitude' => '111.42379872584968',
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
@@ -104,8 +110,7 @@ class TouristDestinationTest extends TestCase
     public function test_an_authenticated_user_can_see_tourist_destinations_show_page()
     {
         $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.show', ['tourist_destination' => $this->touristDestination]));
-        $response->assertStatus(200);
-        $this->assertEquals('Pantai Konang', $this->touristDestination->name);
+        $response->assertRedirect(route('guest.tourist-destinations.show', ['tourist_destination' => $this->touristDestination]));
     }
 
     public function test_a_tourist_destination_edit_page_can_be_rendered()

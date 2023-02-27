@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SubDistrictController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Guest\TouristDestinationController as GuestTouristDestinationController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TouristDestinationCategoryController;
@@ -48,5 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/tourist-destinations/{tourist_destination}', GuestTouristDestinationController::class)->name('guest.tourist-destinations.show');
 
 require __DIR__.'/auth.php';
