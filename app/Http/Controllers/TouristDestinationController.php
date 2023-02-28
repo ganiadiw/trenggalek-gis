@@ -35,9 +35,9 @@ class TouristDestinationController extends Controller
         $validated = $request->safe()->except(['media_files']);
 
         if ($request->file('cover_image')) {
-            $imageCover = $validated['cover_image'];
-            $validated['cover_image_name'] = $imageCover->hashName();
-            $validated['cover_image_path'] = $imageCover->storeAs('public/cover-images', $validated['cover_image_name']);
+            $coverImage = $validated['cover_image'];
+            $validated['cover_image_name'] = $coverImage->hashName();
+            $validated['cover_image_path'] = $coverImage->storeAs('public/cover-images', $validated['cover_image_name']);
         }
 
         $touristDestination = TouristDestination::create($validated);
@@ -86,7 +86,7 @@ class TouristDestinationController extends Controller
 
     public function show(TouristDestination $touristDestination)
     {
-        return redirect(route('guest.tourist-destinations.show', ['tourist_destination' => $touristDestination]));
+        return redirect(route('guest.tourist-destinations.show',['tourist_destination' => $touristDestination]));
     }
 
     public function edit(TouristDestination $touristDestination)
@@ -106,9 +106,9 @@ class TouristDestinationController extends Controller
         $validated = $request->safe()->except(['media_files']);
 
         if ($request->file('cover_image')) {
-            $imageCover = $validated['cover_image'];
-            $validated['cover_image_name'] = $imageCover->hashName();
-            $validated['cover_image_path'] = $imageCover->storeAs('public/cover-images', $validated['cover_image_name']);
+            $coverImage = $validated['cover_image'];
+            $validated['cover_image_name'] = $coverImage->hashName();
+            $validated['cover_image_path'] = $coverImage->storeAs('public/cover-images', $validated['cover_image_name']);
 
             Storage::delete($touristDestination->cover_image_path);
         }
