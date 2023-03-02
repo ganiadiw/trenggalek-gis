@@ -57,33 +57,16 @@
                 <div class="p-6 mb-4 bg-gray-200 rounded-lg shadow-lg">
                     <p class="mb-4 text-sm font-semibold text-red-500">Hanya diisi jika ingin mengubah password</p>
                     <div class="grid md:grid-cols-2 md:gap-6">
-                        <div class="relative z-0 w-full mb-6 group">
-                            <x-input-default-form class="-mb-1 lg:-mb-5" type="password" name="new_password"
-                                id="new_password" labelTitle="Password Baru" error='new_password'
+                        <div class="relative z-0 w-full">
+                            <x-input-default-form type="password" name="password"
+                                id="password" labelTitle="Password Baru" error='password'
                                 placeholder="*********"></x-input-default-form>
                         </div>
-                        <div class="relative z-0 w-full mb-6 group">
-                            <x-input-default-form class="-mb-1 lg:-mb-5" type="password" name="password_confirmation"
+                        <div class="relative z-0 w-full">
+                            <x-input-default-form type="password" name="password_confirmation"
                                 id="password_confirmation" labelTitle="Konfirmasi Password"
                                 error='password_confirmation' placeholder="*********"></x-input-default-form>
                         </div>
-                        @if (session('error'))
-                            <p id="standard_error_help"
-                                class="flex items-center text-xs text-yellow-700 md:-mt-5 lg:-mt-1">
-                                <span class="mr-3 font-medium">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon icon-tabler icon-tabler-info-circle" width="20"
-                                        height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <circle cx="12" cy="12" r="9"></circle>
-                                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                                        <polyline points="11 12 12 12 12 16 13 16"></polyline>
-                                    </svg>
-                                </span>
-                                {{ session('error') }}
-                            </p>
-                        @endif
                     </div>
                 </div>
                 <p class="mb-5 text-sm text-yellow-600">
@@ -108,7 +91,7 @@
     @section('script')
         @include('js.image-preview')
         <script>
-            imagePreview(document.getElementById('avatar'), document.getElementById('avatarUpload'), 'change')
+            imagePreview(document.getElementById('avatar'), document.getElementById('avatarUpload'), 'change');
         </script>
     @endsection
 </x-app-layout>
