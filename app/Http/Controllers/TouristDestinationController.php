@@ -86,7 +86,7 @@ class TouristDestinationController extends Controller
 
     public function show(TouristDestination $touristDestination)
     {
-        return redirect(route('guest.tourist-destinations.show',['tourist_destination' => $touristDestination]));
+        return redirect(route('guest.tourist-destinations.show', ['tourist_destination' => $touristDestination]));
     }
 
     public function edit(TouristDestination $touristDestination)
