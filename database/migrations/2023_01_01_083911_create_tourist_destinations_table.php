@@ -27,8 +27,8 @@ return new class extends Migration
             $table->longText('facility');
             $table->string('cover_image_name');
             $table->string('cover_image_path');
-            $table->string('latitude', 50);
-            $table->string('longitude', 50);
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
             $table->timestamps();
         });
     }
