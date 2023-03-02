@@ -95,6 +95,7 @@
                                             <td class="px-6 py-4">
                                                 <x-action-button
                                                     :value="$subDistrict->name"
+                                                    :downloadURL="route('dashboard.sub-districts.download', ['sub_district' => $subDistrict])"
                                                     :showURL="route('dashboard.sub-districts.show', ['sub_district' => $subDistrict])"
                                                     :editURL="route('dashboard.sub-districts.edit', ['sub_district' => $subDistrict])"
                                                     :deleteURL="route('dashboard.sub-districts.destroy', ['sub_district' => $subDistrict])"

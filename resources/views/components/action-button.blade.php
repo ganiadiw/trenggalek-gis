@@ -1,7 +1,21 @@
-@props(['deleteURL', 'editURL', 'showURL', 'value'])
+@props(['deleteURL', 'editURL', 'showURL', 'downloadURL' => null, 'value'])
 
 <div x-data="{ initial: true, deleting: false }" class="flex items-center text-sm">
     <div class="flex items-center justify-center w-full">
+        @if ($downloadURL != null)
+            <div x-data="{ tooltipDownload : 'Download File Peta' }">
+                <a x-show="initial" x-tooltip="tooltipDownload" href="{{ $downloadURL }}" class="font-medium text-blue-600 hover:underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-download" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                        <path d="M12 17v-6"></path>
+                        <path d="M9.5 14.5l2.5 2.5l2.5 -2.5"></path>
+                    </svg>
+                </a>
+            </div>
+            <span x-show="initial" class="mx-2">|</span>
+        @endif
         <div x-data="{ tooltipShow : 'Detail' }">
             <a x-show="initial" x-tooltip="tooltipShow" href="{{ $showURL }}" class="font-medium text-green-600 hover:underline">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
