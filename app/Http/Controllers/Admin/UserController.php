@@ -60,7 +60,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user)
     {
         $this->authorize('update', $user);
-        $validated = $request->validated();
+        $validated = $request->except('password');
 
         if ($request->file('avatar')) {
             $avatar = $validated['avatar'];
@@ -72,20 +72,13 @@ class UserController extends Controller
             }
         }
 
-        if (isset($validated['new_password']) == null || isset($validated['new_password']) == '') {
-            $user->update($validated);
-
-            return redirect(route('dashboard.users.index'));
+        if ($request->password) {
+            $validated['password'] = $user->password;
         }
 
-        if ($validated['password_confirmation'] != $validated['new_password']) {
-            return back()->with(['error' => 'Konfirmasi password tidak sesuai'])->withInput();
-        } else {
-            $validated['password'] = Hash::make($validated['new_password']);
-            $user->update($validated);
+        $user->update($validated);
 
-            return redirect(route('dashboard.users.index'))->with(['success' => 'Data berhasil diperbarui']);
-        }
+        return redirect(route('dashboard.users.index'))->with(['success' => 'Data berhasil diperbarui']);
     }
 
     public function destroy(User $user)
