@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', UserController::class)->middleware(['admin']);
 
         Route::get('sub-districts/search', [SubDistrictController::class, 'search'])->name('sub-districts.search')->middleware(['admin']);
+        Route::get('sub-districts/{sub_district}/download', [SubDistrictController::class, 'download'])->name('sub-districts.download')->middleware(['admin']);
         Route::resource('sub-districts', SubDistrictController::class)->middleware('admin');
 
         Route::get('tourist-destination-categories/search', [TouristDestinationCategoryController::class, 'search'])->name('tourist-destination-categories.search');
