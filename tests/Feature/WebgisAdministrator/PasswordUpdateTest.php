@@ -3,7 +3,6 @@
 namespace Tests\Feature\WebgisAdministrator;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 // Test case for update user password (Webgis Administrator)
@@ -29,41 +28,35 @@ class PasswordUpdateTest extends TestCase
     public function test_an_superadmin_cannot_update_webgis_administrator_with_incorrect_password()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $updateData = [
+
+        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
             'name' => 'Hugo First Time',
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
-            'new_password' => 'newpassword',
+            'password' => 'newpassword',
             'password_confirmation' => 'wrongpassword',
-        ];
+        ]);
 
-        if ($updateData['password_confirmation'] != $updateData['new_password']) {
-            $response = $this->actingAs($this->superAdmin)->put(route('dashboard.users.update', ['user' => $this->webgisAdmin]), $updateData);
-            $response->assertRedirect(url()->previous());
-        }
+        $response->assertSessionHasErrors(['password']);
+        $response->assertRedirect(url()->previous());
     }
 
-    public function test_an_superadmin_can_update_webgis_administrator_with_change_correct_password()
+    public function test_an_superadmin_can_update_webgis_administrator_with_change_password()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $updateData = [
+        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
             'name' => 'Hugo First Time',
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
-            'new_password' => 'newpassword',
+            'password' => 'newpassword',
             'password_confirmation' => 'newpassword',
-        ];
+        ]);
 
-        if ($updateData['password_confirmation'] == $updateData['new_password']) {
-            $updateData['password'] = Hash::make($updateData['new_password']);
-            $response = $this->actingAs($this->superAdmin)->put(route('dashboard.users.update', ['user' => $this->webgisAdmin]), $updateData);
-            $response->assertValid();
-            $response->assertRedirect(route('dashboard.users.index'));
-        }
+        $response->assertRedirect('/dashboard/users');
 
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',
