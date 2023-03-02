@@ -7,7 +7,6 @@ use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class TouristDestinationTest extends TestCase
@@ -32,32 +31,29 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_authenticated_user_can_see_tourist_destination_management_page()
     {
-        $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.index'));
+        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations');
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Destinasi Wisata');
     }
 
     public function test_a_tourist_destination_create_page_can_be_rendered()
     {
-        $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.create'));
+        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/create');
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Destinasi Wisata');
     }
 
     public function test_correct_data_must_be_provided_to_create_new_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->post(route('dashboard.tourist-destinations.store', [
+        $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => '',
-        ]));
+        ]);
         $response->assertInvalid();
     }
 
     public function test_an_authenticated_user_can_create_new_tourist_destination()
     {
-        // Storage::fake('tourist-destinations');
-        // dd(UploadedFile::fake()->image('image-cover.jpg'));
-
-        $response = $this->actingAs($this->user)->post(route('dashboard.tourist-destinations.store', [
+        $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => $this->subDistrict->id,
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
@@ -66,17 +62,17 @@ class TouristDestinationTest extends TestCase
             'distance_from_city_center' => '56 KM',
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
             'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
-            'cover_image' => asset('assets/images/trenggalek.png'),
-            'latitude' => '-8.257023266748266, 111.42379872584968',
-            'longitude' => '111.42379872584968',
+            'cover_image' => UploadedFile::fake()->create('pantai-pelang.png', 2000),
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
             'media_files' => json_encode([
                 'used_images' => null,
                 'unused_images' => null,
             ]),
-        ]));
+        ]);
         $response->assertValid();
-        $response->assertRedirect(route('dashboard.tourist-destinations.index'));
+        $response->assertRedirect('/dashboard/tourist-destinations');
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
@@ -86,7 +82,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_guest_cannot_create_new_tourist_destination()
     {
-        $response = $this->post(route('dashboard.tourist-destinations.store', [
+        $response = $this->post('dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => $this->subDistrict->id,
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
@@ -95,27 +91,27 @@ class TouristDestinationTest extends TestCase
             'distance_from_city_center' => '56 KM',
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
             'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
-            'latitude' => '-8.257023266748266',
-            'longitude' => '111.42379872584968',
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
             'media_files' => json_encode([
                 'used_images' => null,
                 'unused_images' => null,
             ]),
-        ]));
+        ]);
         $this->assertGuest();
         $response->assertRedirect(route('login'));
     }
 
     public function test_an_authenticated_user_can_see_tourist_destinations_show_page()
     {
-        $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.show', ['tourist_destination' => $this->touristDestination]));
-        $response->assertRedirect(route('guest.tourist-destinations.show', ['tourist_destination' => $this->touristDestination]));
+        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
+        $response->assertRedirect('/tourist-destinations/' . $this->touristDestination->slug);
     }
 
     public function test_a_tourist_destination_edit_page_can_be_rendered()
     {
-        $response = $this->actingAs($this->user)->get(route('dashboard.tourist-destinations.edit', ['tourist_destination' => $this->touristDestination]));
+        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug . '/edit');
         $response->assertStatus(200);
         $response->assertSeeText('Ubah Data Destinasi Wisata');
         $this->assertEquals('Pantai Konang', $this->touristDestination->name);
@@ -123,7 +119,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_correct_data_must_be_provided_to_update_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->put(route('dashboard.tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
+        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
             'name' => '',
         ]);
         $response->assertInvalid();
@@ -133,7 +129,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_authenticated_user_can_update_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->put(route('dashboard.tourist-destinations.update', ['tourist_destination' => $this->touristDestination]), [
+        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
             'name' => 'Pantai Pelang',
             'sub_district_id' => $this->subDistrict->id,
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
@@ -142,8 +138,8 @@ class TouristDestinationTest extends TestCase
             'distance_from_city_center' => '56 KM',
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
             'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
-            'latitude' => '-8.257023266748266, 111.42379872584968',
-            'longitude' => '111.42379872584968',
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
             'media_files' => json_encode([
                 'used_images' => null,
@@ -152,12 +148,12 @@ class TouristDestinationTest extends TestCase
         ]);
         $response->assertValid();
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect(route('dashboard.tourist-destinations.index'));
+        $response->assertRedirect('/dashboard/tourist-destinations');
     }
 
     public function test_an_authenticated_user_can_delete_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->delete(route('dashboard.tourist-destinations.destroy', ['tourist_destination' => $this->touristDestination]));
-        $response->assertRedirect(route('dashboard.tourist-destinations.index'));
+        $response = $this->actingAs($this->user)->delete('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
+        $response->assertRedirect('/dashboard/tourist-destinations');
     }
 }

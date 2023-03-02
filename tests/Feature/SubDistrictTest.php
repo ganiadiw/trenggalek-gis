@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\SubDistrict;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SubDistrictTest extends TestCase
@@ -100,7 +99,7 @@ class SubDistrictTest extends TestCase
     public function test_an_superadmin_can_see_sub_district_management_page()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('dashboard.sub-districts.index'));
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/sub-districts');
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Kecamatan');
     }
@@ -108,193 +107,200 @@ class SubDistrictTest extends TestCase
     public function test_a_sub_district_create_page_can_be_rendered()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('dashboard.sub-districts.create'));
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/sub-districts/create');
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Kecamatan');
     }
 
     public function test_an_superadmin_can_create_new_sub_district_with_uploaded_geojson_file()
     {
-        Storage::fake('geojson');
-
-        $gojsonFile = UploadedFile::fake()->create('gt47g-3503010.geojson', 25, 'application/json');
-        $data = [
-            'code' => '3503010',
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->post('/dashboard/sub-districts', [
+            'code' => 3503010,
             'name' => 'Panggul',
             'latitude' => -8.2402961,
             'longitude' => 111.4484781,
             'fill_color' => '#0ea5e9',
-            'geojson_name' => $gojsonFile->name,
-            'geojson_path' => $gojsonFile->path(),
-        ];
+            'geojson' => UploadedFile::fake()->create('3503010.geojson', 25, 'application/json'),
+        ]);
 
-        $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->post(route('dashboard.sub-districts.store', $data));
-        $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
-        $response->assertRedirect();
+        $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
+        $response->assertRedirect('dashboard/sub-districts');
+        $subDistrict = SubDistrict::where('code', 3503010)->first();
+        $this->assertDatabaseHas('sub_districts', [
+            'code' => 3503010,
+            'name' => 'Panggul',
+            'geojson_name' => $subDistrict->geojson_name,
+        ]);
     }
 
     public function test_an_superadmin_can_create_new_sub_district_with_geojson_text()
     {
-        Storage::fake('geojson');
-
-        $gojsonFile = UploadedFile::fake()->create('gt47g-3503010.geojson', 25, 'application/json');
-
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->post(route('dashboard.sub-districts.store', [
-            'code' => '3503010',
+        $response = $this->actingAs($this->superAdmin)->post('dashboard/sub-districts', [
+            'code' => 3503010,
             'name' => 'Panggul',
             'latitude' => -8.2402961,
             'longitude' => 111.4484781,
             'fill_color' => '#0ea5e9',
-            'geojson_name' => $gojsonFile->name,
-            'geojson_path' => $gojsonFile->path(),
             'geojson_text_area' => json_encode($this->createGeoJson),
-        ]));
+        ]);
 
-        $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
+        $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
         $this->assertJson(json_encode($this->createGeoJson));
-        $response->assertRedirect(route('dashboard.sub-districts.index'));
+        $response->assertRedirect('dashboard/sub-districts');
+        $subDistrict = SubDistrict::where('code', 3503010)->first();
+        $this->assertDatabaseHas('sub_districts', [
+            'code' => 3503010,
+            'name' => 'Panggul',
+            'latitude' => -8.2402961,
+            'longitude' => 111.4484781,
+            'fill_color' => '#0ea5e9',
+            'geojson_name' => $subDistrict->geojson_name,
+        ]);
     }
 
     public function test_correct_data_must_be_provided_to_create_new_sub_district()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->post(route('dashboard.sub-districts.store', [
+        $response = $this->actingAs($this->superAdmin)->post('dashboard/sub-districts', [
             'code' => '',
             'name' => '',
             'latitude' => '',
             'longitude' => '',
             'fill_color' => '',
-            'geojson_name' => '',
-            'geojson_path' => '',
+            'geojson' => '',
             'geojson_text_area' => '',
-        ]));
-        $response->assertInvalid();
+        ]);
+        $response->assertInvalid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
     }
 
     public function test_an_superadmin_can_see_sub_district_show_page()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('dashboard.sub-districts.show', ['sub_district' => $this->subDistrict]));
+        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code);
         $response->assertStatus(200);
         $this->assertEquals('3503020', $this->subDistrict->code);
-        $this->assertEquals('MUNJUNGAN', $this->subDistrict->name);
-        $this->assertEquals('-8.3030696', $this->subDistrict->latitude);
-        $this->assertEquals('111.5768607', $this->subDistrict->longitude);
+        $this->assertEquals('KECAMATAN MUNJUNGAN', $this->subDistrict->name);
+        $this->assertEquals('-8.24312247', $this->subDistrict->latitude);
+        $this->assertEquals('111.45431483', $this->subDistrict->longitude);
     }
 
     public function test_a_sub_district_edit_page_can_be_rendered()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('dashboard.sub-districts.edit', ['sub_district' => $this->subDistrict]));
+        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code . '/edit');
         $response->assertStatus(200);
         $response->assertSeeText('Ubah Data Kecamatan');
     }
 
     public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_file()
     {
-        Storage::fake('geojson');
-
-        $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
-
         $this->assertEquals(1, $this->superAdmin->is_admin);
 
-        $response = $this->actingAs($this->superAdmin)->put(route('dashboard.sub-districts.update', ['sub_district' => $this->subDistrict]), [
-            'code' => '3503020',
-            'name' => 'KECAMATAN MUNJUNGAN',
-            'latitude' => '-8.3030696',
-            'longitude' => '111.5768607',
+        $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
+            'code' => 3503030,
+            'name' => 'KECAMATAN WATULIMO',
+            'latitude' => -8.26538086,
+            'longitude' => 111.71334564,
             'fill_color' => '#059669',
-            'geojson_name' => $gojsonFile->name,
-            'geojson_path' => $gojsonFile->path(),
+            'geojson' => UploadedFile::fake()->create('3503020.geojson', 25, 'application/json'),
         ]);
-        $response->assertValid();
-        $response->assertRedirect(route('dashboard.sub-districts.index'));
+        $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
+        $response->assertRedirect('dashboard/sub-districts');
+        $subDistrict = SubDistrict::where('code', 3503030)->first();
+        $this->assertDatabaseHas('sub_districts', [
+            'code' => 3503030,
+            'name' => 'KECAMATAN WATULIMO',
+            'latitude' => -8.26538086,
+            'longitude' => 111.71334564,
+            'fill_color' => '#059669',
+            'geojson_name' => $subDistrict->geojson_name,
+        ]);
+        $this->assertDatabaseMissing('sub_districts', [
+            'code' => 3503020,
+        ]);
     }
 
     public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_text()
     {
-        Storage::fake('geojson');
-
-        $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
-
         $this->assertEquals(1, $this->superAdmin->is_admin);
 
-        $response = $this->actingAs($this->superAdmin)->put(route('dashboard.sub-districts.update', ['sub_district' => $this->subDistrict]), [
-            'code' => '3503020',
-            'name' => 'KECAMATAN MUNJUNGAN',
-            'latitude' => '-8.3030696',
-            'longitude' => '111.5768607',
+        $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
+            'code' => 3503030,
+            'name' => 'KECAMATAN WATULIMO',
+            'latitude' => -8.26538086,
+            'longitude' => 111.71334564,
             'fill_color' => '#059669',
-            'geojson_name' => $gojsonFile->name,
-            'geojson_path' => $gojsonFile->path(),
             'geojson_text_area' => json_encode($this->updateGeoJson),
         ]);
-        $response->assertValid();
+        $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
         $this->assertJson(json_encode($this->updateGeoJson));
-        $response->assertRedirect(route('dashboard.sub-districts.index'));
+        $response->assertRedirect('dashboard/sub-districts/');
+        $subDistrict = SubDistrict::where('code', 3503030)->first();
+        $this->assertDatabaseHas('sub_districts', [
+            'code' => 3503030,
+            'name' => 'KECAMATAN WATULIMO',
+            'latitude' => -8.26538086,
+            'longitude' => 111.71334564,
+            'fill_color' => '#059669',
+            'geojson_name' => $subDistrict->geojson_name,
+        ]);
+        $this->assertDatabaseMissing('sub_districts', [
+            'code' => 3503020,
+            'name' => 'KECAMATAN MUNJUNGAN',
+            'latitude' => -8.3030696,
+            'longitude' => 111.5768607,
+            'fill_color' => '#059669',
+        ]);
     }
 
     public function test_correct_data_must_be_provided_to_update_sub_district()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->put(route('dashboard.sub-districts.update', ['sub_district' => $this->subDistrict]), [
+        $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => '',
             'name' => '',
             'latitude' => '',
             'longitude' => '',
             'fill_color' => '',
-            'geojson_name' => '',
-            'geojson_path' => '',
-            'geojson_text_area' => '',
         ]);
-        $response->assertInvalid();
+        $response->assertInvalid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
     }
 
     public function test_an_superadmin_can_delete_sub_district()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->delete(route('dashboard.sub-districts.destroy', ['sub_district' => $this->subDistrict]));
+        $response = $this->actingAs($this->superAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
         $this->assertModelMissing($this->subDistrict);
-        $response->assertRedirect(route('dashboard.sub-districts.index'));
+        $response->assertRedirect('dashboard/sub-districts');
     }
 
     public function test_an_webgis_administrator_cannot_create_new_sub_district()
     {
-        $gojsonFile = UploadedFile::fake()->create('gt47g-3503010.geojson', 25, 'application/json');
-
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
-        $response = $this->actingAs($this->webgisAdmin)->post(route('dashboard.sub-districts.store', [
-            'code' => '3503010',
+        $response = $this->actingAs($this->webgisAdmin)->post('dashboard/sub-districts', [
+            'code' => 3503010,
             'name' => 'Panggul',
             'latitude' => -8.2402961,
             'longitude' => 111.4484781,
             'fill_color' => '#0ea5e9',
-            'geojson_name' => $gojsonFile->name,
-            'geojson_path' => $gojsonFile->path(),
             'geojson_text_area' => json_encode($this->createGeoJson),
-        ]));
+        ]);
         $response->assertForbidden();
     }
 
     public function test_an_webgis_administrator_cannot_update_sub_district()
     {
-        Storage::fake('geojson');
-
-        $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
-
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
 
-        $response = $this->actingAs($this->webgisAdmin)->put(route('dashboard.sub-districts.update', ['sub_district' => $this->subDistrict]), [
-            'code' => '3503020',
+        $response = $this->actingAs($this->webgisAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
+            'code' => 3503020,
             'name' => 'KECAMATAN MUNJUNGAN',
-            'latitude' => '-8.3030696',
-            'longitude' => '111.5768607',
+            'latitude' => -8.3030696,
+            'longitude' => 111.5768607,
             'fill_color' => '#059669',
-            'geojson_name' => $gojsonFile->name,
-            'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode($this->updateGeoJson),
+            'geojson' => UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json'),
         ]);
         $response->assertForbidden();
     }
@@ -302,49 +308,41 @@ class SubDistrictTest extends TestCase
     public function test_an_webgis_administrator_cannot_delete_sub_district()
     {
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
-        $response = $this->actingAs($this->webgisAdmin)->delete(route('dashboard.sub-districts.destroy', ['sub_district' => $this->subDistrict]));
+        $response = $this->actingAs($this->webgisAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
         $response->assertForbidden();
     }
 
     public function test_an_guest_cannot_create_new_sub_district()
     {
-        $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
-
-        $response = $this->post(route('dashboard.sub-districts.store', [
-            'code' => '3503010',
+        $response = $this->post('dashboard/sub-districts', [
+            'code' => 3503010,
             'name' => 'Panggul',
             'latitude' => -8.2402961,
             'longitude' => 111.4484781,
             'fill_color' => '#0ea5e9',
-            'geojson_name' => $gojsonFile->name,
-            'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode($this->createGeoJson),
-        ]));
+            'geojson' => UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json'),
+        ]);
         $this->assertGuest();
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect('/login');
     }
 
     public function test_an_guest_cannot_update_sub_district()
     {
-        $gojsonFile = UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json');
-
-        $response = $this->put(route('dashboard.sub-districts.update', ['sub_district' => $this->subDistrict]), [
-            'code' => '3503020',
+        $response = $this->put('dashboard/sub-districts/' . $this->subDistrict->code, [
+            'code' => 3503020,
             'name' => 'KECAMATAN MUNJUNGAN',
-            'latitude' => '-8.3030696',
-            'longitude' => '111.5768607',
+            'latitude' => -8.3030696,
+            'longitude' => 111.5768607,
             'fill_color' => '#059669',
-            'geojson_name' => $gojsonFile->name,
-            'geojson_path' => $gojsonFile->path(),
-            'geojson_text_area' => json_encode($this->updateGeoJson),
+            'geojson' => UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json'),
         ]);
         $this->assertGuest();
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect('/login');
     }
 
     public function test_an_guest_cannot_delete_sub_district()
     {
-        $response = $this->delete(route('dashboard.sub-districts.destroy', ['sub_district' => $this->subDistrict]));
+        $response = $this->delete('dashboard/sub-districts/' . $this->subDistrict->code);
         $this->assertGuest();
         $response->assertRedirect();
     }
@@ -352,7 +350,7 @@ class SubDistrictTest extends TestCase
     public function test_an_superadmin_can_search_contains_sub_district_data()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('dashboard.sub-districts.search'), [
+        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/search', [
             'search' => $this->subDistrict->name,
         ]);
         $response->assertSeeText($this->subDistrict->name);
