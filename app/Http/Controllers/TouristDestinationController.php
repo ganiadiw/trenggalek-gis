@@ -189,6 +189,7 @@ class TouristDestinationController extends Controller
 
     public function destroy(TouristDestination $touristDestination)
     {
+        Storage::delete($touristDestination->cover_image_path);
         $touristDestination->delete();
 
         return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil dihapus']);
