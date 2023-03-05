@@ -127,23 +127,9 @@ class TouristDestinationController extends Controller
         $media = json_decode($mediaFiles['media_files']);
 
         if ($media != null && $media->used_images != null) {
-            $newImageSources = [];
-
-            foreach ($media->used_images as $item) {
-                $mediaLibrary = Media::where('file_name', $item->filename)->first();
-
-                if (! $mediaLibrary) {
-                    $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
-                    $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
-                        ->toMediaCollection('tourist-destinations');
-                    $temporaryFile->delete();
-                    array_push($newImageSources, $newImageSource->getUrl());
-                }
-            }
-
-            if (! empty($newImageSources)) {
-                $this->changeImageSource($newImageSources, $touristDestination);
-            }
+            $touristDestination->update([
+                'description' => $this->changeImageSource($media->used_images, $touristDestination),
+            ]);
         }
 
         if ($media != null && $media->unused_images != null) {
@@ -153,24 +139,38 @@ class TouristDestinationController extends Controller
         return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil diperbarui']);
     }
 
-    public function changeImageSource($newImageSources, $touristDestination)
+    public function changeImageSource($usedImages, $touristDestination)
     {
-        $dom = new DOMDocument();
-        $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $imageTags = $dom->getElementsByTagName('img');
+        $newImageSources = [];
 
-        $index = 0;
-        foreach ($imageTags as $imageTag) {
-            if (pathinfo($imageTag->getAttribute('src'), PATHINFO_FILENAME) == pathinfo($newImageSources[$index], PATHINFO_FILENAME)) {
-                $newSrc = $newImageSources[$index];
-                $imageTag->setAttribute('src', $newSrc);
-                $index++;
+        foreach ($usedImages as $item) {
+            $mediaLibrary = Media::where('file_name', $item->filename)->first();
+
+            if (!$mediaLibrary) {
+                $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
+                $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
+                    ->toMediaCollection('tourist-destinations');
+                $temporaryFile->delete();
+                array_push($newImageSources, $newImageSource->getUrl());
             }
         }
 
-        $touristDestination->update([
-            'description' => $dom->saveHTML(),
-        ]);
+        if (!empty($newImageSources)) {
+            $dom = new DOMDocument();
+            $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $imageTags = $dom->getElementsByTagName('img');
+
+            $index = 0;
+            foreach ($imageTags as $imageTag) {
+                if (pathinfo($imageTag->getAttribute('src'), PATHINFO_FILENAME) == pathinfo($newImageSources[$index], PATHINFO_FILENAME)) {
+                    $newSrc = $newImageSources[$index];
+                    $imageTag->setAttribute('src', $newSrc);
+                    $index++;
+                }
+            }
+        }
+
+        return $dom->saveHTML();
     }
 
     public function deleteUnusedImage($unusedImages)
