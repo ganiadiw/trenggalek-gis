@@ -151,6 +151,7 @@
                 labelMaxFileSize: 'Maksimal berukuran 2048 KB',
             });
 
+            L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}]).addTo(map);
         </script>
     @endsection
 </x-app-layout>
