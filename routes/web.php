@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
         Route::get('tourist-destination-categories/search', [TouristDestinationCategoryController::class, 'search'])->name('tourist-destination-categories.search');
         Route::resource('tourist-destination-categories', TouristDestinationCategoryController::class);
 
+        Route::get('tourist-destinations/search', [TouristDestinationController::class, 'search'])->name('tourist-destinations.search');
         Route::resource('tourist-destinations', TouristDestinationController::class);
 
         Route::prefix('images')->group(function () {

@@ -9,6 +9,7 @@ use App\Models\TemporaryFile;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
 use DOMDocument;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -18,6 +19,14 @@ class TouristDestinationController extends Controller
     {
         $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
             ->orderBy('name', 'asc')->paginate(10);
+
+        return view('tourist-destination.index', compact('touristDestinations'));
+    }
+
+    public function search(Request $request)
+    {
+        $touristDestinations = TouristDestination::where('name', 'like', '%' . $request->search . '%')
+            ->select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->orderBy('name', 'asc')->paginate(10)->withQueryString();
 
         return view('tourist-destination.index', compact('touristDestinations'));
     }

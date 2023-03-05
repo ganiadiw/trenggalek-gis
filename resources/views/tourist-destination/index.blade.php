@@ -20,8 +20,8 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="h-10 mt-3 mb-2 md:w-4/12">
-                            <form action="" method="GET">
+                        <div class="h-10 mt-3 mb-5 md:w-4/12">
+                            <form action="{{ route('dashboard.tourist-destinations.search') }}" method="GET">
                                 <label for="default-search"
                                     class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                                 <div class="relative w-full">
