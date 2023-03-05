@@ -8,7 +8,7 @@
                 <h1 class="mb-5 text-lg font-bold text-gray-700">Ubah Data Destinasi Wisata</h1>
                 <div class="grid gap-x-5 md:grid-cols-2">
                     <x-input-default-form type="text" name="name" :value="old('name', $touristDestination->name)" id="name"
-                        labelTitle="Nama Destinasi Wisata*" error="name" placeholder="Pantai Prigi" />
+                        labelTitle="Nama Destinasi Wisata*" error="name" :placeholder="$touristDestination->name" />
                     <x-input-select-option labelTitle="Pilih Kategori*" id="category"
                         name="tourist_destination_category_id" disabledSelected="Pilih Kategori" error="category">
                         <x-slot name="options">
@@ -31,18 +31,18 @@
                     </x-input-select-option>
                     <x-input-default-form type="text" name="address" :value="old('address', $touristDestination->address)" id="address"
                         labelTitle="Alamat Lengkap*" error="address"
-                        placeholder="Jl. Raya Pantai Tasikmadu, Ketawang, Tasikmadu, Kec. Watulimo, Kabupaten Trenggalek, Jawa Timur 66382" />
+                        :placeholder="$touristDestination->address" />
                     <x-input-default-form type="text" name="manager" :value="old('manager', $touristDestination->manager)" id="manager"
-                        labelTitle="Pengelola*" error="manager" placeholder="DISPARBUD" />
+                        labelTitle="Pengelola*" error="manager" :placeholder="$touristDestination->manager" />
                     <x-input-default-form type="text" name="distance_from_city_center" :value="old('distance_from_city_center', $touristDestination->distance_from_city_center)"
                         id="distance_from_city_center" labelTitle="Jarak dari Pusat Kota*"
-                        error="distance_from_city_center" placeholder="42 KM" />
+                        error="distance_from_city_center" :placeholder="$touristDestination->distance_from_city_center" />
                     <x-input-default-form type="text" name="transportation_access" :value="old('transportation_access', $touristDestination->transportation_access)"
                         id="transportation_access" labelTitle="Akses Transportasi*" error="transportation_access"
-                        placeholder="Bisa diakses dengan Bus Besar, Mobil, dan Sepeda Motor" />
+                        :placeholder="$touristDestination->transportation_access" />
                     <x-input-default-form type="text" name="facility" :value="old('facility', $touristDestination->facility)" id="facility"
                         labelTitle="Fasilitas*" error="facility"
-                        placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus" />
+                        :placeholder="$touristDestination->facility" />
                     <div>
                         @if ($touristDestination->cover_image_name != null)
                             <div class="mb-3">
@@ -51,7 +51,7 @@
                             </div>
                         @endif
                         <x-input-default-form type="file" name="cover_image" id="coverImage"
-                            labelTitle="Foto Sampul" error='cover_image' />
+                            labelTitle="Foto Sampul" error="cover_image" />
                     </div>
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
@@ -64,9 +64,9 @@
                                 dapat ditentukan dengan klik pada peta</p>
                         </blockquote>
                         <x-input-default-form type="text" name="latitude" :value="old('latitude', $touristDestination->latitude)" id="latitude"
-                            labelTitle="Latitude*" error="latitude" placeholder="-8.2402961" />
+                            labelTitle="Latitude*" error="latitude" :placeholder="$touristDestination->latitude" />
                         <x-input-default-form type="text" name="longitude" :value="old('longitude', $touristDestination->longitude)" id="longitude"
-                            labelTitle="Longitude*" error="longitude" placeholder="111.4484781" />
+                            labelTitle="Longitude*" error="longitude" :placeholder="$touristDestination->longitude" />
                         <button type="button" id="buttonFindOnMap"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2.5 text-center">Cari
                             pada peta</button>
