@@ -139,7 +139,7 @@ class TouristDestinationController extends Controller
         return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil diperbarui']);
     }
 
-    public function changeImageSource($usedImages, $touristDestination)
+    public function changeImageSource(array $usedImages, $touristDestination)
     {
         $newImageSources = [];
 
@@ -173,7 +173,7 @@ class TouristDestinationController extends Controller
         return $dom->saveHTML();
     }
 
-    public function deleteUnusedImage($unusedImages)
+    public function deleteUnusedImage(array $unusedImages)
     {
         collect($unusedImages)->map(function ($item) {
             $media = Media::where('file_name', $item->filename)->first();
