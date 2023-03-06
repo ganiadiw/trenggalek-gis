@@ -19,8 +19,9 @@ class TouristDestinationController extends Controller
     {
         $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
             ->orderBy('name', 'asc')->paginate(10);
+        $touristDestinationMapping = TouristDestination::select('slug', 'name', 'distance_from_city_center', 'latitude', 'longitude')->get();
 
-        return view('tourist-destination.index', compact('touristDestinations'));
+        return view('tourist-destination.index', compact('touristDestinations', 'touristDestinationMapping'));
     }
 
     public function search(Request $request)
