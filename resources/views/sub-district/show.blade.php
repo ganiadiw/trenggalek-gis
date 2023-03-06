@@ -50,22 +50,15 @@
                         labelTitle="Longitude" disabled="true"></x-input-default-form>
                 </div>
                 <h2 class="mb-2 text-sm font-medium text-gray-900">Peta Kecamatan</h2>
-                <div id="subDistrictMap" class="w-full mb-5 border rounded-lg h-128"></div>
+                <div class="w-full mb-5 border rounded-lg h-128">
+                    <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" :marker=true />
+                </div>
             </div>
         </div>
     </div>
 
     @section('script')
         <script>
-            let subDistrictMap = L.map('subDistrictMap').setView([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}],
-                12);
-
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 15,
-                minZoom: 12,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(subDistrictMap);
-
             let mapStyle = {
                 'color': '{{ $subDistrict->fill_color }}',
                 'weight': 2,
@@ -81,11 +74,11 @@
                     l.bindPopup(out.join("<br />"));
                 }
             }
-            L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(subDistrictMap)
+
             new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
                 onEachFeature: popUp,
                 style: mapStyle
-            }).addTo(subDistrictMap);
+            }).addTo(map);
         </script>
     @endsection
 </x-app-layout>
