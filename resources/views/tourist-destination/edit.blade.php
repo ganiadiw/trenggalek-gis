@@ -72,7 +72,7 @@
                             pada peta</button>
                     </div>
                     <div class="mt-5 lg:w-2/4 lg:mt-0 h-120">
-                        <x-head.leaflet-init :latitude="$touristDestination->latitude" :longitude="$touristDestination->longitude" />
+                        <x-head.leaflet-init :latitude="$touristDestination->latitude" :longitude="$touristDestination->longitude" :marker=true />
                     </div>
                 </div>
 
@@ -150,8 +150,6 @@
                 maxFileSize: '2048KB',
                 labelMaxFileSize: 'Maksimal berukuran 2048 KB',
             });
-
-            L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}]).addTo(map);
         </script>
     @endsection
 </x-app-layout>

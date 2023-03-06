@@ -195,7 +195,7 @@
                                 pada peta</button>
                         </div>
                         <div class="mt-5 lg:w-2/4 lg:mt-0 h-120">
-                            <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" />
+                            <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" :marker=true />
                         </div>
                     </div>
                 </div>
@@ -220,7 +220,6 @@
                     'opacity': 0.4,
                 }
             }).addTo(map);
-            marker = L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(map)
 
             const pickr = Pickr.create({
                 el: '.color-picker',
