@@ -134,4 +134,12 @@
             </div>
         </div>
     </div>
+
+    @section('script')
+        <script>
+            @foreach ($touristDestinationMapping as $item)
+                L.marker([{{ $item->latitude }}, {{ $item->longitude }}]).addTo(map);
+            @endforeach
+        </script>
+    @endsection
 </x-app-layout>
