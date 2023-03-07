@@ -18,18 +18,31 @@ class TouristDestinationController extends Controller
     public function index()
     {
         $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
-            ->orderBy('name', 'asc')->paginate(10);
-        $touristDestinationMapping = TouristDestination::select('slug', 'name', 'distance_from_city_center', 'latitude', 'longitude')->get();
+            ->orderBy('name', 'asc');
+        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')
+        ->orderBy('code', 'asc')->get();
 
-        return view('tourist-destination.index', compact('touristDestinations', 'touristDestinationMapping'));
+        return view('tourist-destination.index', [
+            'touristDestinations' => $touristDestinations->paginate(10),
+            'touristDestinationMapping' => $touristDestinations->get(),
+            'subDistricts' => $subDistricts,
+        ]);
     }
 
     public function search(Request $request)
     {
         $touristDestinations = TouristDestination::where('name', 'like', '%' . $request->search . '%')
-            ->select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->orderBy('name', 'asc')->paginate(10)->withQueryString();
+            ->orWhere('address', 'like', '%' . $request->search . '%')
+            ->select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->orderBy('name', 'asc');
 
-        return view('tourist-destination.index', compact('touristDestinations'));
+        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')
+            ->orderBy('code', 'asc')->get();
+
+        return view('tourist-destination.index', [
+            'touristDestinations' => $touristDestinations->paginate(10)->withQueryString(),
+            'touristDestinationMapping' => $touristDestinations->get(),
+            'subDistricts' => $subDistricts,
+        ]);
     }
 
     public function create()
@@ -91,7 +104,9 @@ class TouristDestinationController extends Controller
             }
         }
 
-        return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil ditambahkan']);
+        toastr()->success('Data berhasil ditambahkan', 'Sukses');
+
+        return redirect(route('dashboard.tourist-destinations.index'));
     }
 
     public function show(TouristDestination $touristDestination)
@@ -137,7 +152,9 @@ class TouristDestinationController extends Controller
             $this->deleteUnusedImage($media->unused_images);
         }
 
-        return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil diperbarui']);
+        toastr()->success('Data berhasil diperbarui', 'Sukses');
+
+        return back();
     }
 
     public function changeImageSource(array $usedImages, $touristDestination)
@@ -193,6 +210,8 @@ class TouristDestinationController extends Controller
         Storage::delete($touristDestination->cover_image_path);
         $touristDestination->delete();
 
-        return redirect(route('dashboard.tourist-destinations.index'))->with(['success' => 'Data berhasil dihapus']);
+        toastr()->success('Data berhasil dihapus', 'Sukses');
+
+        return back();
     }
 }
