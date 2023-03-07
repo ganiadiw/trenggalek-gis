@@ -72,7 +72,7 @@
                             pada peta</button>
                     </div>
                     <div class="mt-5 lg:w-2/4 lg:mt-0 h-120">
-                        <x-head.leaflet-init :latitude="$touristDestination->latitude" :longitude="$touristDestination->longitude" :marker=true />
+                        <x-head.leaflet-init :latitude="$touristDestination->latitude" :longitude="$touristDestination->longitude" />
                     </div>
                 </div>
 
@@ -134,6 +134,8 @@
         @include('js.leaflet-find-marker')
         @include('js.tinymce')
         <script>
+            marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}]).addTo(map);
+
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
                 FilePondPluginFileValidateType,

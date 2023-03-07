@@ -51,7 +51,7 @@
                 </div>
                 <h2 class="mb-2 text-sm font-medium text-gray-900">Peta Kecamatan</h2>
                 <div class="w-full mb-5 border rounded-lg h-128">
-                    <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" :marker=true />
+                    <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" />
                 </div>
             </div>
         </div>
@@ -59,6 +59,8 @@
 
     @section('script')
         <script>
+            L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(map);
+
             let mapStyle = {
                 'color': '{{ $subDistrict->fill_color }}',
                 'weight': 2,

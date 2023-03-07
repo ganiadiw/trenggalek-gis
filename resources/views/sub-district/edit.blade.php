@@ -195,7 +195,7 @@
                                 pada peta</button>
                         </div>
                         <div class="mt-5 lg:w-2/4 lg:mt-0 h-120">
-                            <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" :marker=true />
+                            <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" />
                         </div>
                     </div>
                 </div>
@@ -212,6 +212,7 @@
     @section('script')
         @include('js.leaflet-find-marker')
         <script>
+            marker = L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(map);
             let subDistrictFillColor = document.getElementById('subDistrictFillColor')
             layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
                 style: {
