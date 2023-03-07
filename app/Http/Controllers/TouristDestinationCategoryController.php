@@ -33,7 +33,9 @@ class TouristDestinationCategoryController extends Controller
     {
         TouristDestinationCategory::create($request->validated());
 
-        return redirect(route('dashboard.tourist-destination-categories.index'))->with('success', 'Data berhasil ditambahkan');
+        toastr()->success('Data berhasil ditambahkan', 'Sukses');
+
+        return redirect(route('dashboard.tourist-destination-categories.index'));
     }
 
     public function show(TouristDestinationCategory $touristDestinationCategory)
@@ -50,13 +52,17 @@ class TouristDestinationCategoryController extends Controller
     {
         $touristDestinationCategory->update($request->validated());
 
-        return redirect(route('dashboard.tourist-destination-categories.index'))->with('success', 'Data berhasil diperbarui');
+        toastr()->success('Data berhasil diperbarui', 'Sukses');
+
+        return back();
     }
 
     public function destroy(TouristDestinationCategory $touristDestinationCategory)
     {
         $touristDestinationCategory->delete();
 
-        return redirect(route('dashboard.tourist-destination-categories.index'))->with('success', 'Data berhasil dihapus');
+        toastr()->success('Data berhasil dihapus', 'Sukses');
+
+        return back();
     }
 }
