@@ -9,9 +9,5 @@
             minZoom: 10,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
-
-        @if ($marker)
-            L.marker([{{ $latitude }}, {{ $longitude }}]).addTo(map);
-        @endif
     </script>
 @endsection
