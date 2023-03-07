@@ -207,7 +207,7 @@ class SubDistrictTest extends TestCase
             'geojson' => UploadedFile::fake()->create('3503020.geojson', 25, 'application/json'),
         ]);
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
-        $response->assertRedirect('dashboard/sub-districts');
+        $response->assertRedirect(url()->previous());
         $subDistrict = SubDistrict::where('code', 3503030)->first();
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503030,
@@ -236,7 +236,7 @@ class SubDistrictTest extends TestCase
         ]);
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
         $this->assertJson(json_encode($this->updateGeoJson));
-        $response->assertRedirect('dashboard/sub-districts/');
+        $response->assertRedirect(url()->previous());
         $subDistrict = SubDistrict::where('code', 3503030)->first();
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503030,
@@ -273,7 +273,7 @@ class SubDistrictTest extends TestCase
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
         $this->assertModelMissing($this->subDistrict);
-        $response->assertRedirect('dashboard/sub-districts');
+        $response->assertRedirect(url()->previous());
     }
 
     public function test_an_webgis_administrator_cannot_create_new_sub_district()

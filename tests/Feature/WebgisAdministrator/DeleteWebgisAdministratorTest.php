@@ -45,7 +45,7 @@ class DeleteWebgisAdministratorTest extends TestCase
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->delete('/dashboard/users/' . $this->webgisAdmin2->username);
-        $response->assertRedirect('/dashboard/users');
+        $response->assertRedirect(url()->previous());
         $this->assertDatabaseMissing('users', [
             'email' => 'johndoe@example.com',
         ]);

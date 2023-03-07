@@ -74,7 +74,7 @@ class UpdateWebgisAdministratorTest extends TestCase
             'phone_number' => '081234567890',
         ]);
         $response->assertValid();
-        $response->assertRedirect('/dashboard/users');
+        $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',
@@ -101,7 +101,7 @@ class UpdateWebgisAdministratorTest extends TestCase
             'avatar' => $avatar,
         ]);
         $response->assertValid();
-        $response->assertRedirect('/dashboard/users');
+        $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('users', [

@@ -83,13 +83,13 @@ class TouristDestinationCategoryTest extends TestCase
         ]);
         $response->assertValid(['name']);
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect('/dashboard/tourist-destination-categories');
+        $response->assertRedirect(url()->previous());
     }
 
     public function test_an_authenticated_user_can_delete_tourist_destination_category()
     {
         $response = $this->actingAs($this->user)->delete('/dashboard/tourist-destination-categories/' . $this->category->id);
-        $response->assertRedirect('/dashboard/tourist-destination-categories');
+        $response->assertRedirect(url()->previous());
     }
 
     public function test_a_guest_cannot_create_new_tourist_destination_category()

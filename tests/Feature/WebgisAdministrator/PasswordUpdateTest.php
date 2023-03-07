@@ -56,7 +56,7 @@ class PasswordUpdateTest extends TestCase
             'password_confirmation' => 'newpassword',
         ]);
 
-        $response->assertRedirect('/dashboard/users');
+        $response->assertRedirect(url()->previous());
 
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',

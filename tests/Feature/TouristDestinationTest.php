@@ -132,7 +132,7 @@ class TouristDestinationTest extends TestCase
         ]);
         $response->assertValid();
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect('/dashboard/tourist-destinations');
+        $response->assertRedirect(url()->previous());
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Konang Indah',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -150,7 +150,7 @@ class TouristDestinationTest extends TestCase
     public function test_an_authenticated_user_can_delete_tourist_destination()
     {
         $response = $this->actingAs($this->user)->delete('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
-        $response->assertRedirect('/dashboard/tourist-destinations');
+        $response->assertRedirect(url()->previous());
         $this->assertDatabaseMissing('tourist_destinations', [
             'id' => $this->touristDestination->id,
             'name' => 'Pantai Konang',
