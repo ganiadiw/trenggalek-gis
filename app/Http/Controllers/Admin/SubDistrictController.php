@@ -124,8 +124,8 @@ class SubDistrictController extends Controller
     public function relatedTouristDestination(SubDistrict $subDistrict)
     {
         $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
-        ->where('sub_district_id', $subDistrict->id)
-            ->orderBy('name', 'asc');
+                                ->where('sub_district_id', $subDistrict->id)
+                                ->orderBy('name', 'asc');
 
         return view('sub-district.related-tourist-destination', [
             'touristDestinations' => $touristDestinations->paginate(10),
