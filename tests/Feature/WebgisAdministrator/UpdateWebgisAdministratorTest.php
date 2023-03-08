@@ -20,16 +20,18 @@ class UpdateWebgisAdministratorTest extends TestCase
     {
         parent::setUp();
 
-        Storage::fake('avatars');
-        $avatar = UploadedFile::fake()->image('avatar.png');
+        $avatar1 = UploadedFile::fake()->image('avatar1.png')->hashName();
+        $avatar2 = UploadedFile::fake()->image('avatar2.png')->hashName();
+        Storage::disk('local')->put('public/avatars/' . $avatar1, '');
+        Storage::disk('local')->put('public/avatars/' . $avatar2, '');
 
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'avatar_path' => $avatar->path(),
-            'avatar_name' => $avatar->hashName(),
+            'avatar_path' => 'public/avatars/' . $avatar1,
+            'avatar_name' => $avatar1,
             'is_admin' => 0,
         ]);
 
@@ -37,8 +39,8 @@ class UpdateWebgisAdministratorTest extends TestCase
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'username' => 'johndoe',
-            'avatar_path' => $avatar->path(),
-            'avatar_name' => $avatar->hashName(),
+            'avatar_path' => 'public/avatars/' . $avatar2,
+            'avatar_name' => $avatar2,
             'is_admin' => 0,
         ]);
     }
@@ -76,6 +78,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         $response->assertValid();
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
+        $this->assertTrue(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
@@ -103,7 +106,8 @@ class UpdateWebgisAdministratorTest extends TestCase
         $response->assertValid();
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
-
+        $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
+        $this->assertTrue(Storage::exists('public/avatars/' . $avatar->hashName()));
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
