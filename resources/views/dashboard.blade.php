@@ -17,7 +17,7 @@
                                 </div>
                             </x-slot>
                             <x-slot name="title">Total WebGIS Administrator</x-slot>
-                            <x-slot name="value">10</x-slot>
+                            <x-slot name="value">{{ count($webgisAdministrators) }}</x-slot>
                         </x-statistic-card>
                     @endcan
                     <x-statistic-card>
@@ -32,7 +32,7 @@
                             </div>
                         </x-slot>
                         <x-slot name="title">Total Kecamatan</x-slot>
-                        <x-slot name="value">17</x-slot>
+                        <x-slot name="value">{{ count($subDistricts) }}</x-slot>
                     </x-statistic-card>
                     <x-statistic-card>
                         <x-slot name="svgIcon">
@@ -46,7 +46,7 @@
                             </div>
                         </x-slot>
                         <x-slot name="title">Total Destinasi Wisata</x-slot>
-                        <x-slot name="value">17</x-slot>
+                        <x-slot name="value">{{ count($touristDestinations) }}</x-slot>
                     </x-statistic-card>
                     <x-statistic-card>
                         <x-slot name="svgIcon">
