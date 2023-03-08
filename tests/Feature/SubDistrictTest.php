@@ -3,8 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\SubDistrict;
+use App\Models\TouristDestination;
+use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class SubDistrictTest extends TestCase
@@ -83,6 +87,9 @@ class SubDistrictTest extends TestCase
     {
         parent::setUp();
 
+        $geojsonFile = UploadedFile::fake()->create('3503020.geojson', 25, 'application/json');
+        $geojsonName = Str::random(5) . '-' . $geojsonFile;
+
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin = User::factory()->create([
             'name' => 'Hugo First',
@@ -93,7 +100,10 @@ class SubDistrictTest extends TestCase
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'is_admin' => 0,
         ]);
-        $this->subDistrict = SubDistrict::factory()->create();
+        $this->subDistrict = SubDistrict::factory()->create([
+            'geojson_name' => $geojsonName,
+            'geojson_path' => 'public/geojson/' . $geojsonName,
+        ]);
     }
 
     public function test_an_superadmin_can_see_sub_district_management_page()
@@ -158,6 +168,7 @@ class SubDistrictTest extends TestCase
             'fill_color' => '#0ea5e9',
             'geojson_name' => $subDistrict->geojson_name,
         ]);
+        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
     }
 
     public function test_correct_data_must_be_provided_to_create_new_sub_district()
@@ -219,7 +230,14 @@ class SubDistrictTest extends TestCase
         ]);
         $this->assertDatabaseMissing('sub_districts', [
             'code' => 3503020,
+            'name' => 'KECAMATAN MUNJUNGAN',
+            'latitude' => -8.24312247,
+            'longitude' => 111.45431483,
+            'fill_color' => '#16a34a',
+            'geojson_name' => $this->subDistrict->geojson_name,
         ]);
+        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
+        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
     public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_text()
@@ -252,7 +270,10 @@ class SubDistrictTest extends TestCase
             'latitude' => -8.3030696,
             'longitude' => 111.5768607,
             'fill_color' => '#059669',
+            'geojson_name' => $this->subDistrict->geojson_name,
         ]);
+        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
+        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
     public function test_correct_data_must_be_provided_to_update_sub_district()
@@ -272,8 +293,52 @@ class SubDistrictTest extends TestCase
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
-        $this->assertModelMissing($this->subDistrict);
+        $this->assertDatabaseMissing('sub_districts', [
+            'code' => 3503020,
+            'name' => 'KECAMATAN MUNJUNGAN',
+            'latitude' => -8.24312247,
+            'longitude' => 111.45431483,
+            'fill_color' => '#16a34a',
+        ]);
         $response->assertRedirect(url()->previous());
+        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
+    }
+
+    public function test_delete_data_will_be_redirected_if_the_sub_district_has_data_related_to_tourist_destinations()
+    {
+        TouristDestinationCategory::factory()->create();
+        TouristDestination::factory()->create();
+
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
+        $response->assertRedirect('dashboard/sub-districts/' . $this->subDistrict->code . '/related-tourist-destination');
+    }
+
+    public function test_related_tourist_destination_data_can_be_displayed()
+    {
+        TouristDestinationCategory::factory()->create();
+        TouristDestination::factory()->create();
+
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code . '/related-tourist-destination');
+        $response->assertStatus(200);
+        $response->assertSeeText('Data Destinasi Wisata yang Berada di ' . $this->subDistrict->name);
+        $response->assertSeeText(['Pantai Konang', 'LDMH', 'Desa Nglebeng, Kecamatan Panggul']);
+    }
+
+    public function test_sub_district_geojson_file_can_be_downloaded()
+    {
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $this->actingAs($this->superAdmin)->post('/dashboard/sub-districts', [
+            'code' => 3503010,
+            'name' => 'Panggul',
+            'latitude' => -8.2402961,
+            'longitude' => 111.4484781,
+            'fill_color' => '#0ea5e9',
+            'geojson' => UploadedFile::fake()->create('3503010.geojson', 25, 'application/json'),
+        ]);
+        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/3503010/download');
+        $response->assertStatus(200);
     }
 
     public function test_an_webgis_administrator_cannot_create_new_sub_district()
