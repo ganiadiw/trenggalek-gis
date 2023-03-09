@@ -23,7 +23,7 @@
                         error="sub_district">
                         <x-slot name="options">
                             @foreach ($subDistricts as $key => $subDistrict)
-                                <option value="{{ $subDistrict->id }}" @selected(old('sub_district') == $subDistrict->id)
+                                <option value="{{ $subDistrict }}" @selected(old('sub_district') == $subDistrict->id)
                                     class="text-sm font-normal text-gray-900">
                                     {{ $subDistrict->name }}</option>
                             @endforeach
@@ -126,6 +126,25 @@
         @include('js.leaflet-find-marker')
         @include('js.tinymce')
         <script>
+            let subDistrict = document.getElementById('sub_district');
+
+            subDistrict.addEventListener('change', function () {
+                let geoJSON = JSON.parse(subDistrict.value);
+
+                if (layer) {
+                    map.removeLayer(layer)
+                }
+
+                layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/') }}' + '/' + geoJSON.geojson_name], {
+                            style: {
+                                'color': geoJSON.fill_color,
+                                'weight': 2,
+                                'opacity': 0.4,
+                            }
+                        }).addTo(map);
+                map.setView([geoJSON.latitude, geoJSON.longitude], 11);
+            })
+
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
                 FilePondPluginFileValidateType,

@@ -23,7 +23,7 @@
                         disabledSelected="Pilih Kecamatan" error="sub_district">
                         <x-slot name="options">
                             @foreach ($subDistricts as $subDistrict)
-                                <option value="{{ $subDistrict->id }}" @selected(old('sub_district',  $touristDestination->subDistrict->id) == $subDistrict->id)
+                                <option value="{{ $subDistrict }}" @selected(old('sub_district',  $touristDestination->subDistrict->id) == $subDistrict->id)
                                     class="text-sm font-normal text-gray-900">
                                     {{ $subDistrict->name }}</option>
                             @endforeach
@@ -135,6 +135,34 @@
         @include('js.tinymce')
         <script>
             marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}]).addTo(map);
+
+            let subDistrict = document.getElementById('sub_district');
+            let geoJSON = JSON.parse(subDistrict.value);
+            layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson') }}' + '/' + geoJSON.geojson_name], {
+                        style: {
+                            'color': geoJSON.fill_color,
+                            'weight': 2,
+                            'opacity': 0.4,
+                        }
+                    }).addTo(map);
+            map.setView([geoJSON.latitude, geoJSON.longitude], 11);
+
+            subDistrict.addEventListener('change', function () {
+                let geoJSON = JSON.parse(subDistrict.value);
+
+                if (layer) {
+                    map.removeLayer(layer)
+                }
+
+                layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/') }}' + '/' + geoJSON.geojson_name], {
+                            style: {
+                                'color': geoJSON.fill_color,
+                                'weight': 2,
+                                'opacity': 0.4,
+                            }
+                        }).addTo(map);
+                map.setView([geoJSON.latitude, geoJSON.longitude], 11);
+            })
 
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
