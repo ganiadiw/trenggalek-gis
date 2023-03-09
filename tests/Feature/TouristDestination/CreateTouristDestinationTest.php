@@ -3,6 +3,7 @@
 namespace Tests\Feature\TouristDestination;
 
 use App\Models\SubDistrict;
+use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -73,6 +74,151 @@ class CreateTouristDestinationTest extends TestCase
             'latitude' => -8.25702326,
             'longitude' => 111.42379872,
         ]);
+    }
+
+    public function test_an_authenticated_user_can_create_new_tourist_destination_with_image_in_description_editor()
+    {
+        $this->actingAs($this->user)->postJson('/dashboard/images', [
+            'image' => UploadedFile::fake()->image('image1678273485413.png'),
+        ]);
+        $this->actingAs($this->user)->postJson('/dashboard/images', [
+            'image' => UploadedFile::fake()->image('image1678273485552.png'),
+        ]);
+
+        $this->assertDatabaseHas('temporary_files', [
+            'foldername' => 'public/tmp/media/images',
+            'filename' => 'image1678273485413.png',
+        ]);
+        $this->assertDatabaseHas('temporary_files', [
+            'foldername' => 'public/tmp/media/images',
+            'filename' => 'image1678273485552.png'
+        ]);
+        $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485413.png'));
+        $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485552.png'));
+
+        $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
+            'name' => 'Pantai Pelang',
+            'sub_district_id' => $this->subDistrict->id,
+            'tourist_destination_category_id' => $this->touristDestinationCategory->id,
+            'address' => 'Desa Wonocoyo, Kecamatan Panggul',
+            'manager' => 'DISPARBUD',
+            'distance_from_city_center' => '56 KM',
+            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
+            'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
+            'cover_image' => UploadedFile::fake()->create('pantai-pelang.png'),
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
+            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'media_files' => json_encode([
+                'used_images' => [
+                    [
+                        'filename' => 'image1678273485413.png'
+                    ],
+                    [
+                        'filename' => 'image1678273485552.png'
+                    ],
+                ],
+                'unused_images' => null,
+            ]),
+        ]);
+        $response->assertValid();
+        $response->assertRedirect('/dashboard/tourist-destinations');
+        $response->assertSessionHasNoErrors();
+        $tourisDestination = TouristDestination::first();
+        $this->assertDatabaseHas('tourist_destinations', [
+            'name' => 'Pantai Pelang',
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
+        ]);
+        // Use Spatie Media Libary Package
+        $this->assertDatabaseHas('media', [
+            'model_id' => $tourisDestination->id,
+            'collection_name' => 'tourist-destinations',
+            'file_name' => 'image1678273485413.png'
+        ]);
+        $this->assertDatabaseMissing('temporary_files', [
+            'foldername' => 'public/tmp/media/images',
+            'filename' => 'image1678273485413.png',
+        ]);
+        $this->assertDatabaseMissing('temporary_files', [
+            'foldername' => 'public/tmp/media/images',
+            'filename' => 'image1678273485552.png'
+        ]);
+        $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485413.png'));
+        $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485552.png'));
+    }
+
+    public function test_an_authenticated_user_can_create_new_tourist_destination_with_deleted_image_in_description_editor()
+    {
+        $this->actingAs($this->user)->postJson('/dashboard/images', [
+            'image' => UploadedFile::fake()->image('image1678273485413.png'),
+        ]);
+        $this->actingAs($this->user)->postJson('/dashboard/images', [
+            'image' => UploadedFile::fake()->image('image1678273485552.png'),
+        ]);
+
+        $this->assertDatabaseHas('temporary_files', [
+            'foldername' => 'public/tmp/media/images',
+            'filename' => 'image1678273485413.png',
+        ]);
+        $this->assertDatabaseHas('temporary_files', [
+            'foldername' => 'public/tmp/media/images',
+            'filename' => 'image1678273485552.png'
+        ]);
+        $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485413.png'));
+        $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485552.png'));
+
+        $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
+            'name' => 'Pantai Pelang',
+            'sub_district_id' => $this->subDistrict->id,
+            'tourist_destination_category_id' => $this->touristDestinationCategory->id,
+            'address' => 'Desa Wonocoyo, Kecamatan Panggul',
+            'manager' => 'DISPARBUD',
+            'distance_from_city_center' => '56 KM',
+            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
+            'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
+            'cover_image' => UploadedFile::fake()->create('pantai-pelang.png'),
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
+            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'media_files' => json_encode([
+                'used_images' => [
+                    [
+                        'filename' => 'image1678273485413.png'
+                    ],
+                ],
+                'unused_images' => [
+                    [
+                        'filename' => 'image1678273485552.png'
+                    ],
+                ],
+            ]),
+        ]);
+        $response->assertValid();
+        $response->assertRedirect('/dashboard/tourist-destinations');
+        $response->assertSessionHasNoErrors();
+        $tourisDestination = TouristDestination::first();
+        $this->assertDatabaseHas('tourist_destinations', [
+            'name' => 'Pantai Pelang',
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
+        ]);
+        // Use Spatie Media Libary Package
+        $this->assertDatabaseHas('media', [
+            'model_id' => $tourisDestination->id,
+            'collection_name' => 'tourist-destinations',
+            'file_name' => 'image1678273485413.png'
+        ]);
+        $this->assertDatabaseMissing('temporary_files', [
+            'foldername' => 'public/tmp/media/images',
+            'filename' => 'image1678273485413.png',
+        ]);
+        $this->assertDatabaseMissing('temporary_files', [
+            'foldername' => 'public/tmp/media/images',
+            'filename' => 'image1678273485552.png'
+        ]);
+        $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485413.png'));
+        $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485552.png'));
     }
 
     public function test_an_guest_cannot_create_new_tourist_destination()
