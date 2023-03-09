@@ -46,7 +46,7 @@ class UpdateTouristDestinationRequest extends FormRequest
             'name.required' => 'Nama destinasi wisata harus diisi',
             'name.max' => 'Jumlah karakter maksimal 255',
             'tourist_destination_category_id.required' => 'Pilih kategori destinasi wisata',
-            'sub_district_id.required' => 'Pilih kecamatan',
+            'sub_district_id.required' => 'Kecamatan harus diisi',
             'address.required' => 'Alamat harus diisi',
             'address.max' => 'Jumlah karakter maksimal 255',
             'manager.required' => 'Pengelola harus diisi',
@@ -64,5 +64,14 @@ class UpdateTouristDestinationRequest extends FormRequest
             'longitude.max' => 'Jumlah karakter maksimal 50',
             'description.required' => 'Deskripsi harus diisi',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->sub_district_id != null) {
+            $this->merge([
+                'sub_district_id' => json_decode($this->sub_district_id)->id,
+            ]);
+        }
     }
 }
