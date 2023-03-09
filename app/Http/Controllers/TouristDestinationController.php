@@ -47,7 +47,7 @@ class TouristDestinationController extends Controller
 
     public function create()
     {
-        $subDistricts = SubDistrict::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $subDistricts = SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy('name', 'ASC')->get();
         $categories = TouristDestinationCategory::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         return view('tourist-destination.create', compact('subDistricts', 'categories'));
@@ -120,7 +120,7 @@ class TouristDestinationController extends Controller
             'touristDestinationCategory:id,name',
             'subDistrict:id,name',
         ]);
-        $subDistricts = SubDistrict::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $subDistricts = SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy('name', 'ASC')->get();
         $categories = TouristDestinationCategory::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         return view('tourist-destination.edit', compact('touristDestination', 'subDistricts', 'categories'));
