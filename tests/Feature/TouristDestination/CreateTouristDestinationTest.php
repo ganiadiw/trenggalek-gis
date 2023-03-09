@@ -49,7 +49,7 @@ class CreateTouristDestinationTest extends TestCase
     {
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
-            'sub_district_id' => $this->subDistrict->id,
+            'sub_district_id' => json_encode($this->subDistrict),
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
@@ -98,7 +98,7 @@ class CreateTouristDestinationTest extends TestCase
 
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
-            'sub_district_id' => $this->subDistrict->id,
+            'sub_district_id' => json_encode($this->subDistrict),
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
@@ -170,7 +170,7 @@ class CreateTouristDestinationTest extends TestCase
 
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
-            'sub_district_id' => $this->subDistrict->id,
+            'sub_district_id' => json_encode($this->subDistrict),
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
@@ -225,7 +225,7 @@ class CreateTouristDestinationTest extends TestCase
     {
         $response = $this->post('dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
-            'sub_district_id' => $this->subDistrict->id,
+            'sub_district_id' => json_encode($this->subDistrict),
             'tourist_destination_category_id' => $this->touristDestinationCategory->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
