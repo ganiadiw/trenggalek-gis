@@ -173,9 +173,10 @@ class TouristDestinationController extends Controller
             }
         }
 
+        $dom = new DOMDocument();
+        $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
         if (! empty($newImageSources)) {
-            $dom = new DOMDocument();
-            $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
             $imageTags = $dom->getElementsByTagName('img');
 
             $index = 0;
