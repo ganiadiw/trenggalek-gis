@@ -51,7 +51,7 @@
 
     tinymce.init({
         selector: 'textarea#description',
-        plugins: 'save autosave anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount fullscreen preview',
+        plugins: 'save autosave anchor autolink charmap codesample emoticons image link lists searchreplace table visualblocks wordcount fullscreen preview',
         toolbar: 'fullscreen undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap visualblocks | removeformat preview',
         referrer_policy: 'origin',
         promotion: false,
@@ -154,9 +154,6 @@
             input.click();
         },
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-        iframe_template_callback: (data) =>
-            `<iframe title="${data.title}" width="${data.width}" height="${data.height}" src="${data.source}"></iframe>`,
-
     });
 
     window.addEventListener('beforeunload', (event) => {
