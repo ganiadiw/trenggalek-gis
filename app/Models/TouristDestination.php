@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Mews\Purifier\Casts\CleanHtml;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -26,6 +27,10 @@ class TouristDestination extends Model implements HasMedia
         'cover_image_path',
         'latitude',
         'longitude',
+    ];
+
+    protected $casts = [
+        'description' => CleanHtml::class
     ];
 
     public function getRouteKeyName()
