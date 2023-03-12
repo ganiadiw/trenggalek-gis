@@ -18,7 +18,7 @@
                         @endif
                     </div>
                     <div class="grid mb-5 justify-items-center">
-                        <a href="{{ route('users.edit', ['user' => $user]) }}"
+                        <a href="{{ route('dashboard.users.edit', ['user' => $user]) }}"
                             class="flex mt-2 text-sm text-blue-400 hover:underline hover:font-semibold">
                             <span class="mr-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit"
@@ -54,7 +54,7 @@
                             labelTitle="Nomor Handphone" disabled="true"></x-input-default-form>
                     </div>
                     <div class="my-3">
-                        <a href="{{ route('users.index') }}"
+                        <a href="{{ route('dashboard.users.index') }}"
                             class="text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kembali</a>
                     </div>
                 </div>

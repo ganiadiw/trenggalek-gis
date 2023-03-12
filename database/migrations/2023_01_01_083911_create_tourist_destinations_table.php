@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('tourist_destinations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sub_district_id')->constrained();
+            $table->foreignId('tourist_destination_category_id')->constrained();
             $table->string('name', 255);
             $table->string('slug', 255)->unique();
             $table->string('address', 255);
@@ -24,8 +25,10 @@ return new class extends Migration
             $table->string('distance_from_city_center', 10);
             $table->longText('transportation_access');
             $table->longText('facility');
-            $table->string('latitude', 50);
-            $table->string('longitude', 50);
+            $table->string('cover_image_name');
+            $table->string('cover_image_path');
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
             $table->timestamps();
         });
     }

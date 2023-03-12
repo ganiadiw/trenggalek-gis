@@ -8,7 +8,7 @@
                     <x-statistic-card>
                         <x-slot name='svgIcon'>
                             <div
-                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-green-500">
+                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                                     <path
@@ -22,7 +22,7 @@
                     <x-statistic-card>
                         <x-slot name='svgIcon'>
                             <div
-                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-green-500">
+                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-building-cottage" width="16" height="16"
                                     viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none"
@@ -50,21 +50,16 @@
                         labelTitle="Longitude" disabled="true"></x-input-default-form>
                 </div>
                 <h2 class="mb-2 text-sm font-medium text-gray-900">Peta Kecamatan</h2>
-                <div id="subDistrictMap" class="w-full mb-5 border rounded-lg h-128"></div>
+                <div class="w-full mb-5 border rounded-lg h-128">
+                    <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" />
+                </div>
             </div>
         </div>
     </div>
 
     @section('script')
         <script>
-            let subDistrictMap = L.map('subDistrictMap').setView([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}],
-                12);
-
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 15,
-                minZoom: 12,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(subDistrictMap);
+            L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(map);
 
             let mapStyle = {
                 'color': '{{ $subDistrict->fill_color }}',
@@ -81,11 +76,11 @@
                     l.bindPopup(out.join("<br />"));
                 }
             }
-            L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(subDistrictMap)
+
             new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
                 onEachFeature: popUp,
                 style: mapStyle
-            }).addTo(subDistrictMap);
+            }).addTo(map);
         </script>
     @endsection
 </x-app-layout>

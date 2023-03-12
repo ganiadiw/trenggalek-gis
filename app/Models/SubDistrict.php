@@ -28,4 +28,9 @@ class SubDistrict extends Model
     {
         return "{$this->latitude}, {$this->longitude}";
     }
+
+    public function touristDestinations()
+    {
+        return $this->hasMany(TouristDestination::class);
+    }
 }

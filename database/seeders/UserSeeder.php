@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -16,7 +17,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        DB::table('users')->insert([
             'name' => 'Gani Adi Wiranata',
             'email' => 'ganiadiw@example.com',
             'username' => 'ganiadiw',
@@ -29,7 +30,7 @@ class UserSeeder extends Seeder
         $faker = Faker::create('id_ID');
 
         for ($i = 0; $i < 20; $i++) {
-            User::create([
+            DB::table('users')->insert([
                 'name' => $faker->name(),
                 'email' => $faker->safeEmail(),
                 'username' => $faker->userName(),

@@ -17,10 +17,10 @@ class SubDistrictFactory extends Factory
     public function definition()
     {
         return [
-            'code' => '3503020',
-            'name' => 'MUNJUNGAN',
-            'latitude' => '-8.3030696',
-            'longitude' => '111.5768607',
+            'code' => 3503020,
+            'name' => 'KECAMATAN MUNJUNGAN',
+            'latitude' => -8.24312247,
+            'longitude' => 111.45431483,
             'fill_color' => '#16a34a',
         ];
     }

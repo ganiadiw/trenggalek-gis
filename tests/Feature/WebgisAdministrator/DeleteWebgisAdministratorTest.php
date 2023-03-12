@@ -20,14 +20,18 @@ class DeleteWebgisAdministratorTest extends TestCase
     {
         parent::setUp();
 
-        Storage::fake('avatars');
-        $avatar = UploadedFile::fake()->image('avatar.png');
+        $avatar1 = UploadedFile::fake()->image('avatar1.png')->hashName();
+        $avatar2 = UploadedFile::fake()->image('avatar2.png')->hashName();
+        Storage::disk('local')->put('public/avatars/' . $avatar1, '');
+        Storage::disk('local')->put('public/avatars/' . $avatar2, '');
 
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
+            'avatar_path' => 'public/avatars/' . $avatar1,
+            'avatar_name' => $avatar1,
             'is_admin' => 0,
         ]);
 
@@ -35,8 +39,8 @@ class DeleteWebgisAdministratorTest extends TestCase
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'username' => 'johndoe',
-            'avatar_path' => $avatar->path(),
-            'avatar_name' => $avatar->hashName(),
+            'avatar_path' => 'public/avatars/' . $avatar2,
+            'avatar_name' => $avatar2,
             'is_admin' => 0,
         ]);
     }
@@ -44,29 +48,25 @@ class DeleteWebgisAdministratorTest extends TestCase
     public function test_an_superadmin_can_delete_webgis_administrator()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->delete(route('users.destroy', ['user' => $this->webgisAdmin2]));
-
-        if ($this->webgisAdmin2['avatar_path'] != null) {
-            Storage::disk('avatars')->delete($this->webgisAdmin2['avatar_path']);
-        }
-
-        $response->assertRedirect(route('users.index'));
-        $response->assertSessionHasNoErrors();
-        $this->assertModelMissing($this->webgisAdmin2);
-        Storage::disk('avatars')->assertMissing('avatar.png');
+        $response = $this->actingAs($this->superAdmin)->delete('/dashboard/users/' . $this->webgisAdmin2->username);
+        $response->assertRedirect(url()->previous());
+        $this->assertDatabaseMissing('users', [
+            'email' => 'johndoe@example.com',
+        ]);
+        $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin2->avatar_name));
     }
 
     public function test_an_webgis_administrator_cannot_delete_webgis_administrator()
     {
         $this->assertEquals(0, $this->webgisAdmin1->is_admin);
-        $response = $this->actingAs($this->webgisAdmin1)->delete(route('users.destroy', ['user' => $this->webgisAdmin2]));
+        $response = $this->actingAs($this->webgisAdmin1)->delete('/dashboard/users/' . $this->webgisAdmin2->username);
         $response->assertForbidden();
     }
 
     public function test_an_guest_cannot_delete_webgis_administrator()
     {
-        $response = $this->delete(route('users.update', ['user' => $this->webgisAdmin1]));
+        $response = $this->delete('/dashboard/users/' . $this->webgisAdmin2->username);
         $this->assertGuest();
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect('/login');
     }
 }

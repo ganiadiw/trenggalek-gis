@@ -20,16 +20,18 @@ class UpdateWebgisAdministratorTest extends TestCase
     {
         parent::setUp();
 
-        Storage::fake('avatars');
-        $avatar = UploadedFile::fake()->image('avatar.png');
+        $avatar1 = UploadedFile::fake()->image('avatar1.png')->hashName();
+        $avatar2 = UploadedFile::fake()->image('avatar2.png')->hashName();
+        Storage::disk('local')->put('public/avatars/' . $avatar1, '');
+        Storage::disk('local')->put('public/avatars/' . $avatar2, '');
 
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'avatar_path' => $avatar->path(),
-            'avatar_name' => $avatar->hashName(),
+            'avatar_path' => 'public/avatars/' . $avatar1,
+            'avatar_name' => $avatar1,
             'is_admin' => 0,
         ]);
 
@@ -37,8 +39,8 @@ class UpdateWebgisAdministratorTest extends TestCase
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'username' => 'johndoe',
-            'avatar_path' => $avatar->path(),
-            'avatar_name' => $avatar->hashName(),
+            'avatar_path' => 'public/avatars/' . $avatar2,
+            'avatar_name' => $avatar2,
             'is_admin' => 0,
         ]);
     }
@@ -46,7 +48,7 @@ class UpdateWebgisAdministratorTest extends TestCase
     public function test_a_edit_page_can_be_rendered()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('users.edit', ['user' => $this->webgisAdmin1]));
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin1->username . '/edit');
         $response->assertStatus(200);
         $response->assertSeeText('Ubah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
     }
@@ -54,20 +56,19 @@ class UpdateWebgisAdministratorTest extends TestCase
     public function test_correct_data_must_be_provided_to_update_webgis_administrator()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->put(route('users.update', ['user' => $this->webgisAdmin1]), [
+        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
             'name' => '',
             'username' => '',
             'email' => '',
-            'username' => '',
         ]);
         $response->assertInvalid();
         $response->assertRedirect(url()->previous());
     }
 
-    public function test_an_superadmin_can_update_webgis_administrator_without_change_avatar_and_password()
+    public function test_an_superadmin_can_update_webgis_administrator_without_change_avatar()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->put(route('users.update', ['user' => $this->webgisAdmin1]), [
+        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
             'name' => 'Hugo First Time',
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
@@ -75,8 +76,9 @@ class UpdateWebgisAdministratorTest extends TestCase
             'phone_number' => '081234567890',
         ]);
         $response->assertValid();
-        $response->assertRedirect(route('users.index'));
+        $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
+        $this->assertTrue(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
@@ -87,38 +89,29 @@ class UpdateWebgisAdministratorTest extends TestCase
         ]);
     }
 
-    public function test_an_superadmin_can_update_webgis_administrator_with_change_avatar()
+    public function test_an_superadmin_can_update_webgis_administrator_with_change_avatar_and_remove_old_file()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        Storage::fake('avatars');
 
         $avatar = UploadedFile::fake()->image('avatar.png');
-        $updateData = [
+
+        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
             'name' => 'Hugo First Time',
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
             'avatar' => $avatar,
-        ];
-
-        if ($updateData['avatar']) {
-            $updateData['avatar_path'] = $avatar->path();
-            $updateData['avatar_name'] = $avatar->hashName();
-
-            if ($this->webgisAdmin1['avatar_path'] != null) {
-                Storage::disk('avatars')->delete($this->webgisAdmin1['avatar_path']);
-            }
-        }
-
-        $response = $this->actingAs($this->superAdmin)->put(route('users.update', ['user' => $this->webgisAdmin1]), $updateData);
+        ]);
         $response->assertValid();
-        $response->assertRedirect(route('users.index'));
+        $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
-
+        $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
+        $this->assertTrue(Storage::exists('public/avatars/' . $avatar->hashName()));
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
+            'avatar_name' => $avatar->hashName(),
         ]);
         $this->assertDatabaseMissing('users', [
             'email' => 'hugofirst@example.com',
@@ -129,7 +122,7 @@ class UpdateWebgisAdministratorTest extends TestCase
     public function test_an_webgis_administrator_cannot_update_webgis_administrator()
     {
         $this->assertEquals(0, $this->webgisAdmin1->is_admin);
-        $response = $this->actingAs($this->webgisAdmin1)->put(route('users.update', ['user' => $this->webgisAdmin2]), [
+        $response = $this->actingAs($this->webgisAdmin1)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
             'name' => 'Micahel John Doe',
             'username' => 'johdoe_mic',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
@@ -141,7 +134,7 @@ class UpdateWebgisAdministratorTest extends TestCase
 
     public function test_an_guest_cannot_update_webgis_administrator()
     {
-        $response = $this->put(route('users.update', ['user' => $this->webgisAdmin1]), [
+        $response = $this->put('/dashboard/users/' . $this->webgisAdmin1->username, [
             'name' => 'Micahel John Doe',
             'username' => 'johdoe_mic',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',

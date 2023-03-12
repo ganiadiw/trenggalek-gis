@@ -28,7 +28,7 @@ class WebgisAdministratorTest extends TestCase
     public function test_an_superadmin_can_see_webgis_administrator_management_page()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('users.index'));
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users');
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
     }
@@ -36,16 +36,19 @@ class WebgisAdministratorTest extends TestCase
     public function test_an_superadmin_can_search_contains_webgis_administrator_data()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('users.search'), [
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search', [
             'search' => $this->webgisAdmin->name,
         ]);
         $response->assertSeeText($this->webgisAdmin->name);
+        $this->assertDatabaseHas('users', [
+            'name' => 'Hugo First',
+        ]);
     }
 
     public function test_an_superadmin_cannot_search_contains_no_webgis_administrator_data()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $this->actingAs($this->superAdmin)->get(route('users.search'), [
+        $this->actingAs($this->superAdmin)->get('/dashboard/users/search', [
             'search' => 'John',
         ]);
         $this->assertDatabaseMissing('users', [
@@ -56,7 +59,7 @@ class WebgisAdministratorTest extends TestCase
     public function test_an_superadmin_can_see_webgis_administrator_profile()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('users.show', ['user' => $this->webgisAdmin]));
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin->username);
         $response->assertStatus(200);
         $this->assertEquals('Hugo First', $this->webgisAdmin->name);
         $this->assertEquals('hugofirst', $this->webgisAdmin->username);
@@ -69,7 +72,7 @@ class WebgisAdministratorTest extends TestCase
     public function test_an_superadmin_redirect_to_profile_update_route_if_want_to_change_the_data_itself()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get(route('users.edit', ['user' => $this->superAdmin->username]));
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->superAdmin->username . '/edit');
         $response->assertRedirect(route('profile.edit'));
     }
 }

@@ -5,28 +5,30 @@
                 <div class="px-5 pt-5 pb-5 text-lg font-semibold text-left text-gray-900 bg-white">
                     <h1 class="font-bold">Kelola Data Destinasi Wisata</h1>
                     <div class="block mt-5 md:justify-between md:flex">
-                        <a href="{{ route('tourist-destinations.create') }}" type="button"
-                            class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
-                            Tambah Data
-                            <span class="flex items-center ml-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus"
-                                    width="20" height="20" viewBox="0 0 24 24" stroke-width="3"
-                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
-                            </span>
-                        </a>
-                        <div class="h-10 mt-3 mb-2 md:w-4/12">
-                            <form action="" method="GET">
+                        <div>
+                            <a href="{{ route('dashboard.tourist-destinations.create') }}" type="button"
+                                class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
+                                Tambah Data
+                                <span class="flex items-center ml-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus"
+                                        width="20" height="20" viewBox="0 0 24 24" stroke-width="3"
+                                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="h-10 mt-3 mb-5 md:w-4/12">
+                            <form action="{{ route('dashboard.tourist-destinations.search') }}" method="GET">
                                 <label for="default-search"
                                     class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
                                 <div class="relative w-full">
                                     <input type="search" name="search" id="search-dropdown"
                                         value="{{ request('search') }}" @keyup.enter="submit"
                                         class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                        required placeholder="Cari nama" autocomplete="off">
+                                        required placeholder="Cari nama atau alamat" autocomplete="off">
                                     <button type="submit"
                                         class="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
                                         <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor"
@@ -38,7 +40,7 @@
                                     </button>
                                 </div>
                             </form>
-                            <a href="{{ route('tourist-destinations.index') }}"
+                            <a href="{{ route('dashboard.tourist-destinations.index') }}"
                                 class="flex justify-end mt-3 text-sm text-blue-500 hover:underline">
                                 Reset pencarian
                             </a>
@@ -74,7 +76,7 @@
                                         Jarak Dari Pusat Kota
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Koordinat Tengah (Latitude, Longitude)
+                                        Koordinat (Latitude, Longitude)
                                     </th>
                                     <th scope="col" class="flex justify-center px-6 py-3">
                                         Aksi
@@ -87,30 +89,31 @@
                                         <td class="px-6 py-4">
                                             {{ $key + $touristDestinations->firstItem() }}
                                         </td>
-                                        <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <a href="{{ route('sub-districts.show', ['sub_district' => $touristDestination]) }}"
-                                                    class="hover:underline hover:underline-offset-4">{{ $touristDestination->name }}</a>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             {{ $touristDestination->name }}
                                         </td>
-                                        {{-- <div>
+                                        <td class="px-6 py-4">
+                                            {{ $touristDestination->address }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $touristDestination->manager }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $touristDestination->distance_from_city_center }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $touristDestination->coordinate }}
+                                        </td>
+                                        <div>
                                             <td class="px-6 py-4">
-                                                @if ($user->is_admin == 1)
-                                                    Super Admin
-                                                @else
-                                                    Webgis Administrator
-                                                @endif
+                                                <x-action-button
+                                                    :value="$touristDestination->name"
+                                                    :showURL="route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination])"
+                                                    :editURL="route('dashboard.tourist-destinations.edit', ['tourist_destination' => $touristDestination])"
+                                                    :deleteURL="route('dashboard.tourist-destinations.destroy', ['tourist_destination' => $touristDestination])"
+                                                />
                                             </td>
-                                            <td class="px-6 py-4">
-                                                @if ($user->is_admin == 0)
-                                                    <x-action-button :value="$user->name" :href="route('users.edit', ['user' => $user])"
-                                                        :action="route('users.destroy', ['user' => $user])" />
-                                                @endif
-                                            </td>
-                                        </div> --}}
+                                        </div>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -121,6 +124,32 @@
                     {{ $touristDestinations->links() }}
                 </div>
             </div>
+            <div class="px-5 py-5 mt-5 bg-white rounded-lg">
+                <div class="font-semibold text-gray-700">
+                    <h1>Peta Sebaran Destinasi Wisata Kabupaten Trenggalek</h1>
+                </div>
+                <div class="w-full mt-5 border rounded-lg h-120">
+                    <x-head.leaflet-init />
+                </div>
+            </div>
         </div>
     </div>
+
+    @section('script')
+        <script>
+            @foreach ($subDistricts as $subDistrict)
+                new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
+                    style: {
+                        'color': '{{ $subDistrict->fill_color }}',
+                        'weight': 2,
+                        'opacity': 0.4,
+                    }
+                }).addTo(map);
+            @endforeach
+
+            @foreach ($touristDestinationMapping as $item)
+                L.marker([{{ $item->latitude }}, {{ $item->longitude }}]).addTo(map);
+            @endforeach
+        </script>
+    @endsection
 </x-app-layout>

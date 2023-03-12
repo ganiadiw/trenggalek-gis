@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\TouristDestinationCategory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TouristDestinationCategorySeeder extends Seeder
 {
@@ -14,9 +15,10 @@ class TouristDestinationCategorySeeder extends Seeder
      */
     public function run()
     {
-        TouristDestinationCategory::factory()->create();
-
-        collect([
+        DB::table('tourist_destination_categories')->insert([
+            [
+                'name' => 'Wisata Pantai',
+            ],
             [
                 'name' => 'Wisata Pertanian',
             ],
@@ -26,8 +28,6 @@ class TouristDestinationCategorySeeder extends Seeder
             [
                 'name' => 'Wisata Ziarah',
             ],
-        ])->each(function ($category) {
-            TouristDestinationCategory::create($category);
-        });
+        ]);
     }
 }

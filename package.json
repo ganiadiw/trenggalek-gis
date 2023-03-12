@@ -7,6 +7,7 @@
     "devDependencies": {
         "@shufo/prettier-plugin-blade": "^1.8.3",
         "@tailwindcss/forms": "^0.5.2",
+        "@tailwindcss/typography": "^0.5.9",
         "alpinejs": "^3.4.2",
         "autoprefixer": "^10.4.2",
         "axios": "^1.1.2",
@@ -18,8 +19,9 @@
         "vite": "^3.0.0"
     },
     "dependencies": {
+        "@alpinejs/intersect": "^3.11.1",
         "@alpinejs/persist": "^3.10.5",
-        "daisyui": "^2.42.1",
+        "@ryangjchandler/alpine-tooltip": "^1.2.0",
         "flowbite": "^1.5.5"
     }
 }

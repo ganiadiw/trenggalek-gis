@@ -40,7 +40,9 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         User::create($validated);
 
-        return redirect(route('users.index'))->with(['success' => 'Data berhasil ditambahkan']);
+        toastr()->success('Data berhasil ditambahkan', 'Sukses');
+
+        return redirect(route('dashboard.users.index'));
     }
 
     public function show(User $user)
@@ -60,7 +62,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user)
     {
         $this->authorize('update', $user);
-        $validated = $request->validated();
+        $validated = $request->except('password');
 
         if ($request->file('avatar')) {
             $avatar = $validated['avatar'];
@@ -72,20 +74,15 @@ class UserController extends Controller
             }
         }
 
-        if (isset($validated['new_password']) == null || isset($validated['new_password']) == '') {
-            $user->update($validated);
-
-            return redirect(route('users.index'));
+        if ($request->password) {
+            $validated['password'] = $user->password;
         }
 
-        if ($validated['password_confirmation'] != $validated['new_password']) {
-            return back()->with(['error' => 'Konfirmasi password tidak sesuai'])->withInput();
-        } else {
-            $validated['password'] = Hash::make($validated['new_password']);
-            $user->update($validated);
+        $user->update($validated);
 
-            return redirect(route('users.index'))->with(['success' => 'Data berhasil diperbarui']);
-        }
+        toastr()->success('Data berhasil diperbarui', 'Sukses');
+
+        return back();
     }
 
     public function destroy(User $user)
@@ -96,6 +93,8 @@ class UserController extends Controller
         }
         $user->delete();
 
-        return redirect(route('users.index'))->with(['success' => 'Data berhasil dihapus']);
+        toastr()->success('Data berhasil dihapus', 'Sukses');
+
+        return back();
     }
 }

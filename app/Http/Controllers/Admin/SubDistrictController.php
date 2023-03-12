@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSubDistrictRequest;
 use App\Http\Requests\UpdateSubDistrictRequest;
 use App\Models\SubDistrict;
+use App\Models\TouristDestination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -16,12 +17,6 @@ class SubDistrictController extends Controller
     {
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
             ->orderBy('code', 'asc')->paginate(10);
-
-        if ($request->search) {
-            $subDistricts = SubDistrict::where('name', 'like', '%' . $request->search . '%')
-                ->select('name', 'code', 'latitude', 'longitude')
-                ->orderBy('code', 'asc')->paginate(10)->withQueryString();
-        }
 
         return view('sub-district.index', compact('subDistricts'));
     }
@@ -46,17 +41,19 @@ class SubDistrictController extends Controller
 
         if ($request->file('geojson')) {
             $geojson = $validated['geojson'];
-            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2) . '-' . Str::random(5) . '-' . $geojson->getClientOriginalName();
+            $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
             $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
         } else {
-            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2) . '-' . Str::random(5) . '-' . $validated['code'] . '.geojson';
+            $validated['geojson_name'] = Str::random(5) . '-' . $validated['code'] . '.geojson';
             Storage::put('public/geojson/' . $validated['geojson_name'], $request->geojson_text_area);
             $validated['geojson_path'] = 'public/geojson/' . $validated['geojson_name'];
         }
 
         SubDistrict::create($validated);
 
-        return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil ditambahkan']);
+        toastr()->success('Data berhasil ditambahkan', 'Sukses');
+
+        return redirect(route('dashboard.sub-districts.index'));
     }
 
     public function show(SubDistrict $subDistrict)
@@ -75,7 +72,7 @@ class SubDistrictController extends Controller
 
         if ($request->file('geojson')) {
             $geojson = $validated['geojson'];
-            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2) . '-' . Str::random(5) . '-' . $geojson->getClientOriginalName();
+            $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
             $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
 
             if ($subDistrict->geojson_path != null) {
@@ -83,7 +80,7 @@ class SubDistrictController extends Controller
             }
         }
         if ($request->geojson_text_area != null) {
-            $validated['geojson_name'] = Str::substr($validated['name'], 0, 2) . '-' . Str::random(5) . '-' . $validated['code'] . '.geojson';
+            $validated['geojson_name'] = Str::random(5) . '-' . $validated['code'] . '.geojson';
             Storage::put('public/geojson/' . $validated['geojson_name'], $request->geojson_text_area);
             $validated['geojson_path'] = 'public/geojson/' . $validated['geojson_name'];
 
@@ -94,20 +91,46 @@ class SubDistrictController extends Controller
 
         $subDistrict->update($validated);
 
-        return redirect(route('sub-districts.index'))->with(['success' => 'Data berhasil diperbarui']);
+        toastr()->success('Data berhasil diperbarui', 'Sukses');
+
+        return back();
     }
 
     public function destroy(SubDistrict $subDistrict)
     {
         abort_if(! auth()->user()->is_admin, 403);
 
+        if ($subDistrict->loadCount(['touristDestinations'])->tourist_destinations_count > 0) {
+            toastr()->warning('Terdapat data destinasi wisata, hapus atau ubah terlebih dahulu data destinasi wisata terkait', 'Data Tidak Dapat Dihapus');
+
+            return redirect(route('dashboard.sub-districts.related-tourist-destination', ['sub_district' => $subDistrict]));
+        }
+
         if ($subDistrict->geojson_path != null) {
             Storage::delete($subDistrict->geojson_path);
         }
         $subDistrict->delete();
 
-        session()->flash('success', 'Data berhasil dihapus');
+        toastr()->success('Data berhasil dihapus', 'Sukses');
 
-        return redirect(route('sub-districts.index'));
+        return back();
+    }
+
+    public function download(SubDistrict $subDistrict)
+    {
+        return Storage::download($subDistrict->geojson_path);
+    }
+
+    public function relatedTouristDestination(SubDistrict $subDistrict)
+    {
+        $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
+                                ->where('sub_district_id', $subDistrict->id)
+                                ->orderBy('name', 'asc');
+
+        return view('sub-district.related-tourist-destination', [
+            'touristDestinations' => $touristDestinations->paginate(10),
+            'touristDestinationMapping' => $touristDestinations->get(),
+            'subDistrict' => $subDistrict,
+        ]);
     }
 }

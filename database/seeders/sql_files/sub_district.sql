@@ -1,4 +1,5 @@
 INSERT INTO sub_districts (code, name, latitude, longitude, created_at) VALUES
+    (3503000, 'SAMPLE', -8.2402961, 111.4484781, NOW()),
     (3503010, 'PANGGUL', -8.2402961, 111.4484781, NOW()),
     (3503020, 'MUNJUNGAN', -8.3030696, 111.5768607, NOW()),
     (3503030, 'WATULIMO', -8.2507376, 111.7221778, NOW()),

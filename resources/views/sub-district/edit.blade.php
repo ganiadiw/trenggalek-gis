@@ -2,7 +2,7 @@
     <div class="py-8">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-24">
             <form class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST"
-                action="{{ route('sub-districts.update', ['sub_district' => $subDistrict]) }}"
+                action="{{ route('dashboard.sub-districts.update', ['sub_district' => $subDistrict]) }}"
                 enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -179,21 +179,28 @@
                     <div class="mb-3 lg:flex lg:gap-x-2">
                         <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">
                             <h2 class="font-semibold text-black ">Tentukan koordinat titik tengah peta kecamatan</h2>
-                            <p class="mb-3 text-xs text-red-500">Titik tengah koordinat peta akan otomatis ditentukan
+                            <blockquote class="p-2 my-2 border-l-4 border-yellow-300 rounded-sm bg-gray-50">
+                                <p class="text-[13px] font-medium italic leading-relaxed text-yellow-500">Titik tengah koordinat peta akan otomatis ditentukan
                                 saat file geojson telah dipilih atau text geosjon telah di preview pada peta, atau juga
                                 dapat ditentukan dengan klik pada peta</p>
-                            <x-input-default-form class="cursor-not-allowed" type="text" name="latitude"
+                            </blockquote>
+                            <x-input-default-form type="text" name="latitude"
                                 :value="old('latitude', $subDistrict->latitude)" id="latitude" labelTitle="Latitude*" error='latitude'
-                                placeholder="-8.2402961" readonly="true"></x-input-default-form>
-                            <x-input-default-form class="cursor-not-allowed" type="text" name="longitude"
+                                placeholder="-8.2402961"></x-input-default-form>
+                            <x-input-default-form type="text" name="longitude"
                                 :value="old('longitude', $subDistrict->longitude)" id="longitude" labelTitle="Longitude*" error='longitude'
-                                placeholder="111.4484781" readonly="true"></x-input-default-form>
+                                placeholder="111.4484781"></x-input-default-form>
+                            <button type="button" id="buttonFindOnMap"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2.5 text-center">Cari
+                                pada peta</button>
                         </div>
-                        <div id="subDistrictMap" class="mt-5 border rounded-lg lg:w-2/4 lg:mt-0 h-120"></div>
+                        <div class="mt-5 lg:w-2/4 lg:mt-0 h-120">
+                            <x-head.leaflet-init :latitude="$subDistrict->latitude" :longitude="$subDistrict->longitude" />
+                        </div>
                     </div>
                 </div>
                 <div class="flex gap-x-2">
-                    <a href="{{ route('sub-districts.index') }}"
+                    <a href="{{ route('dashboard.sub-districts.index') }}"
                         class="text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kembali</a>
                     <button type="submit"
                         class="text-white bg-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Simpan</button>
@@ -203,24 +210,17 @@
     </div>
 
     @section('script')
+        @include('js.leaflet-find-marker')
         <script>
-            let subDistrictMap = L.map('subDistrictMap').setView([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}],
-                11);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 15,
-                minZoom: 10,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(subDistrictMap);
-
+            marker = L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(map);
             let subDistrictFillColor = document.getElementById('subDistrictFillColor')
-            let mapStyle = {
-                'color': '{{ $subDistrict->fill_color }}',
-                'weight': 2,
-                'opacity': 0.4,
-            }
-            let layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
-                style: mapStyle
-            }).addTo(subDistrictMap);
+            layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
+                style: {
+                    'color': '{{ $subDistrict->fill_color }}',
+                    'weight': 2,
+                    'opacity': 0.4,
+                }
+            }).addTo(map);
 
             const pickr = Pickr.create({
                 el: '.color-picker',
@@ -266,32 +266,12 @@
                 pickr.hide()
             })
 
-            subDistrictMap.on('click', onMapClick)
-
-            let marker = L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(subDistrictMap)
-            let latitudeInput = document.getElementById('latitude')
-            let longitudeInput = document.getElementById('longitude')
-
-            function onMapClick(e) {
-                let latitude = e.latlng.lat
-                let longitude = e.latlng.lng
-
-                if (!marker) {
-                    marker = L.marker(e.latlng).addTo(subDistrictMap)
-                } else {
-                    marker.setLatLng(e.latlng)
-                }
-
-                latitudeInput.value = latitude
-                longitudeInput.value = longitude
-            }
-
             function previewGeoJSONToMap(geoJSON) {
                 const data = JSON.parse(geoJSON)
 
                 if (layer) {
-                    subDistrictMap.removeLayer(layer)
-                    subDistrictMap.removeLayer(marker)
+                    map.removeLayer(layer)
+                    map.removeLayer(marker)
                 }
 
                 layer = L.geoJSON(data, {
@@ -302,12 +282,12 @@
                             opacity: 0.4,
                         }
                     }
-                }).addTo(subDistrictMap)
+                }).addTo(map)
 
                 let bounds = layer.getBounds()
-                subDistrictMap.fitBounds(bounds)
+                map.fitBounds(bounds)
                 let center = bounds.getCenter()
-                marker = L.marker(center).addTo(subDistrictMap)
+                marker = L.marker(center).addTo(map)
                 latitudeInput.value = center.lat
                 longitudeInput.value = center.lng
             }

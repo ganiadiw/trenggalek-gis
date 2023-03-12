@@ -12,4 +12,9 @@ class TouristDestinationCategory extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function touristDestinations()
+    {
+        return $this->hasMany(TouristDestination::class);
+    }
 }
