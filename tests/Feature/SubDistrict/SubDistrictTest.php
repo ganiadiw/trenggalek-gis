@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\SubDistrict;
 
+use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
@@ -51,7 +52,7 @@ class SubDistrictTest extends TestCase
 
     public function test_related_tourist_destination_data_can_be_displayed()
     {
-        TouristDestinationCategory::factory()->create();
+        Category::factory()->create();
         TouristDestination::factory()->create();
 
         $this->assertEquals(1, $this->superAdmin->is_admin);

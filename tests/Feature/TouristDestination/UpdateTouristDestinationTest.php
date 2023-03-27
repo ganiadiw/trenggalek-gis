@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\TouristDestination;
 
+use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
@@ -24,7 +25,7 @@ class UpdateTouristDestinationTest extends TestCase
         Storage::disk('local')->put('public/cover-images/' . $image, '');
 
         $this->user = User::factory()->create();
-        TouristDestinationCategory::factory()->create();
+        Category::factory()->create();
         SubDistrict::factory()->create();
         $this->touristDestination = TouristDestination::factory()->create([
             'cover_image_name' => $image,
@@ -59,7 +60,7 @@ class UpdateTouristDestinationTest extends TestCase
                 'id' => 1,
                 'name' => 'KECAMATAN PANGGUL',
             ]),
-            'tourist_destination_category_id' => 1,
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -101,7 +102,7 @@ class UpdateTouristDestinationTest extends TestCase
                 'id' => 1,
                 'name' => 'KECAMATAN PANGGUL',
             ]),
-            'tourist_destination_category_id' => 1,
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -153,7 +154,7 @@ class UpdateTouristDestinationTest extends TestCase
                 'id' => 1,
                 'name' => 'KECAMATAN PANGGUL',
             ]),
-            'tourist_destination_category_id' => 1,
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -216,7 +217,7 @@ class UpdateTouristDestinationTest extends TestCase
                 'id' => 1,
                 'name' => 'KECAMATAN PANGGUL',
             ]),
-            'tourist_destination_category_id' => 1,
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -260,7 +261,7 @@ class UpdateTouristDestinationTest extends TestCase
                 'id' => 1,
                 'name' => 'KECAMATAN PANGGUL',
             ]),
-            'tourist_destination_category_id' => 1,
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\TouristDestination;
 
+use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
@@ -24,7 +25,7 @@ class DeleteTouristDestinationTest extends TestCase
         Storage::disk('local')->put('public/cover-images/' . $image, '');
 
         $this->user = User::factory()->create();
-        TouristDestinationCategory::factory()->create();
+        Category::factory()->create();
         SubDistrict::factory()->create();
         $this->touristDestination = TouristDestination::factory()->create([
             'cover_image_name' => $image,

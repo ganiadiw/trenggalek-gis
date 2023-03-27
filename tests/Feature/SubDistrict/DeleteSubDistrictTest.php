@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\SubDistrict;
 
+use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
@@ -59,7 +60,7 @@ class DeleteSubDistrictTest extends TestCase
 
     public function test_delete_data_will_be_redirected_if_the_sub_district_has_data_related_to_tourist_destinations()
     {
-        TouristDestinationCategory::factory()->create();
+        Category::factory()->create();
         TouristDestination::factory()->create();
 
         $this->assertEquals(1, $this->superAdmin->is_admin);

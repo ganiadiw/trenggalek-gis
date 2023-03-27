@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\TouristDestination;
 
+use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use App\Models\TouristDestinationCategory;
@@ -14,7 +15,7 @@ class CreateTouristDestinationTest extends TestCase
 {
     private User $user;
 
-    private TouristDestinationCategory $touristDestinationCategory;
+    private Category $category;
 
     private SubDistrict $subDistrict;
 
@@ -26,7 +27,7 @@ class CreateTouristDestinationTest extends TestCase
         Storage::disk('local')->put('public/cover-images/' . $image, '');
 
         $this->user = User::factory()->create();
-        $this->touristDestinationCategory = TouristDestinationCategory::factory()->create();
+        $this->category = Category::factory()->create();
         $this->subDistrict = SubDistrict::factory()->create();
     }
 
@@ -50,7 +51,7 @@ class CreateTouristDestinationTest extends TestCase
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => json_encode($this->subDistrict),
-            'tourist_destination_category_id' => $this->touristDestinationCategory->id,
+            'category_id' => $this->category->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
             'distance_from_city_center' => '56 KM',
@@ -99,7 +100,7 @@ class CreateTouristDestinationTest extends TestCase
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => json_encode($this->subDistrict),
-            'tourist_destination_category_id' => $this->touristDestinationCategory->id,
+            'category_id' => $this->category->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
             'distance_from_city_center' => '56 KM',
@@ -171,7 +172,7 @@ class CreateTouristDestinationTest extends TestCase
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => json_encode($this->subDistrict),
-            'tourist_destination_category_id' => $this->touristDestinationCategory->id,
+            'category_id' => $this->category->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
             'distance_from_city_center' => '56 KM',
@@ -226,7 +227,7 @@ class CreateTouristDestinationTest extends TestCase
         $response = $this->post('dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
             'sub_district_id' => json_encode($this->subDistrict),
-            'tourist_destination_category_id' => $this->touristDestinationCategory->id,
+            'category_id' => $this->category->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
             'distance_from_city_center' => '56 KM',
