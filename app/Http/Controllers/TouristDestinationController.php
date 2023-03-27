@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTouristDestinationRequest;
 use App\Http\Requests\UpdateTouristDestinationRequest;
+use App\Models\Category;
+use App\Models\SubCategory;
 use App\Models\SubDistrict;
 use App\Models\TemporaryFile;
 use App\Models\TouristDestination;
-use App\Models\TouristDestinationCategory;
 use DOMDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -48,7 +49,7 @@ class TouristDestinationController extends Controller
     public function create()
     {
         $subDistricts = SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy('name', 'ASC')->get();
-        $categories = TouristDestinationCategory::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $categories = Category::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         return view('tourist-destination.create', compact('subDistricts', 'categories'));
     }
@@ -117,11 +118,11 @@ class TouristDestinationController extends Controller
     public function edit(TouristDestination $touristDestination)
     {
         $touristDestination->load([
-            'touristDestinationCategory:id,name',
             'subDistrict:id,name',
+            'category:id,name',
         ]);
         $subDistricts = SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy('name', 'ASC')->get();
-        $categories = TouristDestinationCategory::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $categories = Category::select('id', 'name')->orderBy('name', 'ASC')->get();
 
         return view('tourist-destination.edit', compact('touristDestination', 'subDistricts', 'categories'));
     }
