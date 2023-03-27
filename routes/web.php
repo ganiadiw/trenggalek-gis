@@ -3,10 +3,11 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SubDistrictController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Guest\TouristDestinationController as GuestTouristDestinationController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TouristDestinationCategoryController;
+use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TouristDestinationController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,16 +29,18 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::name('dashboard.')->prefix('dashboard')->group(function () {
-        Route::get('users/search', [UserController::class, 'search'])->name('users.search')->middleware(['admin']);
-        Route::resource('users', UserController::class)->middleware(['admin']);
+        Route::middleware(['admin'])->group(function () {
+            Route::get('users/search', [UserController::class, 'search'])->name('users.search');
+            Route::resource('users', UserController::class);
 
-        Route::get('sub-districts/search', [SubDistrictController::class, 'search'])->name('sub-districts.search')->middleware(['admin']);
-        Route::get('sub-districts/{sub_district}/download', [SubDistrictController::class, 'download'])->name('sub-districts.download')->middleware(['admin']);
-        Route::get('sub-districts/{sub_district}/related-tourist-destination', [SubDistrictController::class, 'relatedTouristDestination'])->name('sub-districts.related-tourist-destination')->middleware(['admin']);
-        Route::resource('sub-districts', SubDistrictController::class)->middleware('admin');
+            Route::get('sub-districts/search', [SubDistrictController::class, 'search'])->name('sub-districts.search');
+            Route::get('sub-districts/{sub_district}/download', [SubDistrictController::class, 'download'])->name('sub-districts.download');
+            Route::get('sub-districts/{sub_district}/related-tourist-destination', [SubDistrictController::class, 'relatedTouristDestination'])->name('sub-districts.related-tourist-destination');
+            Route::resource('sub-districts', SubDistrictController::class);
 
-        Route::get('tourist-destination-categories/search', [TouristDestinationCategoryController::class, 'search'])->name('tourist-destination-categories.search');
-        Route::resource('tourist-destination-categories', TouristDestinationCategoryController::class);
+            Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');
+            Route::resource('categories', CategoryController::class);
+        });
 
         Route::get('tourist-destinations/search', [TouristDestinationController::class, 'search'])->name('tourist-destinations.search');
         Route::resource('tourist-destinations', TouristDestinationController::class);
