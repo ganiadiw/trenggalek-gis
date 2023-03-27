@@ -1,4 +1,4 @@
-@props(['type', 'name' => null, 'value' => null, 'labelTitle', 'error' => null, 'id' => null, 'placeholder' => ' ', 'readonly' => false, 'disabled' => false, 'desc' => null])
+@props(['type', 'name' => null, 'value' => null, 'labelTitle' => null, 'error' => null, 'id' => null, 'placeholder' => ' ', 'readonly' => false, 'disabled' => false, 'desc' => null])
 
 <div {{ $attributes->merge(['class' => 'mb-3']) }}>
     <label for="{{ $id }}" class="block mb-2 text-sm font-medium text-gray-900">{{ $labelTitle }}</label>
