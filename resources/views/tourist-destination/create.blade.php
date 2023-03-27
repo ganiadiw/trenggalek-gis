@@ -25,7 +25,7 @@
                         <x-slot name="options">
                             <option value="" disabled selected>Pilih Kategori</option>
                             @foreach ($categories as $key => $category)
-                                <option value="{{ $category->id }}" @selected(old('category') == $category->id)
+                                <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)
                                     class="text-sm font-normal text-gray-900">
                                     {{ $category->name }}</option>
                             @endforeach
