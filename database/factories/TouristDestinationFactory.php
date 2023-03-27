@@ -19,7 +19,7 @@ class TouristDestinationFactory extends Factory
     {
         return [
             'sub_district_id' => 1,
-            'tourist_destination_category_id' => 1,
+            'category_id' => 1,
             'name' => 'Pantai Konang',
             'slug' => Str::slug('Pantai Konang') . '-' . Str::random(5),
             'manager' => 'LDMH',

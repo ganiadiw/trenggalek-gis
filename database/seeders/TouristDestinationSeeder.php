@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\TouristDestination;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +17,7 @@ class TouristDestinationSeeder extends Seeder
         DB::table('tourist_destinations')->insert([
             [
                 'sub_district_id' => 1,
-                'tourist_destination_category_id' => 1,
+                'category_id' => 1,
                 'name' => 'Pantai Konang',
                 'slug' => str()->slug('Pantai Konang') . '-' . str()->random(5),
                 'manager' => 'LDMH',

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tourist_destinations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sub_district_id')->constrained();
-            $table->foreignId('tourist_destination_category_id')->constrained();
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name', 255);
             $table->string('slug', 255)->unique();
             $table->string('address', 255);

@@ -5,13 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TouristDestinationCategory extends Model
+class Category extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
+        'slug',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 
     public function touristDestinations()
     {

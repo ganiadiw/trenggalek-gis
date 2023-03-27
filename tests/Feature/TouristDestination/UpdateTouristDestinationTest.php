@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\TouristDestination;
 
+use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
-use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +16,8 @@ class UpdateTouristDestinationTest extends TestCase
 
     private TouristDestination $touristDestination;
 
+    private SubDistrict $subDistrict;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,13 +26,14 @@ class UpdateTouristDestinationTest extends TestCase
         Storage::disk('local')->put('public/cover-images/' . $image, '');
 
         $this->user = User::factory()->create();
-        TouristDestinationCategory::factory()->create();
-        SubDistrict::factory()->create();
+        Category::factory()->create();
+        $this->subDistrict = $this->subDistrict = SubDistrict::factory()->create();
         $this->touristDestination = TouristDestination::factory()->create([
             'cover_image_name' => $image,
             'cover_image_path' => 'public/cover-images/' . $image,
         ]);
     }
+
     public function test_a_tourist_destination_edit_page_can_be_rendered()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug . '/edit');
@@ -55,11 +58,8 @@ class UpdateTouristDestinationTest extends TestCase
     public function test_an_authenticated_user_can_update_tourist_destination_without_change_cover_image()
     {
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode([
-                'id' => 1,
-                'name' => 'KECAMATAN PANGGUL',
-            ]),
-            'tourist_destination_category_id' => 1,
+            'sub_district_id' => json_encode($this->subDistrict),
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -97,11 +97,8 @@ class UpdateTouristDestinationTest extends TestCase
         $coverImage = UploadedFile::fake()->image('pantai-konang-indah.jpg');
 
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode([
-                'id' => 1,
-                'name' => 'KECAMATAN PANGGUL',
-            ]),
-            'tourist_destination_category_id' => 1,
+            'sub_district_id' => json_encode($this->subDistrict),
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -149,11 +146,8 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/media/2/image1678273485552.png'));
 
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode([
-                'id' => 1,
-                'name' => 'KECAMATAN PANGGUL',
-            ]),
-            'tourist_destination_category_id' => 1,
+            'sub_district_id' => json_encode($this->subDistrict),
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -166,12 +160,12 @@ class UpdateTouristDestinationTest extends TestCase
             'media_files' => json_encode([
                 'used_images' => [
                     [
-                        'filename' => 'image1678273485413.png'
+                        'filename' => 'image1678273485413.png',
                     ],
                 ],
                 'unused_images' => [
                     [
-                        'filename' => 'image1678273485552.png'
+                        'filename' => 'image1678273485552.png',
                     ],
                 ],
             ]),
@@ -189,12 +183,12 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485413.png'
+            'file_name' => 'image1678273485413.png',
         ]);
         $this->assertDatabaseMissing('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485552.png'
+            'file_name' => 'image1678273485552.png',
         ]);
         $this->assertFalse(Storage::exists('public/media/2/image1678273485552.png'));
     }
@@ -212,11 +206,8 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485732.png'));
 
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode([
-                'id' => 1,
-                'name' => 'KECAMATAN PANGGUL',
-            ]),
-            'tourist_destination_category_id' => 1,
+            'sub_district_id' => json_encode($this->subDistrict),
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
@@ -229,7 +220,7 @@ class UpdateTouristDestinationTest extends TestCase
             'media_files' => json_encode([
                 'used_images' => [
                     [
-                        'filename' => 'image1678273485732.png'
+                        'filename' => 'image1678273485732.png',
                     ],
                 ],
                 'unused_images' => null,
@@ -248,7 +239,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485732.png'
+            'file_name' => 'image1678273485732.png',
         ]);
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485732.png'));
     }
@@ -256,11 +247,8 @@ class UpdateTouristDestinationTest extends TestCase
     public function test_a_guest_cannot_update_new_tourist_destination()
     {
         $response = $this->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode([
-                'id' => 1,
-                'name' => 'KECAMATAN PANGGUL',
-            ]),
-            'tourist_destination_category_id' => 1,
+            'sub_district_id' => json_encode($this->subDistrict),
+            'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',

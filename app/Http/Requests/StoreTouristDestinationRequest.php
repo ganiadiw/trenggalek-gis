@@ -27,7 +27,7 @@ class StoreTouristDestinationRequest extends FormRequest
         return [
             'name' => ['required', 'max:255'],
             'slug' => ['required'],
-            'tourist_destination_category_id' => ['required'],
+            'category_id' => ['required'],
             'sub_district_id' => ['required'],
             'address' => ['required', 'max:255'],
             'manager' => ['required', 'max:255'],
@@ -47,7 +47,7 @@ class StoreTouristDestinationRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug($this->name) . '-' . Str::random(5),
         ]);
-        
+
         if ($this->sub_district_id != null) {
             $this->merge([
                 'sub_district_id' => json_decode($this->sub_district_id)->id,

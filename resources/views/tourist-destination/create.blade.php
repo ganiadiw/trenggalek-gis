@@ -9,23 +9,25 @@
                 <div class="grid gap-x-5 md:grid-cols-2">
                     <x-input-default-form type="text" name="name" :value="old('name')" id="name"
                         labelTitle="Nama Destinasi Wisata*" error="name" placeholder="Pantai Prigi" />
-                    <x-input-select-option labelTitle="Pilih Kategori*" id="category"
-                        name="tourist_destination_category_id" error="category">
-                        <x-slot name="options">
-                            @foreach ($categories as $key => $category)
-                                <option value="{{ $category->id }}" @selected(old('category') == $category->id)
-                                    class="text-sm font-normal text-gray-900">
-                                    {{ $category->name }}</option>
-                            @endforeach
-                        </x-slot>
-                    </x-input-select-option>
                     <x-input-select-option labelTitle="Pilih Kecamatan*" id="sub_district" name="sub_district_id"
                         error="sub_district">
                         <x-slot name="options">
+                            <option value="" disabled selected>Pilih Kecamatan</option>
                             @foreach ($subDistricts as $key => $subDistrict)
-                                <option value="{{ $subDistrict }}" @selected(old('sub_district') == $subDistrict->id)
+                                <option value="{{ $subDistrict }}" @selected(old('sub_district_id') == $subDistrict)
                                     class="text-sm font-normal text-gray-900">
                                     {{ $subDistrict->name }}</option>
+                            @endforeach
+                        </x-slot>
+                    </x-input-select-option>
+                    <x-input-select-option labelTitle="Pilih Kategori*" id="categoryId"
+                        name="category_id" error="category_id">
+                        <x-slot name="options">
+                            <option value="" disabled selected>Pilih Kategori</option>
+                            @foreach ($categories as $key => $category)
+                                <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)
+                                    class="text-sm font-normal text-gray-900">
+                                    {{ $category->name }}</option>
                             @endforeach
                         </x-slot>
                     </x-input-select-option>
@@ -161,7 +163,6 @@
                 maxFileSize: '2048KB',
                 labelMaxFileSize: 'Maksimal berukuran 2048 KB',
             });
-
         </script>
     @endsection
 </x-app-layout>
