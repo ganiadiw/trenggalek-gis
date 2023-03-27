@@ -5,7 +5,6 @@ namespace Tests\Feature\TouristDestination;
 use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
-use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -45,8 +44,6 @@ class TouristDestinationTest extends TestCase
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
         $response->assertRedirect('/tourist-destinations/' . $this->touristDestination->slug);
     }
-
-
 
     public function test_an_user_can_search_contains_tourist_destination_data()
     {

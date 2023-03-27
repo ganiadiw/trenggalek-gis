@@ -5,7 +5,6 @@ namespace Tests\Feature\TouristDestination;
 use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
-use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +17,6 @@ class UpdateTouristDestinationTest extends TestCase
     private TouristDestination $touristDestination;
 
     private SubDistrict $subDistrict;
-
 
     protected function setUp(): void
     {
@@ -35,6 +33,7 @@ class UpdateTouristDestinationTest extends TestCase
             'cover_image_path' => 'public/cover-images/' . $image,
         ]);
     }
+
     public function test_a_tourist_destination_edit_page_can_be_rendered()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug . '/edit');
@@ -161,12 +160,12 @@ class UpdateTouristDestinationTest extends TestCase
             'media_files' => json_encode([
                 'used_images' => [
                     [
-                        'filename' => 'image1678273485413.png'
+                        'filename' => 'image1678273485413.png',
                     ],
                 ],
                 'unused_images' => [
                     [
-                        'filename' => 'image1678273485552.png'
+                        'filename' => 'image1678273485552.png',
                     ],
                 ],
             ]),
@@ -184,12 +183,12 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485413.png'
+            'file_name' => 'image1678273485413.png',
         ]);
         $this->assertDatabaseMissing('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485552.png'
+            'file_name' => 'image1678273485552.png',
         ]);
         $this->assertFalse(Storage::exists('public/media/2/image1678273485552.png'));
     }
@@ -221,7 +220,7 @@ class UpdateTouristDestinationTest extends TestCase
             'media_files' => json_encode([
                 'used_images' => [
                     [
-                        'filename' => 'image1678273485732.png'
+                        'filename' => 'image1678273485732.png',
                     ],
                 ],
                 'unused_images' => null,
@@ -240,7 +239,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485732.png'
+            'file_name' => 'image1678273485732.png',
         ]);
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485732.png'));
     }

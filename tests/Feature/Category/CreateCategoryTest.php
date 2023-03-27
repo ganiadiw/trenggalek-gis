@@ -3,8 +3,6 @@
 namespace Tests\Feature\Category;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CreateCategoryTest extends TestCase
@@ -66,7 +64,6 @@ class CreateCategoryTest extends TestCase
             'name' => 'Wisata Pertanian',
         ]);
         $response->assertForbidden();
-
     }
 
     public function test_an_guest_cannot_create_new_category()
@@ -76,6 +73,5 @@ class CreateCategoryTest extends TestCase
         ]);
         $this->assertGuest();
         $response->assertRedirect('/login');
-
     }
 }

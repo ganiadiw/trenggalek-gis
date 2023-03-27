@@ -5,7 +5,6 @@ namespace Tests\Feature\TouristDestination;
 use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
-use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

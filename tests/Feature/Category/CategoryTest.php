@@ -3,10 +3,7 @@
 namespace Tests\Feature\Category;
 
 use App\Models\Category;
-use App\Models\SubCategory;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
@@ -16,7 +13,6 @@ class CategoryTest extends TestCase
     private User $webgisAdmin;
 
     private Category $category;
-
 
     public function setUp(): void
     {

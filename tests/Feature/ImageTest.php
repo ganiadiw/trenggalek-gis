@@ -36,6 +36,7 @@ class ImageTest extends TestCase
         ]);
         $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485413.png'));
     }
+
     public function test_an_authenticated_use_can_delete_an_temporary_image_file()
     {
         Storage::disk('local')->put('public/cover-images/image1678273485413.png', '');

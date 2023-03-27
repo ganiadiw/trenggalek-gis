@@ -31,7 +31,7 @@ class TouristDestination extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'description' => CleanHtml::class
+        'description' => CleanHtml::class,
     ];
 
     public function getRouteKeyName()

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +16,7 @@ class CategorySeeder extends Seeder
     {
         DB::table('categories')->insert([
             [
-                'name'=> 'Wisata Pantai',
+                'name' => 'Wisata Pantai',
                 'slug' => str()->slug('Wisata Pantai') . '-' . str()->random(5),
             ],
             [

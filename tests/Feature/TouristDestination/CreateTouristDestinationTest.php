@@ -5,7 +5,6 @@ namespace Tests\Feature\TouristDestination;
 use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
-use App\Models\TouristDestinationCategory;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -92,7 +91,7 @@ class CreateTouristDestinationTest extends TestCase
         ]);
         $this->assertDatabaseHas('temporary_files', [
             'foldername' => 'public/tmp/media/images',
-            'filename' => 'image1678273485552.png'
+            'filename' => 'image1678273485552.png',
         ]);
         $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485413.png'));
         $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485552.png'));
@@ -113,10 +112,10 @@ class CreateTouristDestinationTest extends TestCase
             'media_files' => json_encode([
                 'used_images' => [
                     [
-                        'filename' => 'image1678273485413.png'
+                        'filename' => 'image1678273485413.png',
                     ],
                     [
-                        'filename' => 'image1678273485552.png'
+                        'filename' => 'image1678273485552.png',
                     ],
                 ],
                 'unused_images' => null,
@@ -135,7 +134,7 @@ class CreateTouristDestinationTest extends TestCase
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485413.png'
+            'file_name' => 'image1678273485413.png',
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => 'public/tmp/media/images',
@@ -143,7 +142,7 @@ class CreateTouristDestinationTest extends TestCase
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => 'public/tmp/media/images',
-            'filename' => 'image1678273485552.png'
+            'filename' => 'image1678273485552.png',
         ]);
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485413.png'));
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485552.png'));
@@ -164,7 +163,7 @@ class CreateTouristDestinationTest extends TestCase
         ]);
         $this->assertDatabaseHas('temporary_files', [
             'foldername' => 'public/tmp/media/images',
-            'filename' => 'image1678273485552.png'
+            'filename' => 'image1678273485552.png',
         ]);
         $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485413.png'));
         $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485552.png'));
@@ -185,12 +184,12 @@ class CreateTouristDestinationTest extends TestCase
             'media_files' => json_encode([
                 'used_images' => [
                     [
-                        'filename' => 'image1678273485413.png'
+                        'filename' => 'image1678273485413.png',
                     ],
                 ],
                 'unused_images' => [
                     [
-                        'filename' => 'image1678273485552.png'
+                        'filename' => 'image1678273485552.png',
                     ],
                 ],
             ]),
@@ -208,7 +207,7 @@ class CreateTouristDestinationTest extends TestCase
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485413.png'
+            'file_name' => 'image1678273485413.png',
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => 'public/tmp/media/images',
@@ -216,7 +215,7 @@ class CreateTouristDestinationTest extends TestCase
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => 'public/tmp/media/images',
-            'filename' => 'image1678273485552.png'
+            'filename' => 'image1678273485552.png',
         ]);
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485413.png'));
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485552.png'));

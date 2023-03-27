@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTouristDestinationRequest;
 use App\Http\Requests\UpdateTouristDestinationRequest;
 use App\Models\Category;
-use App\Models\SubCategory;
 use App\Models\SubDistrict;
 use App\Models\TemporaryFile;
 use App\Models\TouristDestination;
