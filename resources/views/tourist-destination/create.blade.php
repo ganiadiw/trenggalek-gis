@@ -14,7 +14,7 @@
                         <x-slot name="options">
                             <option value="" disabled selected>Pilih Kecamatan</option>
                             @foreach ($subDistricts as $key => $subDistrict)
-                                <option value="{{ $subDistrict->id }}" @selected(old('sub_district_id') == $subDistrict)
+                                <option value="{{ $subDistrict }}" @selected(old('sub_district_id') == $subDistrict)
                                     class="text-sm font-normal text-gray-900">
                                     {{ $subDistrict->name }}</option>
                             @endforeach

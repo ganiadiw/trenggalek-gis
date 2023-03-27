@@ -40,6 +40,15 @@ class UpdateTouristDestinationRequest extends FormRequest
         ];
     }
 
+    protected function prepareForValidation()
+    {
+        if ($this->sub_district_id != null) {
+            $this->merge([
+                'sub_district_id' => json_decode($this->sub_district_id)->id,
+            ]);
+        }
+    }
+
     public function messages()
     {
         return [
