@@ -19,6 +19,7 @@ class UpdateTouristDestinationTest extends TestCase
 
     private SubDistrict $subDistrict;
 
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -28,7 +29,7 @@ class UpdateTouristDestinationTest extends TestCase
 
         $this->user = User::factory()->create();
         Category::factory()->create();
-        $this->subDistrict = SubDistrict::factory()->create();
+        $this->subDistrict = $this->subDistrict = SubDistrict::factory()->create();
         $this->touristDestination = TouristDestination::factory()->create([
             'cover_image_name' => $image,
             'cover_image_path' => 'public/cover-images/' . $image,
