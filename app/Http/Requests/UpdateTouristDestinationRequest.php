@@ -25,7 +25,7 @@ class UpdateTouristDestinationRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'tourist_destination_category_id' => ['required'],
+            'category_id' => ['required'],
             'sub_district_id' => ['required'],
             'address' => ['required', 'max:255'],
             'manager' => ['required', 'max:255'],

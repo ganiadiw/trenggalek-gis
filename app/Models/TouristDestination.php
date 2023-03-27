@@ -14,7 +14,8 @@ class TouristDestination extends Model implements HasMedia
 
     protected $fillable = [
         'sub_district_id',
-        'tourist_destination_category_id',
+        'category_id',
+        'sub_category_id',
         'name',
         'slug',
         'address',
@@ -48,8 +49,8 @@ class TouristDestination extends Model implements HasMedia
         return $this->belongsTo(SubDistrict::class);
     }
 
-    public function touristDestinationCategory()
+    public function category()
     {
-        return $this->belongsTo(TouristDestinationCategory::class);
+        return $this->belongsTo(Category::class);
     }
 }
