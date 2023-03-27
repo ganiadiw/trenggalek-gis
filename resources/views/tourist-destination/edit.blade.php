@@ -2,36 +2,38 @@
     <div class="py-4">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <form class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST"
-                action="{{ route('dashboard.tourist-destinations.update', ['tourist_destination' => $touristDestination]) }}" enctype="multipart/form-data">
+                action="{{ route('dashboard.tourist-destinations.update', ['tourist_destination' => $touristDestination]) }}"
+                enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <h1 class="mb-5 text-lg font-bold text-gray-700">Ubah Data Destinasi Wisata</h1>
                 <div class="grid gap-x-5 md:grid-cols-2">
                     <x-input-default-form type="text" name="name" :value="old('name', $touristDestination->name)" id="name"
                         labelTitle="Nama Destinasi Wisata*" error="name" :placeholder="$touristDestination->name" />
-                    <x-input-select-option labelTitle="Pilih Kategori*" id="category"
-                        name="tourist_destination_category_id" disabledSelected="Pilih Kategori" error="category">
-                        <x-slot name="options">
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" @selected(old('category', $touristDestination->touristDestinationCategory->id) == $category->id)
-                                    class="text-sm font-normal text-gray-900">
-                                    {{ $category->name }}</option>
-                            @endforeach
-                        </x-slot>
-                    </x-input-select-option>
                     <x-input-select-option labelTitle="Pilih Kecamatan*" id="sub_district" name="sub_district_id"
                         disabledSelected="Pilih Kecamatan" error="sub_district">
                         <x-slot name="options">
+                            <option value="" disabled selected>Pilih Kecamatan</option>
                             @foreach ($subDistricts as $subDistrict)
-                                <option value="{{ $subDistrict }}" @selected(old('sub_district',  $touristDestination->subDistrict->id) == $subDistrict->id)
+                                <option value="{{ $subDistrict }}" @selected(old('sub_district', $touristDestination->sub_district_id) == $subDistrict->id)
                                     class="text-sm font-normal text-gray-900">
                                     {{ $subDistrict->name }}</option>
                             @endforeach
                         </x-slot>
                     </x-input-select-option>
+                    <x-input-select-option labelTitle="Pilih Kategori*" id="categoryId"
+                        name="category_id" error="category_id">
+                        <x-slot name="options">
+                            <option value="" disabled selected>Pilih Kategori</option>
+                            @foreach ($categories as $key => $category)
+                                <option value="{{ $category->id }}" @selected(old('category_id', $touristDestination->category_id) == $category->id)
+                                    class="text-sm font-normal text-gray-900">
+                                    {{ $category->name }}</option>
+                            @endforeach
+                        </x-slot>
+                    </x-input-select-option>
                     <x-input-default-form type="text" name="address" :value="old('address', $touristDestination->address)" id="address"
-                        labelTitle="Alamat Lengkap*" error="address"
-                        :placeholder="$touristDestination->address" />
+                        labelTitle="Alamat Lengkap*" error="address" :placeholder="$touristDestination->address" />
                     <x-input-default-form type="text" name="manager" :value="old('manager', $touristDestination->manager)" id="manager"
                         labelTitle="Pengelola*" error="manager" :placeholder="$touristDestination->manager" />
                     <x-input-default-form type="text" name="distance_from_city_center" :value="old('distance_from_city_center', $touristDestination->distance_from_city_center)"
@@ -41,17 +43,20 @@
                         id="transportation_access" labelTitle="Akses Transportasi*" error="transportation_access"
                         :placeholder="$touristDestination->transportation_access" />
                     <x-input-default-form type="text" name="facility" :value="old('facility', $touristDestination->facility)" id="facility"
-                        labelTitle="Fasilitas*" error="facility"
-                        :placeholder="$touristDestination->facility" />
+                        labelTitle="Fasilitas*" error="facility" :placeholder="$touristDestination->facility" />
                     <div>
                         @if ($touristDestination->cover_image_name != null)
                             <div class="mb-3">
-                                <label for="coverImagePreview" class="block mb-2 text-sm italic font-medium text-gray-900">Foto Sampul Saat Ini</label>
-                                <img class="max-h-80" id="coverImagePreview" src="{{ asset('storage/cover-images/' . $touristDestination->cover_image_name) }}" alt="{{ $touristDestination->cover_image_name }}">
+                                <label for="coverImagePreview"
+                                    class="block mb-2 text-sm italic font-medium text-gray-900">Foto Sampul Saat
+                                    Ini</label>
+                                <img class="max-h-80" id="coverImagePreview"
+                                    src="{{ asset('storage/cover-images/' . $touristDestination->cover_image_name) }}"
+                                    alt="{{ $touristDestination->cover_image_name }}">
                             </div>
                         @endif
-                        <x-input-default-form type="file" name="cover_image" id="coverImage"
-                            labelTitle="Foto Sampul" error="cover_image" />
+                        <x-input-default-form type="file" name="cover_image" id="coverImage" labelTitle="Foto Sampul"
+                            error="cover_image" />
                     </div>
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
@@ -139,15 +144,15 @@
             let subDistrict = document.getElementById('sub_district');
             let geoJSON = JSON.parse(subDistrict.value);
             layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson') }}' + '/' + geoJSON.geojson_name], {
-                        style: {
-                            'color': geoJSON.fill_color,
-                            'weight': 2,
-                            'opacity': 0.4,
-                        }
-                    }).addTo(map);
+                style: {
+                    'color': geoJSON.fill_color,
+                    'weight': 2,
+                    'opacity': 0.4,
+                }
+            }).addTo(map);
             map.setView([geoJSON.latitude, geoJSON.longitude], 11);
 
-            subDistrict.addEventListener('change', function () {
+            subDistrict.addEventListener('change', function() {
                 let geoJSON = JSON.parse(subDistrict.value);
 
                 if (layer) {
@@ -155,12 +160,12 @@
                 }
 
                 layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/') }}' + '/' + geoJSON.geojson_name], {
-                            style: {
-                                'color': geoJSON.fill_color,
-                                'weight': 2,
-                                'opacity': 0.4,
-                            }
-                        }).addTo(map);
+                    style: {
+                        'color': geoJSON.fill_color,
+                        'weight': 2,
+                        'opacity': 0.4,
+                    }
+                }).addTo(map);
                 map.setView([geoJSON.latitude, geoJSON.longitude], 11);
             })
 
