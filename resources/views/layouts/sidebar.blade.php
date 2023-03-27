@@ -54,7 +54,7 @@
                 </li>
             @endcan
             <li x-data="{
-                toggleDropdown: '{{ request()->routeIs('tourist-destination-categories*') || request()->routeIs('tourist-destinations*') }}',
+                toggleDropdown: '{{ request()->routeIs('dashboard.categories*') || request()->routeIs('dashboard.tourist-destination*') }}',
                 get isDropdownOpen() { return this.toggleDropdown },
                 toggleTheDropdown() { this.toggleDropdown = !this.toggleDropdown },
             }" class="mr-2">
@@ -74,7 +74,7 @@
                     </div>
                     <div class="flex items-center justify-between w-full pr-2 ml-4">
                         Kelola Destinasi Wisata
-                        @if (request()->routeIs('tourist-destination-categories*') || request()->routeIs('tourist-destinations*'))
+                        @if (request()->routeIs('dashboard.categories*') || request()->routeIs('dashboard.tourist-destination*'))
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-down"
                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -101,63 +101,18 @@
                     x-transition:leave-end="opacity-0 -translate-y-2"
                     class="w-full my-1 ml-1 mr-1 bg-gray-200 rounded-md">
                     <ul>
-                        <li class="flex mt-1">
-                            <x-side-link :href="route('dashboard.tourist-destination-categories.index')" class="pl-9" :active="request()->routeIs('tourist-destination-categories*')"
-                                spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
-                                <x-slot name="title">Kategori Destinasi Wisata</x-slot>
-                            </x-side-link>
-                        </li>
+                        @can('view_superadmin_menu')
+                            <li class="flex mt-1">
+                                <x-side-link :href="route('dashboard.categories.index')" class="pl-9" :active="request()->routeIs('dashboard.categories*')"
+                                    spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
+                                    <x-slot name="title">Kategori Destinasi Wisata</x-slot>
+                                </x-side-link>
+                            </li>
+                        @endcan
                         <li class="flex">
-                            <x-side-link :href="route('dashboard.tourist-destinations.index')" class="pl-9" :active="request()->routeIs('tourist-destinations*')"
+                            <x-side-link :href="route('dashboard.tourist-destinations.index')" class="pl-9" :active="request()->routeIs('dashboard.tourist-destinations*')"
                                 spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
                                 <x-slot name="title">Destinasi Wisata</x-slot>
-                            </x-side-link>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li x-data="{ toggleDropdown: false }" class="mr-2">
-                <button @click="toggleDropdown = ! toggleDropdown"
-                    class="flex items-center w-full h-12 pl-4 my-1 ml-1 hover:bg-gray-300 hover:rounded-md hover:text-gray-900"
-                    :class="{ ' rounded-lg bg-gray-300 text-gray-900': toggleDropdown }">
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-category-2"
-                            width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#d97706"
-                            fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M14 4h6v6h-6z"></path>
-                            <path d="M4 14h6v6h-6z"></path>
-                            <circle cx="17" cy="17" r="3"></circle>
-                            <circle cx="7" cy="7" r="3"></circle>
-                        </svg>
-                    </div>
-                    <div class="flex items-center justify-between w-full pr-2 ml-4">
-                        Kelola Desa Wisata
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-right"
-                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                            stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                            :class="{ 'rotate-90 duration-200': toggleDropdown, ' duration-200': !toggleDropdown }">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <polyline points="9 6 15 12 9 18"></polyline>
-                        </svg>
-                    </div>
-                </button>
-
-                <div x-cloak x-show="toggleDropdown" x-transition:enter="transform duration-200"
-                    x-transition:enter-start="opacity-0 -translate-y-6"
-                    x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transform duration-200"
-                    x-transition:leave-start="opacity-100 translate-y-0"
-                    x-transition:leave-end="opacity-0 -translate-y-2"
-                    class="w-full my-1 ml-1 mr-1 bg-gray-200 rounded-md">
-                    <ul>
-                        <li class="flex mt-1">
-                            <x-side-link class="pl-9">
-                                <x-slot name="title">Kategori Desa Wisata</x-slot>
-                            </x-side-link>
-                        </li>
-                        <li class="flex">
-                            <x-side-link class="pl-9 hover:ml-1">
-                                <x-slot name="title">Desa Wisata</x-slot>
                             </x-side-link>
                         </li>
                     </ul>
