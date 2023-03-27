@@ -65,13 +65,4 @@ class UpdateTouristDestinationRequest extends FormRequest
             'description.required' => 'Deskripsi harus diisi',
         ];
     }
-
-    protected function prepareForValidation()
-    {
-        if ($this->sub_district_id != null) {
-            $this->merge([
-                'sub_district_id' => json_decode($this->sub_district_id)->id,
-            ]);
-        }
-    }
 }
