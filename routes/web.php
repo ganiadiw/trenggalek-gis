@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Guest\TouristDestinationController as GuestTouristDestinationController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\MapDrawerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TouristDestinationController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');
             Route::resource('categories', CategoryController::class);
+
+            Route::get('/map-drawer', MapDrawerController::class)->name('map-drawer');
         });
 
         Route::get('tourist-destinations/search', [TouristDestinationController::class, 'search'])->name('tourist-destinations.search');
