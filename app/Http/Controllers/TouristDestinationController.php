@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTouristDestinationRequest;
 use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TemporaryFile;
+use App\Models\TouristAttraction;
 use App\Models\TouristDestination;
 use DOMDocument;
 use Illuminate\Http\Request;
@@ -64,6 +65,23 @@ class TouristDestinationController extends Controller
         }
 
         $touristDestination = TouristDestination::create($validated);
+
+        if ($validated['tourist_attraction_names'][0] != null && $validated['tourist_attraction_captions'][0] != null) {
+            foreach ($validated['tourist_attraction_names'] as $key => $value) {
+                $tourisAttractionImage = $validated['tourist_attraction_images'][$key];
+                $tourisAttractionImageName = str()->random(5) . '-' . $tourisAttractionImage->getClientOriginalName();
+                $tourisAttractionImagePath = $tourisAttractionImage->storeAs('public/tourist-attractions', $tourisAttractionImageName);
+
+                TouristAttraction::create([
+                    'tourist_destination_id' => $touristDestination->id,
+                    'name' => $value,
+                    'image_name' => $tourisAttractionImageName,
+                    'image_path' => $tourisAttractionImagePath,
+                    'caption' => $validated['tourist_attraction_captions'][$key],
+                ]);
+            }
+        }
+
         $mediaFiles = $request->safe()->only('media_files');
         $media = json_decode($mediaFiles['media_files']);
 

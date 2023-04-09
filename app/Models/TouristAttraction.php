@@ -10,7 +10,15 @@ class TouristAttraction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'tourist_destination_id',
+        'name',
+        'image_name',
+        'image_path',
+        'caption',
     ];
+
+    public function touristDestination()
+    {
+        return $this->belongsTo(TouristDestination::class);
+    }
 }

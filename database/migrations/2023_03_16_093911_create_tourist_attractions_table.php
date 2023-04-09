@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tourist_destination_id')->constrained();
             $table->string('name', 255);
+            $table->string('image_name', 255);
+            $table->string('image_path', 255);
+            $table->string('caption', 255);
             $table->timestamps();
         });
     }

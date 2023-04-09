@@ -53,4 +53,9 @@ class TouristDestination extends Model implements HasMedia
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function touristAttractions()
+    {
+        return $this->hasMany(TouristAttraction::class);
+    }
 }

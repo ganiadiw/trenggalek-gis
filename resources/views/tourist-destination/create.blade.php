@@ -8,7 +8,7 @@
                     Tambah Data Destinasi Wisata</h1>
                 <div class="grid gap-x-5 md:grid-cols-2">
                     <x-input-default-form type="text" name="name" :value="old('name')" id="name"
-                        labelTitle="Nama Destinasi Wisata*" error="name" placeholder="Pantai Prigi" />
+                        labelTitle="Nama Destinasi Wisata*" error="name" placeholder="Pantai Prigi" required />
                     <x-input-select-option labelTitle="Pilih Kecamatan*" id="sub_district" name="sub_district_id"
                         error="sub_district">
                         <x-slot name="options">
@@ -20,8 +20,8 @@
                             @endforeach
                         </x-slot>
                     </x-input-select-option>
-                    <x-input-select-option labelTitle="Pilih Kategori*" id="categoryId"
-                        name="category_id" error="category_id">
+                    <x-input-select-option labelTitle="Pilih Kategori*" id="categoryId" name="category_id"
+                        error="category_id">
                         <x-slot name="options">
                             <option value="" disabled selected>Pilih Kategori</option>
                             @foreach ($categories as $key => $category)
@@ -33,20 +33,20 @@
                     </x-input-select-option>
                     <x-input-default-form type="text" name="address" :value="old('address')" id="address"
                         labelTitle="Alamat Lengkap*" error="address"
-                        placeholder="Jl. Raya Pantai Tasikmadu, Ketawang, Tasikmadu, Kec. Watulimo, Kabupaten Trenggalek, Jawa Timur 66382" />
+                        placeholder="Jl. Raya Pantai Tasikmadu, Ketawang, Tasikmadu, Kec. Watulimo, Kabupaten Trenggalek, Jawa Timur 66382" required />
                     <x-input-default-form type="text" name="manager" :value="old('manager')" id="manager"
-                        labelTitle="Pengelola*" error="manager" placeholder="DISPARBUD" />
+                        labelTitle="Pengelola*" error="manager" placeholder="DISPARBUD" required />
                     <x-input-default-form type="text" name="distance_from_city_center" :value="old('distance_from_city_center')"
                         id="distance_from_city_center" labelTitle="Jarak dari Pusat Kota*"
-                        error="distance_from_city_center" placeholder="42 KM" />
+                        error="distance_from_city_center" placeholder="42 KM" required />
                     <x-input-default-form type="text" name="transportation_access" :value="old('transportation_access')"
                         id="transportation_access" labelTitle="Akses Transportasi*" error="transportation_access"
-                        placeholder="Bisa diakses dengan Bus Besar, Mobil, dan Sepeda Motor" />
+                        placeholder="Bisa diakses dengan Bus Besar, Mobil, dan Sepeda Motor" required />
                     <x-input-default-form type="text" name="facility" :value="old('facility')" id="facility"
                         labelTitle="Fasilitas*" error="facility"
-                        placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus" />
-                    <x-input-default-form type="file" name="cover_image" id="coverImage"
-                        labelTitle="Foto Sampul*" error='cover_image' />
+                        placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus" required />
+                    <x-input-default-form type="file" name="cover_image" id="coverImage" labelTitle="Foto Sampul*"
+                        error='cover_image' required />
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
                     <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">
@@ -58,9 +58,9 @@
                                 dapat ditentukan dengan klik pada peta</p>
                         </blockquote>
                         <x-input-default-form type="text" name="latitude" :value="old('latitude')" id="latitude"
-                            labelTitle="Latitude*" error="latitude" placeholder="-8.2402961" />
+                            labelTitle="Latitude*" error="latitude" placeholder="-8.2402961" required />
                         <x-input-default-form type="text" name="longitude" :value="old('longitude')" id="longitude"
-                            labelTitle="Longitude*" error="longitude" placeholder="111.4484781" />
+                            labelTitle="Longitude*" error="longitude" placeholder="111.4484781" required />
                         <button type="button" id="buttonFindOnMap"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2.5 text-center">Cari
                             pada peta</button>
@@ -96,9 +96,47 @@
                         </div>
                         <div>
                             <div class="prose-xl">
-                                <textarea name="description" id="description" placeholder="Deskripsi destinasi wisata">{!! old('description') !!}</textarea>
+                                <textarea name="description" id="description" required placeholder="Deskripsi destinasi wisata">{!! old('description') !!}</textarea>
                             </div>
                             <x-input-error-validation error="description" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <div class="flex text-sm font-medium text-gray-900">Atraksi Wisata (Opsional)</div>
+                    <div x-cloak x-data="{ inputs: [{name: '', image: '', caption: ''}] }">
+                        <template x-for="(input, index) in inputs" :key="index">
+                            <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
+                                <div x-text="index + 1" class="flex w-5 mt-2 mr-4 md:mt-0 md:items-center"></div>
+                                <div class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
+                                    <input x-model="input.name" type="text" name="tourist_attraction_names[]" placeholder="Nama Atraksi Wisata"
+                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                        autocomplete="off" :required="input.image.trim() !== '' || input.caption.trim() !== ''" type="text">
+                                    <input x-model="input.image" type="file" name="tourist_attraction_images[]" placeholder="Foto Atraksi Wisata"
+                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
+                                        autocomplete="off" accept="image/*" :required="input.name.trim() !== '' || input.caption.trim() !== ''">
+                                    <input x-model="input.caption" type="text" name="tourist_attraction_captions[]" placeholder="Keterangan Atraksi Wisata"
+                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                        autocomplete="off" :required="input.name.trim() !== '' || input.image.trim() !== ''">
+                                </div>
+                                <div class="flex mt-[6px] space-x-2">
+                                    <button type="button"
+                                        @click="inputs.splice(index, 1)"
+                                        x-tooltip.raw="Hapus baris"
+                                        class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200"
+                                        x-bind:class="{ 'hidden': inputs.length === 1 }">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="text-red-500 icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="flex justify-end mt-5">
+                            <button type="button" @click="inputs.push({ name: '', image: '', caption: '' })" class="px-4 py-2 text-center text-white bg-green-500 rounded-lg hover:bg-green-600">Tambah baris</button>
                         </div>
                     </div>
                 </div>
@@ -130,7 +168,7 @@
         <script>
             let subDistrict = document.getElementById('sub_district');
 
-            subDistrict.addEventListener('change', function () {
+            subDistrict.addEventListener('change', function() {
                 let geoJSON = JSON.parse(subDistrict.value);
 
                 if (layer) {
@@ -138,12 +176,12 @@
                 }
 
                 layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/') }}' + '/' + geoJSON.geojson_name], {
-                            style: {
-                                'color': geoJSON.fill_color,
-                                'weight': 2,
-                                'opacity': 0.4,
-                            }
-                        }).addTo(map);
+                    style: {
+                        'color': geoJSON.fill_color,
+                        'weight': 2,
+                        'opacity': 0.4,
+                    }
+                }).addTo(map);
                 map.setView([geoJSON.latitude, geoJSON.longitude], 11);
             })
 
@@ -154,7 +192,7 @@
             );
 
             const inputCoverImage = document.querySelector('input[id="coverImage"]');
-            const pond = FilePond.create(inputCoverImage, {
+            FilePond.create(inputCoverImage, {
                 storeAsFile: true,
                 acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
                 labelFileTypeNotAllowed: 'Format gambar tidak didukung, gunakan  .png, .jpg atau .jpeg',
