@@ -119,7 +119,7 @@
                 </div>
             </li>
             <li class="flex">
-                <x-side-link>
+                <x-side-link :href="route('dashboard.map-drawer')" target="_blank" :active="request()->routeIs('dashboard.map-drawer')">
                     <x-slot name="svgIcon">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brush"
                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#292524"
