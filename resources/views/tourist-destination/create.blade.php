@@ -8,7 +8,7 @@
                     Tambah Data Destinasi Wisata</h1>
                 <div class="grid gap-x-5 md:grid-cols-2">
                     <x-input-default-form type="text" name="name" :value="old('name')" id="name"
-                        labelTitle="Nama Destinasi Wisata*" error="name" placeholder="Pantai Prigi" required />
+                        labelTitle="Nama Destinasi Wisata*" error="name" placeholder="Pantai Prigi" />
                     <x-input-select-option labelTitle="Pilih Kecamatan*" id="sub_district" name="sub_district_id"
                         error="sub_district">
                         <x-slot name="options">
@@ -33,20 +33,20 @@
                     </x-input-select-option>
                     <x-input-default-form type="text" name="address" :value="old('address')" id="address"
                         labelTitle="Alamat Lengkap*" error="address"
-                        placeholder="Jl. Raya Pantai Tasikmadu, Ketawang, Tasikmadu, Kec. Watulimo, Kabupaten Trenggalek, Jawa Timur 66382" required />
+                        placeholder="Jl. Raya Pantai Tasikmadu, Ketawang, Tasikmadu, Kec. Watulimo, Kabupaten Trenggalek, Jawa Timur 66382" />
                     <x-input-default-form type="text" name="manager" :value="old('manager')" id="manager"
-                        labelTitle="Pengelola*" error="manager" placeholder="DISPARBUD" required />
+                        labelTitle="Pengelola*" error="manager" placeholder="DISPARBUD"/>
                     <x-input-default-form type="text" name="distance_from_city_center" :value="old('distance_from_city_center')"
                         id="distance_from_city_center" labelTitle="Jarak dari Pusat Kota*"
-                        error="distance_from_city_center" placeholder="42 KM" required />
+                        error="distance_from_city_center" placeholder="42 KM"/>
                     <x-input-default-form type="text" name="transportation_access" :value="old('transportation_access')"
                         id="transportation_access" labelTitle="Akses Transportasi*" error="transportation_access"
-                        placeholder="Bisa diakses dengan Bus Besar, Mobil, dan Sepeda Motor" required />
+                        placeholder="Bisa diakses dengan Bus Besar, Mobil, dan Sepeda Motor"/>
                     <x-input-default-form type="text" name="facility" :value="old('facility')" id="facility"
                         labelTitle="Fasilitas*" error="facility"
-                        placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus" required />
+                        placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus"/>
                     <x-input-default-form type="file" name="cover_image" id="coverImage" labelTitle="Foto Sampul*"
-                        error='cover_image' required />
+                        error='cover_image'/>
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
                     <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">
@@ -58,9 +58,9 @@
                                 dapat ditentukan dengan klik pada peta</p>
                         </blockquote>
                         <x-input-default-form type="text" name="latitude" :value="old('latitude')" id="latitude"
-                            labelTitle="Latitude*" error="latitude" placeholder="-8.2402961" required />
+                            labelTitle="Latitude*" error="latitude" placeholder="-8.2402961"/>
                         <x-input-default-form type="text" name="longitude" :value="old('longitude')" id="longitude"
-                            labelTitle="Longitude*" error="longitude" placeholder="111.4484781" required />
+                            labelTitle="Longitude*" error="longitude" placeholder="111.4484781"/>
                         <button type="button" id="buttonFindOnMap"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-3 py-2.5 text-center">Cari
                             pada peta</button>
@@ -96,7 +96,7 @@
                         </div>
                         <div>
                             <div class="prose-xl">
-                                <textarea name="description" id="description" required placeholder="Deskripsi destinasi wisata">{!! old('description') !!}</textarea>
+                                <textarea name="description" id="description" placeholder="Deskripsi destinasi wisata">{!! old('description') !!}</textarea>
                             </div>
                             <x-input-error-validation error="description" />
                         </div>
