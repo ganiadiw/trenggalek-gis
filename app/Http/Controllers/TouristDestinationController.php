@@ -21,7 +21,7 @@ class TouristDestinationController extends Controller
         $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
             ->orderBy('name', 'asc');
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')
-        ->orderBy('code', 'asc')->get();
+            ->orderBy('code', 'asc')->get();
 
         return view('tourist-destination.index', [
             'touristDestinations' => $touristDestinations->paginate(10),
@@ -67,21 +67,7 @@ class TouristDestinationController extends Controller
         $touristDestination = TouristDestination::create($validated);
 
         if ($validated['tourist_attraction_names'][0] != null && $validated['tourist_attraction_captions'][0] != null) {
-            foreach ($validated['tourist_attraction_names'] as $key => $value) {
-                if ($value != null) {
-                    $tourisAttractionImage = $validated['tourist_attraction_images'][$key];
-                    $tourisAttractionImageName = str()->random(5) . '-' . $tourisAttractionImage->getClientOriginalName();
-                    $tourisAttractionImagePath = $tourisAttractionImage->storeAs('public/tourist-attractions', $tourisAttractionImageName);
-
-                    TouristAttraction::create([
-                        'tourist_destination_id' => $touristDestination->id,
-                        'name' => $value,
-                        'image_name' => $tourisAttractionImageName,
-                        'image_path' => $tourisAttractionImagePath,
-                        'caption' => $validated['tourist_attraction_captions'][$key],
-                    ]);
-                }
-            }
+            $this->createTouristAttraction($touristDestination, $validated['tourist_attraction_names'], $validated['tourist_attraction_images'], $validated['tourist_attraction_captions']);
         }
 
         $mediaFiles = $request->safe()->only('media_files');
@@ -184,7 +170,7 @@ class TouristDestinationController extends Controller
         foreach ($usedImages as $item) {
             $mediaLibrary = Media::where('file_name', $item->filename)->first();
 
-            if (! $mediaLibrary) {
+            if (!$mediaLibrary) {
                 $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
                 $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
                     ->toMediaCollection('tourist-destinations');
@@ -196,7 +182,7 @@ class TouristDestinationController extends Controller
         $dom = new DOMDocument();
         $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
-        if (! empty($newImageSources)) {
+        if (!empty($newImageSources)) {
             $imageTags = $dom->getElementsByTagName('img');
 
             $index = 0;
@@ -234,5 +220,24 @@ class TouristDestinationController extends Controller
         toastr()->success('Data berhasil dihapus', 'Sukses');
 
         return back();
+    }
+
+    public function createTouristAttraction($touristDestination, array $touristAttractionNames, array $touristAttractionImages, array $touristAttractionCaptions)
+    {
+        foreach ($touristAttractionNames as $key => $value) {
+            if ($value != null) {
+                $tourisAttractionImage = $touristAttractionImages[$key];
+                $tourisAttractionImageName = str()->random(5) . '-' . $tourisAttractionImage->getClientOriginalName();
+                $tourisAttractionImagePath = $tourisAttractionImage->storeAs('public/tourist-attractions', $tourisAttractionImageName);
+
+                TouristAttraction::create([
+                    'tourist_destination_id' => $touristDestination->id,
+                    'name' => $value,
+                    'image_name' => $tourisAttractionImageName,
+                    'image_path' => $tourisAttractionImagePath,
+                    'caption' => $touristAttractionCaptions[$key],
+                ]);
+            }
+        }
     }
 }
