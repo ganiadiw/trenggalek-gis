@@ -38,9 +38,9 @@ class StoreTouristDestinationRequest extends FormRequest
             'latitude' => ['required', 'max:50'],
             'longitude' => ['required', 'max:50'],
             'description' => ['required'],
-            'tourist_attraction_names' => ['nullable', 'array'],
-            'tourist_attraction_images' => ['nullable', 'array'],
-            'tourist_attraction_captions' => ['nullable', 'array'],
+            'tourist_attraction_names.*' => ['nullable', 'max:255'],
+            'tourist_attraction_images.*' => ['mimes:png,jpg'],
+            'tourist_attraction_captions.*' => ['nullable', 'max:255'],
             'media_files' => ['nullable'],
         ];
     }

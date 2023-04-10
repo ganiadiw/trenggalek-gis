@@ -68,17 +68,19 @@ class TouristDestinationController extends Controller
 
         if ($validated['tourist_attraction_names'][0] != null && $validated['tourist_attraction_captions'][0] != null) {
             foreach ($validated['tourist_attraction_names'] as $key => $value) {
-                $tourisAttractionImage = $validated['tourist_attraction_images'][$key];
-                $tourisAttractionImageName = str()->random(5) . '-' . $tourisAttractionImage->getClientOriginalName();
-                $tourisAttractionImagePath = $tourisAttractionImage->storeAs('public/tourist-attractions', $tourisAttractionImageName);
+                if ($value != null) {
+                    $tourisAttractionImage = $validated['tourist_attraction_images'][$key];
+                    $tourisAttractionImageName = str()->random(5) . '-' . $tourisAttractionImage->getClientOriginalName();
+                    $tourisAttractionImagePath = $tourisAttractionImage->storeAs('public/tourist-attractions', $tourisAttractionImageName);
 
-                TouristAttraction::create([
-                    'tourist_destination_id' => $touristDestination->id,
-                    'name' => $value,
-                    'image_name' => $tourisAttractionImageName,
-                    'image_path' => $tourisAttractionImagePath,
-                    'caption' => $validated['tourist_attraction_captions'][$key],
-                ]);
+                    TouristAttraction::create([
+                        'tourist_destination_id' => $touristDestination->id,
+                        'name' => $value,
+                        'image_name' => $tourisAttractionImageName,
+                        'image_path' => $tourisAttractionImagePath,
+                        'caption' => $validated['tourist_attraction_captions'][$key],
+                    ]);
+                }
             }
         }
 

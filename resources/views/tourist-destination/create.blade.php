@@ -105,7 +105,21 @@
 
                 <div class="mt-3">
                     <div class="flex text-sm font-medium text-gray-900">Atraksi Wisata (Opsional)</div>
-                    <div x-cloak x-data="{ inputs: [{name: '', image: '', caption: ''}] }">
+                    <div x-cloak x-data="{
+                        inputs: [
+                            @if (old('tourist_attraction_names'))
+                                @foreach (old('tourist_attraction_names') as $key => $value)
+                                    {
+                                        name: '{{ $value }}',
+                                        image: '',
+                                        caption: '{{ old('tourist_attraction_captions')[$key] }}'
+                                    }{{ $loop->last ? '' : ',' }}
+                                @endforeach
+                            @else
+                                { name: '', image: '', caption: '' }
+                            @endif
+                        ]
+                    }">
                         <template x-for="(input, index) in inputs" :key="index">
                             <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
                                 <div x-text="index + 1" class="flex w-5 mt-2 mr-4 md:mt-0 md:items-center"></div>
@@ -138,6 +152,15 @@
                         <div class="flex justify-end mt-5">
                             <button type="button" @click="inputs.push({ name: '', image: '', caption: '' })" class="px-4 py-2 text-center text-white bg-green-500 rounded-lg hover:bg-green-600">Tambah baris</button>
                         </div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
