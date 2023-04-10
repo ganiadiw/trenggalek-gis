@@ -170,7 +170,7 @@ class TouristDestinationController extends Controller
         foreach ($usedImages as $item) {
             $mediaLibrary = Media::where('file_name', $item->filename)->first();
 
-            if (!$mediaLibrary) {
+            if (! $mediaLibrary) {
                 $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
                 $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
                     ->toMediaCollection('tourist-destinations');
@@ -182,7 +182,7 @@ class TouristDestinationController extends Controller
         $dom = new DOMDocument();
         $dom->loadHTML($touristDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
-        if (!empty($newImageSources)) {
+        if (! empty($newImageSources)) {
             $imageTags = $dom->getElementsByTagName('img');
 
             $index = 0;
