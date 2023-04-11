@@ -111,12 +111,12 @@
                                 @foreach (old('tourist_attraction_names') as $key => $value)
                                     {
                                         name: '{{ $value }}',
+                                        caption: '{{ old('tourist_attraction_captions')[$key] }}',
                                         image: '',
-                                        caption: '{{ old('tourist_attraction_captions')[$key] }}'
                                     }{{ $loop->last ? '' : ',' }}
                                 @endforeach
                             @else
-                                { name: '', image: '', caption: '' }
+                                { name: '', caption: '', image: '' }
                             @endif
                         ]
                     }">
@@ -127,19 +127,18 @@
                                     <input x-model="input.name" type="text" name="tourist_attraction_names[]" placeholder="Nama Atraksi Wisata"
                                         class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
                                         autocomplete="off" :required="input.image.trim() !== '' || input.caption.trim() !== ''" type="text">
-                                    <input x-model="input.image" type="file" name="tourist_attraction_images[]" placeholder="Foto Atraksi Wisata"
-                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
-                                        autocomplete="off" accept="image/*" :required="input.name.trim() !== '' || input.caption.trim() !== ''">
                                     <input x-model="input.caption" type="text" name="tourist_attraction_captions[]" placeholder="Keterangan Atraksi Wisata"
                                         class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
                                         autocomplete="off" :required="input.name.trim() !== '' || input.image.trim() !== ''">
+                                    <input x-model="input.image" type="file" name="tourist_attraction_images[]" placeholder="Foto Atraksi Wisata"
+                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
+                                        autocomplete="off" accept="image/*" :required="input.name.trim() !== '' || input.caption.trim() !== ''">
                                 </div>
-                                <div class="flex mt-[6px] space-x-2">
+                                <div class="flex mt-[4px] space-x-2 ml-2">
                                     <button type="button"
                                         @click="inputs.splice(index, 1)"
                                         x-tooltip.raw="Hapus baris"
-                                        class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200"
-                                        x-bind:class="{ 'hidden': inputs.length === 1 }">
+                                        class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="text-red-500 icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -150,17 +149,8 @@
                             </div>
                         </template>
                         <div class="flex justify-end mt-5">
-                            <button type="button" @click="inputs.push({ name: '', image: '', caption: '' })" class="px-4 py-2 text-center text-white bg-green-500 rounded-lg hover:bg-green-600">Tambah baris</button>
+                            <button type="button" @click="inputs.push({ name: '', caption: '', image: '' })" class="px-4 py-2 text-center text-white bg-green-500 rounded-lg hover:bg-green-600">Tambah baris</button>
                         </div>
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
                     </div>
                 </div>
 
