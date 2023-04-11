@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-4">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <form class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST"
+            <form x-data="{ deletedTouristAttractions: [] }" class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST"
                 action="{{ route('dashboard.tourist-destinations.update', ['tourist_destination' => $touristDestination]) }}"
                 enctype="multipart/form-data">
                 @csrf
@@ -21,8 +21,8 @@
                             @endforeach
                         </x-slot>
                     </x-input-select-option>
-                    <x-input-select-option labelTitle="Pilih Kategori*" id="categoryId"
-                        name="category_id" error="category_id">
+                    <x-input-select-option labelTitle="Pilih Kategori*" id="categoryId" name="category_id"
+                        error="category_id">
                         <x-slot name="options">
                             <option value="" disabled selected>Pilih Kategori</option>
                             @foreach ($categories as $key => $category)
@@ -114,8 +114,142 @@
                     </div>
                 </div>
 
+                <div class="mt-3">
+                    <div class="flex text-sm font-medium text-gray-900">Atraksi Wisata (Opsional)</div>
+                    @if (count($touristDestination->touristAttractions))
+                        <div x-data="{ deletedTouristAttractionCount: 0 }">
+                            <div class="justify-between w-full mt-3 text-sm font-medium md:flex">
+                                <div class="text-green-500">
+                                    <p>Atraksi wisata yang saat ini tersedia</p>
+                                </div>
+                                <div x-cloak x-show="deletedTouristAttractionCount > 0" x-transition
+                                    class="text-red-500">Jumlah data akan dihapus : <span
+                                        x-text="deletedTouristAttractionCount"></span>
+                                </div>
+                            </div>
+                            @foreach ($touristDestination->touristAttractions as $key => $value)
+                                <div x-data x-ref="row" class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
+                                    <div class="flex w-5 mt-2 mr-4 md:-mt-6 md:items-center">{{ $key + 1 }}</div>
+                                    <div class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
+                                        <input type="text" name="tourist_attraction_names[]"
+                                            placeholder="Nama Atraksi Wisata"
+                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                            autocomplete="off" value="{{ $value->name }}" required>
+                                        <input type="text" name="tourist_attraction_captions[]"
+                                            placeholder="Keterangan Atraksi Wisata"
+                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                            autocomplete="off" value="{{ $value->caption }}" required>
+                                        <div class="space-y-2 md:space-y-0 md:space-x-2 md:flex">
+                                            <div>
+                                                <img class="rounded-md" height="100" width="150" src="{{ asset('storage/tourist-attractions/' . $value->image_name) }}" alt="{{ $value->image_name }}">
+                                            </div>
+                                            <div>
+                                                <input type="file" id="inputImage" name="tourist_attraction_images[]"
+                                                    placeholder="Foto Atraksi Wisata"
+                                                    class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
+                                                    autocomplete="off" accept="image/*">
+                                                <label for="inputImage"
+                                                    class="text-xs italic font-semibold text-red-500">Ubah hanya jika ingin
+                                                    mengubahnya</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex mt-[4px] space-x-2 ml-2">
+                                        <button x-data type="button"
+                                            x-on:click="
+                                                deletedTouristAttractions.push({{ $value->id }});
+                                                $refs.row.remove();
+                                                deletedTouristAttractionCount++
+                                            "
+                                            x-tooltip.raw="Hapus dari database"
+                                            class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="text-red-500 icon icon-tabler icon-tabler-trash" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M4 7l16 0"></path>
+                                                <path d="M10 11l0 6"></path>
+                                                <path d="M14 11l0 6"></path>
+                                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
+                            <hr class="w-full h-1 mx-auto bg-gray-400 border-0 rounded md:my-4">
+                        </div>
+                    @endif
+                    <div x-cloak x-data="{
+                        inputs: [
+                            @if (old('new_tourist_attraction_names')) @foreach (old('new_tourist_attraction_names') as $key => $value)
+                                    {
+                                        name: '{{ $value }}',
+                                        caption: '{{ old('new_tourist_attraction_captions')[$key] }}'
+                                        image: '',
+                                    }{{ $loop->last ? '' : ',' }}
+                                @endforeach
+                            @else
+                                { name: '', caption: '', image: '' } @endif
+                        ]
+                    }">
+                        <div class="mt-3 text-sm font-medium text-green-500">
+                            <p>Tambah atraksi wisata baru</p>
+                        </div>
+                        <template x-for="(input, index) in inputs" :key="index">
+                            <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
+                                <div x-text="index + 1" class="flex w-5 mt-2 mr-4 md:mt-0 md:items-center"></div>
+                                <div class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
+                                    <input x-model="input.name" type="text" name="new_tourist_attraction_names[]"
+                                        placeholder="Nama Atraksi Wisata"
+                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                        autocomplete="off"
+                                        :required="input.image.trim() !== '' || input.caption.trim() !== ''"
+                                        type="text">
+                                    <input x-model="input.caption" type="text"
+                                        name="new_tourist_attraction_captions[]" placeholder="Keterangan Atraksi Wisata"
+                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                        autocomplete="off"
+                                        :required="input.name.trim() !== '' || input.image.trim() !== ''">
+                                    <input x-model="input.image" type="file" name="new_tourist_attraction_images[]"
+                                        placeholder="Foto Atraksi Wisata"
+                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
+                                        autocomplete="off" accept="image/*"
+                                        :required="input.name.trim() !== '' || input.caption.trim() !== ''">
+                                </div>
+                                <div class="flex mt-[4px] space-x-2 ml-2">
+                                    <button type="button" @click="inputs.splice(index, 1)"
+                                        x-tooltip.raw="Hapus baris"
+                                        class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="text-red-500 icon icon-tabler icon-tabler-x" width="24"
+                                            height="24" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <line x1="18" y1="6" x2="6" y2="18">
+                                            </line>
+                                            <line x1="6" y1="6" x2="18" y2="18">
+                                            </line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="flex justify-end mt-5">
+                            <button type="button" @click="inputs.push({ name: '', caption: '', image: '' })"
+                                class="px-4 py-2 text-center text-white bg-green-500 rounded-lg hover:bg-green-600">Tambah
+                                baris</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div>
                     <input type="hidden" name="media_files" id="mediaFiles">
+                    <input x-model="deletedTouristAttractions" type="hidden" name="deleted_tourist_attractions[]"
+                        id="deletedTouristAttractions">
                 </div>
 
                 <div class="flex gap-x-2">
@@ -185,6 +319,10 @@
                 maxFileSize: '2048KB',
                 labelMaxFileSize: 'Maksimal berukuran 2048 KB',
             });
+
+            const handleDeleteImage = (imageId) => {
+                console.log(imageId);
+            }
         </script>
     @endsection
 </x-app-layout>

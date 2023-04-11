@@ -125,6 +125,7 @@ class TouristDestinationController extends Controller
         $touristDestination->load([
             'subDistrict:id,name',
             'category:id,name',
+            'touristAttractions:id,tourist_destination_id,name,image_name,image_path,caption',
         ]);
         $subDistricts = SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy('name', 'ASC')->get();
         $categories = Category::select('id', 'name')->orderBy('name', 'ASC')->get();
@@ -144,7 +145,22 @@ class TouristDestinationController extends Controller
             Storage::delete($touristDestination->cover_image_path);
         }
 
+        if ($validated['deleted_tourist_attractions'][0] != null) {
+            $newArrayData = array_values(explode(',', $validated['deleted_tourist_attractions'][0]));
+
+            foreach ($newArrayData as $value) {
+                $touristAttraction = TouristAttraction::find($value);
+                Storage::delete($touristAttraction->image_path);
+                $touristAttraction->delete();
+            }
+        }
+
         $touristDestination->update($validated);
+
+        if ($validated['new_tourist_attraction_names'][0] != null && $validated['new_tourist_attraction_captions'][0] != null) {
+            $this->createTouristAttraction($touristDestination, $validated['new_tourist_attraction_names'], $validated['new_tourist_attraction_images'], $validated['new_tourist_attraction_captions']);
+        }
+
         $mediaFiles = $request->safe()->only('media_files');
         $media = json_decode($mediaFiles['media_files']);
 
