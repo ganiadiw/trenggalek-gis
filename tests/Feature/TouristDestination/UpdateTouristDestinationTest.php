@@ -69,6 +69,13 @@ class UpdateTouristDestinationTest extends TestCase
             'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
             'latitude' => -8.27466803,
             'longitude' => 111.45297354,
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
+            'new_tourist_attraction_names' => [null],
+            'new_tourist_attraction_images' => [null],
+            'new_tourist_attraction_captions' => [null],
+            'deleted_tourist_attractions' => [null],
             'media_files' => json_encode([
                 'used_images' => null,
                 'unused_images' => null,
@@ -109,6 +116,13 @@ class UpdateTouristDestinationTest extends TestCase
             'cover_image' => $coverImage,
             'latitude' => -8.27466803,
             'longitude' => 111.45297354,
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
+            'new_tourist_attraction_names' => [null],
+            'new_tourist_attraction_images' => [null],
+            'new_tourist_attraction_captions' => [null],
+            'deleted_tourist_attractions' => [null],
             'media_files' => json_encode([
                 'used_images' => null,
                 'unused_images' => null,
@@ -157,6 +171,13 @@ class UpdateTouristDestinationTest extends TestCase
             'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
             'latitude' => -8.27466803,
             'longitude' => 111.45297354,
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
+            'new_tourist_attraction_names' => [null],
+            'new_tourist_attraction_images' => [null],
+            'new_tourist_attraction_captions' => [null],
+            'deleted_tourist_attractions' => [null],
             'media_files' => json_encode([
                 'used_images' => [
                     [
@@ -217,6 +238,13 @@ class UpdateTouristDestinationTest extends TestCase
             'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
             'latitude' => -8.27466803,
             'longitude' => 111.45297354,
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
+            'new_tourist_attraction_names' => [null],
+            'new_tourist_attraction_images' => [null],
+            'new_tourist_attraction_captions' => [null],
+            'deleted_tourist_attractions' => [null],
             'media_files' => json_encode([
                 'used_images' => [
                     [
@@ -258,6 +286,13 @@ class UpdateTouristDestinationTest extends TestCase
             'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
             'latitude' => -8.27466803,
             'longitude' => 111.45297354,
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
+            'new_tourist_attraction_names' => [null],
+            'new_tourist_attraction_images' => [null],
+            'new_tourist_attraction_captions' => [null],
+            'deleted_tourist_attractions' => [null],
             'media_files' => json_encode([
                 'used_images' => null,
                 'unused_images' => null,
