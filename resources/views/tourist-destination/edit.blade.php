@@ -50,7 +50,7 @@
                                 <label for="coverImagePreview"
                                     class="block mb-2 text-sm italic font-medium text-gray-900">Foto Sampul Saat
                                     Ini</label>
-                                <img class="max-h-80" id="coverImagePreview"
+                                <img class="rounded-[4px] max-h-80" id="coverImagePreview"
                                     src="{{ asset('storage/cover-images/' . $touristDestination->cover_image_name) }}"
                                     alt="{{ $touristDestination->cover_image_name }}">
                             </div>
@@ -128,9 +128,10 @@
                                 </div>
                             </div>
                             @foreach ($touristDestination->touristAttractions as $key => $value)
-                                <div x-data x-ref="row" class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
+                                <div x-ref="row" class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
                                     <div class="flex w-5 mt-2 mr-4 md:-mt-6 md:items-center">{{ $key + 1 }}</div>
                                     <div class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
+                                        <input type="hidden" name="tourist_attraction_id[]" value="{{ $value->id }}">
                                         <input type="text" name="tourist_attraction_names[]"
                                             placeholder="Nama Atraksi Wisata"
                                             class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
@@ -139,15 +140,16 @@
                                             placeholder="Keterangan Atraksi Wisata"
                                             class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
                                             autocomplete="off" value="{{ $value->caption }}" required>
-                                        <div class="space-y-2 md:space-y-0 md:space-x-2 md:flex">
+                                        <div x-data="handleImageUpload()" class="space-y-2 md:space-y-0 md:space-x-2 md:flex">
                                             <div>
-                                                <img class="rounded-md" height="100" width="150" src="{{ asset('storage/tourist-attractions/' . $value->image_name) }}" alt="{{ $value->image_name }}">
+                                                <img x-ref="imagePreview" class="rounded-md" style="width:150px;height:70px;" src="{{ asset('storage/tourist-attractions/' . $value->image_name) }}" alt="{{ $value->image_name }}">
                                             </div>
                                             <div>
-                                                <input type="file" id="inputImage" name="tourist_attraction_images[]"
+                                                <input x-ref="inputImage" type="file" id="inputImage" name="tourist_attraction_images[]"
                                                     placeholder="Foto Atraksi Wisata"
-                                                    class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
-                                                    autocomplete="off" accept="image/*">
+                                                    class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full"
+                                                    autocomplete="off" accept="image/*"
+                                                    x-on:change="upload({{ $value->id }});">
                                                 <label for="inputImage"
                                                     class="text-xs italic font-semibold text-red-500">Ubah hanya jika ingin
                                                     mengubahnya</label>
@@ -159,7 +161,7 @@
                                             x-on:click="
                                                 deletedTouristAttractions.push({{ $value->id }});
                                                 $refs.row.remove();
-                                                deletedTouristAttractionCount++
+                                                deletedTouristAttractionCount++;
                                             "
                                             x-tooltip.raw="Hapus dari database"
                                             class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200">
@@ -320,8 +322,28 @@
                 labelMaxFileSize: 'Maksimal berukuran 2048 KB',
             });
 
-            const handleDeleteImage = (imageId) => {
-                console.log(imageId);
+            function handleImageUpload() {
+                return {
+                    upload(id) {
+                        const formData = new FormData();
+                        formData.append('id', id);
+                        formData.append('image', (event.target.files[0]));
+
+                        fetch('/dashboard/images/tourist-attraction/update', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            this.$refs.inputImage.value = '';
+                            this.$refs.imagePreview.src = data.public_path;
+                            this.$refs.imagePreview.alt = data.image_name;
+                        })
+                    }
+                }
             }
         </script>
     @endsection

@@ -145,6 +145,8 @@ class TouristDestinationController extends Controller
             Storage::delete($touristDestination->cover_image_path);
         }
 
+        $touristDestination->update($validated);
+
         if ($validated['deleted_tourist_attractions'][0] != null) {
             $newArrayData = array_values(explode(',', $validated['deleted_tourist_attractions'][0]));
 
@@ -155,7 +157,14 @@ class TouristDestinationController extends Controller
             }
         }
 
-        $touristDestination->update($validated);
+        if (! empty($validated['tourist_attraction_id'])) {
+            foreach ($validated['tourist_attraction_id'] as $key => $value) {
+                TouristAttraction::where('id', $value)->update([
+                    'name' => $validated['tourist_attraction_names'][$key],
+                    'caption' => $validated['tourist_attraction_captions'][$key],
+                ]);
+            }
+        }
 
         if ($validated['new_tourist_attraction_names'][0] != null && $validated['new_tourist_attraction_captions'][0] != null) {
             $this->createTouristAttraction($touristDestination, $validated['new_tourist_attraction_names'], $validated['new_tourist_attraction_images'], $validated['new_tourist_attraction_captions']);
