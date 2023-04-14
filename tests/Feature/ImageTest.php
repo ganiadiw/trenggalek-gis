@@ -2,7 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
+use App\Models\SubDistrict;
 use App\Models\TemporaryFile;
+use App\Models\TouristAttraction;
+use App\Models\TouristDestination;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -56,5 +60,41 @@ class ImageTest extends TestCase
             'filename' => 'image1678273485413.png',
         ]);
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485413.png'));
+    }
+
+    public function test_an_authenticated_user_can_update_tourist_attraction_image()
+    {
+        SubDistrict::factory()->create();
+        Category::factory()->create();
+        $tourisDestination = TouristDestination::factory()->create();
+        Storage::disk('local')->put('public/touris_attractions/image123.jpg', '');
+        $touristAttraction = TouristAttraction::create([
+            'tourist_destination_id' => $tourisDestination->id,
+            'name' => 'Tourist Attraction Name',
+            'caption' => 'Touris Attraction Caption',
+            'image_name' => 'image123.jpg',
+            'image_path' => 'public/touris_attractions/image123.jpg'
+        ]);
+
+        $response = $this->actingAs($this->user)->postJson('/dashboard/images/tourist-attraction/update', [
+            'id' => $touristAttraction->id,
+            'image' => UploadedFile::fake()->image('image2.jpg'),
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'message' => 'Update image was successfully',
+        ]);
+        $touristAttraction = TouristAttraction::first();
+        $this->assertDatabaseHas('tourist_attractions', [
+            'image_name' => $touristAttraction->image_name,
+            'image_path' => $touristAttraction->image_path,
+        ]);
+        $this->assertDatabaseMissing('tourist_attractions', [
+            'foldername' => 'public/touris_attractions/image123.jpg',
+            'filename' => 'image123.jpg',
+        ]);
+        $this->assertTrue(Storage::exists('public/tourist-attractions/' . $touristAttraction->image_name));
+        $this->assertFalse(Storage::exists('public/tourist-attractions/image123.jpg'));
     }
 }
