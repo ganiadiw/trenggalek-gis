@@ -126,7 +126,7 @@
                                 <div class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
                                     <input x-model="input.name" type="text" name="tourist_attraction_names[]" placeholder="Nama Atraksi Wisata"
                                         class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
-                                        autocomplete="off" :required="input.image.trim() !== '' || input.caption.trim() !== ''" type="text">
+                                        autocomplete="off" :required="input.image.trim() !== '' || input.caption.trim() !== ''">
                                     <input x-model="input.caption" type="text" name="tourist_attraction_captions[]" placeholder="Keterangan Atraksi Wisata"
                                         class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
                                         autocomplete="off" :required="input.name.trim() !== '' || input.image.trim() !== ''">
