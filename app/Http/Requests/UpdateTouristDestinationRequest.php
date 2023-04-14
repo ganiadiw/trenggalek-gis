@@ -40,7 +40,7 @@ class UpdateTouristDestinationRequest extends FormRequest
             'tourist_attraction_names.*' => ['nullable', 'max:255'],
             'tourist_attraction_captions.*' => ['nullable', 'max:255'],
             'new_tourist_attraction_names.*' => ['nullable', 'max:255'],
-            'new_tourist_attraction_images.*' => ['mimes:png,jpg'],
+            'new_tourist_attraction_images.*' => ['nullable', 'mimes:png,jpg'],
             'new_tourist_attraction_captions.*' => ['nullable', 'max:255'],
             'media_files' => ['nullable'],
             'deleted_tourist_attractions' => ['nullable'],

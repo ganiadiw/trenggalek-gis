@@ -39,7 +39,7 @@ class StoreTouristDestinationRequest extends FormRequest
             'longitude' => ['required', 'max:50'],
             'description' => ['required'],
             'tourist_attraction_names.*' => ['nullable', 'max:255'],
-            'tourist_attraction_images.*' => ['mimes:png,jpg'],
+            'tourist_attraction_images.*' => ['nullable','mimes:png,jpg'],
             'tourist_attraction_captions.*' => ['nullable', 'max:255'],
             'media_files' => ['nullable'],
         ];
