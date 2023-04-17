@@ -66,10 +66,10 @@ class ImageTest extends TestCase
     {
         SubDistrict::factory()->create();
         Category::factory()->create();
-        $tourisDestination = TouristDestination::factory()->create();
+        TouristDestination::factory()->create();
         Storage::disk('local')->put('public/touris_attractions/image123.jpg', '');
         $touristAttraction = TouristAttraction::create([
-            'tourist_destination_id' => $tourisDestination->id,
+            'tourist_destination_id' => TouristDestination::first()->id,
             'name' => 'Tourist Attraction Name',
             'caption' => 'Touris Attraction Caption',
             'image_name' => 'image123.jpg',
