@@ -1,8 +1,8 @@
 <aside class="min-h-screen border-r">
-    <div class="relative flex items-center w-full h-16 ml-3 border-b">
+    <a href="{{ route('welcome') }}" class="relative flex items-center w-full h-16 ml-3 border-b">
         <img class="w-11 h-11" src="{{ asset('assets/images/trenggalek.png') }}" alt="Trenggalek">
         <h1 class="absolute mr-3 text-sm font-bold text-black ml-14">Sistem Informasi Geografis Wisata Trenggalek</h1>
-    </div>
+    </a>
     <div class="mt-6 text-sm text-gray-800 ">
         <ul>
             <li class="flex">
