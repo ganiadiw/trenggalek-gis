@@ -22,7 +22,7 @@
             </li>
             @can('view_superadmin_menu')
                 <li class="flex">
-                    <x-side-link :href="route('dashboard.users.index')" :active="request()->routeIs('users*')">
+                    <x-side-link :href="route('dashboard.users.index')" :active="request()->routeIs('dashboard.users*')">
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users"
                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#18181b"
@@ -38,7 +38,7 @@
                     </x-side-link>
                 </li>
                 <li class="flex">
-                    <x-side-link :href="route('dashboard.sub-districts.index')" :active="request()->routeIs('sub-districts*')">
+                    <x-side-link :href="route('dashboard.sub-districts.index')" :active="request()->routeIs('dashboard.sub-districts*')">
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map" width="24"
                                 height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none"
