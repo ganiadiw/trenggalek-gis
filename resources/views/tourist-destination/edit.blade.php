@@ -128,7 +128,7 @@
                                 </div>
                             </div>
                             @foreach ($touristDestination->touristAttractions as $key => $value)
-                                <div x-ref="row" class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
+                                <div x-data x-ref="row" class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
                                     <div class="flex w-5 mt-2 mr-4 md:-mt-6 md:items-center">{{ $key + 1 }}</div>
                                     <div class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
                                         <input type="hidden" name="tourist_attraction_id[]" value="{{ $value->id }}">
