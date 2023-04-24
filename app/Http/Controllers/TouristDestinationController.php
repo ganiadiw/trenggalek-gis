@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTouristDestinationRequest;
 use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TemporaryFile;
+use App\Models\TouristAttraction;
 use App\Models\TouristDestination;
 use DOMDocument;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class TouristDestinationController extends Controller
         $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
             ->orderBy('name', 'asc');
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')
-        ->orderBy('code', 'asc')->get();
+            ->orderBy('code', 'asc')->get();
 
         return view('tourist-destination.index', [
             'touristDestinations' => $touristDestinations->paginate(10),
@@ -64,6 +65,11 @@ class TouristDestinationController extends Controller
         }
 
         $touristDestination = TouristDestination::create($validated);
+
+        if ($validated['tourist_attraction_names'][0] != null && $validated['tourist_attraction_captions'][0] != null) {
+            $this->createTouristAttraction($touristDestination, $validated['tourist_attraction_names'], $validated['tourist_attraction_images'], $validated['tourist_attraction_captions']);
+        }
+
         $mediaFiles = $request->safe()->only('media_files');
         $media = json_decode($mediaFiles['media_files']);
 
@@ -119,6 +125,7 @@ class TouristDestinationController extends Controller
         $touristDestination->load([
             'subDistrict:id,name',
             'category:id,name',
+            'touristAttractions:id,tourist_destination_id,name,image_name,image_path,caption',
         ]);
         $subDistricts = SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy('name', 'ASC')->get();
         $categories = Category::select('id', 'name')->orderBy('name', 'ASC')->get();
@@ -139,6 +146,30 @@ class TouristDestinationController extends Controller
         }
 
         $touristDestination->update($validated);
+
+        if ($validated['deleted_tourist_attractions'][0] != null) {
+            $newArrayData = array_values(explode(',', $validated['deleted_tourist_attractions'][0]));
+
+            foreach ($newArrayData as $value) {
+                $touristAttraction = TouristAttraction::find($value);
+                Storage::delete($touristAttraction->image_path);
+                $touristAttraction->delete();
+            }
+        }
+
+        if (! empty($validated['tourist_attraction_id'])) {
+            foreach ($validated['tourist_attraction_id'] as $key => $value) {
+                TouristAttraction::where('id', $value)->update([
+                    'name' => $validated['tourist_attraction_names'][$key],
+                    'caption' => $validated['tourist_attraction_captions'][$key],
+                ]);
+            }
+        }
+
+        if ($validated['new_tourist_attraction_names'][0] != null && $validated['new_tourist_attraction_captions'][0] != null) {
+            $this->createTouristAttraction($touristDestination, $validated['new_tourist_attraction_names'], $validated['new_tourist_attraction_images'], $validated['new_tourist_attraction_captions']);
+        }
+
         $mediaFiles = $request->safe()->only('media_files');
         $media = json_decode($mediaFiles['media_files']);
 
@@ -214,5 +245,24 @@ class TouristDestinationController extends Controller
         toastr()->success('Data berhasil dihapus', 'Sukses');
 
         return back();
+    }
+
+    public function createTouristAttraction($touristDestination, array $touristAttractionNames, array $touristAttractionImages, array $touristAttractionCaptions)
+    {
+        foreach ($touristAttractionNames as $key => $value) {
+            if ($value != null) {
+                $tourisAttractionImage = $touristAttractionImages[$key];
+                $tourisAttractionImageName = str()->random(5) . '-' . $tourisAttractionImage->getClientOriginalName();
+                $tourisAttractionImagePath = $tourisAttractionImage->storeAs('public/tourist-attractions', $tourisAttractionImageName);
+
+                TouristAttraction::create([
+                    'tourist_destination_id' => $touristDestination->id,
+                    'name' => $value,
+                    'image_name' => $tourisAttractionImageName,
+                    'image_path' => $tourisAttractionImagePath,
+                    'caption' => $touristAttractionCaptions[$key],
+                ]);
+            }
+        }
     }
 }

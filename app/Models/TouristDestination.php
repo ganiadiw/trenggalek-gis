@@ -28,6 +28,10 @@ class TouristDestination extends Model implements HasMedia
         'cover_image_path',
         'latitude',
         'longitude',
+        'facebook_url',
+        'instagram_url',
+        'twitter_url',
+        'youtube_url',
     ];
 
     protected $casts = [
@@ -52,5 +56,10 @@ class TouristDestination extends Model implements HasMedia
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function touristAttractions()
+    {
+        return $this->hasMany(TouristAttraction::class);
     }
 }

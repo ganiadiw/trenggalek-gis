@@ -36,7 +36,18 @@ class UpdateTouristDestinationRequest extends FormRequest
             'latitude' => ['required', 'max:50'],
             'longitude' => ['required', 'max:50'],
             'description' => ['required'],
+            'tourist_attraction_id.*' => ['nullable', 'max:255'],
+            'tourist_attraction_names.*' => ['nullable', 'max:255'],
+            'tourist_attraction_captions.*' => ['nullable', 'max:255'],
+            'new_tourist_attraction_names.*' => ['nullable', 'max:255'],
+            'new_tourist_attraction_images.*' => ['nullable', 'mimes:png,jpg'],
+            'new_tourist_attraction_captions.*' => ['nullable', 'max:255'],
+            'facebook_url' => 'nullable',
+            'instagram_url' => 'nullable',
+            'twitter_url' => 'nullable',
+            'youtube_url' => 'nullable',
             'media_files' => ['nullable'],
+            'deleted_tourist_attractions' => ['nullable'],
         ];
     }
 

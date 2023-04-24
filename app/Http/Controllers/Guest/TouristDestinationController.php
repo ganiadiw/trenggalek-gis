@@ -9,6 +9,9 @@ class TouristDestinationController extends Controller
 {
     public function __invoke(TouristDestination $touristDestination)
     {
-        return view('guest.tourist-destination.show', compact('touristDestination'));
+        $touristDestination['facility'] = explode(', ', $touristDestination->facility);
+        $touristDestination->load(['touristAttractions', 'category', 'subDistrict']);
+
+        return view('tourist-destination.show', compact('touristDestination'));
     }
 }

@@ -1,1 +1,0 @@
-{{ $touristDestination->name }}

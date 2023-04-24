@@ -45,7 +45,7 @@ class CreateTouristDestinationTest extends TestCase
         $response->assertInvalid();
     }
 
-    public function test_an_authenticated_user_can_create_new_tourist_destination()
+    public function test_an_authenticated_user_can_create_new_tourist_destination_with_tourist_attraction()
     {
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
@@ -60,6 +60,52 @@ class CreateTouristDestinationTest extends TestCase
             'latitude' => -8.25702326,
             'longitude' => 111.42379872,
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'tourist_attraction_names' => [
+                'Air Terjun',
+                'Gardu Pandang',
+            ],
+            'tourist_attraction_images' => [
+                UploadedFile::fake()->create('air-terjun.jpg'),
+                UploadedFile::fake()->create('gardu-pandang.jpg')
+            ],
+            'tourist_attraction_captions' => [
+                'Air terjun yang indah di pesisir pantai',
+                'Gardu pandang yang menjangkau seluruh wilayah pesisi pantai',
+            ],
+            'media_files' => json_encode([
+                'used_images' => null,
+                'unused_images' => null,
+            ]),
+        ]);
+        $response->assertValid();
+        $response->assertRedirect('/dashboard/tourist-destinations');
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('tourist_destinations', [
+            'name' => 'Pantai Pelang',
+            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
+        ]);
+    }
+
+    public function test_an_authenticated_user_can_create_new_tourist_destination_without_tourist_attraction()
+    {
+        $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
+            'name' => 'Pantai Pelang',
+            'sub_district_id' => json_encode($this->subDistrict),
+            'category_id' => $this->category->id,
+            'address' => 'Desa Wonocoyo, Kecamatan Panggul',
+            'manager' => 'DISPARBUD',
+            'distance_from_city_center' => '56 KM',
+            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
+            'facility' => 'MCK, Mushola, Lahan Parkir, Camping Ground, Kios Kuliner',
+            'cover_image' => UploadedFile::fake()->create('pantai-pelang.png'),
+            'latitude' => -8.25702326,
+            'longitude' => 111.42379872,
+            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
             'media_files' => json_encode([
                 'used_images' => null,
                 'unused_images' => null,
@@ -109,6 +155,9 @@ class CreateTouristDestinationTest extends TestCase
             'latitude' => -8.25702326,
             'longitude' => 111.42379872,
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
             'media_files' => json_encode([
                 'used_images' => [
                     [
@@ -181,6 +230,9 @@ class CreateTouristDestinationTest extends TestCase
             'latitude' => -8.25702326,
             'longitude' => 111.42379872,
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
             'media_files' => json_encode([
                 'used_images' => [
                     [
@@ -236,6 +288,9 @@ class CreateTouristDestinationTest extends TestCase
             'latitude' => -8.25702326,
             'longitude' => 111.42379872,
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_images' => [null],
+            'tourist_attraction_captions' => [null],
             'media_files' => json_encode([
                 'used_images' => null,
                 'unused_images' => null,

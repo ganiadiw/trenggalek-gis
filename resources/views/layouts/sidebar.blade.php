@@ -1,8 +1,8 @@
 <aside class="min-h-screen border-r">
-    <div class="relative flex items-center w-full h-16 ml-3 border-b">
+    <a href="{{ route('welcome') }}" class="relative flex items-center w-full h-16 ml-3 border-b">
         <img class="w-11 h-11" src="{{ asset('assets/images/trenggalek.png') }}" alt="Trenggalek">
         <h1 class="absolute mr-3 text-sm font-bold text-black ml-14">Sistem Informasi Geografis Wisata Trenggalek</h1>
-    </div>
+    </a>
     <div class="mt-6 text-sm text-gray-800 ">
         <ul>
             <li class="flex">
@@ -22,7 +22,7 @@
             </li>
             @can('view_superadmin_menu')
                 <li class="flex">
-                    <x-side-link :href="route('dashboard.users.index')" :active="request()->routeIs('users*')">
+                    <x-side-link :href="route('dashboard.users.index')" :active="request()->routeIs('dashboard.users*')">
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users"
                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#18181b"
@@ -38,7 +38,7 @@
                     </x-side-link>
                 </li>
                 <li class="flex">
-                    <x-side-link :href="route('dashboard.sub-districts.index')" :active="request()->routeIs('sub-districts*')">
+                    <x-side-link :href="route('dashboard.sub-districts.index')" :active="request()->routeIs('dashboard.sub-districts*')">
                         <x-slot name="svgIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map" width="24"
                                 height="24" viewBox="0 0 24 24" stroke-width="1" stroke="#16a34a" fill="none"
