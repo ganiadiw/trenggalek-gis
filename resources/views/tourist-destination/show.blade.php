@@ -32,8 +32,8 @@
             </div>
             <div class="grid grid-cols-8 mt-5 mb-20 gap-x-4">
                 <div class="col-span-6">
-                    <div class="max-w-[69rem] max-h-[40rem]">
-                        <img class="rounded-md"
+                    <div>
+                        <img class="rounded-md w-[69rem] h-[40rem]"
                             src="{{ asset('storage/cover-images/' . $touristDestination->cover_image_name) }}"
                             alt="{{ $touristDestination->cover_image_name }}">
                     </div>
