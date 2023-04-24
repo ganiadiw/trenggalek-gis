@@ -43,7 +43,7 @@
                         id="transportation_access" labelTitle="Akses Transportasi*" error="transportation_access"
                         placeholder="Bisa diakses dengan Bus Besar, Mobil, dan Sepeda Motor"/>
                     <x-input-default-form type="text" name="facility" :value="old('facility')" id="facility"
-                        labelTitle="Fasilitas*" error="facility"
+                        labelTitle="Fasilitas* (Pisahkan dengan tanda koma dan spasi)" error="facility"
                         placeholder="Food Court, Kios Cindera Mata, Mushola, MCK, Spot Selfie, Akses Jalan Bagus"/>
                     <x-input-default-form type="file" name="cover_image" id="coverImage" labelTitle="Foto Sampul*"
                         error='cover_image'/>

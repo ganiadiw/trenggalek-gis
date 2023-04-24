@@ -43,7 +43,7 @@
                         id="transportation_access" labelTitle="Akses Transportasi*" error="transportation_access"
                         :placeholder="$touristDestination->transportation_access" />
                     <x-input-default-form type="text" name="facility" :value="old('facility', $touristDestination->facility)" id="facility"
-                        labelTitle="Fasilitas*" error="facility" :placeholder="$touristDestination->facility" />
+                        labelTitle="Fasilitas* (Pisahkan dengan tanda koma dan spasi)" error="facility" :placeholder="$touristDestination->facility" />
                     <div>
                         @if ($touristDestination->cover_image_name != null)
                             <div class="mb-3">
@@ -129,7 +129,7 @@
                             </div>
                             @foreach ($touristDestination->touristAttractions as $key => $value)
                                 <div x-data x-ref="row" class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
-                                    <div class="flex w-5 mt-2 mr-4 md:-mt-6 md:items-center">{{ $key + 1 }}</div>
+                                    <div class="flex w-5 mt-2 mr-4 md:-mt-10 md:items-center">{{ $key + 1 }}</div>
                                     <div class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
                                         <input type="hidden" name="tourist_attraction_id[]" value="{{ $value->id }}">
                                         <input type="text" name="tourist_attraction_names[]"
@@ -140,9 +140,9 @@
                                             placeholder="Keterangan Atraksi Wisata"
                                             class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
                                             autocomplete="off" value="{{ $value->caption }}" required>
-                                        <div x-data="handleImageUpload()" class="space-y-2 md:space-y-0 md:space-x-2 md:flex">
-                                            <div>
-                                                <img x-ref="imagePreview" class="rounded-md" style="width:150px;height:70px;" src="{{ asset('storage/tourist-attractions/' . $value->image_name) }}" alt="{{ $value->image_name }}">
+                                        <div x-data="handleImageUpload()" class="grid gap-3 md:grid-cols-2">
+                                            <div class="flex justify-center">
+                                                <img x-ref="imagePreview" class="w-auto rounded-md max-h-[5rem]" src="{{ asset('storage/tourist-attractions/' . $value->image_name) }}" alt="{{ $value->image_name }}">
                                             </div>
                                             <div>
                                                 <input x-ref="inputImage" type="file" id="inputImage" name="tourist_attraction_images[]"
