@@ -136,7 +136,7 @@
                         </li>
                         <li>
                             <div class="mt-5 lg:mt-0">
-                                <x-head.leaflet-init class="h-80" :latitude="$touristDestination->latitude" :longitude="$touristDestination->longitude"
+                                <x-head.leaflet-init class="border-2 border-gray-300 h-80" :latitude="$touristDestination->latitude" :longitude="$touristDestination->longitude"
                                     :zoomLevel=13 />
                                 <a type="button"
                                     href="https://www.google.com/maps/search/?api=1&query={{ $touristDestination->latitude }}%2C{{ $touristDestination->longitude }}"
