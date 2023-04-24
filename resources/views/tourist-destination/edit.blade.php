@@ -58,6 +58,14 @@
                         <x-input-default-form type="file" name="cover_image" id="coverImage" labelTitle="Foto Sampul"
                             error="cover_image" />
                     </div>
+                    <x-input-default-form type="text" name="facebook_url" :value="old('facebook_url', $touristDestination->facebook_url)" id="facebook_url"
+                        labelTitle="Alamat URL Facebook" error="facebook_url" placeholder="Alamat URL Facebook"/>
+                    <x-input-default-form type="text" name="instagram_url" :value="old('instagram_url', $touristDestination->instagram_url)" id="instagram_url"
+                        labelTitle="Alamat URL Instagram" error="instagram_url" placeholder="Alamat URL Instagram"/>
+                    <x-input-default-form type="text" name="twitter_url" :value="old('twitter_url', $touristDestination->twitter_url)" id="twitter_url"
+                        labelTitle="Alamat URL Twitter" error="twitter_url" placeholder="Alamat URL Twitter"/>
+                    <x-input-default-form type="text" name="youtube_url" :value="old('youtube_url', $touristDestination->youtube_url)" id="youtube_url"
+                        labelTitle="Alamat URL Youtube" error="youtube_url" placeholder="Alamat URL Youtube"/>
                 </div>
                 <div class="mb-3 lg:flex lg:gap-x-5">
                     <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">

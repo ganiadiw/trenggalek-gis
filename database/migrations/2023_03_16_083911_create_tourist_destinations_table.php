@@ -29,6 +29,10 @@ return new class extends Migration
             $table->string('cover_image_path');
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 11, 8);
+            $table->string('facebook_url')->nullable();
+            $table->string('instagram_url')->nullable();
+            $table->string('twitter_url')->nullable();
+            $table->string('youtube_url')->nullable();
             $table->timestamps();
         });
     }

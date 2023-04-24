@@ -41,6 +41,10 @@ class StoreTouristDestinationRequest extends FormRequest
             'tourist_attraction_names.*' => ['nullable', 'max:255'],
             'tourist_attraction_images.*' => ['nullable','mimes:png,jpg'],
             'tourist_attraction_captions.*' => ['nullable', 'max:255'],
+            'facebook_url' => 'nullable',
+            'instagram_url' => 'nullable',
+            'twitter_url' => 'nullable',
+            'youtube_url' => 'nullable',
             'media_files' => ['nullable'],
         ];
     }
