@@ -42,11 +42,6 @@
                         </x-nav-link>
                     </li>
                     <li class="px-2">
-                        <x-nav-link>
-                            {{ __('Contact') }}
-                        </x-nav-link>
-                    </li>
-                    <li class="px-2">
                         @auth
                             <x-dropdown align="right" width="48">
                                 <x-slot name="trigger">
@@ -118,11 +113,6 @@
                     <li class="px-2">
                         <x-nav-link>
                             {{ __('About') }}
-                        </x-nav-link>
-                    </li>
-                    <li class="px-2">
-                        <x-nav-link>
-                            {{ __('Contact') }}
                         </x-nav-link>
                     </li>
                     @auth
