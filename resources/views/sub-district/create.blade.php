@@ -82,7 +82,7 @@
                                     </svg>
                                 </a>
                                 atau pada menu
-                                <a class="text-blue-500 underline" href="#">Map Drawer</a>
+                                <a class="text-blue-500 underline" href="{{ route('dashboard.map-drawer') }}">Map Drawer</a>
                             </p>
                             <div class="text-sm text-center text-black border-b border-gray-400">
                                 <ul class="flex flex-wrap -mb-px">
