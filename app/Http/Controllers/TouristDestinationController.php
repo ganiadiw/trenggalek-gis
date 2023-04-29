@@ -66,7 +66,7 @@ class TouristDestinationController extends Controller
 
         $touristDestination = TouristDestination::create($validated);
 
-        if ($validated['tourist_attraction_names'][0] != null && $validated['tourist_attraction_captions'][0] != null) {
+        if (isset($validated['tourist_attraction_names']) && $validated['tourist_attraction_names'][0] != null) {
             $this->createTouristAttraction($touristDestination, $validated['tourist_attraction_names'], $validated['tourist_attraction_images'], $validated['tourist_attraction_captions']);
         }
 
@@ -166,7 +166,7 @@ class TouristDestinationController extends Controller
             }
         }
 
-        if ($validated['new_tourist_attraction_names'][0] != null && $validated['new_tourist_attraction_captions'][0] != null) {
+        if (isset($validated['new_tourist_attraction_names']) && $validated['new_tourist_attraction_names'][0] != null) {
             $this->createTouristAttraction($touristDestination, $validated['new_tourist_attraction_names'], $validated['new_tourist_attraction_images'], $validated['new_tourist_attraction_captions']);
         }
 
