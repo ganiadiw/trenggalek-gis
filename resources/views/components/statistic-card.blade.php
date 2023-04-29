@@ -1,3 +1,5 @@
+@props(['svgIcon' => null])
+
 <div class="flex items-center p-3 bg-white border rounded-lg shadow-lg">
     {{ $svgIcon }}
     <div>
