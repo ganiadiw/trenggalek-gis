@@ -70,6 +70,9 @@
                                             <th scope="col" class="px-6 py-3">
                                                 Nama Kategori
                                             </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Jumlah Destinasi Wisata
+                                            </th>
                                             <th scope="col" class="flex justify-center px-6 py-3">
                                                 Aksi
                                             </th>
@@ -84,16 +87,19 @@
                                                 <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                                     {{ $category->name }}
                                                 </td>
+                                                <td class="px-6 py-4">
+                                                    {{ $category->tourist_destinations_count }}
+                                                </td>
                                                 <div>
                                                     <td class="px-6 py-4">
-                                                    <x-action-button
-                                                        :value="$category->name"
-                                                        :relationshipCountOnDelete="$category->tourist_destinations_count"
-                                                        relationshipMessageOnDelete="Menghapus {{ $category->name }} membuat {{ $category->tourist_destinations_count }} data destinasi wisata menjadi Tidak Berkategori"
-                                                        :showURL="route('dashboard.categories.show', ['category' => $category])"
-                                                        :editURL="route('dashboard.categories.edit', ['category' => $category])"
-                                                        :deleteURL="route('dashboard.categories.destroy', ['category' => $category])"
-                                                    />
+                                                        <x-action-button
+                                                            :value="$category->name"
+                                                            :relationshipCountOnDelete="$category->tourist_destinations_count"
+                                                            relationshipMessageOnDelete="Menghapus {{ $category->name }} membuat {{ $category->tourist_destinations_count }} data destinasi wisata menjadi Tidak Berkategori"
+                                                            :showURL="route('dashboard.categories.show', ['category' => $category])"
+                                                            :editURL="route('dashboard.categories.edit', ['category' => $category])"
+                                                            :deleteURL="route('dashboard.categories.destroy', ['category' => $category])"
+                                                        />
                                                     </td>
                                                 </div>
                                             </tr>
