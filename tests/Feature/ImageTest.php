@@ -73,7 +73,7 @@ class ImageTest extends TestCase
             'name' => 'Tourist Attraction Name',
             'caption' => 'Touris Attraction Caption',
             'image_name' => 'image123.jpg',
-            'image_path' => 'public/touris_attractions/image123.jpg'
+            'image_path' => 'public/touris_attractions/image123.jpg',
         ]);
 
         $response = $this->actingAs($this->user)->postJson('/dashboard/images/tourist-attraction/update', [

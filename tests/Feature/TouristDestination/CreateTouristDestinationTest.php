@@ -66,7 +66,7 @@ class CreateTouristDestinationTest extends TestCase
             ],
             'tourist_attraction_images' => [
                 UploadedFile::fake()->create('air-terjun.jpg'),
-                UploadedFile::fake()->create('gardu-pandang.jpg')
+                UploadedFile::fake()->create('gardu-pandang.jpg'),
             ],
             'tourist_attraction_captions' => [
                 'Air terjun yang indah di pesisir pantai',

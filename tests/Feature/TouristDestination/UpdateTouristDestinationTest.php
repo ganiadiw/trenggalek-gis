@@ -315,7 +315,7 @@ class UpdateTouristDestinationTest extends TestCase
             'new_tourist_attraction_names' => [null],
             'new_tourist_attraction_images' => [null],
             'new_tourist_attraction_captions' => [null],
-            'deleted_tourist_attractions' => ["1,2"],
+            'deleted_tourist_attractions' => ['1,2'],
             'media_files' => json_encode([
                 'used_images' => null,
                 'unused_images' => null,
@@ -458,7 +458,7 @@ class UpdateTouristDestinationTest extends TestCase
             ],
             'new_tourist_attraction_images' => [
                 UploadedFile::fake()->create('air-terjun.jpg'),
-                UploadedFile::fake()->create('gardu-pandang.jpg')
+                UploadedFile::fake()->create('gardu-pandang.jpg'),
             ],
             'new_tourist_attraction_captions' => [
                 'Air terjun yang indah di pesisir pantai',
