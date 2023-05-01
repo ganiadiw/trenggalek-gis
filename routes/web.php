@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PageSetting\WelcomeController as WelcomeSettingController;
 use App\Http\Controllers\Admin\SubDistrictController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CategoryController;
@@ -42,6 +43,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('categories', CategoryController::class);
 
             Route::get('/map-drawer', MapDrawerController::class)->name('map-drawer');
+
+            Route::name('page-setting.')->prefix('page-setting')->group(function () {
+                Route::get('/welcome', [WelcomeSettingController::class, 'index'])->name('welcome');
+            });
         });
 
         Route::get('tourist-destinations/search', [TouristDestinationController::class, 'search'])->name('tourist-destinations.search');
