@@ -32,7 +32,9 @@
         @if (!request()->routeIs('login'))
             @include('layouts.guest-navigation')
         @endif
-        {{ $slot }}
+        <div class="min-h-screen">
+            {{ $slot }}
+        </div>
         <footer class="flex items-center justify-between w-full h-20 mx-auto bg-gray-100 px-14">
             <div><span class="text-sm text-gray-600">© 2023 <a href="http://pariwisata.trenggalekkab.go.id/"
                         class="hover:underline">Disparbud Kabupaten Trenggalek</a>. All Rights Reserved.</span></div>
