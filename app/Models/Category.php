@@ -19,11 +19,6 @@ class Category extends Model
         return 'slug';
     }
 
-    public function categories()
-    {
-        return $this->hasMany(Category::class);
-    }
-
     public function touristDestinations()
     {
         return $this->hasMany(TouristDestination::class);
