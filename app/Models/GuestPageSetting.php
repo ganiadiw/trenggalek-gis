@@ -19,12 +19,4 @@ class GuestPageSetting extends Model
     protected $casts = [
         'value' => 'array',
     ];
-
-    // protected function value(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn ($value) => json_decode($value, true),
-    //         set: fn ($value) => json_encode($value),
-    //     );
-    // }
 }
