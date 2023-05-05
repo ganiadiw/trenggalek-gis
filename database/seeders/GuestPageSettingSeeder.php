@@ -23,7 +23,13 @@ class GuestPageSettingSeeder extends Seeder
             ],
             [
                 'key' => 'welcome_message',
-                'value' => json_encode(['Selamat datang di Sistem Informasi Pemetaan Wisata Kabupaten Trenggalek']),
+                'value' => json_encode(['Selamat Datang di Sistem Informasi Geografis Pemetaan Wisata Kabupaten Trenggalek']),
+                'input_type' => 'text',
+                'max_value' => 1,
+            ],
+            [
+                'key' => 'short_description',
+                'value' => json_encode(['Jelajahi dan dapatkan informasi dari beraneka ragam destinasi wisata yang ada di Kabupaten Trenggalek']),
                 'input_type' => 'text',
                 'max_value' => 1,
             ],
@@ -41,7 +47,7 @@ class GuestPageSettingSeeder extends Seeder
             ],
             [
                 'key' => 'about_page',
-                'value' => json_encode(['<p>Selamat datang di Sistem Informasi Pemetaan Wisata Kabupaten Trenggalek</p>']),
+                'value' => json_encode(['<p>Merupakan sistem informasi yang memberikan informasi tentang persebaran destinasi wisata yang ada di Kabupaten Trenggalek. Bertujuan sebagai sarana promosi wisata dan mempermudah akses informasi kepada wisatawan yang ingin berwisata di Kabupaten Trenggalek.</p>']),
                 'input_type' => 'textarea',
                 'max_value' => 1,
             ],
