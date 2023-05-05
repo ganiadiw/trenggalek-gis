@@ -73,6 +73,9 @@
                                             <th scope="col" class="px-6 py-3">
                                                 Jumlah Destinasi Wisata
                                             </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                Icon Kategori
+                                            </th>
                                             <th scope="col" class="flex justify-center px-6 py-3">
                                                 Aksi
                                             </th>
@@ -84,12 +87,19 @@
                                                 <td class="px-6 py-4">
                                                     {{ $key + $categories->firstItem() }}
                                                 </td>
-                                                <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                                     {{ $category->name }}
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     {{ $category->tourist_destinations_count }}
                                                 </td>
+                                                @if ($category->icon_name)
+                                                    <td class="px-6 py-4">
+                                                        <img class="flex items-center w-7 h-7" src="{{ asset('storage/categories/icon/' . $category->icon_name) }}" alt="icon">
+                                                    </td>
+                                                @else
+                                                    <td class="px-6 py-4">Tidak ada custom icon</td>
+                                                @endif
                                                 <div>
                                                     <td class="px-6 py-4">
                                                         <x-action-button

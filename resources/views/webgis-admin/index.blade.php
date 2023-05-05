@@ -88,7 +88,6 @@
                                         <td class="flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             <div
                                                 class="relative inline-flex items-center justify-center w-10 h-10 mr-3 overflow-hidden bg-gray-100 rounded-full">
-                                                {{-- <img id="avatar" class="flex items-center justify-center p-1 rounded-full" src="{{ $user->avatar_name ? asset('storage/avatars/' . $user->avatar_name) : Avatar::create($user->full_name)->setDimension(300, 300)->setFontSize(150)->toBase64()}}" alt="{{ $user->full_name }}"> --}}
                                                 @if ($user->avatar_name)
                                                     <img class="w-10 h-10 rounded-full"
                                                         src="{{ asset('storage/avatars/' . $user->avatar_name) }}"

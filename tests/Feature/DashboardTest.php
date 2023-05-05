@@ -35,7 +35,7 @@ class DashboardTest extends TestCase
         $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->get('/dashboard');
         $response->assertStatus(200);
-        $response->assertSeeTextInOrder(['Dashboard', 'Administrator WebGIS', 'Kecamatan', 'Kategori Destinasi Wisata', 'Destinasi Wisata', 'Desa Wisata']);
+        $response->assertSeeTextInOrder(['Dashboard', 'Administrator WebGIS', 'Kecamatan', 'Kategori Destinasi Wisata', 'Destinasi Wisata', 'Map Drawer', 'Halaman Pengunjung']);
     }
 
     public function test_an_webgis_admin_cannot_see_superadmin_menu()

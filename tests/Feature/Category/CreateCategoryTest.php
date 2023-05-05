@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Category;
 
+use App\Models\Category;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CreateCategoryTest extends TestCase
@@ -55,6 +58,22 @@ class CreateCategoryTest extends TestCase
         $this->assertDatabaseHas('categories', [
             'name' => 'Wisata Pertanian',
         ]);
+    }
+
+    public function test_an_superadmin_can_create_new_category_with_icon_marker()
+    {
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
+            'name' => 'Wisata Pertanian',
+            'icon' => UploadedFile::fake()->create('icon.png', ''),
+        ]);
+        $response->assertValid(['name', 'icon']);
+        $response->assertRedirect('/dashboard/categories');
+        $category = Category::first();
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Wisata Pertanian',
+        ]);
+        $this->assertTrue(Storage::exists($category->icon_path));
     }
 
     public function test_an_webgis_administrator_cannot_create_new_category()
