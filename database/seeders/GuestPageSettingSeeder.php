@@ -40,6 +40,12 @@ class GuestPageSettingSeeder extends Seeder
                 'input_type' => 'file',
                 'max_value' => 5,
             ],
+            [
+                'key' => 'about_page',
+                'value' => json_encode(['<p>Selamat datang di Sistem Informasi Pemetaan Wisata Kabupaten Trenggalek</p>']),
+                'input_type' => 'textarea',
+                'max_value' => 1,
+            ]
         ]);
     }
 }

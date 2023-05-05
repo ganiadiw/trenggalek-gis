@@ -12,7 +12,7 @@ class GuestPageSettingController extends Controller
 {
     public function index()
     {
-        $settings = GuestPageSetting::select('id', 'key', 'value')->orderBy('key', 'ASC')->get();
+        $settings = GuestPageSetting::select('id', 'key', 'value', 'input_type')->orderBy('key', 'ASC')->get();
 
         return view('page-setting.guest.index', compact('settings'));
     }
@@ -25,6 +25,7 @@ class GuestPageSettingController extends Controller
     public function update(GuestSettingRequest $request, GuestPageSetting $guestPageSetting)
     {
         $validated = $request->validated();
+
         if ($request->hasFile('value_image')) {
             $existingFilename = $guestPageSetting->value;
             $newFilename = [];
@@ -55,7 +56,7 @@ class GuestPageSettingController extends Controller
             ]);
         }
 
-        if ($guestPageSetting->input_type == 'text') {
+        if ($guestPageSetting->input_type == 'text' || $guestPageSetting->input_type == 'textarea') {
             $guestPageSetting->update([
                 'value' => $validated['value_text'],
             ]);
