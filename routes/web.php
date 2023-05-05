@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('sub-districts', SubDistrictController::class);
 
             Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');
+            Route::delete('/categories/delete-icon/{category}', [CategoryController::class, 'deleteIcon'])->name('categories.delete.icon');
             Route::resource('categories', CategoryController::class);
 
             Route::get('/map-drawer', MapDrawerController::class)->name('map-drawer');
