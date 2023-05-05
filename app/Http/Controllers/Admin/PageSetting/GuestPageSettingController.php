@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\PageSetting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GuestSettingRequest;
 use App\Models\GuestPageSetting;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class GuestPageSettingController extends Controller
@@ -31,7 +30,6 @@ class GuestPageSettingController extends Controller
             $newFilename = [];
 
             foreach ($validated['value_image'] as $key => $value) {
-
                 $imageName = str()->random(2) . substr((time() - strtotime('June 8, 1995')), -5) . '-' . $value->getClientOriginalName();
                 $value->storeAs('public/page-settings/' . $guestPageSetting->key, $imageName);
                 $newFilename[$key] = $imageName;

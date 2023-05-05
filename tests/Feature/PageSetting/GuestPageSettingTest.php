@@ -4,8 +4,6 @@ namespace Tests\Feature\PageSetting;
 
 use App\Models\GuestPageSetting;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -54,7 +52,7 @@ class GuestPageSettingTest extends TestCase
             'value' => ['Wisata Trenggalek'],
         ]);
         $this->assertDatabaseHas('guest_page_settings', [
-            'value' => "[\"Destinasi Wisata Trenggalek\"]",
+            'value' => '["Destinasi Wisata Trenggalek"]',
         ]);
     }
 
@@ -80,7 +78,7 @@ class GuestPageSettingTest extends TestCase
         $response->assertRedirect(url()->previous());
         $guestPageSetting = GuestPageSetting::where('key', 'hero_image')->first();
         $this->assertDatabaseMissing('guest_page_settings', [
-            'value' => ['12345-image.png','98765-image.png'],
+            'value' => ['12345-image.png', '98765-image.png'],
         ]);
         $this->assertFalse(Storage::exists('public/page-settings/hero_image/12345-image.png'));
         $this->assertFalse(Storage::exists('public/page-settings/hero_image/56789-image.png'));

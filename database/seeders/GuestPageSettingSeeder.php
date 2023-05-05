@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -45,7 +44,7 @@ class GuestPageSettingSeeder extends Seeder
                 'value' => json_encode(['<p>Selamat datang di Sistem Informasi Pemetaan Wisata Kabupaten Trenggalek</p>']),
                 'input_type' => 'textarea',
                 'max_value' => 1,
-            ]
+            ],
         ]);
     }
 }

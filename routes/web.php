@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PageSetting\GuestPageSettingController;
-use App\Http\Controllers\Admin\PageSetting\WelcomeController as WelcomeSettingController;
 use App\Http\Controllers\Admin\SubDistrictController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CategoryController;
