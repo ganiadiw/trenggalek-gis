@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('page_settings', function (Blueprint $table) {
+        Schema::create('guest_page_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->nullable();
-            $table->text('value')->nullable();
+            $table->string('key');
+            $table->json('value')->nullable();
+            $table->string('input_type')->default('text');
+            $table->integer('max_value')->default(1);
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('page_settings');
+        Schema::dropIfExists('guest_page_settings');
     }
 };

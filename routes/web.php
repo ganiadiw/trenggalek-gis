@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PageSetting\GuestPageSettingController;
 use App\Http\Controllers\Admin\PageSetting\WelcomeController as WelcomeSettingController;
 use App\Http\Controllers\Admin\SubDistrictController;
 use App\Http\Controllers\Admin\UserController;
@@ -44,8 +45,13 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/map-drawer', MapDrawerController::class)->name('map-drawer');
 
-            Route::name('page-setting.')->prefix('page-setting')->group(function () {
-                Route::get('/welcome', [WelcomeSettingController::class, 'index'])->name('welcome');
+            Route::name('page-settings.')->prefix('page-settings')->group(function () {
+                Route::name('guest.')->prefix('guest')->group(function () {
+                    Route::delete('/delete-image/{key}/{filename}', [GuestPageSettingController::class, 'deleteImage'])->name('delete.image');
+                    Route::get('/', [GuestPageSettingController::class, 'index'])->name('index');
+                    Route::get('/{guest_page_setting}', [GuestPageSettingController::class, 'edit'])->name('edit');
+                    Route::put('/{guest_page_setting}', [GuestPageSettingController::class, 'update'])->name('update');
+                });
             });
         });
 

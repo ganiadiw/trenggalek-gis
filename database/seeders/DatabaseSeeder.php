@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SubDistrictSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(TouristDestinationSeeder::class);
+        $this->call(GuestPageSettingSeeder::class);
     }
 }
