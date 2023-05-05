@@ -2,7 +2,7 @@
     <div class="py-8">
         <div class="static mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="relative sm:rounded-lg">
-                <div class="grid w-full lg:grid-cols-3">
+                <div class="grid w-full lg:grid-cols-3 gap-y-3">
                     @foreach ($settings as $key => $setting)
                         <div>
                             <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
