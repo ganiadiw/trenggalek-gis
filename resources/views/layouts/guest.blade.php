@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/leaflet.css') }}">
+    @yield('link')
     <style>
         [x-cloak] {
             display: none !important;
@@ -32,13 +33,13 @@
         @if (!request()->routeIs('login'))
             @include('layouts.guest-navigation')
         @endif
-        <div class="min-h-screen">
+        <div class="min-h-screen bg-gray-50">
             {{ $slot }}
         </div>
-        <footer class="flex items-center justify-between w-full h-20 mx-auto bg-gray-100 px-14">
-            <div><span class="text-sm text-gray-600">© 2023 <a href="http://pariwisata.trenggalekkab.go.id/"
-                        class="hover:underline">Disparbud Kabupaten Trenggalek</a>. All Rights Reserved.</span></div>
-            <div>
+        <footer class="items-center justify-between w-full py-5 mx-auto mt-auto text-gray-200 h-fit md:flex bg-slate-800 px-14">
+            <div><span class="text-sm">© 2023 <a href="#"
+                        class="hover:underline">Sistem Informasi Wisata Kabupaten Trenggalek</a>. All Rights Reserved.</span></div>
+            <div class="mt-5 md:mt-0">
                 <ul class="flex space-x-4">
                     <li class="p-1 duration-200 hover:-translate-y-2">
                         <a href="#">
