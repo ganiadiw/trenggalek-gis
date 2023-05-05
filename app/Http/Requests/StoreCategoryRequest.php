@@ -26,6 +26,7 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name' => ['required'],
             'slug' => ['required'],
+            'icon' => ['sometimes', 'mimes:png'],
         ];
     }
 

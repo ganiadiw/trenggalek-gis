@@ -6,12 +6,13 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::select('id', 'name', 'slug')->orderBy('name', 'asc')->withCount('touristDestinations')->paginate(10);
+        $categories = Category::select('id', 'name', 'slug', 'icon_name', 'icon_path')->orderBy('name', 'asc')->withCount('touristDestinations')->paginate(10);
 
         return view('category.index', compact('categories'));
     }
@@ -19,7 +20,7 @@ class CategoryController extends Controller
     public function search(Request $request)
     {
         $categories = Category::where('name', 'like', '%' . $request->search . '%')
-            ->select('id', 'name', 'slug')->orderBy('name', 'asc')->paginate(10)->withQueryString();
+            ->select('id', 'name','slug', 'icon_name', 'icon_path')->orderBy('name', 'asc')->paginate(10)->withQueryString();
 
         return view('category.index', compact('categories'));
     }
@@ -31,7 +32,15 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        Category::create($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('icon')) {
+            $icon = $validated['icon'];
+            $validated['icon_name'] = $icon->hashName();
+            $validated['icon_path'] = $icon->storeAs('public/categories/icon/', $validated['icon_name']);
+        }
+
+        Category::create($validated);
 
         toastr()->success('Data berhasil ditambahkan', 'Sukses');
 
@@ -50,7 +59,19 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $category->update($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('icon')) {
+            $icon = $validated['icon'];
+            $validated['icon_name'] = $icon->hashName();
+            $validated['icon_path'] = $icon->storeAs('public/categories/icon/', $validated['icon_name']);
+
+            if ($category->icon_path) {
+                Storage::delete($category->icon_path);
+            }
+        }
+
+        $category->update($validated);
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
@@ -59,10 +80,30 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        if ($category->icon_path) {
+            Storage::delete($category->icon_path);
+        }
+
         $category->delete();
 
         toastr()->success('Data berhasil dihapus', 'Sukses');
 
         return back();
+    }
+
+    public function deleteIcon(Category $category)
+    {
+        if ($category->icon_path) {
+            Storage::delete($category->icon_path);
+        }
+
+        $category->update([
+            'icon_name' => null,
+            'icon_path' => null,
+        ]);
+
+        return response()->json([
+            'message' => 'Delete image successfully',
+        ]);
     }
 }
