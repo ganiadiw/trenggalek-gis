@@ -93,7 +93,7 @@
                                 </x-slot>
                             </x-dropdown>
                         @else
-                            <x-nav-link :href="route('login')">
+                            <x-nav-link class="text-lg text-slate-300 hover:text-slate-50" :href="route('login')">
                                 {{ __('Login') }}
                             </x-nav-link>
                         @endauth
