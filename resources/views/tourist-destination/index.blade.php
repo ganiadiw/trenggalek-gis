@@ -7,7 +7,7 @@
                     <div class="block mt-5 md:justify-between md:flex">
                         <div>
                             <a href="{{ route('dashboard.tourist-destinations.create') }}" type="button"
-                                class="flex items-center py-2.5 w-fit px-2 mr-2 mb-2 mt-3 text-sm font-medium text-white focus:outline-none bg-green-600 rounded-lg border border-gray-200 hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
+                                class="flex items-center px-2 py-4 mt-3 mb-2 mr-2 text-sm font-medium text-white bg-green-600 border border-gray-200 rounded-lg w-fit focus:outline-none hover:bg-green-500 focus:z-10 focus:ring-2 focus:ring-gray-200">
                                 Tambah Data
                                 <span class="flex items-center ml-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus"

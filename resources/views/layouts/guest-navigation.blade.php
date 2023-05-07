@@ -1,10 +1,22 @@
-<nav x-data="{ open: true }" class="bg-gray-100 border-b-2 border-gray-200 shadow-lg">
+<nav x-data="{ open: false }" class="py-1 border-slate-800 border-b-[1px] text-slate-200 bg-slate-950">
     <div class="flex-wrap items-center justify-between block p-2 px-8 mx-auto lg:flex">
         <div class="flex justify-between">
-            <a href="https://flowbite.com/" class="flex items-center">
-                <img src="{{ asset('assets/images/trenggalek.png') }}" class="h-12 mr-3" alt="Flowbite Logo" />
-                <span class="self-center text-lg font-bold whitespace-nowrap">Wisata Trenggalek</span>
-            </a>
+            <div class="flex items-center">
+                <a href="{{ route('welcome') }}" class="flex items-center">
+                    <img src="{{ asset('assets/images/trenggalek.png') }}" class="h-12 px-[1px] py-[2px] mr-3 bg-gray-800 rounded-md" alt="Flowbite Logo" />
+                    <span class="self-center text-xl font-bold whitespace-nowrap">Wisata Trenggalek</span>
+                </a>
+                <div class="ml-10">
+                    <ul class="flex items-center w-full py-2 space-x-2">
+                        <li class="px-2">
+                            <x-nav-link class="text-lg text-slate-300 hover:text-slate-50" :href="route('welcome')" :active="request()->routeIs('welcome')">
+                                {{ __('Home') }}
+                            </x-nav-link>
+                        </li>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="flex items-center lg:hidden">
                 <button @click="open = ! open">
                     <svg x-cloak x-show="!open" xmlns="http://www.w3.org/2000/svg"
@@ -29,18 +41,8 @@
         </div>
         <div class="items-center block">
             {{-- Primary Navbar --}}
-            <div class="hidden lg:flex">
-                <ul class="flex w-full py-2 space-x-2">
-                    <li class="px-2">
-                        <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
-                            {{ __('Home') }}
-                        </x-nav-link>
-                    </li>
-                    <li class="px-2">
-                        <x-nav-link>
-                            {{ __('About') }}
-                        </x-nav-link>
-                    </li>
+            <div class="items-center hidden lg:flex">
+                <ul class="flex items-center w-full py-2 space-x-2">
                     <li class="px-2">
                         @auth
                             <x-dropdown align="right" width="48">
@@ -49,11 +51,11 @@
                                         class="flex items-center text-sm font-medium text-gray-500 transition duration-150 ease-in-out border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
                                         <div class="">
                                             @if (auth()->user()->avatar_name)
-                                                <img class="rounded-full w-7 h-7"
+                                                <img class="rounded-full w-[32px] h-[32px]"
                                                     src="{{ asset('storage/avatars/' . auth()->user()->avatar_name) }}"
                                                     alt="{{ auth()->user()->name }}">
                                             @else
-                                                <img class="flex items-center justify-center rounded-full w-7 h-7"
+                                                <img class="flex items-center justify-center rounded-full w-[32px] h-[32px] border-2 border-gray-500"
                                                     src="{{ Avatar::create(auth()->user()->name)->setDimension(100, 100)->toBase64() }}"
                                                     alt="{{ auth()->user()->name }}">
                                             @endif
@@ -91,7 +93,7 @@
                                 </x-slot>
                             </x-dropdown>
                         @else
-                            <x-nav-link :href="route('login')">
+                            <x-nav-link class="text-lg text-slate-300 hover:text-slate-50" :href="route('login')">
                                 {{ __('Login') }}
                             </x-nav-link>
                         @endauth
@@ -104,20 +106,14 @@
                 x-transition:leave="transform duration-200" x-transition:leave-start="opacity-100 translate-y-0"
                 x-transition:leave-end="opacity-0 -translate-y-2" class="mt-2 bg-gray-200 rounded-md lg:hidden">
                 <ul class="block w-full py-2 space-y-2">
-
                     <li class="px-2">
                         <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                             {{ __('Home') }}
                         </x-nav-link>
                     </li>
-                    <li class="px-2">
-                        <x-nav-link>
-                            {{ __('About') }}
-                        </x-nav-link>
-                    </li>
                     @auth
                         <li class="px-3 text-sm font-semibold text-gray-900">
-                            <button class="flex items-center hover:underline" @click="toggleDropdown = ! toggleDropdown">
+                            <button class="flex items-center mt-5 hover:underline" @click="toggleDropdown = ! toggleDropdown">
                                 @if (auth()->user()->avatar_name)
                                     <img class="mr-2 rounded-full w-7 h-7"
                                         src="{{ asset('storage/avatars/' . auth()->user()->avatar_name) }}"

@@ -50,7 +50,7 @@
                                 <label for="coverImagePreview"
                                     class="block mb-2 text-sm italic font-medium text-gray-900">Foto Sampul Saat
                                     Ini</label>
-                                <img class="rounded-[4px] max-h-80" id="coverImagePreview"
+                                <img class="rounded-[4px] max-h-72" id="coverImagePreview"
                                     src="{{ asset('storage/cover-images/' . $touristDestination->cover_image_name) }}"
                                     alt="{{ $touristDestination->cover_image_name }}">
                             </div>

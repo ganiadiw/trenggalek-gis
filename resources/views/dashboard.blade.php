@@ -68,7 +68,7 @@
             <div class="grid w-full gap-4 p-4 pb-10 mt-5 bg-white rounded-md lg:grid-cols-2">
                 <div>
                     <h2 class="p-2 mb-5 text-base font-semibold">Statistik Destinasi Wisata Per Kecamatan</h2>
-                    <div class="overflow-x-scroll h-[24rem]">
+                    <div class="overflow-x-scroll h-[28rem]">
                         <div class="h-[28rem]">
                             <canvas class="p-2" id="subDistrictChart"></canvas>
                         </div>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="mt-10 lg:mt-0">
                     <h2 class="p-2 mb-5 text-base font-semibold">Statistik Destinasi Wisata Per Kategori</h2>
-                    <div class="overflow-x-scroll h-[24rem]">
+                    <div class="overflow-x-scroll h-[28rem]">
                         <div class="h-[28rem]">
                             <canvas class="p-2" id="categoryChart"></canvas>
                         </div>
@@ -99,8 +99,50 @@
                 }).addTo(map);
             @endforeach
 
-            @foreach ($touristDestinations as $touristDestination)
-                L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}]).addTo(map);
+            let icon, marker;
+            @foreach ($touristDestinations as $key => $touristDestination)
+                @if ($touristDestination->category->icon_name)
+                    icon = L.icon({
+                        iconUrl: '{{ asset('storage/categories/icon/' . $touristDestination->category->icon_name) }}',
+                        iconSize: [45, 45],
+                        iconAnchor: [23.5, 47],
+                        popupAnchor: [0, 0],
+                    });
+                    marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {icon: icon})
+                            .addTo(map)
+                            .bindPopup(`<b>{{ $touristDestination->name }}</b>
+                                        <br />
+                                        Kategori: {{ $touristDestination->category->name }}
+                                        <br />
+                                        Alamat: {{ $touristDestination->address }}
+                                        <br />
+                                        Jarak dari pusat kota: {{ $touristDestination->distance_from_city_center }}
+                                        <br />
+                                        <a href="{{ route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"><b>Lihat detail</b></a>
+                                        <br />
+                                        <a href="{{ route('dashboard.tourist-destinations.edit', ['tourist_destination' => $touristDestination]) }}"><b>Ubah data</b></a>
+                                        <br />
+                                        <a href="https://www.google.com/maps/search/?api=1&query={{ $touristDestination->latitude }}%2C{{ $touristDestination->longitude }}"><b>Buka di Google Maps</b></a>`);
+                @else
+                    marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
+                            .addTo(map)
+                            .bindPopup(`<b>{{ $touristDestination->name }}</b>
+                                        <br />
+                                        Kategori: {{ $touristDestination->category->name }}
+                                        <br />
+                                        Alamat: {{ $touristDestination->address }}
+                                        <br />
+                                        Jarak dari pusat kota: {{ $touristDestination->distance_from_city_center }}
+                                        <br />
+                                        <a href="{{ route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"><b>Lihat detail</b></a>
+                                        <br />
+                                        <a href="{{ route('dashboard.tourist-destinations.edit', ['tourist_destination' => $touristDestination]) }}"><b>Ubah data</b></a>
+                                        <br />
+                                        <a href="https://www.google.com/maps/search/?api=1&query={{ $touristDestination->latitude }}%2C{{ $touristDestination->longitude }}"><b>Buka di Google Maps</b></a>`);
+                @endif
+                marker.on('click', function(e) {
+                    this.openPopup();
+                });
             @endforeach
 
             let jsonSubDistricts = @json($subDistricts);
