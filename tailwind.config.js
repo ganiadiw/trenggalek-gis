@@ -15,6 +15,10 @@ module.exports = {
             },
             colors: {
                 "dark-void": "#141618",
+                "facebook-brand": " #3b5998",
+                "twitter-brand": "#00acee",
+                "instragram-brand": "#E1306C",
+                "youtube-brand": "#c4302b",
             },
             height: {
                 128: "32rem",
