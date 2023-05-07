@@ -16,95 +16,116 @@
 
             .swiper-slide img {
                 display: block;
-                width: 600px;
-                height: 300px;
+                width: 100%;
+                height: 100%;
                 object-fit: cover;
             }
         </style>
     @endsection
 
-    <div>
-        <div class="md:h-[22rem] h-fit bg-slate-950 relative">
-            <div class="pt-20 md:pb-20 px-7 md:px-14 lg:px-28">
-                <div class="relative">
-                    <div class="max-w-2xl">
-                        <h1 class="text-3xl font-bold text-gray-100">{{ $welcomeMessage->value[0] }}</h1>
-                        <p class="mt-5 text-gray-200">{{ $shortDescription->value[0] }}</p>
+    <div class="relative h-fit bg-slate-950">
+        <div class="pt-14 md:pt-20 pb-14 md:pb-20 px-7 md:px-14 lg:px-28">
+            {{-- Mobile Swipper --}}
+            <div class="h-[200px] md:h-[350px] w-full mb-10 xl:hidden">
+                @if ($heroImagesCount > 0)
+                    <div class="swiper mySwiper2">
+                        <div class="rounded-lg swiper-wrapper">
+                            @foreach ($heroImages->value as $key => $heroImage)
+                                @if ($heroImage && Storage::exists('public/page-settings/hero_image/' . $heroImage))
+                                    <div class="swiper-slide">
+                                        <img class="rounded-lg"
+                                            src="{{ asset('storage/page-settings/hero_image/' . $heroImage) }}"
+                                            alt="{{ $heroImage }}">
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-                <div class="max-w-[600px] max-h-[300px] absolute 2xl:-bottom-10 2xl:right-32 hidden 2xl:block">
-                    @if ($heroImagesCount > 0)
-                        <div class="wiper mySwiper">
-                            <div class="rounded-lg swiper-wrapper">
-                                @foreach ($heroImages->value as $key => $heroImage)
-                                    @if ($heroImage && Storage::exists('public/page-settings/hero_image/' . $heroImage))
-                                        <div class="swiper-slide">
-                                            <img class="h-10 rounded-lg"
-                                                src="{{ asset('storage/page-settings/hero_image/' . $heroImage) }}"
-                                                alt="{{ $heroImage }}">
-                                        </div>
-                                    @endif
-                                @endforeach
+                @endif
+            </div>
+            <div class="xl:max-w-xl">
+                <h1 class="text-4xl font-bold leading-[3rem] text-gray-100">{{ $welcomeMessage->value[0] }}</h1>
+                <p class="pr-10 mt-5 text-gray-200 right">{{ $shortDescription->value[0] }}</p>
+            </div>
+            {{-- XL Swipper --}}
+            <div class="2xl:w-[600px] xl:h-[300px] xl:w-[520px] absolute xl:-bottom-14 xl:right-24 hidden xl:block">
+                @if ($heroImagesCount > 0)
+                    <div class="swiper mySwiper1">
+                        <div class="rounded-lg swiper-wrapper">
+                            @foreach ($heroImages->value as $key => $heroImage)
+                                @if ($heroImage && Storage::exists('public/page-settings/hero_image/' . $heroImage))
+                                    <div class="swiper-slide">
+                                        <img class="rounded-lg"
+                                            src="{{ asset('storage/page-settings/hero_image/' . $heroImage) }}"
+                                            alt="{{ $heroImage }}">
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="px-7 md:px-14 lg:px-28 mt-14">
+        <div class="w-full">
+            <h2 class="mb-5 text-2xl font-bold ">Peta Destinasi Wisata</h2>
+            <x-head.leaflet-init class="w-full border-2 border-gray-300 rounded-lg shadow-xl h-128" />
+        </div>
+    </div>
+    <div class="w-full mt-[50px] px-7 md:px-14 lg:px-28 bg-black py-16">
+        <div class="items-center w-full space-y-10 md:space-y-0 md:space-x-10 md:flex">
+            <div class="md:w-2/5">
+                <h5 class="mb-3 text-xl font-bold text-center text-gray-200 md:text-2xl xl:text-3xl">
+                    Tahukah kamu, apa saja dan berapa jumlah destinasi wisata yang terdapat di Kabupaten
+                    Trenggalek?
+                </h5>
+            </div>
+            <div
+                class="grid content-center grid-cols-2 gap-3 md:pt-[300px] xl:pt-[156px] md:h-[300px] px-5 md:overflow-y-auto md:w-3/5 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
+                @foreach ($categories as $category)
+                    @if ($category->tourist_destinations_count > 0)
+                        <div class="content-center py-3 md:py-6 text-center bg-[#404040] rounded-sm">
+                            <div x-data="{ current: 0, target: {{ $category->tourist_destinations_count }}, time: 300 }" x-init="() => {
+                                start = current;
+                                const interval = Math.max(time / (target - start), 5);
+                                const step = (target - start) / (time / interval);
+                                const handle = setInterval(() => {
+                                    if (current < target)
+                                        current += step
+                                    else {
+                                        clearInterval(handle);
+                                        current = target
+                                    }
+                                }, interval);
+                            }"
+                                class="w-full mb-2 md:mb-4 text-5xl md:text-6xl h-14 font-bold text-[#26c772]">
+                                <p x-cloak x-text="Math.round(current)"></p>
                             </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-pagination"></div>
+                            <p class="text-gray-200">{{ $category->name }}</p>
                         </div>
                     @endif
-                </div>
+                @endforeach
             </div>
         </div>
-        <div class="px-7 md:px-14 lg:px-28">
-            <div class="mt-14">
-                <div class="mb-10 lg:space-x-5 lg:flex">
-                    <div class="w-full lg:w-[70%]">
-                        <h2 class="mb-5 text-2xl font-bold ">Peta Destinasi Wisata</h2>
-                        <x-head.leaflet-init class="w-full rounded-lg h-128" />
-                    </div>
-                    <div class="lg:w-[30%] w-full mt-[50px]">
-                        <div
-                            class="w-full p-4 overflow-scroll bg-white border border-gray-200 rounded-lg shadow sm:p-6 lg:h-128">
-                            <h5 class="mb-3 text-base font-bold text-gray-900">
-                                Tahukah kamu, apa saja dan berapa jumlah destinasi wisata yang terdapat di Kabupaten
-                                Trenggalek?
-                            </h5>
-                            <ul class="grid w-full gap-3 md:grid-cols-2 lg:grid-cols-1">
-                                @foreach ($categories as $category)
-                                    @if ($category->tourist_destinations_count > 0)
-                                        <li>
-                                            <div
-                                                class="flex items-center max-w-sm p-3 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
-                                                <div class="flex items-center justify-center w-10 h-10 mr-5 text-lg font-semibold text-gray-900 bg-gray-300 rounded-full">{{ $category->tourist_destinations_count }}</div>
-                                                <div class="text-lg font-semibold tracking-tight text-gray-900">
-                                                    {{ $category->name }}
-                                                </div>
-                                            </div>
-
-                                        </li>
-                                    @endif
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="p-3 bg-gray-600">
-            <div class="py-10 px-7 md:px-14 lg:px-28">
-                <h2 class="mb-5 text-xl font-bold text-gray-100">Sekilas Tentang Sistem Informasi Ini</h2>
-                <div class="text-gray-100">
-                    <p>{!! $aboutPage->value[0] !!}</p>
-                    <a href=""></a>
-                </div>
-            </div>
+    </div>
+    <div class="py-10 bg-gray-600 px-7 md:px-14 lg:px-28">
+        <h2 class="mb-5 text-xl font-bold text-gray-100">Sekilas Tentang Sistem Informasi Ini</h2>
+        <div class="text-gray-100">
+            <p>{!! $aboutPage->value[0] !!}</p>
+            <a href=""></a>
         </div>
     </div>
 
     @section('script')
         <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
         <script>
-            let swiper = new Swiper(".mySwiper", {
+            let swiper = new Swiper(".mySwiper1", {
                 cssMode: true,
+                loop: true,
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
@@ -118,6 +139,15 @@
                 },
                 mousewheel: true,
                 keyboard: true,
+            });
+
+            let swiper2 = new Swiper(".mySwiper2", {
+                cssMode: true,
+                loop: true,
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: false,
+                },
             });
 
             @foreach ($subDistricts as $subDistrict)
@@ -155,7 +185,7 @@
                                         <a href="{{ route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"><b>Lihat detail</b></a>
                                         <br />
                                         <a href="https://www.google.com/maps/search/?api=1&query={{ $touristDestination->latitude }}%2C{{ $touristDestination->longitude }}"><b>Buka di Google Maps</b></a>`
-                            );
+                        );
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
                         .addTo(map)
@@ -171,7 +201,7 @@
                                         <a href="{{ route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"><b>Lihat detail</b></a>
                                         <br />
                                         <a href="https://www.google.com/maps/search/?api=1&query={{ $touristDestination->latitude }}%2C{{ $touristDestination->longitude }}"><b>Buka di Google Maps</b></a>`
-                            );
+                        );
                 @endif
                 marker.on('click', function(e) {
                     this.openPopup();
