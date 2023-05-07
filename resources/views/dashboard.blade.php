@@ -68,7 +68,7 @@
             <div class="grid w-full gap-4 p-4 pb-10 mt-5 bg-white rounded-md lg:grid-cols-2">
                 <div>
                     <h2 class="p-2 mb-5 text-base font-semibold">Statistik Destinasi Wisata Per Kecamatan</h2>
-                    <div class="overflow-x-scroll h-[24rem]">
+                    <div class="overflow-x-scroll h-[28rem]">
                         <div class="h-[28rem]">
                             <canvas class="p-2" id="subDistrictChart"></canvas>
                         </div>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="mt-10 lg:mt-0">
                     <h2 class="p-2 mb-5 text-base font-semibold">Statistik Destinasi Wisata Per Kategori</h2>
-                    <div class="overflow-x-scroll h-[24rem]">
+                    <div class="overflow-x-scroll h-[28rem]">
                         <div class="h-[28rem]">
                             <canvas class="p-2" id="categoryChart"></canvas>
                         </div>
