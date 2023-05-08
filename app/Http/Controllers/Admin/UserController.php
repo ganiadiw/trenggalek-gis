@@ -62,7 +62,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user)
     {
         $this->authorize('update', $user);
-        $validated = $request->except('password');
+        $validated = $request->except(['password', 'password_confirmation']);
 
         if ($request->file('avatar')) {
             $avatar = $validated['avatar'];
@@ -75,7 +75,7 @@ class UserController extends Controller
         }
 
         if ($request->password) {
-            $validated['password'] = $user->password;
+            $validated['password'] = Hash::make($request->password);
         }
 
         $user->update($validated);
