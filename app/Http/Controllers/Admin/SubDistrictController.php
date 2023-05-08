@@ -93,7 +93,7 @@ class SubDistrictController extends Controller
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
-        return back();
+        return redirect()->route('dashboard.sub-districts.edit', ['sub_district' => $subDistrict]);
     }
 
     public function destroy(SubDistrict $subDistrict)

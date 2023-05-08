@@ -82,7 +82,7 @@ class UserController extends Controller
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
-        return back();
+        return redirect()->route('dashboard.users.edit', ['user' => $user]);
     }
 
     public function destroy(User $user)
