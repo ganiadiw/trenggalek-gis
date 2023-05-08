@@ -1,11 +1,11 @@
 <x-app-layout>
     <div class="py-8">
         <div class="static mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="relative sm:rounded-lg">
-                <div class="grid w-full lg:grid-cols-3 gap-y-3">
+            <div class="relative">
+                <div class="grid w-full gap-3 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($settings as $key => $setting)
                         <div>
-                            <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
+                            <div class="block p-6 mx-4 bg-white border border-gray-200 rounded-lg shadow md:mx-0 w-sm hover:bg-gray-100">
                                 <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">{{ ucwords(str_replace('_', ' ', $setting->key)) }}</h5>
                                 <div class="h-[4rem] overflow-hidden">
                                     @foreach ($setting->value as $value)

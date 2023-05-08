@@ -111,7 +111,7 @@
                     </div>
                 </div>
 
-                <div class="mt-3">
+                <div class="mt-3 mb-5">
                     <div class="flex text-sm font-medium text-gray-900">Atraksi Wisata (Opsional)</div>
                     <div x-cloak x-data="{
                         inputs: [
