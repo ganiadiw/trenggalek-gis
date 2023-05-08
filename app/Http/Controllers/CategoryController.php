@@ -20,7 +20,7 @@ class CategoryController extends Controller
     public function search(Request $request)
     {
         $categories = Category::where('name', 'like', '%' . $request->search . '%')
-            ->select('id', 'name','slug', 'icon_name', 'icon_path')->orderBy('name', 'asc')->paginate(10)->withQueryString();
+            ->select('id', 'name', 'slug', 'icon_name', 'icon_path')->orderBy('name', 'asc')->paginate(10)->withQueryString();
 
         return view('category.index', compact('categories'));
     }

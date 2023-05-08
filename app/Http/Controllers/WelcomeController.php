@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\GuestPageSetting;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
-use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {

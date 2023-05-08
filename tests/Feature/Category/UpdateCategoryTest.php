@@ -92,7 +92,7 @@ class UpdateCategoryTest extends TestCase
         $this->assertFalse(Storage::exists($this->category->icon_path));
     }
 
-    public function  test_an_superadmin_can_delete_icon_marker_without_delete_the_category_itself()
+    public function test_an_superadmin_can_delete_icon_marker_without_delete_the_category_itself()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->deleteJson('dashboard/categories/delete-icon/' . $this->category->slug);
