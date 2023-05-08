@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSubDistrictRequest;
 use App\Http\Requests\UpdateSubDistrictRequest;
+use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use Illuminate\Http\Request;
@@ -58,6 +59,12 @@ class SubDistrictController extends Controller
 
     public function show(SubDistrict $subDistrict)
     {
+        $subDistrict->load('touristDestinations:sub_district_id,id,name,category_id');
+        $touristDestinationsId = $subDistrict->touristDestinations->pluck('category_id')->unique();
+
+        $subDistrict['tourist_destinations_count'] = count($subDistrict->touristDestinations);
+        $subDistrict['tourist_destination_categories_count'] = Category::whereIn('id', $touristDestinationsId)->count();
+
         return view('sub-district.show', compact('subDistrict'));
     }
 

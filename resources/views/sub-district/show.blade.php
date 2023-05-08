@@ -7,36 +7,33 @@
                 <div class="grid gap-5 mb-8 sm:grid-cols-2">
                     <x-statistic-card>
                         <x-slot name='svgIcon'>
-                            <div
-                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                            <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-category-2"
+                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#d97706"
+                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M14 4h6v6h-6z"></path>
+                                    <path d="M4 14h6v6h-6z"></path>
+                                    <circle cx="17" cy="17" r="3"></circle>
+                                    <circle cx="7" cy="7" r="3"></circle>
+                                </svg>
+                            </div>
+                        </x-slot>
+                        <x-slot name='title'>Jumlah Kategori Destinasi Wisata</x-slot>
+                        <x-slot name='value'>{{ $subDistrict->tourist_destination_categories_count }}</x-slot>
+                    </x-statistic-card>
+                    <x-statistic-card>
+                        <x-slot name='svgIcon'>
+                            <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                                     <path
                                         d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
                                 </svg>
                             </div>
                         </x-slot>
                         <x-slot name='title'>Jumlah Destinasi Wisata</x-slot>
-                        <x-slot name='value'>10</x-slot>
-                    </x-statistic-card>
-                    <x-statistic-card>
-                        <x-slot name='svgIcon'>
-                            <div
-                                class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-building-cottage" width="16" height="16"
-                                    viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <line x1="3" y1="21" x2="21" y2="21"></line>
-                                    <path d="M4 21v-11l2.5 -4.5l5.5 -2.5l5.5 2.5l2.5 4.5v11"></path>
-                                    <circle cx="12" cy="9" r="2"></circle>
-                                    <path d="M9 21v-5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v5"></path>
-                                </svg>
-                            </div>
-                        </x-slot>
-                        <x-slot name='title'>Jumlah Desa Wisata</x-slot>
-                        <x-slot name='value'>10</x-slot>
+                        <x-slot name='value'>{{ $subDistrict->tourist_destinations_count }}</x-slot>
                     </x-statistic-card>
                 </div>
                 <div class="grid gap-x-5 md:grid-cols-2">
