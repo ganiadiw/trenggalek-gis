@@ -50,7 +50,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin1->username . '/edit');
         $response->assertStatus(200);
-        $response->assertSeeText('Ubah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
+        $response->assertSeeText('Edit Data Administrator');
     }
 
     public function test_correct_data_must_be_provided_to_update_webgis_administrator()
@@ -76,7 +76,7 @@ class UpdateWebgisAdministratorTest extends TestCase
             'phone_number' => '081234567890',
         ]);
         $response->assertValid();
-        $response->assertRedirect(url()->previous());
+        $response->assertRedirect('/dashboard/users/hugofirsttime/edit');
         $response->assertSessionHasNoErrors();
         $this->assertTrue(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
         $this->assertDatabaseHas('users', [
@@ -104,7 +104,7 @@ class UpdateWebgisAdministratorTest extends TestCase
             'avatar' => $avatar,
         ]);
         $response->assertValid();
-        $response->assertRedirect(url()->previous());
+        $response->assertRedirect('/dashboard/users/hugofirsttime/edit');
         $response->assertSessionHasNoErrors();
         $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
         $this->assertTrue(Storage::exists('public/avatars/' . $avatar->hashName()));

@@ -40,7 +40,7 @@ class UpdateTouristDestinationTest extends TestCase
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug . '/edit');
         $response->assertStatus(200);
-        $response->assertSeeText('Ubah Data Destinasi Wisata');
+        $response->assertSeeText('Edit Data Destinasi Wisata');
         $this->assertEquals('Pantai Konang', $this->touristDestination->name);
         $this->assertEquals('Desa Nglebeng, Kecamatan Panggul', $this->touristDestination->address);
         $this->assertEquals('-8.27466803', $this->touristDestination->latitude);

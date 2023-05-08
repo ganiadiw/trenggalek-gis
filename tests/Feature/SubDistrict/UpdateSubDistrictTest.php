@@ -79,7 +79,7 @@ class UpdateSubDistrictTest extends TestCase
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code . '/edit');
         $response->assertStatus(200);
-        $response->assertSeeText('Ubah Data Kecamatan');
+        $response->assertSeeText('Edit Data Kecamatan');
     }
 
     public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_file()
@@ -95,7 +95,7 @@ class UpdateSubDistrictTest extends TestCase
             'geojson' => UploadedFile::fake()->create('3503020.geojson', 25, 'application/json'),
         ]);
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
-        $response->assertRedirect(url()->previous());
+        $response->assertRedirect('dashboard/sub-districts/3503030/edit');
         $subDistrict = SubDistrict::where('code', 3503030)->first();
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503030,
@@ -131,7 +131,7 @@ class UpdateSubDistrictTest extends TestCase
         ]);
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
         $this->assertJson(json_encode($this->updateGeoJson));
-        $response->assertRedirect(url()->previous());
+        $response->assertRedirect('dashboard/sub-districts/3503030/edit');
         $subDistrict = SubDistrict::where('code', 3503030)->first();
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503030,
