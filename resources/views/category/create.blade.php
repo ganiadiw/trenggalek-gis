@@ -1,43 +1,47 @@
 <x-app-layout>
-    <div class="py-4">
-        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <form class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg" method="POST" enctype="multipart/form-data"
-                action="{{ route('dashboard.categories.store') }}">
-                @csrf
-                <h1 class="mb-5 text-lg font-bold text-gray-700">Tambah Data Kategori Destinasi Wisata</h1>
-                <div class="mb-5">
-                    <div class="grid gap-x-5 md:grid-cols-2">
-                        <x-input-default-form type="text" name="name" :value="old('name')" id="name"
-                            labelTitle="Nama Kategori*" error='name' placeholder="Kategori Destinasi Wisata" required />
-                        <div>
-                            <x-input-default-form type="file" name="icon" id="icon"
-                                labelTitle="Icon Kategori" error='icon' />
-                            <p class="flex mt-6 text-sm text-yellow-500">
-                                <span class="mr-3 font-medium">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon icon-tabler icon-tabler-info-circle" width="20" height="20"
-                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <circle cx="12" cy="12" r="9"></circle>
-                                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                                        <polyline points="11 12 12 12 12 16 13 16"></polyline>
-                                    </svg>
-                                </span>
-                                Format gambar harus berformat .png dengan latar belakang transparan, icon ini akan
-                                digunakan sebagai marker dari destinasi wisata yang berkategori ini. Jika tidak
-                                menambahkan icon, maka icon default akan digunakan.
-                            </p>
+    <div>
+        <div class="px-4 py-4 mx-auto text-gray-900 max-w-7xl sm:px-6 lg:px-8">
+            <div class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg">
+                <h1 class="w-full text-lg font-bold">Tambah Data Kategori Destinasi Wisata</h1>
+                <div class="w-full mt-5">
+                    <form method="POST" enctype="multipart/form-data" action="{{ route('dashboard.categories.store') }}">
+                        @csrf
+                        <div class="grid">
+                            <div>
+                                <h2 class="text-base font-semibold text-gray-800">Data Kategori</h2>
+                                <div
+                                    class="grid gap-5 p-5 mt-3 border-2 border-gray-200 rounded-md shadow-md lg:grid-cols-2">
+                                    <x-input-default-form type="text" name="name" :value="old('name')" id="name"
+                                        labelTitle="Nama Kategori*" error='name'
+                                        placeholder="Kategori Destinasi Wisata" required />
+                                    <div>
+                                        <x-input-default-form type="file" name="icon" id="icon"
+                                            labelTitle="Icon Kategori" error='icon' />
+                                        <blockquote
+                                            class="p-2 mt-8 bg-gray-100 border-l-4 border-yellow-300 rounded-sm">
+                                            <p class="text-[13px] font-medium italic leading-relaxed text-yellow-500">
+                                                Format gambar harus berformat .png dengan latar belakang transparan,
+                                                icon
+                                                ini akan
+                                                digunakan sebagai marker dari destinasi wisata yang berkategori ini.
+                                                Jika
+                                                tidak
+                                                menambahkan icon, maka icon default akan digunakan
+                                            </p>
+                                        </blockquote>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="flex justify-end mt-8 gap-x-2">
+                            <button onclick="history.back()"
+                                class="text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kembali</button>
+                            <button type="submit"
+                                class="text-white bg-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Simpan</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="flex gap-x-2">
-                    <a button onclick="history.back()"
-                        class="text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kembali</a>
-                    <button type="submit"
-                        class="text-white bg-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Simpan</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 

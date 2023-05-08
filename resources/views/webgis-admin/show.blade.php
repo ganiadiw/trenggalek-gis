@@ -7,13 +7,13 @@
                 </div>
 
                 <div>
-                    <div class="flex justify-center mb-5">
+                    <div class="flex justify-center">
                         @if ($user->avatar_name)
-                            <img class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64"
+                            <img class="flex items-center justify-center w-32 h-32 p-1 rounded-full lg:w-44 lg:h-44"
                                 src="{{ asset('storage/avatars/' . $user->avatar_name) }}" alt="Bordered avatar">
                         @else
-                            <img class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64"
-                                src="{{ Avatar::create($user->name)->setDimension(500, 500)->setFontSize(230)->toBase64() }}"
+                            <img class="flex items-center justify-center w-32 h-32 p-1 rounded-full lg:w-64 lg:h-64"
+                                src="{{ Avatar::create($user->name)->setDimension(100, 100)->setFontSize(230)->toBase64() }}"
                                 alt="{{ $user->name }}">
                         @endif
                     </div>
