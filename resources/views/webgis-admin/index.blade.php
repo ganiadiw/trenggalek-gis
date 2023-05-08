@@ -93,8 +93,8 @@
                                                         src="{{ asset('storage/avatars/' . $user->avatar_name) }}"
                                                         alt="Bordered avatar">
                                                 @else
-                                                    <img class="flex items-center justify-center p-1 rounded-full w-44 h-44 lg:w-64 lg:h-64"
-                                                        src="{{ Avatar::create($user->name)->setDimension(100, 800)->toBase64() }}"
+                                                    <img class="flex items-center justify-center p-1 rounded-full"
+                                                        src="{{ Avatar::create($user->name)->setDimension(100, 100)->toBase64() }}"
                                                         alt="{{ $user->name }}">
                                                 @endif
                                             </div>
