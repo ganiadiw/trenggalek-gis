@@ -1,4 +1,4 @@
-<div id="map" {{ $attributes->merge(['class' => 'border rounded-lg h-120']) }}></div>
+<div id="map" {{ $attributes->merge(['class' => 'z-0 border rounded-lg h-120']) }}></div>
 
 @section('component-script')
     <script>
