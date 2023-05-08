@@ -101,7 +101,7 @@
 
             let icon, marker;
             @foreach ($touristDestinations as $key => $touristDestination)
-                @if ($touristDestination->category->icon_name)
+                @if ($touristDestination->category && $touristDestination->category->icon_name)
                     icon = L.icon({
                         iconUrl: '{{ asset('storage/categories/icon/' . $touristDestination->category->icon_name) }}',
                         iconSize: [45, 45],
@@ -128,7 +128,7 @@
                             .addTo(map)
                             .bindPopup(`<b>{{ $touristDestination->name }}</b>
                                         <br />
-                                        Kategori: {{ $touristDestination->category->name }}
+                                        Kategori: {{ $touristDestination->category->name ?? 'Belum Berkategori' }}
                                         <br />
                                         Alamat: {{ $touristDestination->address }}
                                         <br />
