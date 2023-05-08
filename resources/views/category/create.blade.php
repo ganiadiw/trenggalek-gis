@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="flex gap-x-2">
-                    <a href="{{ route('dashboard.categories.index') }}"
+                    <a button onclick="history.back()"
                         class="text-white bg-gray-600 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Kembali</a>
                     <button type="submit"
                         class="text-white bg-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Simpan</button>
@@ -40,7 +40,7 @@
             </form>
         </div>
     </div>
-    
+
     @push('cdn-script')
         <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
         <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
