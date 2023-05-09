@@ -51,9 +51,11 @@
                                         class="flex items-center text-sm font-medium text-gray-500 transition duration-150 ease-in-out border border-transparent rounded-md hover:text-gray-700 focus:outline-none">
                                         <div class="">
                                             @if (auth()->user()->avatar_name)
-                                                <img class="rounded-full w-[32px] h-[32px]"
-                                                    src="{{ asset('storage/avatars/' . auth()->user()->avatar_name) }}"
-                                                    alt="{{ auth()->user()->name }}">
+                                                <div class="rounded-full w-[32px] h-[32px]">
+                                                     <img class="object-cover w-full h-full rounded-full"
+                                                        src="{{ asset('storage/avatars/' . auth()->user()->avatar_name) }}"
+                                                        alt="{{ auth()->user()->name }}">
+                                                </div>
                                             @else
                                                 <img class="flex items-center justify-center rounded-full w-[32px] h-[32px] border-2 border-gray-500"
                                                     src="{{ Avatar::create(auth()->user()->name)->setDimension(100, 100)->toBase64() }}"
