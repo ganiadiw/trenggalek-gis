@@ -5,8 +5,6 @@ namespace Tests\Feature\Guest;
 use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
