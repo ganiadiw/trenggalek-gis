@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -12,11 +14,20 @@ class ProfileTest extends TestCase
 
     private User $user;
 
+    private $avatar;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->avatar = UploadedFile::fake()->image('avatar1.png')->hashName();
+
+        Storage::disk('local')->put('public/avatars/' . $this->avatar, '');
+
+        $this->user = User::factory()->create([
+            'avatar_path' => 'public/avatars/' . $this->avatar,
+            'avatar_name' => $this->avatar,
+        ]);
     }
 
     public function test_profile_page_is_displayed()
@@ -32,9 +43,12 @@ class ProfileTest extends TestCase
     {
         $response = $this
             ->actingAs($this->user)
-            ->patch('/profile', [
+            ->put('/profile', [
                 'name' => 'Test User',
                 'email' => 'test@example.com',
+                'username' => 'newusername',
+                'address' => 'New Address',
+                'phone_number' => 1234567899,
             ]);
 
         $response
@@ -45,54 +59,67 @@ class ProfileTest extends TestCase
 
         $this->assertSame('Test User', $this->user->name);
         $this->assertSame('test@example.com', $this->user->email);
-        $this->assertNull($this->user->email_verified_at);
     }
 
-    public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged()
+    public function test_correct_data_must_be_provided_to_update_profile_information()
     {
-        $response = $this
-            ->actingAs($this->user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => $this->user->email,
-            ]);
-
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
-
-        $this->assertNotNull($this->user->refresh()->email_verified_at);
+        $response = $this->actingAs($this->user)->put('/profile', [
+            'name' => '',
+            'username' => '',
+            'email' => '',
+        ]);
+        $response->assertInvalid();
+        $response->assertRedirect(url()->previous());
     }
 
-    public function test_user_can_delete_their_account()
+    public function test_profile_information_can_be_updated_without_change_avatar()
     {
-        $response = $this
-            ->actingAs($this->user)
-            ->delete('/profile', [
-                'password' => 'password',
-            ]);
-
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/');
-
-        $this->assertGuest();
-        $this->assertNull($this->user->fresh());
+        $response = $this->actingAs($this->user)->put('/profile', [
+            'name' => 'Hugo First Time',
+            'email' => 'hugofirsttime@example.com',
+            'username' => 'hugofirsttime',
+            'address' => 'Desa Sumberbening, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+        ]);
+        $response->assertValid();
+        $response->assertRedirect('/profile');
+        $response->assertSessionHasNoErrors();
+        $this->assertTrue(Storage::exists('public/avatars/' . $this->user->avatar_name));
+        $this->assertDatabaseHas('users', [
+            'email' => 'hugofirsttime@example.com',
+            'username' => 'hugofirsttime',
+        ]);
+        $this->assertDatabaseMissing('users', [
+            'email' => 'hugofirst@example.com',
+            'username' => 'hugofirst',
+        ]);
     }
 
-    public function test_correct_password_must_be_provided_to_delete_account()
+    public function test_profile_information_can_be_updated_with_change_avatar_and_remove_old_file()
     {
-        $response = $this
-            ->actingAs($this->user)
-            ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
-            ]);
+        $avatar = UploadedFile::fake()->image('avatar.png');
 
-        $response
-            ->assertSessionHasErrorsIn('userDeletion', 'password')
-            ->assertRedirect('/profile');
-
-        $this->assertNotNull($this->user->fresh());
+        $response = $this->actingAs($this->user)->put('/profile', [
+            'name' => 'Hugo First Time',
+            'email' => 'hugofirsttime@example.com',
+            'username' => 'hugofirsttime',
+            'address' => 'Desa Sumberbening, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'avatar' => $avatar,
+        ]);
+        $response->assertValid();
+        $response->assertRedirect('/profile');
+        $response->assertSessionHasNoErrors();
+        $this->assertFalse(Storage::exists('public/avatars/' . $this->avatar));
+        $this->assertTrue(Storage::exists('public/avatars/' . $avatar->hashName()));
+        $this->assertDatabaseHas('users', [
+            'email' => 'hugofirsttime@example.com',
+            'username' => 'hugofirsttime',
+            'avatar_name' => $avatar->hashName(),
+        ]);
+        $this->assertDatabaseMissing('users', [
+            'email' => 'hugofirst@example.com',
+            'username' => 'hugofirst',
+        ]);
     }
 }
