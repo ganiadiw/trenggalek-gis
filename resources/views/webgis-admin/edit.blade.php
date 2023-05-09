@@ -15,10 +15,12 @@
                                     <div x-data="{ open: false }">
                                         <div class="flex justify-center mb-5">
                                             <div class="relative">
-                                                <img id="avatar"
-                                                    class="flex items-center justify-center p-1 rounded-full w-28 h-28 md:w-32 md:h-32"
-                                                    src="{{ $user->avatar_name? asset('storage/avatars/' . $user->avatar_name): Avatar::create($user->name)->setDimension(500, 500)->setFontSize(230)->toBase64() }}"
-                                                    alt="Bordered avatar">
+                                                <div class="flex items-center justify-center p-1 rounded-full w-28 h-28 md:w-32 md:h-32">
+                                                    <img id="avatar"
+                                                        class="object-cover w-full h-full rounded-full"
+                                                        src="{{ $user->avatar_name? asset('storage/avatars/' . $user->avatar_name): Avatar::create($user->name)->setDimension(500, 500)->setFontSize(230)->toBase64() }}"
+                                                        alt="Bordered avatar">
+                                                </div>
                                                 <input x-on:change="open = true" type="file" id="avatarUpload"
                                                     name="avatar" hidden>
                                                 <label for="avatarUpload" x-data x-tooltip.raw="Ubah foto"
