@@ -13,9 +13,12 @@ class WelcomeController extends Controller
     {
         $heroImages = GuestPageSetting::where('key', 'hero_image')->select('key', 'value')->first();
         $heroImagesCount = 0;
-        foreach ($heroImages->value as $heroImage) {
-            if ($heroImage != null) {
-                $heroImagesCount++;
+
+        if ($heroImages) {
+            foreach ($heroImages->value as $heroImage) {
+                if ($heroImage != null) {
+                    $heroImagesCount++;
+                }
             }
         }
 
