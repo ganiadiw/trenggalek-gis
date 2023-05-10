@@ -12,15 +12,23 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::select('id', 'name', 'slug', 'icon_name', 'icon_path')->orderBy('name', 'asc')->withCount('touristDestinations')->paginate(10);
+        $categories = Category::select('id', 'name', 'slug', 'icon_name', 'icon_path')
+                        ->orderBy('name', 'asc')->withCount('touristDestinations')->paginate(10);
 
         return view('category.index', compact('categories'));
     }
 
     public function search(Request $request)
     {
-        $categories = Category::where('name', 'like', '%' . $request->search . '%')
-            ->select('id', 'name', 'slug', 'icon_name', 'icon_path')->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        $validated = $request->validate([
+            'column_name' => 'required',
+            'search_value' => 'required',
+        ]);
+
+        $categories = Category::select('id', 'name', 'slug', 'icon_name', 'icon_path')
+            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
+            ->orderBy('name', 'asc')->withCount('touristDestinations')
+            ->paginate(10)->withQueryString();
 
         return view('category.index', compact('categories'));
     }

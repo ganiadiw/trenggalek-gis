@@ -32,9 +32,14 @@ class TouristDestinationController extends Controller
 
     public function search(Request $request)
     {
-        $touristDestinations = TouristDestination::where('name', 'like', '%' . $request->search . '%')
-            ->orWhere('address', 'like', '%' . $request->search . '%')
-            ->select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->orderBy('name', 'asc');
+        $validated = $request->validate([
+            'column_name' => 'required',
+            'search_value' => 'required',
+        ]);
+
+        $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
+            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
+            ->orderBy('name', 'asc');
 
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')
             ->orderBy('code', 'asc')->get();

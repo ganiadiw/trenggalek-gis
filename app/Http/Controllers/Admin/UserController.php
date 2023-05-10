@@ -22,9 +22,15 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
-        $users = User::where('name', 'like', '%' . $request->search . '%')
-            ->orderBy('is_admin', 'desc')->orderBy('name', 'asc')
-            ->paginate(10)->withQueryString();
+        $validated = $request->validate([
+            'column_name' => 'required',
+            'search_value' => 'required',
+        ]);
+
+        $users = User::select('name', 'avatar_name', 'username', 'email', 'is_admin')
+                    ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
+                    ->orderBy('is_admin', 'desc')->orderBy($validated['column_name'], 'asc')
+                    ->paginate(10)->withQueryString();
 
         return view('webgis-admin.index', compact('users'));
     }

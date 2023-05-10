@@ -24,8 +24,13 @@ class SubDistrictController extends Controller
 
     public function search(Request $request)
     {
-        $subDistricts = SubDistrict::where('name', 'like', '%' . $request->search . '%')
-            ->select('name', 'code', 'latitude', 'longitude')
+        $validated = $request->validate([
+            'column_name' => 'required',
+            'search_value' => 'required',
+        ]);
+
+        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
+            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
             ->orderBy('code', 'asc')->paginate(10)->withQueryString();
 
         return view('sub-district.index', compact('subDistricts'));
@@ -136,6 +141,25 @@ class SubDistrictController extends Controller
 
         return view('sub-district.related-tourist-destination', [
             'touristDestinations' => $touristDestinations->paginate(10),
+            'touristDestinationMapping' => $touristDestinations->get(),
+            'subDistrict' => $subDistrict,
+        ]);
+    }
+
+    public function relatedTouristDestinationSearch(SubDistrict $subDistrict, Request $request)
+    {
+        $validated = $request->validate([
+            'column_name' => 'required',
+            'search_value' => 'required',
+        ]);
+
+        $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
+            ->where('sub_district_id', $subDistrict->id)
+            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
+            ->orderBy('name', 'asc');
+
+        return view('sub-district.related-tourist-destination', [
+            'touristDestinations' => $touristDestinations->paginate(10)->withQueryString(),
             'touristDestinationMapping' => $touristDestinations->get(),
             'subDistrict' => $subDistrict,
         ]);
