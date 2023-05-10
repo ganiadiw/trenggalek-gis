@@ -61,6 +61,19 @@ class SubDistrictTest extends TestCase
         $response->assertSeeText(['Pantai Konang', 'LDMH', 'Desa Nglebeng, Kecamatan Panggul']);
     }
 
+    public function test_related_tourist_destination_data_can_be_searched()
+    {
+        Category::factory()->create();
+        TouristDestination::factory()->create();
+
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $response = $this->actingAs($this->superAdmin)
+                    ->get('dashboard/sub-districts/' . $this->subDistrict->code . '/related-tourist-destination/search?column_name=name&search_value=konang');
+        $response->assertStatus(200);
+        $response->assertSeeText('Data Destinasi Wisata yang Berada di ' . $this->subDistrict->name);
+        $response->assertSeeText(['Pantai Konang', 'LDMH', 'Desa Nglebeng, Kecamatan Panggul']);
+    }
+
     public function test_sub_district_geojson_file_can_be_downloaded()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
@@ -79,9 +92,7 @@ class SubDistrictTest extends TestCase
     public function test_an_superadmin_can_search_contains_sub_district_data()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/search', [
-            'search' => $this->subDistrict->name,
-        ]);
+        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/search?column_name=name&search_value=munjungan');
         $response->assertSeeText($this->subDistrict->name);
     }
 }

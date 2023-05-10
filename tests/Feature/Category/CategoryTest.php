@@ -67,9 +67,7 @@ class CategoryTest extends TestCase
     public function test_an_superadmin_can_search_contaions_category_data()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search', [
-            'search' => $this->category->name,
-        ]);
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search?column_name=name&search_value=wisata');
         $response->assertSeeText($this->category->name);
     }
 }
