@@ -84,31 +84,32 @@
                     Trenggalek?
                 </h5>
             </div>
-            <div
-                class="grid content-center grid-cols-2 gap-3 md:pt-[300px] xl:pt-[156px] md:h-[300px] px-5 md:overflow-y-auto md:w-3/5 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
-                @foreach ($categories as $category)
-                    @if ($category->tourist_destinations_count > 0)
-                        <div class="content-center py-3 md:py-6 text-center bg-[#404040] rounded-sm">
-                            <div x-data="{ current: 0, target: {{ $category->tourist_destinations_count }}, time: 300 }" x-init="() => {
-                                start = current;
-                                const interval = Math.max(time / (target - start), 5);
-                                const step = (target - start) / (time / interval);
-                                const handle = setInterval(() => {
-                                    if (current < target)
-                                        current += step
-                                    else {
-                                        clearInterval(handle);
-                                        current = target
-                                    }
-                                }, interval);
-                            }"
-                                class="w-full mb-2 md:mb-4 text-5xl md:text-6xl h-14 font-bold text-[#26c772]">
-                                <p x-cloak x-text="Math.round(current)"></p>
+            <div class="md:h-[300px] md:overflow-y-auto md:w-3/5">
+                <div class="grid content-center grid-cols-2 gap-3 px-5 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
+                    @foreach ($categories as $category)
+                        @if ($category->tourist_destinations_count > 0)
+                            <div class="content-center py-3 md:py-6 text-center bg-[#404040] rounded-sm">
+                                <div x-data="{ current: 0, target: {{ $category->tourist_destinations_count }}, time: 300 }" x-init="() => {
+                                    start = current;
+                                    const interval = Math.max(time / (target - start), 5);
+                                    const step = (target - start) / (time / interval);
+                                    const handle = setInterval(() => {
+                                        if (current < target)
+                                            current += step
+                                        else {
+                                            clearInterval(handle);
+                                            current = target
+                                        }
+                                    }, interval);
+                                }"
+                                    class="w-full mb-2 md:mb-4 text-5xl md:text-6xl h-14 font-bold text-[#26c772]">
+                                    <p x-cloak x-text="Math.round(current)"></p>
+                                </div>
+                                <p class="text-gray-200">{{ $category->name }}</p>
                             </div>
-                            <p class="text-gray-200">{{ $category->name }}</p>
-                        </div>
-                    @endif
-                @endforeach
+                        @endif
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
