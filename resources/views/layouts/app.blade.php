@@ -45,7 +45,7 @@
         <div class="relative w-full bg-gray-100">
             @include('layouts.navigation')
             @if ($errors->any())
-                <div class="absolute flex justify-center w-full">
+                <div class="absolute z-50 flex justify-center w-full">
                     <div id="toast-warning" class="flex items-center p-4 text-gray-500 bg-white rounded-lg shadow w-fit"
                         role="alert">
                         <div
