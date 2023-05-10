@@ -234,9 +234,9 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="block mb-2 text-sm font-semibold">Tentukan koordinat titik tengah
-                                            peta
-                                            kecamatan</p>
+                                        <p class="block mb-2 text-sm font-semibold">Tentukan Koordinat Titik Tengah
+                                            Peta
+                                            Kecamatan</p>
                                         <div class="p-3 mb-3 border-2 rounded-md border-slate-300 lg:flex lg:gap-x-2">
                                             <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">
                                                 <blockquote

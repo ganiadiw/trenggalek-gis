@@ -92,9 +92,7 @@
                             <h2 class="text-base font-semibold text-gray-800">Data Peta</h2>
                             <div class="p-5 mt-3 border-2 border-gray-200 rounded-md shadow-md">
                                 <div>
-                                    <p class="block mb-2 text-sm font-semibold">Tentukan koordinat titik tengah
-                                        peta
-                                        kecamatan</p>
+                                    <p class="block mb-2 text-sm font-semibold">Tentukan Titik Koordinat Destinasi Wisata</p>
                                     <div class="mb-3 rounded-md lg:flex lg:gap-x-3">
                                         <div class="p-3 bg-gray-200 rounded-md shadow-lg lg:w-2/4 lg:h-fit">
                                             <blockquote
