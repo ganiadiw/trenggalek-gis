@@ -121,8 +121,11 @@
         </div>
     </div>
 
-    @section('script')
+    @push('cdn-script')
         <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    @endpush
+
+    @section('script')
         <script>
             let swiper = new Swiper(".mySwiper1", {
                 cssMode: true,
@@ -161,48 +164,84 @@
                 }).addTo(map);
             @endforeach
 
-            let icon, marker;
+            let icon, marker, popUp;
             @foreach ($touristDestinations as $key => $touristDestination)
+                popUp = `<div>
+                        <h1 class="mb-5 text-lg font-bold">{{ $touristDestination->name }}</h1>
+                        <div>
+                            <ul>
+                                <li>
+                                    <p id="address" class="flex w-full text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="w-5 text-red-700"
+                                            fill="currentColor" class="mr-2 bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                                        </svg>
+                                        <span class="ml-2">{{ $touristDestination->address }} </span>
+                                    </p>
+                                </li>
+                                <li>
+                                    <p id="category" class="flex items-center text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 text-orange-400 icon icon-tabler icon-tabler-category" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M4 4h6v6h-6z"></path>
+                                            <path d="M14 4h6v6h-6z"></path>
+                                            <path d="M4 14h6v6h-6z"></path>
+                                            <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                                        </svg>
+                                        <span class="ml-2">{{ $touristDestination->category->name ?? 'Belum Berkategori' }}</span>
+                                    </p>
+                                </li>
+                                <li>
+                                    <p id="distance" class="flex items-center text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="w-5 text-green-700"
+                                            fill="currentColor" class="bi bi-geo-fill" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z" />
+                                        </svg>
+                                        <span class="ml-2">Berjarak {{ $touristDestination->distance_from_city_center }} dari pusat kota</span>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="{{ route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"
+                                class="inline-flex items-center px-5 py-2 text-sm font-medium bg-green-700 rounded-md hover:bg-green-800 focus:ring-1 focus:ring-green-300">
+                                <span class="text-white">Lihat detail</span>
+                            </a>
+                        </div>
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ $touristDestination->latitude }}%2C{{ $touristDestination->longitude }}"
+                            target="_blank"
+                            class="text-white h-10 mt-3 bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-1 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-md text-sm px-2.5 py-2 text-center inline-flex items-center mr-2 mb-2">
+                            <div class="p-1 bg-white rounded-full">
+                                <img src="{{ asset('assets/icon/Google-Maps-Platform.svg') }}" class="w-5"
+                                    alt="Google Maps Icon">
+                            </div>
+                            <span class="ml-2 text-white">Buka di Google Maps</span>
+                        </a>
+                    </div>`
+
                 @if ($touristDestination->category && $touristDestination->category->icon_name)
+
                     icon = L.icon({
                         iconUrl: '{{ asset('storage/categories/icon/' . $touristDestination->category->icon_name) }}',
                         iconSize: [45, 45],
                         iconAnchor: [23.5, 47],
                         popupAnchor: [0, 0],
                     });
+
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {
                             icon: icon
                         })
                         .addTo(map)
-                        .bindPopup(
-                            `<b>{{ $touristDestination->name }}</b>
-                                        <br />
-                                        Kategori: {{ $touristDestination->category->name }}
-                                        <br />
-                                        Alamat: {{ $touristDestination->address }}
-                                        <br />
-                                        Jarak dari pusat kota: {{ $touristDestination->distance_from_city_center }}
-                                        <br />
-                                        <a href="{{ route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"><b>Lihat detail</b></a>
-                                        <br />
-                                        <a href="https://www.google.com/maps/search/?api=1&query={{ $touristDestination->latitude }}%2C{{ $touristDestination->longitude }}"><b>Buka di Google Maps</b></a>`
-                        );
+                        .bindPopup(popUp);
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
                         .addTo(map)
-                        .bindPopup(
-                            `<b>{{ $touristDestination->name }}</b>
-                                        <br />
-                                        Kategori: {{ $touristDestination->category->name ?? 'Belum Berkategori' }}
-                                        <br />
-                                        Alamat: {{ $touristDestination->address }}
-                                        <br />
-                                        Jarak dari pusat kota: {{ $touristDestination->distance_from_city_center }}
-                                        <br />
-                                        <a href="{{ route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"><b>Lihat detail</b></a>
-                                        <br />
-                                        <a href="https://www.google.com/maps/search/?api=1&query={{ $touristDestination->latitude }}%2C{{ $touristDestination->longitude }}"><b>Buka di Google Maps</b></a>`
-                        );
+                        .bindPopup(popUp);
                 @endif
                 marker.on('click', function(e) {
                     this.openPopup();
