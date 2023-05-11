@@ -249,8 +249,11 @@
         </div>
     </div>
 
-    @section('script')
+    @push('cdn-script')
         <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    @endpush
+
+    @section('script')
         <script>
             new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $touristDestination->subDistrict->geojson_name) }}'], {
                 style: {
