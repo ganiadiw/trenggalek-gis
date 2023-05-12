@@ -108,6 +108,29 @@
                 maxFileSize: '2048KB',
                 labelMaxFileSize: 'Maksimal berukuran 2048 KB',
             });
+
+            function handleDeleteImage() {
+                return {
+                    deleteButton: true,
+                    loading: false,
+                    deleteImage(slug) {
+                        if (confirm('Apakah Anda yakin akan menghapusnya?')) {
+                            this.deleteButton = false,
+                            this.loading = true,
+                            fetch('/dashboard/categories/delete-icon/' + slug, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                location.reload();
+                            })
+                        }
+                    }
+                }
+            }
         </script>
     @endsection
 </x-app-layout>
