@@ -64,7 +64,7 @@
                     </x-statistic-card>
                 </div>
             </div>
-            <x-head.leaflet-init class="w-full rounded-lg h-128" />
+            <x-head.leaflet-init class="w-full rounded-lg h-[40rem]" />
             <div class="grid w-full gap-4 p-4 pb-10 mt-5 bg-white rounded-md lg:grid-cols-2">
                 <div>
                     <h2 class="p-2 mb-5 text-base font-semibold">Statistik Destinasi Wisata Per Kecamatan</h2>
