@@ -91,6 +91,7 @@
     @endpush
 
     @section('script')
+        <script src="{{ asset('assets/js/leaflet/leaflet.awesome-markers.js') }}"></script>
         <script>
             @foreach ($subDistricts as $subDistrict)
                 new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
@@ -167,13 +168,11 @@
                             </a>
                         </div>`
 
-                @if ($touristDestination->category && $touristDestination->category->icon_name)
-                    icon = L.icon({
-                        iconUrl: '{{ asset('storage/categories/icon/' . $touristDestination->category->icon_name) }}',
-                        iconSize: [45, 45],
-                        iconAnchor: [23.5, 47],
-                        popupAnchor: [0, 0],
-                    });
+                @if ($touristDestination->category && $touristDestination->category->svg_name)
+                    icon = L.AwesomeMarkers.icon({
+                                icon: '{{ $touristDestination->category->svg_name }}',
+                                markerColor: '{{ $touristDestination->category->color }}'
+                            });
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {icon: icon})
                             .addTo(map)
                             .bindPopup(popUp);

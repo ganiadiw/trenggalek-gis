@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.fullscreen@2.4.0/Control.FullScreen.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/leaflet-awesome-markers/leaflet.awesome-markers.css') }}">
     @yield('link')
     <style>
         [x-cloak] {
@@ -86,6 +88,7 @@
         </footer>
     </div>
 
+    <script src="{{ asset('assets/js/leaflet/leaflet.awesome-markers.js') }}"></script>
     @yield('component-script')
     @yield('script')
     @yield('script2')

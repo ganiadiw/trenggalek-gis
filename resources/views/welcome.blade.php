@@ -224,25 +224,20 @@
                         </a>
                     </div>`
 
-                @if ($touristDestination->category && $touristDestination->category->icon_name)
-
-                    icon = L.icon({
-                        iconUrl: '{{ asset('storage/categories/icon/' . $touristDestination->category->icon_name) }}',
-                        iconSize: [45, 45],
-                        iconAnchor: [23.5, 47],
-                        popupAnchor: [0, 0],
-                    });
-
-                    marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {
-                            icon: icon
-                        })
-                        .addTo(map)
-                        .bindPopup(popUp);
+                @if ($touristDestination->category && $touristDestination->category->svg_name)
+                    icon = L.AwesomeMarkers.icon({
+                                icon: '{{ $touristDestination->category->svg_name }}',
+                                markerColor: '{{ $touristDestination->category->color }}'
+                            });
+                    marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {icon: icon})
+                            .addTo(map)
+                            .bindPopup(popUp);
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
-                        .addTo(map)
-                        .bindPopup(popUp);
+                            .addTo(map)
+                            .bindPopup(popUp);
                 @endif
+
                 marker.on('click', function(e) {
                     this.openPopup();
                 });

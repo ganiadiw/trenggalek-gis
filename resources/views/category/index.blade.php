@@ -69,7 +69,7 @@
                                         Jumlah Destinasi Wisata
                                     </th>
                                     <th scope="col" class="px-3 py-3">
-                                        Icon Kategori
+                                        Custom Marker
                                     </th>
                                     <th scope="col" class="flex justify-center px-3 py-3">
                                         Aksi
@@ -88,12 +88,8 @@
                                         <td class="px-3 py-4">
                                             {{ $category->tourist_destinations_count }}
                                         </td>
-                                        @if ($category->icon_name)
-                                            <td class="px-3 py-4">
-                                                <img class="flex items-center w-7 h-7"
-                                                    src="{{ asset('storage/categories/icon/' . $category->icon_name) }}"
-                                                    alt="icon">
-                                            </td>
+                                        @if ($category->svg_name)
+                                            <td class="px-3 py-4">Ya | {{ $category->svg_name }} | {{ $category->color }}</td>
                                         @else
                                             <td class="px-3 py-4">Tidak ada custom icon</td>
                                         @endif
