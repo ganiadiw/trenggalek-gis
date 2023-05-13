@@ -6,7 +6,7 @@
                 enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <h1 class="mb-5 text-lg font-bold text-gray-800">Ubah Data Pengaturan Halaman</h1>
+                <h1 class="mb-5 text-lg font-bold text-gray-800">Edit Data Pengaturan Halaman</h1>
                 <div class="grid mb-5 gap-x-5">
                     <div class="mb-3">
                         <h2 class="block mb-3 text-base font-semibold text-gray-900">
