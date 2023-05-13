@@ -35,7 +35,7 @@ class GuestPageSettingTest extends TestCase
         $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->get('/dashboard/page-settings/guest/' . $this->guestPageSetting->id);
         $response->assertStatus(200);
-        $response->assertSeeText('Ubah Data Pengaturan Halaman');
+        $response->assertSeeText('Edit Data Pengaturan Halaman');
     }
 
     public function test_text_field_can_be_updated()
