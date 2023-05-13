@@ -30,8 +30,8 @@ class WelcomeController extends Controller
             'heroImagesCount' => $heroImagesCount,
             'aboutPage' => GuestPageSetting::where('key', 'about_page')->select('key', 'value')->first(),
             'subDistricts' => SubDistrict::select('name', 'geojson_path', 'geojson_name', 'fill_color')->get(),
-            'categories' => Category::select('name', 'icon_name', 'icon_path')->withCount('touristDestinations')->get(),
-            'touristDestinations' => TouristDestination::with('category:id,name,icon_name')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->get(),
+            'categories' => Category::select('name', 'color', 'svg_name')->withCount('touristDestinations')->get(),
+            'touristDestinations' => TouristDestination::with('category:id,name,color,svg_name')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->get(),
         ]);
     }
 }
