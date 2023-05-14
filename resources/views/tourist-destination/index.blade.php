@@ -192,6 +192,13 @@
                         'color': '{{ $subDistrict->fill_color }}',
                         'weight': 2,
                         'opacity': 0.4,
+                    },
+                    onEachFeature(feature, layer) {
+                        layer.bindTooltip('{{ $subDistrict->name }}', {
+                            permanent: true,
+                            direction: 'center',
+                            className: 'bg-inherit border-0 shadow-none text-gray-500 font-semibold whitespace-pre-wrap text-center text-[11px]'
+                        });
                     }
                 }).addTo(map);
             @endforeach
@@ -266,13 +273,27 @@
                                 icon: '{{ $touristDestination->category->svg_name }}',
                                 markerColor: '{{ $touristDestination->category->color }}'
                             });
-                    marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {icon: icon})
+                    marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {
+                                icon: icon,
+                            })
                             .addTo(map)
-                            .bindPopup(popUp);
+                            .bindPopup(popUp)
+                            .bindTooltip('{{ $touristDestination->name }}', {
+                                offset: [-20, -20],
+                                permanent: true,
+                                direction: 'left',
+                                className: 'bg-inherit border-0 shadow-none text-gray-900 font-semibold'
+                            });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
                             .addTo(map)
-                            .bindPopup(popUp);
+                            .bindPopup(popUp)
+                            .bindTooltip('{{ $touristDestination->name }}', {
+                                offset: [-20, -20],
+                                permanent: true,
+                                direction: 'left',
+                                className: 'bg-inherit border-0 shadow-none text-gray-900 font-semibold'
+                            });
                 @endif
 
                 marker.on('click', function(e) {
