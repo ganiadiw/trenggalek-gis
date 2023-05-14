@@ -41,7 +41,7 @@ class CategorySeeder extends Seeder
                 'slug' => str()->slug('Wisata Gunung') . '-' . str()->random(5),
                 'color' => 'darkgreen',
                 'svg_name' => 'bi bi-tree-fill',
-                'hex_code' => '#9e3235',
+                'hex_code' => '#6f7f23',
             ],
         ]);
     }
