@@ -37,7 +37,7 @@ class TouristDestinationController extends Controller
             'search_value' => 'required',
         ]);
 
-        $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
+        $touristDestinations = TouristDestination::with('category:id,name,color,svg_name')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
             ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
             ->orderBy('name', 'asc');
 
@@ -45,8 +45,8 @@ class TouristDestinationController extends Controller
             ->orderBy('code', 'asc')->get();
 
         return view('tourist-destination.index', [
-            'touristDestinations' => $touristDestinations->paginate(10)->withQueryString(),
-            'touristDestinationMapping' => $touristDestinations->get(),
+            'touristDestinationsDataTable' => $touristDestinations->paginate(10)->withQueryString(),
+            'touristDestinations' => $touristDestinations->get(),
             'subDistricts' => $subDistricts,
         ]);
     }
