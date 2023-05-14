@@ -10,14 +10,14 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        L.control.fullscreen({
-            position: 'topleft',
-            title: 'Fullscreen mode',
-            titleCancel: 'Exit fullscreen mode',
-            content: null,
-            forceSeparateButton: true,
-            forcePseudoFullscreen: true,
-            fullscreenElement: false
-        }).addTo(map);
+        // L.control.fullscreen({
+        //     position: 'topleft',
+        //     title: 'Fullscreen mode',
+        //     titleCancel: 'Exit fullscreen mode',
+        //     content: null,
+        //     forceSeparateButton: true,
+        //     forcePseudoFullscreen: true,
+        //     fullscreenElement: false
+        // }).addTo(map);
     </script>
 @endsection
