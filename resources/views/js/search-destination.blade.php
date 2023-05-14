@@ -1,31 +1,31 @@
 <script>
-    function searchLocation() {
+    document.addEventListener('alpine:init', () => {
         let jsonTouristDestinations = @json($touristDestinations);
 
-        return {
+        Alpine.data('searchLocation', () => ({
             searchInput: '',
+            modalResult: false,
             selectedTouristDestinationIndex: '',
+            selecteTouristDestinationdName: '',
             touristDestinations: jsonTouristDestinations.map((item, index) => ({
                 name: item.name,
                 address: item.address,
                 latitude: item.latitude,
                 longitude: item.longitude
             })),
-            selectedLatitude: '',
-            selectedLongitude: '',
+            selectedTouristDestinationLatitude: '',
+            selectedTouristDestinationLongitude: '',
 
             get filteredTouristDestinations() {
                 if (this.searchInput === '') {
                     return [];
                 }
 
-                return this.touristDestinations.filter(
-                    touristDestination => touristDestination.name.toLowerCase().includes(this.searchInput.toLowerCase())
-                );
+                return this.touristDestinations.filter(touristDestination => touristDestination.name.toLowerCase().includes(this.searchInput.toLowerCase()));
             },
 
             reset() {
-                this.searchInput = ''
+                this.searchInput = '';
             },
 
             selectNextList() {
@@ -35,11 +35,13 @@
                     this.selectedTouristDestinationIndex++;
                 }
 
-                if (this.selectedTouristDestinationIndex == this.filteredTouristDestinations.length) {
+                if (this.selectedTouristDestinationIndex === this.filteredTouristDestinations.length) {
                     this.selectedTouristDestinationIndex = 0;
                 }
 
-                this.focusSelectedList();
+                if (this.searchInput != '') {
+                    this.focusSelectedList();
+                }
             },
 
             selectPreviousList() {
@@ -53,19 +55,26 @@
                     this.selectedTouristDestinationIndex = this.filteredTouristDestinations.length - 1;
                 }
 
-                this.focusSelectedList();
+                if (this.searchInput != '') {
+                    this.focusSelectedList();
+                }
             },
 
             focusSelectedList() {
+                const selectedDestination = this.filteredTouristDestinations[this.selectedTouristDestinationIndex];
+
                 this.$refs.touristDestinations.children[this.selectedTouristDestinationIndex + 1].scrollIntoView({ block: 'nearest' });
-                this.selectedLatitude = this.filteredTouristDestinations[this.selectedTouristDestinationIndex].latitude;
-                this.selectedLongitude = this.filteredTouristDestinations[this.selectedTouristDestinationIndex].longitude;
+                this.selectedTouristDestinationLatitude = selectedDestination.latitude;
+                this.selectedTouristDestinationLongitude = selectedDestination.longitude;
+                this.selectedTouristDestinationName = selectedDestination.name;
             },
 
-            goToMarker(latitude = this.selectedLatitude, longitude = this.selectedLongitude) {
+            goToMarker(latitude = this.selectedTouristDestinationLatitude, longitude = this.selectedTouristDestinationLongitude, name = this.selectedTouristDestinationName) {
+                this.modalResult = false;
+                this.$refs.input.blur();
+                this.searchInput = name;
                 map.setView([latitude, longitude], 13);
-                this.reset();
             }
-        }
-    }
+        }))
+    });
 </script>

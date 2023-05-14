@@ -73,30 +73,41 @@
     <div class="px-7 md:px-14 lg:px-28 mt-14">
         <div class="w-full">
             <h2 class="mb-5 text-2xl font-bold ">Peta Destinasi Wisata</h2>
-            <div x-data="searchLocation()"
+            <div x-data="searchLocation"
                 x-init="$watch('searchInput', () => selectedTouristDestinationIndex = '')"
                 class="relative">
                 <x-head.leaflet-init class="w-full border-2 border-gray-300 rounded-lg shadow-xl h-[40rem]" />
-                <div class="absolute z-20 w-52 sm:w-80 md:w-96 right-2 top-2">
+                <div x-data="{ focusInput: true }" class="absolute z-20 w-52 sm:w-80 md:w-96 right-2 top-2">
                     <div class="absolute left-0 flex items-center pl-3 pointer-events-none top-3">
                         <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                     </div>
                     <input type="text"
+                        x-ref="input"
                         x-model="searchInput"
-                        x-on:click.outside="reset()"
-                        x-on:keyup.escape="reset()"
+                        x-on:focus="modalResult = true"
+                        x-on:click.outside="modalResult = false"
+                        x-on:keyup.escape="modalResult = false"
                         x-on:keyup.down="selectNextList()"
                         x-on:keyup.up="selectPreviousList()"
                         x-on:keyup.enter="goToMarker()"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Telusuri di sini">
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-10 p-2.5" placeholder="Telusuri di sini">
+                    <div x-cloak x-show="searchInput !== ''" class="absolute flex items-center pl-3 right-3 top-[6px]">
+                        <button x-on:click="reset()" type="button" class="p-1 rounded-md hover:bg-gray-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500 icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M18 6l-12 12"></path>
+                                <path d="M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
                     <div x-cloak
                         x-transition
-                        x-show="filteredTouristDestinations.length > 0"
+                        x-show="modalResult && filteredTouristDestinations.length > 0"
                         x-ref="touristDestinations"
                         class="mt-1 overflow-y-auto text-sm bg-white border-[1.5px] border-gray-300 rounded-md shadow-lg max-h-64">
                         <template x-for="(touristDestination, index) in filteredTouristDestinations">
                             <button type="button"
-                                x-on:click.prevent="goToMarker(touristDestination.latitude, touristDestination.longitude)"
+                                x-on:click.prevent="goToMarker(touristDestination.latitude, touristDestination.longitude, touristDestination.name)"
                                 class="w-full p-2 text-left border-b-[1.5px] border-b-gray-300 hover:bg-gray-200"
                                 x-bind:class="{ 'bg-gray-200': index === selectedTouristDestinationIndex }">
                                 <p class="font-medium text-gray-800" x-text="touristDestination.name"></p>
@@ -200,76 +211,6 @@
                     }
                 }).addTo(map);
             @endforeach
-
-            function searchLocation() {
-                let jsonTouristDestinations = @json($touristDestinations);
-
-                return {
-                    searchInput: '',
-                    selectedTouristDestinationIndex: '',
-                    touristDestinations: jsonTouristDestinations.map((item, index) => ({
-                        name: item.name,
-                        address: item.address,
-                        latitude: item.latitude,
-                        longitude: item.longitude
-                    })),
-                    selectedLatitude: '',
-                    selectedLongitude: '',
-
-                    get filteredTouristDestinations() {
-                        if (this.searchInput === '') {
-                            return [];
-                        }
-
-                        return this.touristDestinations.filter(
-                            touristDestination => touristDestination.name.toLowerCase().includes(this.searchInput.toLowerCase())
-                        );
-                    },
-
-                    reset() {
-                        this.searchInput = ''
-                    },
-
-                    selectNextList() {
-                        if (this.selectedTouristDestinationIndex === '') {
-                            this.selectedTouristDestinationIndex = 0;
-                        } else {
-                            this.selectedTouristDestinationIndex++;
-                        }
-
-                        if (this.selectedTouristDestinationIndex == this.filteredTouristDestinations.length) {
-                            this.selectedTouristDestinationIndex = 0;
-                        }
-
-                        this.focusSelectedList();
-                    },
-
-                    selectPreviousList() {
-                        if (this.selectedTouristDestinationIndex === '') {
-                            this.selectedTouristDestinationIndex = this.filteredTouristDestinations.length - 1;
-                        } else {
-                            this.selectedTouristDestinationIndex--;
-                        }
-
-                        if (this.selectedTouristDestinationIndex < 0) {
-                            this.selectedTouristDestinationIndex = this.filteredTouristDestinations.length - 1;
-                        }
-
-                        this.focusSelectedList();
-                    },
-
-                    focusSelectedList() {
-                        this.$refs.touristDestinations.children[this.selectedTouristDestinationIndex + 1].scrollIntoView({ block: 'nearest' });
-                        this.selectedLatitude = this.filteredTouristDestinations[this.selectedTouristDestinationIndex].latitude;
-                        this.selectedLongitude = this.filteredTouristDestinations[this.selectedTouristDestinationIndex].longitude;
-                    },
-
-                    goToMarker(latitude = this.selectedLatitude, longitude = this.selectedLongitude) {
-                        map.setView([latitude, longitude], 13);
-                        this.reset();
-                    }
-                }
-            }
 
             let icon, marker, popUp;
             @foreach ($touristDestinations as $key => $touristDestination)
