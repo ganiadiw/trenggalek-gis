@@ -18,7 +18,7 @@ class TouristDestinationController extends Controller
 {
     public function index()
     {
-        $touristDestinations = TouristDestination::with('category:id,name,color,svg_name')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
+        $touristDestinations = TouristDestination::with('category:id,name,color,svg_name,hex_code')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
             ->orderBy('name', 'asc');
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')
             ->orderBy('code', 'asc')->get();
@@ -37,7 +37,7 @@ class TouristDestinationController extends Controller
             'search_value' => 'required',
         ]);
 
-        $touristDestinations = TouristDestination::with('category:id,name,color,svg_name')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
+        $touristDestinations = TouristDestination::with('category:id,name,color,svg_name,hex_code')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
             ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
             ->orderBy('name', 'asc');
 

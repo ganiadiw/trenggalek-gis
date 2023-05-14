@@ -15,6 +15,7 @@ class Category extends Model
         'slug',
         'color',
         'svg_name',
+        'hex_code'
     ];
 
     const COLORS = [

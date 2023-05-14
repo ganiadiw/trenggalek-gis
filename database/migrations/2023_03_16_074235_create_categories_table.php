@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug', 255)->unique();
             $table->string('color')->nullable();
             $table->string('svg_name')->nullable();
+            $table->string('hex_code')->nullable();
             $table->timestamps();
         });
     }

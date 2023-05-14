@@ -21,7 +21,7 @@
                                             <blockquote
                                                 class="p-2 bg-gray-100 border-l-4 border-yellow-300 rounded-sm">
                                                 <p class="text-[13px] font-medium italic leading-relaxed text-yellow-500">
-                                                    Bersifat opsional. Jika tidak menambahkan icon, maka icon default akan digunakan atau menggunakan icon yang sebelumnya sudah dimasukkan.
+                                                    Bersifat opsional. Jika tidak menambahkan icon, maka icon default akan digunakan atau menggunakan icon yang sebelumnya sudah didaftarkan. Warna teks nama destinasi wisata yang ditampilkan pada peta juga akan sesuai dengan warna marker yang dipilih.
                                                 </p>
                                                 <button type="button" @click="openModalInstruction = ! openModalInstruction" class="hover:bg-green-600 mb-1 flex items-center text-gray-100 text-[13px] mt-3 font-semibold bg-green-500 px-2.5 py-2 rounded-md">
                                                     Baca Cara Penggunaan
