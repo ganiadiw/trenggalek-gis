@@ -36,9 +36,7 @@ class WebgisAdministratorTest extends TestCase
     public function test_an_superadmin_can_search_contains_webgis_administrator_data()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search', [
-            'search' => $this->webgisAdmin->name,
-        ]);
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=hugo');
         $response->assertSeeText($this->webgisAdmin->name);
         $this->assertDatabaseHas('users', [
             'name' => 'Hugo First',
@@ -48,9 +46,7 @@ class WebgisAdministratorTest extends TestCase
     public function test_an_superadmin_cannot_search_contains_no_webgis_administrator_data()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
-        $this->actingAs($this->superAdmin)->get('/dashboard/users/search', [
-            'search' => 'John',
-        ]);
+        $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=john');
         $this->assertDatabaseMissing('users', [
             'name' => 'John',
         ]);

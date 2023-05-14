@@ -69,17 +69,17 @@
                     deleteImage(key, filename) {
                         if (confirm('Apakah Anda yakin akan menghapusnya?')) {
                             this.deleteButton = false,
-                                this.loading = true,
-                                fetch('/dashboard/page-settings/guest/delete-image/' + key + '/' + filename, {
-                                    method: 'DELETE',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    }
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    location.reload();
-                                })
+                            this.loading = true,
+                            fetch('/dashboard/page-settings/guest/delete-image/' + key + '/' + filename, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                location.reload();
+                            })
                         }
                     }
                 }

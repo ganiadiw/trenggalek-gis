@@ -65,15 +65,16 @@ class CreateCategoryTest extends TestCase
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
             'name' => 'Wisata Pertanian',
-            'icon' => UploadedFile::fake()->create('icon.png', ''),
+            'color' => 'green',
+            'svg_name' => 'apple-whole'
         ]);
-        $response->assertValid(['name', 'icon']);
+        $response->assertValid(['name', 'color', 'svg_name']);
         $response->assertRedirect('/dashboard/categories');
-        $category = Category::first();
         $this->assertDatabaseHas('categories', [
             'name' => 'Wisata Pertanian',
+            'color' => 'green',
+            'svg_name' => 'apple-whole'
         ]);
-        $this->assertTrue(Storage::exists($category->icon_path));
     }
 
     public function test_an_webgis_administrator_cannot_create_new_category()

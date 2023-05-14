@@ -34,6 +34,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_authenticated_user_can_see_tourist_destination_management_page()
     {
+        $this->withExceptionHandling();
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations');
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Destinasi Wisata');
@@ -48,9 +49,7 @@ class TouristDestinationTest extends TestCase
     public function test_an_user_can_search_contains_tourist_destination_data()
     {
         $this->assertEquals(1, $this->user->is_admin);
-        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/search', [
-            'search' => $this->touristDestination->name,
-        ]);
+        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/search?column_name=name&search_value=konang');
         $response->assertStatus(200);
         $response->assertSeeText($this->touristDestination->name);
     }

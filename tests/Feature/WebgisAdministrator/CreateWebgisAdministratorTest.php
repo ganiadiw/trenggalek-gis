@@ -30,7 +30,7 @@ class CreateWebgisAdministratorTest extends TestCase
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/create');
         $response->assertStatus(200);
-        $response->assertSeeText('Tambah Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
+        $response->assertSeeText('Tambah Data Administrator');
     }
 
     public function test_correct_data_must_be_provided_to_create_new_webgis_administrator()

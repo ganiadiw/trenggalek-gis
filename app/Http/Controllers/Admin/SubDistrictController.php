@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSubDistrictRequest;
 use App\Http\Requests\UpdateSubDistrictRequest;
+use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use Illuminate\Http\Request;
@@ -23,8 +24,13 @@ class SubDistrictController extends Controller
 
     public function search(Request $request)
     {
-        $subDistricts = SubDistrict::where('name', 'like', '%' . $request->search . '%')
-            ->select('name', 'code', 'latitude', 'longitude')
+        $validated = $request->validate([
+            'column_name' => 'required',
+            'search_value' => 'required',
+        ]);
+
+        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
+            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
             ->orderBy('code', 'asc')->paginate(10)->withQueryString();
 
         return view('sub-district.index', compact('subDistricts'));
@@ -58,6 +64,12 @@ class SubDistrictController extends Controller
 
     public function show(SubDistrict $subDistrict)
     {
+        $subDistrict->load('touristDestinations:sub_district_id,id,name,category_id');
+        $touristDestinationsId = $subDistrict->touristDestinations->pluck('category_id')->unique();
+
+        $subDistrict['tourist_destinations_count'] = count($subDistrict->touristDestinations);
+        $subDistrict['tourist_destination_categories_count'] = Category::whereIn('id', $touristDestinationsId)->count();
+
         return view('sub-district.show', compact('subDistrict'));
     }
 
@@ -93,7 +105,7 @@ class SubDistrictController extends Controller
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
-        return back();
+        return redirect()->route('dashboard.sub-districts.edit', ['sub_district' => $subDistrict]);
     }
 
     public function destroy(SubDistrict $subDistrict)
@@ -129,6 +141,25 @@ class SubDistrictController extends Controller
 
         return view('sub-district.related-tourist-destination', [
             'touristDestinations' => $touristDestinations->paginate(10),
+            'touristDestinationMapping' => $touristDestinations->get(),
+            'subDistrict' => $subDistrict,
+        ]);
+    }
+
+    public function relatedTouristDestinationSearch(SubDistrict $subDistrict, Request $request)
+    {
+        $validated = $request->validate([
+            'column_name' => 'required',
+            'search_value' => 'required',
+        ]);
+
+        $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
+            ->where('sub_district_id', $subDistrict->id)
+            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
+            ->orderBy('name', 'asc');
+
+        return view('sub-district.related-tourist-destination', [
+            'touristDestinations' => $touristDestinations->paginate(10)->withQueryString(),
             'touristDestinationMapping' => $touristDestinations->get(),
             'subDistrict' => $subDistrict,
         ]);

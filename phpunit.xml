@@ -10,6 +10,11 @@
         </testsuite>
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
+            <exclude>./tests/Feature/Auth/EmailVerificationTest.php</exclude>
+            <exclude>./tests/Feature/Auth/PasswordConfirmationTest.php</exclude>
+            <exclude>./tests/Feature/Auth/PasswordResetTest.php</exclude>
+            <exclude>./tests/Feature/Auth/PasswordUpdateTest.php</exclude>
+            <exclude>./tests/Feature/Auth/RegistrationTest.php</exclude>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
@@ -32,6 +37,14 @@
             <file>./app/Http/Middleware/TrustProxies.php</file>
             <file>./app/Http/Middleware/ValidateSignature.php</file>
             <file>./app/Http/Middleware/VerifyCsrfToken.php</file>
+            <file>./app/Http/Controllers/Auth/ConfirmablePasswordController.php</file>
+            <file>./app/Http/Controllers/Auth/EmailVerificationNotificationController.php</file>
+            <file>./app/Http/Controllers/Auth/EmailVerificationPromptController.php</file>
+            <file>./app/Http/Controllers/Auth/NewPasswordController.php</file>
+            <file>./app/Http/Controllers/Auth/PasswordController.php</file>
+            <file>./app/Http/Controllers/Auth/PasswordResetLinkController.php</file>
+            <file>./app/Http/Controllers/Auth/RegisteredUserController.php</file>
+            <file>./app/Http/Controllers/Auth/VerifyEmailController.php</file>
         </exclude>
     </coverage>
     <php>

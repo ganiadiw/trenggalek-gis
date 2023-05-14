@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
             Route::get('sub-districts/search', [SubDistrictController::class, 'search'])->name('sub-districts.search');
             Route::get('sub-districts/{sub_district}/download', [SubDistrictController::class, 'download'])->name('sub-districts.download');
             Route::get('sub-districts/{sub_district}/related-tourist-destination', [SubDistrictController::class, 'relatedTouristDestination'])->name('sub-districts.related-tourist-destination');
+            Route::get('sub-districts/{sub_district}/related-tourist-destination/search', [SubDistrictController::class, 'relatedTouristDestinationSearch'])->name('sub-districts.related-tourist-destination.search');
             Route::resource('sub-districts', SubDistrictController::class);
 
             Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');
@@ -65,8 +66,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::get('/tourist-destinations/{tourist_destination}', GuestTouristDestinationController::class)->name('guest.tourist-destinations.show');

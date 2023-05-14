@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -28,37 +29,28 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request)
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Delete the user's account.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Request $request)
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current-password'],
-        ]);
-
         $user = $request->user();
 
-        Auth::logout();
+        $validated = $request->except(['password', 'password_confirmation']);
 
-        $user->delete();
+        if ($request->file('avatar')) {
+            $avatar = $validated['avatar'];
+            $validated['avatar_name'] = $avatar->hashName();
+            $validated['avatar_path'] = $avatar->storeAs('public/avatars', $validated['avatar_name']);
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            if ($user->avatar_path != null) {
+                Storage::delete($user->avatar_path);
+            }
+        }
 
-        return Redirect::to('/');
+        if ($request->password) {
+            $validated['password'] = Hash::make($request->password);
+        }
+
+        $user->update($validated);
+
+        toastr()->success('Data berhasil diperbarui', 'Sukses');
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 }

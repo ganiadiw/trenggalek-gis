@@ -1,17 +1,24 @@
 <nav x-data="{ open: false, openSidebar: false }" class="bg-white border-b">
     <!-- Primary Navigation Menu -->
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 xl:justify-end">
-            <button @click="openSidebar = ! openSidebar"
-                class="inline-flex items-center justify-center p-2 text-gray-400 transition duration-150 ease-in-out rounded-md xl:hidden hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500">
-                <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                    <path :class="{ 'hidden': openSidebar, 'inline-flex': !openSidebar }" class="inline-flex"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    <path :class="{ 'hidden': !openSidebar, 'inline-flex': openSidebar }" class="hidden"
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center space-x-3">
+                <button @click="openSidebar = ! openSidebar"
+                    class="inline-flex items-center justify-center p-2 text-gray-400 transition duration-150 ease-in-out rounded-md xl:hidden hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500">
+                    <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path :class="{ 'hidden': openSidebar, 'inline-flex': !openSidebar }" class="inline-flex"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{ 'hidden': !openSidebar, 'inline-flex': openSidebar }" class="hidden"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <div>
+                    <a  href="{{ route('welcome') }}" class="px-1 pt-1 text-sm font-semibold leading-5 text-gray-700 transition duration-150 ease-in-out border-b-2 border-transparent hover:text-blue-700 hover:border-gray-300 focus:outline-none focus:text-blue-900 focus:border-gray-300">
+                        Home
+                    </a>
+                </div>
+            </div>
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
@@ -147,17 +154,19 @@
                         <div class="flex items-center justify-between w-full pr-2 ml-4">
                             Kelola Destinasi Wisata
                             @if (request()->routeIs('dashboard.categories*') || request()->routeIs('dashboard.tourist-destination*'))
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-down"
-                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-chevron-down" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round"
                                     :class="{ '-rotate-90 duration-200': !toggleDropdown, 'duration-200': toggleDropdown }">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                             @else
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-right"
-                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-chevron-right" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round"
                                     :class="{ 'rotate-90 duration-200': toggleDropdown, 'duration-200': !toggleDropdown }">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <polyline points="9 6 15 12 9 18"></polyline>
@@ -176,37 +185,39 @@
                             @can('view_superadmin_menu')
                                 <li class="flex mt-1">
                                     <x-side-link :href="route('dashboard.categories.index')" class="pl-9" :active="request()->routeIs('dashboard.categories*')"
-                                        spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
+                                        spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg"
+                                        titleClasses="-ml-5">
                                         <x-slot name="title">Kategori Destinasi Wisata</x-slot>
                                     </x-side-link>
                                 </li>
                             @endcan
                             <li class="flex">
                                 <x-side-link :href="route('dashboard.tourist-destinations.index')" class="pl-9" :active="request()->routeIs('dashboard.tourist-destinations*')"
-                                    spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
+                                    spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg"
+                                    titleClasses="-ml-5">
                                     <x-slot name="title">Destinasi Wisata</x-slot>
                                 </x-side-link>
                             </li>
                         </ul>
                     </div>
                 </li>
-                <li class="flex">
-                    <x-side-link :href="route('dashboard.map-drawer')" target="_blank" :active="request()->routeIs('dashboard.map-drawer')">
-                        <x-slot name="svgIcon">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brush"
-                                width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#292524"
-                                fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M3 21v-4a4 4 0 1 1 4 4h-4"></path>
-                                <path d="M21 3a16 16 0 0 0 -12.8 10.2"></path>
-                                <path d="M21 3a16 16 0 0 1 -10.2 12.8"></path>
-                                <path d="M10.6 9a9 9 0 0 1 4.4 4.4"></path>
-                            </svg>
-                        </x-slot>
-                        <x-slot name="title">Map Drawer</x-slot>
-                    </x-side-link>
-                </li>
                 @can('view_superadmin_menu')
+                    <li class="flex">
+                        <x-side-link :href="route('dashboard.map-drawer')" target="_blank" :active="request()->routeIs('dashboard.map-drawer')">
+                            <x-slot name="svgIcon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brush"
+                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#292524"
+                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 21v-4a4 4 0 1 1 4 4h-4"></path>
+                                    <path d="M21 3a16 16 0 0 0 -12.8 10.2"></path>
+                                    <path d="M21 3a16 16 0 0 1 -10.2 12.8"></path>
+                                    <path d="M10.6 9a9 9 0 0 1 4.4 4.4"></path>
+                                </svg>
+                            </x-slot>
+                            <x-slot name="title">Map Drawer</x-slot>
+                        </x-side-link>
+                    </li>
                     <li x-data="{
                         toggleDropdown: '{{ request()->routeIs('dashboard.page-settings*') }}',
                         get isDropdownOpen() { return this.toggleDropdown },
@@ -216,26 +227,32 @@
                             class="flex items-center w-full h-12 pl-4 my-1 ml-1 hover:bg-gray-300 hover:rounded-md hover:text-gray-900"
                             :class="{ ' rounded-lg bg-gray-300 text-gray-900': toggleDropdown }">
                             <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings"
+                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
+                                    <path
+                                        d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z">
+                                    </path>
                                     <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
                                 </svg>
                             </div>
                             <div class="flex items-center justify-between w-full pr-2 ml-4">
                                 Pengaturan Halaman
                                 @if (request()->routeIs('dashboard.page-settings*'))
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-down"
-                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="icon icon-tabler icon-tabler-chevron-down" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round"
                                         :class="{ '-rotate-90 duration-200': !toggleDropdown, 'duration-200': toggleDropdown }">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <polyline points="6 9 12 15 18 9"></polyline>
                                     </svg>
                                 @else
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-right"
-                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="icon icon-tabler icon-tabler-chevron-right" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round"
                                         :class="{ 'rotate-90 duration-200': toggleDropdown, 'duration-200': !toggleDropdown }">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <polyline points="9 6 15 12 9 18"></polyline>
@@ -253,7 +270,8 @@
                             <ul>
                                 <li class="flex mt-1">
                                     <x-side-link :href="route('dashboard.page-settings.guest.index')" class="pl-9" :active="request()->routeIs('dashboard.page-settings*')"
-                                        spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg" titleClasses="-ml-5">
+                                        spanClasses="-ml-9 mr-1 bg-blue-500 rounded-tr-lg rounded-br-lg"
+                                        titleClasses="-ml-5">
                                         <x-slot name="title">Halaman Pengunjung</x-slot>
                                     </x-side-link>
                                 </li>

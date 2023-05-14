@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\GuestPageSetting;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
-use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
@@ -14,9 +13,12 @@ class WelcomeController extends Controller
     {
         $heroImages = GuestPageSetting::where('key', 'hero_image')->select('key', 'value')->first();
         $heroImagesCount = 0;
-        foreach ($heroImages->value as $heroImage) {
-            if ($heroImage != null) {
-                $heroImagesCount++;
+
+        if ($heroImages) {
+            foreach ($heroImages->value as $heroImage) {
+                if ($heroImage != null) {
+                    $heroImagesCount++;
+                }
             }
         }
 
@@ -28,8 +30,8 @@ class WelcomeController extends Controller
             'heroImagesCount' => $heroImagesCount,
             'aboutPage' => GuestPageSetting::where('key', 'about_page')->select('key', 'value')->first(),
             'subDistricts' => SubDistrict::select('name', 'geojson_path', 'geojson_name', 'fill_color')->get(),
-            'categories' => Category::select('name', 'icon_name', 'icon_path')->withCount('touristDestinations')->get(),
-            'touristDestinations' => TouristDestination::with('category:id,name,icon_name')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->get(),
+            'categories' => Category::select('name', 'color', 'svg_name')->withCount('touristDestinations')->get(),
+            'touristDestinations' => TouristDestination::with('category:id,name,color,svg_name')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->get(),
         ]);
     }
 }

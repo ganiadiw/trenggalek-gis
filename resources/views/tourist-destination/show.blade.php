@@ -81,7 +81,7 @@
                                         <path d="M4 14h6v6h-6z"></path>
                                         <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
                                     </svg>
-                                    <span class="ml-2">{{ $touristDestination->category->name }}</span>
+                                    <span class="ml-2">{{ $touristDestination->category->name ?? 'Belum Berkategori'}}</span>
                                 </p>
                             </div>
                             <div>
@@ -249,8 +249,11 @@
         </div>
     </div>
 
-    @section('script')
+    @push('cdn-script')
         <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    @endpush
+
+    @section('script')
         <script>
             new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $touristDestination->subDistrict->geojson_name) }}'], {
                 style: {
@@ -260,19 +263,17 @@
                 }
             }).addTo(map);
 
-            @if ($touristDestination->category->icon_name)
-                icon = L.icon({
-                    iconUrl: '{{ asset('storage/categories/icon/' . $touristDestination->category->icon_name) }}',
-                    iconSize: [45, 45],
-                    iconAnchor: [23.5, 47],
-                    popupAnchor: [0, 0],
-                });
-
-                marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {
-                    icon: icon
-                }).addTo(map);
+            let icon;
+            @if ($touristDestination->category && $touristDestination->category->svg_name)
+                icon = L.AwesomeMarkers.icon({
+                            icon: '{{ $touristDestination->category->svg_name }}',
+                            markerColor: '{{ $touristDestination->category->color }}'
+                        });
+                marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {icon: icon})
+                        .addTo(map);
             @else
-                marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}]).addTo(map)
+                marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
+                        .addTo(map);
             @endif
 
             let swiper = new Swiper(".mySwiper", {
