@@ -64,7 +64,43 @@
                     </x-statistic-card>
                 </div>
             </div>
-            <x-head.leaflet-init class="w-full rounded-lg h-[40rem]" />
+            <div x-data="searchLocation()"
+                x-init="$watch('searchInput', () => selectedTouristDestinationIndex = '')"
+                class="relative">
+                <x-head.leaflet-init class="w-full rounded-lg h-[40rem]" />
+                <div class="absolute z-20 w-52 sm:w-80 md:w-96 right-2 top-2">
+                    <div class="absolute left-0 flex items-center pl-3 pointer-events-none top-3">
+                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <input type="text"
+                        x-model="searchInput"
+                        x-on:click.outside="reset()"
+                        x-on:keyup.escape="reset()"
+                        x-on:keyup.down="selectNextList()"
+                        x-on:keyup.up="selectPreviousList()"
+                        x-on:keyup.enter="goToMarker()"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Telusuri di sini">
+                    <div x-cloak
+                        x-transition
+                        x-show="filteredTouristDestinations.length > 0"
+                        x-ref="touristDestinations"
+                        class="mt-1 overflow-y-auto text-sm bg-white border-[1.5px] border-gray-300 rounded-md shadow-lg max-h-64">
+                        <template x-for="(touristDestination, index) in filteredTouristDestinations">
+                            <button type="button"
+                                x-on:click="goToMarker(touristDestination.latitude, touristDestination.longitude)"
+                                class="w-full p-2 text-left border-b-[1.5px] border-b-gray-300 hover:bg-gray-200"
+                                x-bind:class="{ 'bg-gray-200': index === selectedTouristDestinationIndex }">
+                                <p class="font-medium text-gray-800" x-text="touristDestination.name"></p>
+                                <p class="text-xs text-gray-500 truncate" x-text="touristDestination.address"></p>
+                            </button>
+                        </template>
+                    </div>
+                    <div x-cloak x-transition x-show="searchInput !== '' && filteredTouristDestinations.length === 0"
+                        class="mt-1 overflow-y-auto text-sm bg-white border-[1.5px] border-gray-300 rounded-md shadow-lg h-fit">
+                        <p class="w-full px-2 py-4 text-left text-gray-800">Hasil Tidak Ditemukan</p>
+                    </div>
+                </div>
+            </div>
             <div class="grid w-full gap-4 p-4 pb-10 mt-5 bg-white rounded-md lg:grid-cols-2">
                 <div>
                     <h2 class="p-2 mb-5 text-base font-semibold">Statistik Destinasi Wisata Per Kecamatan</h2>
@@ -92,6 +128,7 @@
 
     @section('script')
         <script src="{{ asset('assets/js/leaflet/leaflet.awesome-markers.js') }}"></script>
+        @include('js.search-destination')
         <script>
             @foreach ($subDistricts as $subDistrict)
                 new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {

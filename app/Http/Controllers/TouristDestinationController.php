@@ -24,8 +24,8 @@ class TouristDestinationController extends Controller
             ->orderBy('code', 'asc')->get();
 
         return view('tourist-destination.index', [
-            'touristDestinations' => $touristDestinations->paginate(10),
-            'touristDestinationMapping' => $touristDestinations->get(),
+            'touristDestinationsDataTable' => $touristDestinations->paginate(10),
+            'touristDestinations' => $touristDestinations->get(),
             'subDistricts' => $subDistricts,
         ]);
     }
