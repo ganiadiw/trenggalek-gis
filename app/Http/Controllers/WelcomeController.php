@@ -31,7 +31,7 @@ class WelcomeController extends Controller
             'aboutPage' => GuestPageSetting::where('key', 'about_page')->select('key', 'value')->first(),
             'subDistricts' => SubDistrict::select('name', 'geojson_path', 'geojson_name', 'fill_color')->get(),
             'categories' => Category::select('name', 'color', 'svg_name')->withCount('touristDestinations')->get(),
-            'touristDestinations' => TouristDestination::with('category:id,name,color,svg_name')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->get(),
+            'touristDestinations' => TouristDestination::with('category:id,name,color,svg_name,hex_code')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->get(),
         ]);
     }
 }
