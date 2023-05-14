@@ -40,7 +40,16 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        Category::create($request->validated());
+        $validated = $request->validated();
+
+        if (isset($validated['color'])) {
+            $matchedColor = collect(Category::COLORS)->first(function ($item) use ($validated) {
+                return $item['name'] === $validated['color'];
+            });
+            $validated['hex_code'] = $matchedColor['hex_code'];
+        }
+
+        Category::create($validated);
 
         toastr()->success('Data berhasil ditambahkan', 'Sukses');
 
@@ -59,7 +68,16 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $category->update($request->validated());
+        $validated = $request->validated();
+
+        if (isset($validated['color'])) {
+            $matchedColor = collect(Category::COLORS)->first(function ($item) use ($validated) {
+                return $item['name'] === $validated['color'];
+            });
+            $validated['hex_code'] = $matchedColor['hex_code'];
+        }
+
+        $category->update($validated);
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
