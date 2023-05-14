@@ -33,7 +33,7 @@
                                                 </button>
                                             </blockquote>
                                             <div class="mb-3">
-                                                <label for="color"  class="block mb-2 text-sm font-medium text-gray-900">Pilih Warna Marker</label>
+                                                <label for="color" class="block mb-2 text-sm font-medium text-gray-900">Pilih Warna Marker</label>
                                                 <select id="color" name="color" class="w-full text-sm py-2.5 px-4 text-gray-900 border-gray-300 rounded-md bg-gray-50" x-bind:required="svgName !== null && svgName !== ''">
                                                     <option value="" disabled selected>Pilih Warna</option>
                                                     @foreach (\App\Models\Category::COLORS as $key => $color)
