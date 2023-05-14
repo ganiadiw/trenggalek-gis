@@ -293,17 +293,17 @@
                                 offset: [-20, -20],
                                 permanent: true,
                                 direction: 'left',
-                                className: 'bg-inherit border-0 shadow-none text-gray-900 font-semibold'
+                                className: 'bg-inherit border-0 shadow-none text-[{{ $touristDestination->category->hex_code }}] font-[720]'
                             });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
                             .addTo(map)
                             .bindPopup(popUp)
                             .bindTooltip('{{ $touristDestination->name }}', {
-                                offset: [-20, -20],
+                                offset: [-35, 5],
                                 permanent: true,
                                 direction: 'left',
-                                className: 'bg-inherit border-0 shadow-none text-gray-900 font-semibold'
+                                className: 'bg-inherit border-0 shadow-none text-[#277fc9] font-[720]'
                             });
                 @endif
 
