@@ -13,12 +13,12 @@
                                 class="grid p-5 mt-3 border-2 border-gray-200 rounded-md shadow-md gap-x-5 md:grid-cols-2">
                                 <x-input-default-form type="text" name="name" :value="old('name')" id="name"
                                     labelTitle="Nama Destinasi Wisata*" error="name" placeholder="Nama Destinasi Wisata" />
-                                <x-input-select-option labelTitle="Pilih Kecamatan*" id="sub_district"
-                                    name="sub_district_id" error="sub_district">
+                                <x-input-select-option labelTitle="Pilih Kecamatan*" id="sub_district_id"
+                                    name="sub_district_id" error="sub_district_id">
                                     <x-slot name="options">
                                         <option value="" disabled selected>Pilih Kecamatan</option>
                                         @foreach ($subDistricts as $key => $subDistrict)
-                                            <option value="{{ $subDistrict }}" @selected(old('sub_district_id') == $subDistrict)
+                                            <option value="{{ $subDistrict->id }}" @selected(old('sub_district_id') == $subDistrict->id)
                                                 class="text-sm font-normal text-gray-900">
                                                 {{ $subDistrict->name }}</option>
                                         @endforeach
@@ -89,11 +89,11 @@
                                                     dapat ditentukan dengan klik pada peta</p>
                                             </blockquote>
                                             <x-input-default-form type="text" name="latitude" :value="old('latitude')"
-                                                id="latitude" labelTitle="Latitude*" error='latitude'
+                                                id="latitude" labelTitle="Latitude / Garis Lintang*" error='latitude'
                                                 placeholder="-8.2402961">
                                             </x-input-default-form>
                                             <x-input-default-form type="text" name="longitude" :value="old('longitude')"
-                                                id="longitude" labelTitle="Longitude*" error='longitude'
+                                                id="longitude" labelTitle="Longitude / Garis Bujur*" error='longitude'
                                                 placeholder="111.4484781">
                                             </x-input-default-form>
                                             <button type="button" id="buttonFindOnMap"

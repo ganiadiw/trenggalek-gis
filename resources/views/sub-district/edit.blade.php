@@ -218,11 +218,11 @@
                                                         dapat ditentukan dengan klik pada peta</p>
                                                 </blockquote>
                                                 <x-input-default-form type="text" name="latitude" :value="old('latitude', $subDistrict->latitude)"
-                                                    id="latitude" labelTitle="Latitude*" error='latitude'
+                                                    id="latitude" labelTitle="Latitude / Garis Lintang*" error='latitude'
                                                     placeholder="{{ $subDistrict->latitude ?? '-8.2402961' }}">
                                                 </x-input-default-form>
                                                 <x-input-default-form type="text" name="longitude"
-                                                    :value="old('longitude', $subDistrict->longitude)" id="longitude" labelTitle="Longitude*"
+                                                    :value="old('longitude', $subDistrict->longitude)" id="longitude" labelTitle="Longitude / Garis Bujur*"
                                                     error='longitude'
                                                     placeholder="{{ $subDistrict->longitude ?? '111.4484781' }}">
                                                 </x-input-default-form>

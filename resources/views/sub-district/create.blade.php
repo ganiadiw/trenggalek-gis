@@ -213,11 +213,11 @@
                                                         dapat ditentukan dengan klik pada peta</p>
                                                 </blockquote>
                                                 <x-input-default-form type="text" name="latitude" :value="old('latitude')"
-                                                    id="latitude" labelTitle="Latitude*" error='latitude'
+                                                    id="latitude" labelTitle="Latitude / Garis Lintang*" error='latitude'
                                                     placeholder="-8.2402961">
                                                 </x-input-default-form>
                                                 <x-input-default-form type="text" name="longitude"
-                                                    :value="old('longitude')" id="longitude" labelTitle="Longitude*"
+                                                    :value="old('longitude')" id="longitude" labelTitle="Longitude / Garis Bujur*"
                                                     error='longitude' placeholder="111.4484781">
                                                 </x-input-default-form>
                                                 <button type="button" id="buttonFindOnMap"
