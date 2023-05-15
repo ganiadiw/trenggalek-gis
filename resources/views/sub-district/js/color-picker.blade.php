@@ -1,11 +1,15 @@
 <script>
     let subDistrictFillColor = document.getElementById('subDistrictFillColor');
-    let defaultColor;
+    let defaultColor = '#C5A516';
 
     @if (request()->routeIs('dashboard.sub-districts.create'))
-        defaultColor = '{{ old('fill_color', '#C5A516') }}';
+        if (subDistrictFillColor.value !== '') {
+            defaultColor = '{{ old('fill_color') }}';
+        }
     @elseif (request()->routeIs('dashboard.sub-districts.edit'))
-        defaultColor = '{{ old('fill_color', $subDistrict->fill_color) }}';
+        if (subDistrictFillColor.value !== '') {
+            defaultColor = '{{ old('fill_color', $subDistrict->fill_color) }}';
+        }
     @endif
 
     const pickr = Pickr.create({
