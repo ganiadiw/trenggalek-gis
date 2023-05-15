@@ -17,7 +17,7 @@ class SubDistrictController extends Controller
     public function index(Request $request)
     {
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
-            ->orderBy('code', 'asc')->paginate(10);
+            ->orderBy('code', 'asc')->withCount('touristDestinations')->paginate(10);
 
         return view('sub-district.index', compact('subDistricts'));
     }
@@ -31,7 +31,7 @@ class SubDistrictController extends Controller
 
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
             ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
-            ->orderBy('code', 'asc')->paginate(10)->withQueryString();
+            ->orderBy('code', 'asc')->withCount('touristDestinations')->paginate(10)->withQueryString();
 
         return view('sub-district.index', compact('subDistricts'));
     }

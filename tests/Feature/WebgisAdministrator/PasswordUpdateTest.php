@@ -23,12 +23,13 @@ class PasswordUpdateTest extends TestCase
             'email' => 'hugofirst@example.com',
             'is_admin' => 0,
         ]);
+
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
     public function test_an_superadmin_cannot_update_webgis_administrator_with_incorrect_password()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
-
         $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
             'name' => 'Hugo First Time',
             'email' => 'hugofirsttime@example.com',
@@ -45,7 +46,6 @@ class PasswordUpdateTest extends TestCase
 
     public function test_an_superadmin_can_update_webgis_administrator_with_change_password()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
             'name' => 'Hugo First Time',
             'email' => 'hugofirsttime@example.com',
@@ -57,6 +57,7 @@ class PasswordUpdateTest extends TestCase
         ]);
 
         $response->assertRedirect('/dashboard/users/hugofirsttime/edit');
+        $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',

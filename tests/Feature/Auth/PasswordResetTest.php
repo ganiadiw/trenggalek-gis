@@ -12,7 +12,7 @@ class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_reset_password_link_screen_can_be_rendered()
+    public function test_reset_password_link_screen_is_displayed()
     {
         $response = $this->get('/forgot-password');
 
@@ -30,7 +30,7 @@ class PasswordResetTest extends TestCase
         Notification::assertSentTo($user, ResetPassword::class);
     }
 
-    public function test_reset_password_screen_can_be_rendered()
+    public function test_reset_password_screen_is_displayed()
     {
         Notification::fake();
 

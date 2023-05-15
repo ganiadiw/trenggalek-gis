@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class MapDrawerTest extends TestCase
 {
-    public function test_a_map_drawer_page_can_be_rendered()
+    public function test_a_map_drawer_page_is_displayed()
     {
         $user = User::factory()->create();
 
@@ -16,5 +16,6 @@ class MapDrawerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSeeText('Map Drawer');
+        $response->assertSessionHasNoErrors();
     }
 }

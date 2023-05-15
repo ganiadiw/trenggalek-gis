@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserStoreRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,19 +33,15 @@ class UserStoreRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function attributes()
     {
         return [
-            'name.required' => 'Nama harus diisi',
-            'email.required' => 'Email harus diisi',
-            'email.eamil' => 'Email tidak valid',
-            'email.unique' => 'Email sudah terdaftar',
-            'username.required' => 'Username harus diisi',
-            'username.unique' => 'Username sudah terdaftar',
-            'password.required' => 'Password harus diisi',
-            'password.min' => 'Password minimal 8 karakter',
-            'address.required' => 'Alamat harus diisi',
-            'phone_number.required' => 'Nomor telepon harus diisi',
+            'name' => 'Nama',
+            'email' => 'Surel',
+            'username' => 'Nama Pengguna',
+            'password' => 'Kata Sandi',
+            'address' => 'Alamat',
+            'phone_number' => 'Nomor Handphone',
         ];
     }
 }

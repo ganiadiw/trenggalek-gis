@@ -20,34 +20,40 @@ class GuestPageSettingTest extends TestCase
 
         $this->user = User::factory()->create();
         $this->guestPageSetting = GuestPageSetting::factory()->create();
+
+        $this->assertEquals(1, $this->user->is_admin);
     }
 
     public function test_an_authenticated_user_can_see_guest_page_setting_page()
     {
-        $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->get('/dashboard/page-settings/guest');
+
         $response->assertStatus(200);
         $response->assertSeeText('Pengaturan Halaman');
+        $response->assertSessionHasNoErrors();
     }
 
-    public function test_update_guets_page_setting_can_be_rendered()
+    public function test_update_guest_page_setting_is_displayed()
     {
-        $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->get('/dashboard/page-settings/guest/' . $this->guestPageSetting->id);
+
         $response->assertStatus(200);
         $response->assertSeeText('Edit Data Pengaturan Halaman');
+        $response->assertSessionHasNoErrors();
     }
 
     public function test_text_field_can_be_updated()
     {
-        $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->put('/dashboard/page-settings/guest/' . $this->guestPageSetting->id, [
             'value_text' => [
                 'Destinasi Wisata Trenggalek',
             ],
         ]);
+
         $response->assertValid('value_text');
         $response->assertRedirect(url()->previous());
+        $response->assertSessionHasNoErrors();
+
         $this->assertDatabaseMissing('guest_page_settings', [
             'value' => ['Wisata Trenggalek'],
         ]);
@@ -67,16 +73,19 @@ class GuestPageSettingTest extends TestCase
             'max_value' => 2,
         ]);
 
-        $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->put('/dashboard/page-settings/guest/' . $guestPageSetting->id, [
             'value_image' => [
                 UploadedFile::fake()->image('54321-image.png'),
                 UploadedFile::fake()->image('98765-image.png'),
             ],
         ]);
+
         $response->assertValid('value_image');
         $response->assertRedirect(url()->previous());
+        $response->assertSessionHasNoErrors();
+
         $guestPageSetting = GuestPageSetting::where('key', 'hero_image')->first();
+
         $this->assertDatabaseMissing('guest_page_settings', [
             'value' => ['12345-image.png', '98765-image.png'],
         ]);
@@ -97,12 +106,13 @@ class GuestPageSettingTest extends TestCase
             'max_value' => 2,
         ]);
 
-        $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->deleteJson('/dashboard/page-settings/guest/delete-image/' . $guestPageSetting->key . '/' . '12345-image.png');
+
         $response->assertStatus(200);
         $response->assertJson([
             'message' => 'Delete image successfully',
         ]);
+
         $this->assertFalse(Storage::exists('public/page-settings/hero_image/12345-image.png'));
     }
 }

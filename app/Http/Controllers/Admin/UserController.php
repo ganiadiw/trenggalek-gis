@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -40,7 +40,7 @@ class UserController extends Controller
         return view('webgis-admin.create');
     }
 
-    public function store(UserStoreRequest $request)
+    public function store(StoreUserRequest $request)
     {
         $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
@@ -65,7 +65,7 @@ class UserController extends Controller
         return view('webgis-admin.edit', compact('user'));
     }
 
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $this->authorize('update', $user);
         $validated = $request->except(['password', 'password_confirmation']);

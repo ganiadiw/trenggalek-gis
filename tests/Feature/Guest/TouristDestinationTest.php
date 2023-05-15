@@ -30,8 +30,10 @@ class TouristDestinationTest extends TestCase
 
     public function test_an_guest_can_see_tourist_destination_page()
     {
-        $response = $this->get('/tourist-destinations/' . $this->touristDestination->slug);
+        $response = $this->get('tourist-destinations/' . $this->touristDestination->slug);
+
         $response->assertStatus(200);
         $response->assertSeeText([$this->touristDestination->name, $this->touristDestination->address]);
+        $response->assertSessionHasNoErrors();
     }
 }

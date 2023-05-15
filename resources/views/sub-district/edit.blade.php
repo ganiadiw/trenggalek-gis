@@ -218,11 +218,11 @@
                                                         dapat ditentukan dengan klik pada peta</p>
                                                 </blockquote>
                                                 <x-input-default-form type="text" name="latitude" :value="old('latitude', $subDistrict->latitude)"
-                                                    id="latitude" labelTitle="Latitude*" error='latitude'
+                                                    id="latitude" labelTitle="Latitude / Garis Lintang*" error='latitude'
                                                     placeholder="{{ $subDistrict->latitude ?? '-8.2402961' }}">
                                                 </x-input-default-form>
                                                 <x-input-default-form type="text" name="longitude"
-                                                    :value="old('longitude', $subDistrict->longitude)" id="longitude" labelTitle="Longitude*"
+                                                    :value="old('longitude', $subDistrict->longitude)" id="longitude" labelTitle="Longitude / Garis Bujur*"
                                                     error='longitude'
                                                     placeholder="{{ $subDistrict->longitude ?? '111.4484781' }}">
                                                 </x-input-default-form>
@@ -252,9 +252,12 @@
 
     @section('script')
         @include('js.leaflet-find-marker')
+        @include('sub-district.js.preview-geojson-to-map')
+        @include('sub-district.js.color-picker')
+
         <script>
             marker = L.marker([{{ $subDistrict->latitude }}, {{ $subDistrict->longitude }}]).addTo(map);
-            let subDistrictFillColor = document.getElementById('subDistrictFillColor')
+
             layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
                 style: {
                     'color': '{{ $subDistrict->fill_color }}',
@@ -262,102 +265,6 @@
                     'opacity': 0.4,
                 }
             }).addTo(map);
-
-            const pickr = Pickr.create({
-                el: '.color-picker',
-                theme: 'nano',
-                default: '{{ $subDistrict->fill_color }}',
-
-                swatches: [
-                    '#059669',
-                    '#0284c7',
-                    '#8b5cf6',
-                    '#db2777',
-                    '#84cc16',
-                    '#fbbf24',
-                    '#78716c',
-                ],
-
-                components: {
-                    preview: true,
-                    opacity: false,
-                    hue: true,
-
-                    interaction: {
-                        hex: false,
-                        rgba: false,
-                        hsla: false,
-                        hsva: false,
-                        cmyk: false,
-                        input: true,
-                        clear: false,
-                        save: true,
-                    }
-                }
-            });
-
-            pickr.on('save', (color, instance) => {
-                const hexColor = color.toHEXA().toString()
-                subDistrictFillColor.value = hexColor
-                layer.setStyle({
-                    'color': hexColor,
-                    'weight': 2,
-                    'opacity': 0.4,
-                })
-                pickr.hide()
-            })
-
-            function previewGeoJSONToMap(geoJSON) {
-                const data = JSON.parse(geoJSON)
-
-                if (layer) {
-                    map.removeLayer(layer)
-                    map.removeLayer(marker)
-                }
-
-                layer = L.geoJSON(data, {
-                    style: function(feature) {
-                        return {
-                            color: subDistrictFillColor.value,
-                            weight: 2,
-                            opacity: 0.4,
-                        }
-                    }
-                }).addTo(map)
-
-                let bounds = layer.getBounds()
-                map.fitBounds(bounds)
-                let center = bounds.getCenter()
-                marker = L.marker(center).addTo(map)
-                latitudeInput.value = center.lat
-                longitudeInput.value = center.lng
-            }
-
-            let geojsonFile = document.getElementById('geojsonFile')
-
-            geojsonFile.addEventListener('change', function() {
-                const file = geojsonFile.files[0]
-                const reader = new FileReader()
-
-                reader.onload = function() {
-                    previewGeoJSONToMap(reader.result)
-                    document.getElementById('geoJSONTextArea').value = ''
-                }
-                reader.readAsText(file)
-            })
-
-            let buttonGeoJSONText = document.getElementById('buttonGeoJSONText')
-
-            buttonGeoJSONText.addEventListener('click', function() {
-                let geoJSONTextArea = document.getElementById('geoJSONTextArea')
-                let badGeoJSON = geoJSONTextArea.value
-                let parseGeoJSON = JSON.parse(badGeoJSON)
-                let geoJSONPrettyFormat = JSON.stringify(parseGeoJSON, undefined, 2)
-                geoJSONTextArea.value = geoJSONPrettyFormat
-
-                geojsonFile.value = ''
-                previewGeoJSONToMap(geoJSONPrettyFormat)
-            })
         </script>
     @endsection
 </x-app-layout>

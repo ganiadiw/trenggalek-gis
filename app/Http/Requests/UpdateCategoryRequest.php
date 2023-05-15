@@ -51,15 +51,12 @@ class UpdateCategoryRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function attributes()
     {
         return [
-            'name.required' => 'Nama harus diisi',
-            'name.max' => 'Maksimal 255 karakter',
-            'color.required_with' => 'Warna harus diisi jika nama icon diisi',
-            'color.in' => 'Pilihan warna tidak sesuai dengan yang tersedia',
-            'svg_name.required_with' => 'Nama icon harus diisi jika warna dipilih',
-            'svg_name.max' => 'Maksimal 255 karakter',
+            'name' => 'Nama Kategori',
+            'color' => 'Warna',
+            'svg_name' => 'Nama SVG Icon',
         ];
     }
 }

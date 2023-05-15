@@ -34,24 +34,16 @@ class StoreSubDistrictRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function attributes()
     {
         return [
-            'code.required' => 'Kode kecamatan harus diisi',
-            'code.unique' => 'Kode kecamatan sudah terdaftar',
-            'name.required' => 'Nama kecamatan harus diisi',
-            'latitude.required' => 'Latitude harus diisi',
-            'latitude.numeric' => 'Latitude harus berupa bilangan',
-            'latitude.between' => 'Latitude harus bernilai -90 sampai 90',
-            'longitude.required' => 'Longitude harus diisi',
-            'longitude.numeric' => 'Longitude harus berupa bilangan',
-            'longitude.between' => 'Longitude harus bernilai -180 sampai 180',
-            'geojson.required' => 'File geojson harus diisi dengan format .geojson',
-            'geojson.required_without' => 'Peta kecamatan harus diisi, pilih salah satu diantara dua metode upload file atau upload text',
-            'geojson.mimetypes' => 'File harus berformat geojson',
-            'geojson_text_area.required_without' => 'Peta kecamatan harus diisi, pilih salah satu diantara dua metode upload file atau upload text',
-            'fill_color.required' => 'Warna peta harus diisi',
-            'fill_color.regex' => 'Warna peta harus berupa warna Hex',
+            'code' => 'Kode Kecamatan',
+            'name' => 'Nama Kecamatan',
+            'latitude' => 'Latitude / Garis Lintang',
+            'longitude' => 'Longitude / Garis Bujur',
+            'geojson' => 'File Peta Geojson',
+            'geojson_text_area' => 'Kode Koordinat Peta Geojson',
+            'fill_color' => 'Warna Peta',
         ];
     }
 }

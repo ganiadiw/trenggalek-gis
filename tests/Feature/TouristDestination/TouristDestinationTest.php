@@ -30,27 +30,32 @@ class TouristDestinationTest extends TestCase
             'cover_image_name' => $image,
             'cover_image_path' => 'public/cover-images/' . $image,
         ]);
+
     }
 
     public function test_an_authenticated_user_can_see_tourist_destination_management_page()
     {
-        $this->withExceptionHandling();
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations');
+
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Destinasi Wisata');
+        $response->assertSessionHasNoErrors();
     }
 
     public function test_an_authenticated_user_can_see_tourist_destinations_show_page()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
+
         $response->assertRedirect('/tourist-destinations/' . $this->touristDestination->slug);
+        $response->assertSessionHasNoErrors();
     }
 
     public function test_an_user_can_search_contains_tourist_destination_data()
     {
-        $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/search?column_name=name&search_value=konang');
+
         $response->assertStatus(200);
         $response->assertSeeText($this->touristDestination->name);
+        $response->assertSessionHasNoErrors();
     }
 }

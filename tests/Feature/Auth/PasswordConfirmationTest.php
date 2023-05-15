@@ -10,7 +10,7 @@ class PasswordConfirmationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_confirm_password_screen_can_be_rendered()
+    public function test_confirm_password_screen_is_displayed()
     {
         $user = User::factory()->create();
 

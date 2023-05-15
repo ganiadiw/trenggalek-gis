@@ -71,6 +71,9 @@
                                     <th scope="col" class="px-3 py-3">
                                         Koordinat Tengah (Latitude, Longitude)
                                     </th>
+                                    <th scope="col" class="px-3 py-3">
+                                        Jumlah Destinasi Wisata
+                                    </th>
                                     <th scope="col" class="flex justify-center px-3 py-3">
                                         Aksi
                                     </th>
@@ -90,6 +93,9 @@
                                         </td>
                                         <td class="px-3 py-4">
                                             {{ $subDistrict->center_coordinate }}
+                                        </td>
+                                        <td class="px-3 py-4">
+                                            {{ $subDistrict->tourist_destinations_count }}
                                         </td>
                                         <td class="px-3 py-4">
                                             <x-action-button
