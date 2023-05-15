@@ -30,14 +30,14 @@ class CreateTouristDestinationTest extends TestCase
         $this->subDistrict = SubDistrict::factory()->create();
     }
 
-    public function test_a_tourist_destination_create_page_can_be_rendered()
+    public function test_a_tourist_destination_create_page_is_displayed()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/create');
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Destinasi Wisata');
     }
 
-    public function test_correct_data_must_be_provided_to_create_new_tourist_destination()
+    public function test_correct_data_must_be_provided_to_create_tourist_destination()
     {
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => '',
@@ -45,11 +45,11 @@ class CreateTouristDestinationTest extends TestCase
         $response->assertInvalid();
     }
 
-    public function test_an_authenticated_user_can_create_new_tourist_destination_with_tourist_attraction()
+    public function test_an_authenticated_user_can_create_tourist_destination_with_tourist_attraction()
     {
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => $this->category->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
@@ -88,11 +88,11 @@ class CreateTouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_an_authenticated_user_can_create_new_tourist_destination_without_tourist_attraction()
+    public function test_an_authenticated_user_can_create_tourist_destination_without_tourist_attraction()
     {
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => $this->category->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
@@ -122,7 +122,7 @@ class CreateTouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_an_authenticated_user_can_create_new_tourist_destination_with_image_in_description_editor()
+    public function test_an_authenticated_user_can_create_tourist_destination_with_image_in_description_editor()
     {
         $this->actingAs($this->user)->postJson('/dashboard/images', [
             'image' => UploadedFile::fake()->image('image1678273485413.png'),
@@ -144,7 +144,7 @@ class CreateTouristDestinationTest extends TestCase
 
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => $this->category->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
@@ -197,7 +197,7 @@ class CreateTouristDestinationTest extends TestCase
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485552.png'));
     }
 
-    public function test_an_authenticated_user_can_create_new_tourist_destination_with_deleted_image_in_description_editor()
+    public function test_an_authenticated_user_can_create_tourist_destination_with_deleted_image_in_description_editor()
     {
         $this->actingAs($this->user)->postJson('/dashboard/images', [
             'image' => UploadedFile::fake()->image('image1678273485413.png'),
@@ -219,7 +219,7 @@ class CreateTouristDestinationTest extends TestCase
 
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => $this->category->id,
             'address' => 'Desa Wonocoyo, Kecamatan Panggul',
             'manager' => 'DISPARBUD',
@@ -273,7 +273,7 @@ class CreateTouristDestinationTest extends TestCase
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485552.png'));
     }
 
-    public function test_an_guest_cannot_create_new_tourist_destination()
+    public function test_an_guest_cannot_create_tourist_destination()
     {
         $response = $this->post('dashboard/tourist-destinations', [
             'name' => 'Pantai Pelang',

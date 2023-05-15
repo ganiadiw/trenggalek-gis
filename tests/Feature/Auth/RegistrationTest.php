@@ -10,7 +10,7 @@ class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_registration_screen_can_be_rendered()
+    public function test_registration_screen_is_displayed()
     {
         $response = $this->get('/register');
 

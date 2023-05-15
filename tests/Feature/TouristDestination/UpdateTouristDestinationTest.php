@@ -36,7 +36,7 @@ class UpdateTouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_a_tourist_destination_edit_page_can_be_rendered()
+    public function test_a_tourist_destination_edit_page_is_displayed()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug . '/edit');
         $response->assertStatus(200);
@@ -60,7 +60,7 @@ class UpdateTouristDestinationTest extends TestCase
     public function test_an_authenticated_user_can_update_tourist_destination_without_change_any_not_required_field()
     {
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
@@ -105,7 +105,7 @@ class UpdateTouristDestinationTest extends TestCase
         $coverImage = UploadedFile::fake()->image('pantai-konang-indah.jpg');
 
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
@@ -161,7 +161,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/media/2/image1678273485552.png'));
 
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
@@ -228,7 +228,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485732.png'));
 
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
@@ -298,7 +298,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/tourist-attractions/attraction-2.jpg'));
 
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
@@ -372,7 +372,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/tourist-attractions/attraction-2.jpg'));
 
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
@@ -438,7 +438,7 @@ class UpdateTouristDestinationTest extends TestCase
     public function test_an_authenticated_user_can_update_tourist_destination_with_add_new_tourist_attraction()
     {
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
@@ -500,7 +500,7 @@ class UpdateTouristDestinationTest extends TestCase
     public function test_a_guest_cannot_update_new_tourist_destination()
     {
         $response = $this->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => json_encode($this->subDistrict),
+            'sub_district_id' => $this->subDistrict->id,
             'category_id' => 1,
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',

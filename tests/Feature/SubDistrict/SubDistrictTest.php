@@ -49,7 +49,7 @@ class SubDistrictTest extends TestCase
         $this->assertEquals('111.45431483', $this->subDistrict->longitude);
     }
 
-    public function test_related_tourist_destination_data_can_be_displayed()
+    public function test_related_tourist_destination_data_is_displayed()
     {
         Category::factory()->create();
         TouristDestination::factory()->create();

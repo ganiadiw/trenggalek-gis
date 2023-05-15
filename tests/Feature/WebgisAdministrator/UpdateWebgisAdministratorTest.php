@@ -45,7 +45,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         ]);
     }
 
-    public function test_a_edit_page_can_be_rendered()
+    public function test_a_edit_page_is_displayed()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin1->username . '/edit');

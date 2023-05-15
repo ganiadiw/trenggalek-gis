@@ -25,7 +25,7 @@ class CreateWebgisAdministratorTest extends TestCase
         ]);
     }
 
-    public function test_a_webgis_administrator_create_page_can_be_rendered()
+    public function test_a_webgis_administrator_create_page_is_displayed()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/create');

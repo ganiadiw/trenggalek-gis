@@ -74,7 +74,7 @@ class UpdateSubDistrictTest extends TestCase
         ]);
     }
 
-    public function test_a_sub_district_edit_page_can_be_rendered()
+    public function test_a_sub_district_edit_page_is_displayed()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code . '/edit');
@@ -82,7 +82,7 @@ class UpdateSubDistrictTest extends TestCase
         $response->assertSeeText('Edit Data Kecamatan');
     }
 
-    public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_file()
+    public function test_an_superadmin_can_update_sub_district_with_upload_geojson_file()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
 
@@ -117,7 +117,7 @@ class UpdateSubDistrictTest extends TestCase
         $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
-    public function test_an_superadmin_can_update_sub_district_with_uploaded_geojson_text()
+    public function test_an_superadmin_can_update_sub_district_with_geojson_text()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
 

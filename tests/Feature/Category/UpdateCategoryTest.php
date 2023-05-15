@@ -33,7 +33,7 @@ class UpdateCategoryTest extends TestCase
         $this->category = Category::factory()->create();
     }
 
-    public function test_a_category_edit_page_can_be_rendered()
+    public function test_a_category_edit_page_is_displayed()
     {
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('dashboard/categories/' . $this->category->slug . '/edit');

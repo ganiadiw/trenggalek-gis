@@ -30,7 +30,7 @@ class GuestPageSettingTest extends TestCase
         $response->assertSeeText('Pengaturan Halaman');
     }
 
-    public function test_update_guets_page_setting_can_be_rendered()
+    public function test_update_guest_page_setting_is_displayed()
     {
         $this->assertEquals(1, $this->user->is_admin);
         $response = $this->actingAs($this->user)->get('/dashboard/page-settings/guest/' . $this->guestPageSetting->id);

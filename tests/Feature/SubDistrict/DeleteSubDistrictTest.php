@@ -57,7 +57,7 @@ class DeleteSubDistrictTest extends TestCase
         $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
-    public function test_delete_data_will_be_redirected_if_the_sub_district_has_data_related_to_tourist_destinations()
+    public function test_delete_data_will_be_redirected_if_the_sub_district_has_relationship_to_tourist_destinations()
     {
         Category::factory()->create();
         TouristDestination::factory()->create();
