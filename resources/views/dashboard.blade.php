@@ -158,7 +158,7 @@
                 }).addTo(map);
             @endforeach
 
-            let icon, marker, popUp;
+            let icon, marker, popUp, textColor;
 
             @foreach ($touristDestinations as $key => $touristDestination)
                 popUp = `<div>
@@ -224,6 +224,8 @@
                         </div>`
 
                 @if ($touristDestination->category && $touristDestination->category->svg_name)
+                    textColor = 'bg-inherit border-0 shadow-none font-[720]' + ' ' + 'text-[{{ $touristDestination->category->hex_code }}]';
+                    
                     icon = L.AwesomeMarkers.icon({
                                 icon: '{{ $touristDestination->category->svg_name }}',
                                 markerColor: '{{ $touristDestination->category->color }}'
@@ -237,7 +239,7 @@
                                 offset: [-20, -20],
                                 permanent: true,
                                 direction: 'left',
-                                className: 'bg-inherit border-0 shadow-none text-[{{ $touristDestination->category->hex_code }}] font-[720]'
+                                className: textColor
                             });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
