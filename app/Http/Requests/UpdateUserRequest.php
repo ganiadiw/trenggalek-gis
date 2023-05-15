@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserUpdateRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -36,22 +36,17 @@ class UserUpdateRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function attributes()
     {
         return [
-            'name.required' => 'Nama harus diisi',
-            'email.required' => 'Email harus diisi',
-            'email.eamil' => 'Email tidak valid',
-            'email.unique' => 'Email sudah terdaftar',
-            'username.required' => 'Username harus diisi',
-            'username.unique' => 'Username sudah terdaftar',
-            'password.min' => 'Password minimal 8 karakter',
-            'password.confirmed' => 'Konfirmasi password tidak sesuai',
-            // 'password_confirmation.min' => 'Password minimal 8 karakter',
-            'alamat.required' => 'Alamat harus diisi',
-            'phone_number.required' => 'Nomor telepon harus diisi',
-            'avatar.image' => 'Foto profil harus berformat gambar dengan ekstensi .png atau .jpg',
-            'avatr.max' => 'Ukuran maksimal foto profil adalah 2048KB atau 2MB',
+            'name' => 'Nama',
+            'email' => 'Surel',
+            'username' => 'Nama Pengguna',
+            'password' => 'Kata Sandi',
+            'password_confirmation' => 'Konfirmasi Kata Sandi',
+            'address' => 'Alamat',
+            'phone_number' => 'Nomor Handphone',
+            'avatar' => 'Foto Profil',
         ];
     }
 }

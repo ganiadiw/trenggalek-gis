@@ -54,38 +54,30 @@ class StoreTouristDestinationRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug($this->name) . '-' . Str::random(5),
         ]);
-
-        if ($this->sub_district_id != null) {
-            $this->merge([
-                'sub_district_id' => json_decode($this->sub_district_id)->id,
-            ]);
-        }
     }
 
-    public function messages()
+    public function attributes()
     {
         return [
-            'name.required' => 'Nama destinasi wisata harus diisi',
-            'name.max' => 'Jumlah karakter maksimal 255',
-            'tourist_destination_category_id.required' => 'Pilih kategori destinasi wisata',
-            'sub_district_id.required' => 'Kecamatan harus diisi',
-            'address.required' => 'Alamat harus diisi',
-            'address.max' => 'Jumlah karakter maksimal 255',
-            'manager.required' => 'Pengelola harus diisi',
-            'manager.max' => 'Jumlah karakter maksimal 255',
-            'distance_from_city_center.required' => 'Jarak harus diisi',
-            'distance_from_city_center.max' => 'Jumlah karakter maksimal 10',
-            'transportation_access.required' => 'Akses transportasi harus diisi',
-            'facility.required' => 'Fasilitas harus diisi',
-            'cover_image.required' => 'Foto sampul harus diisi',
-            'cover_image.image' => 'Foto sampul harus berupa gambar',
-            'cover_image.mimes' => 'Format gambar tidak didukung, gunakan .png, .jpg atau .jpeg',
-            'cover_image.max' => 'Foto sampul maksimal berukuran 2048 KB',
-            'latitude.required' => 'Latitude harus diisi',
-            'latitude.max' => 'Jumlah karakter maksimal 50',
-            'longitude.required' => 'Longitude harus diisi',
-            'longitude.max' => 'Jumlah karakter maksimal 50',
-            'description.required' => 'Deskripsi harus diisi',
+            'name' => 'Nama Destinasi Wisata',
+            'category_id' => 'Kategori',
+            'sub_district_id' => 'Kecamatan',
+            'address' => 'Alamat',
+            'manager' => 'Pengelola',
+            'distance_from_city_center' => 'Jarak Dari Pusat Kota',
+            'transportation_access' => 'Akses Transportasi',
+            'facility' => 'Fasilitas',
+            'cover_image' => 'Foto Sampul',
+            'latitude' => 'Latitude / Garis Lintang',
+            'longitude' => 'Longitude / Garis Bujur',
+            'description' => 'Deskripsi Destiansi Wisata',
+            'tourist_attraction_names.*' => 'Nama Atraksi Wisata',
+            'tourist_attraction_images.*' => 'Foto Atraksi Wisata',
+            'tourist_attraction_captions.*' => 'Keterangan Atraksi Wisata',
+            'facebook_url' => 'Alamat URL Facebook',
+            'instagram_url' => 'Alamat URL Instragram',
+            'twitter_url' => 'Alamat URL Twitter',
+            'youtube_url' => 'Alamat URL Youtube',
         ];
     }
 }
