@@ -82,45 +82,11 @@
                                                     Pilih salah satu dari dua metode unggah peta. Isi hanya jika ingin
                                                     mengubahnya!
                                                 </p>
-                                                <p class="my-2 text-sm italic text-yellow-600">File atau text geojson
-                                                    dapat
-                                                    diperoleh dari
-                                                    website
-                                                    <a class="inline-flex items-center text-blue-500 underline"
-                                                        target="_blank" href="https://geojson.io/#map=2/0/20">
-                                                        geojson.io
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="icon icon-tabler icon-tabler-arrow-up-right"
-                                                            width="18" height="18" viewBox="0 0 24 24"
-                                                            stroke-width="2" stroke="currentColor" fill="none"
-                                                            stroke-linecap="round" stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                            </path>
-                                                            <line x1="17" y1="7" x2="7"
-                                                                y2="17">
-                                                            </line>
-                                                            <polyline points="8 7 17 7 17 16"></polyline>
-                                                        </svg>
-                                                    </a>,
-                                                    <a class="inline-flex items-center text-blue-500 underline"
-                                                        target="_blank" href="https://geoman.io/geojson-editor">
-                                                        geoman.io
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="icon icon-tabler icon-tabler-arrow-up-right"
-                                                            width="18" height="18" viewBox="0 0 24 24"
-                                                            stroke-width="2" stroke="currentColor" fill="none"
-                                                            stroke-linecap="round" stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                            </path>
-                                                            <line x1="17" y1="7" x2="7"
-                                                                y2="17"></line>
-                                                            <polyline points="8 7 17 7 17 16"></polyline>
-                                                        </svg>
-                                                    </a>
-                                                    atau pada menu
-                                                    <a class="text-blue-500 underline"
-                                                        href="{{ route('dashboard.map-drawer') }}">Map
-                                                        Drawer</a>
+                                                <p class="my-2 text-sm italic text-yellow-600">
+                                                    File atau text geojson dapat diperoleh dari website <a target="_blank" class="font-medium hover:underline text-blue-500 after:content-['↗'] after:font-bold" href="https://geojson.io/#map=2/0/20">geojson.io</a>
+                                                    ,
+                                                    <a target="_blank" class="font-medium hover:underline text-blue-500 after:content-['↗'] after:font-bold" href="https://geoman.io/geojson-editor">geoman.io</a>
+                                                    , atau pada menu <a target="_blank" class="font-medium text-blue-500 hover:underline after:content-['↗'] after:font-bold" href="{{ route('dashboard.map-drawer') }}">Map Drawer</a>
                                                 </p>
                                                 <div class="text-sm text-center text-black border-b border-gray-400">
                                                     <ul class="flex flex-wrap -mb-px">

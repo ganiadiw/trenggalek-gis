@@ -98,53 +98,29 @@
                                     <div class="flex">
                                         <p class="w-5">1.</p>
                                         <p class="ml-2">
-                                            Buka halaman wesbite
-                                            <span>
-                                                <a target="_blank" class="font-semibold hover:underline" href="https://fontawesome.com/icons">Font Awesome</a>
-                                            </span>
+                                            Buka halaman website <a target="_blank" class="font-semibold hover:underline text-sky-700 after:content-['↗'] after:font-bold" href="https://icons.getbootstrap.com/">Bootstrap Icon</a>
                                         </p>
                                     </div>
+                                    <div class="mt-2 ml-7">
+                                        <img class="w-[600px]" src="{{ asset('assets/images/bootstrap-icons-tutorial/step-1.png') }}" alt="Step-1">
+                                    </div>
                                 </li>
-                                <li>
+                                <li class="mt-3">
                                     <div  class="flex">
                                         <p class="w-5">2.</p>
-                                        <p class="ml-2">Masukkan kata kunci pada kolom pencarian yang disediakan</p>
+                                        <p class="ml-2">Masukkan kata kunci pada kolom pencarian yang disediakan, kemudian akan ditampilkan daftar icon yang sesuai, kemudia klik pada icon yang diiginkan.</p>
+                                    </div>
+                                    <div class="mt-2 ml-7">
+                                        <img class="w-[600px]" src="{{ asset('assets/images/bootstrap-icons-tutorial/step-2.png') }}" alt="Step-2">
                                     </div>
                                 </li>
-                                <li>
+                                <li class="mt-3">
                                     <div class="flex">
                                         <p class="w-5">3.</p>
-                                        <p class="ml-2">Masukkan kata kunci pada kolom pencarian</p>
+                                        <p class="ml-2">Salin atau catat nama icon sesuai pada arah panah, sebagai contoh : <span class="font-semibold">bi bi-tree-fill</span> dan masukkan nama tersebut pada kolom <span class="font-semibold">Nama SVG Icon.</span></p>
                                     </div>
                                     <div class="mt-2 ml-7">
-                                        <img class="w-[600px]" src="{{ asset('assets/images/font-awesome-tutorial/step-1.png') }}" alt="">
-                                    </div>
-                                </li>
-                                <li class="mt-3">
-                                    <div class="flex">
-                                        <p class="w-5">4.</p>
-                                        <p class="ml-2">Setelah hasilnya tampil, pilih icon yang bersifat gratis / <span class="font-semibold">free</span></p>
-                                    </div>
-                                    <div class="mt-2 ml-7">
-                                        <img class="w-[600px]" src="{{ asset('assets/images/font-awesome-tutorial/step-2.png') }}" alt="">
-                                    </div>
-                                </li>
-                                <li class="mt-3">
-                                    <div class="flex">
-                                        <p class="w-5">5.</p>
-                                        <p class="ml-2">Pilih icon yang diiginkan</p>
-                                    </div>
-                                    <div class="mt-2 ml-7">
-                                        <img class="w-[600px]" src="{{ asset('assets/images/font-awesome-tutorial/step-3.png') }}" alt="">
-                                    </div>
-                                </li>
-                                <li class="mt-3">
-                                    <div class="flex">
-                                        <p class="w-5">6.</p>
-                                        <p class="ml-2">Salin atau catat nama icon sesuai pada arah panah dan pilih ukuran icon <span class="font-semibold">Default Size</span> sebagai contoh : <span class="font-semibold">fa-solid fa-mug-hot</span> dan masukkan nama tersebut pada kolom <span class="font-semibold">Nama SVG Icon</span></p>
-                                    </div>
-                                    <div class="mt-2 ml-7">
-                                        <img class="w-[600px]" src="{{ asset('assets/images/font-awesome-tutorial/step-4.png') }}" alt="">
+                                        <img class="w-[600px]" src="{{ asset('assets/images/bootstrap-icons-tutorial/step-3.png') }}" alt="Step-3">
                                     </div>
                                 </li>
                             </ol>

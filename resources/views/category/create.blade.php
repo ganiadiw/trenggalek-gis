@@ -98,10 +98,7 @@
                                     <div class="flex">
                                         <p class="w-5">1.</p>
                                         <p class="ml-2">
-                                            Buka halaman website
-                                            <span>
-                                                <a target="_blank" class="font-semibold hover:underline" href="https://icons.getbootstrap.com/">Bootstrap Icon.</a>
-                                            </span>
+                                            Buka halaman website <a target="_blank" class="font-semibold hover:underline text-sky-700 after:content-['↗'] after:font-bold" href="https://icons.getbootstrap.com/">Bootstrap Icon</a>
                                         </p>
                                     </div>
                                     <div class="mt-2 ml-7">
