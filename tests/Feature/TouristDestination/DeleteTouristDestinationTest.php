@@ -30,12 +30,16 @@ class DeleteTouristDestinationTest extends TestCase
             'cover_image_name' => $image,
             'cover_image_path' => 'public/cover-images/' . $image,
         ]);
+
     }
 
     public function test_an_authenticated_user_can_delete_tourist_destination()
     {
         $response = $this->actingAs($this->user)->delete('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
+
         $response->assertRedirect(url()->previous());
+        $response->assertSessionHasNoErrors();
+
         $this->assertFalse(Storage::exists('public/cover-images/' . $this->touristDestination->cover_image_name));
         $this->assertDatabaseMissing('tourist_destinations', [
             'id' => $this->touristDestination->id,
@@ -49,7 +53,8 @@ class DeleteTouristDestinationTest extends TestCase
     {
         $response = $this->delete('/dashboard/tourist-destinations/' . $this->touristDestination->id);
 
-        $this->assertGuest();
         $response->assertRedirect('/login');
+
+        $this->assertGuest();
     }
 }

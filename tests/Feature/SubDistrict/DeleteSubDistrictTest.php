@@ -40,12 +40,18 @@ class DeleteSubDistrictTest extends TestCase
             'geojson_name' => $geojsonName,
             'geojson_path' => 'public/geojson/' . $geojsonName,
         ]);
+
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
     public function test_an_superadmin_can_delete_sub_district()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
+
+        $response->assertRedirect(url()->previous());
+        $response->assertSessionHasNoErrors();
+
         $this->assertDatabaseMissing('sub_districts', [
             'code' => 3503020,
             'name' => 'KECAMATAN MUNJUNGAN',
@@ -53,7 +59,6 @@ class DeleteSubDistrictTest extends TestCase
             'longitude' => 111.45431483,
             'fill_color' => '#16a34a',
         ]);
-        $response->assertRedirect(url()->previous());
         $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
@@ -62,22 +67,25 @@ class DeleteSubDistrictTest extends TestCase
         Category::factory()->create();
         TouristDestination::factory()->create();
 
-        $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
+
         $response->assertRedirect('dashboard/sub-districts/' . $this->subDistrict->code . '/related-tourist-destination');
+        $response->assertSessionHasNoErrors();
     }
 
     public function test_an_webgis_administrator_cannot_delete_sub_district()
     {
-        $this->assertEquals(0, $this->webgisAdmin->is_admin);
         $response = $this->actingAs($this->webgisAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
+
         $response->assertForbidden();
     }
 
     public function test_an_guest_cannot_delete_sub_district()
     {
         $response = $this->delete('dashboard/sub-districts/' . $this->subDistrict->code);
-        $this->assertGuest();
+
         $response->assertRedirect();
+
+        $this->assertGuest();
     }
 }

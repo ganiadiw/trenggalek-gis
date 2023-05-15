@@ -28,11 +28,13 @@ class CreateTouristDestinationTest extends TestCase
         $this->user = User::factory()->create();
         $this->category = Category::factory()->create();
         $this->subDistrict = SubDistrict::factory()->create();
+
     }
 
     public function test_a_tourist_destination_create_page_is_displayed()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/create');
+
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Destinasi Wisata');
     }
@@ -42,6 +44,7 @@ class CreateTouristDestinationTest extends TestCase
         $response = $this->actingAs($this->user)->post('/dashboard/tourist-destinations', [
             'name' => '',
         ]);
+
         $response->assertInvalid();
     }
 
@@ -77,9 +80,11 @@ class CreateTouristDestinationTest extends TestCase
                 'unused_images' => null,
             ]),
         ]);
+
         $response->assertValid();
         $response->assertRedirect('/dashboard/tourist-destinations');
         $response->assertSessionHasNoErrors();
+
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
@@ -111,9 +116,11 @@ class CreateTouristDestinationTest extends TestCase
                 'unused_images' => null,
             ]),
         ]);
+
         $response->assertValid();
         $response->assertRedirect('/dashboard/tourist-destinations');
         $response->assertSessionHasNoErrors();
+
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
@@ -170,10 +177,13 @@ class CreateTouristDestinationTest extends TestCase
                 'unused_images' => null,
             ]),
         ]);
+
         $response->assertValid();
         $response->assertRedirect('/dashboard/tourist-destinations');
         $response->assertSessionHasNoErrors();
+
         $tourisDestination = TouristDestination::first();
+
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
             'latitude' => -8.25702326,
@@ -246,10 +256,13 @@ class CreateTouristDestinationTest extends TestCase
                 ],
             ]),
         ]);
+
         $response->assertValid();
         $response->assertRedirect('/dashboard/tourist-destinations');
         $response->assertSessionHasNoErrors();
+
         $tourisDestination = TouristDestination::first();
+
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
             'latitude' => -8.25702326,
@@ -296,7 +309,9 @@ class CreateTouristDestinationTest extends TestCase
                 'unused_images' => null,
             ]),
         ]);
-        $this->assertGuest();
+
         $response->assertRedirect('/login');
+
+        $this->assertGuest();
     }
 }

@@ -29,45 +29,54 @@ class CategoryTest extends TestCase
             'is_admin' => 0,
         ]);
         $this->category = Category::factory()->create();
+
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
     public function test_an_superadmin_can_see_category_management_page()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories');
-        $response->assertStatus(200);
+
         $response->assertSeeText('Kelola Data Kategori Destinasi Wisata');
         $response->assertSeeText('Destinasi Wisata');
+        $response->assertStatus(200);
+        $response->assertSessionHasNoErrors();
     }
 
     public function test_an_webgis_admin_cannot_see_category_management_page()
     {
-        $this->assertEquals(0, $this->webgisAdmin->is_admin);
         $response = $this->actingAs($this->webgisAdmin)->get('/dashboard/categories');
+
         $response->assertForbidden();
     }
 
     public function test_an_guest_cannot_see_category_management_page()
     {
         $response = $this->get('/dashboard/categories');
-        $this->assertGuest();
+
         $response->assertRedirect('/login');
+
+        $this->assertGuest();
     }
 
     public function test_an_superadmin_can_see_category_show_page()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/' . $this->category->slug);
+
         $response->assertStatus(200);
         $response->assertSeeText('Informasi Kategori Destinasi Wisata');
+        $response->assertSessionHasNoErrors();
+
         $this->assertEquals(1, $this->category->id);
         $this->assertEquals('Wisata Pantai', $this->category->name);
     }
 
     public function test_an_superadmin_can_search_contaions_category_data()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search?column_name=name&search_value=wisata');
+
         $response->assertSeeText($this->category->name);
+        $response->assertSessionHasNoErrors();
     }
 }

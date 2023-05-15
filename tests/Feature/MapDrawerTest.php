@@ -16,5 +16,6 @@ class MapDrawerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSeeText('Map Drawer');
+        $response->assertSessionHasNoErrors();
     }
 }

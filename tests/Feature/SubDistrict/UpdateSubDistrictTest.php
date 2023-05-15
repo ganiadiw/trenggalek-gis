@@ -72,20 +72,23 @@ class UpdateSubDistrictTest extends TestCase
             'geojson_name' => $geojsonName,
             'geojson_path' => 'public/geojson/' . $geojsonName,
         ]);
+
+        $this->assertEquals(1, $this->superAdmin->is_admin);
+        $this->assertEquals(0, $this->webgisAdmin->is_admin);
+        $this->assertJson(json_encode($this->updateGeoJson));
     }
 
     public function test_a_sub_district_edit_page_is_displayed()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code . '/edit');
+
         $response->assertStatus(200);
         $response->assertSeeText('Edit Data Kecamatan');
+        $response->assertSessionHasNoErrors();
     }
 
     public function test_an_superadmin_can_update_sub_district_with_upload_geojson_file()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
-
         $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => 3503030,
             'name' => 'KECAMATAN WATULIMO',
@@ -94,9 +97,13 @@ class UpdateSubDistrictTest extends TestCase
             'fill_color' => '#059669',
             'geojson' => UploadedFile::fake()->create('3503020.geojson', 25, 'application/json'),
         ]);
+
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
         $response->assertRedirect('dashboard/sub-districts/3503030/edit');
+        $response->assertSessionHasNoErrors();
+
         $subDistrict = SubDistrict::where('code', 3503030)->first();
+
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503030,
             'name' => 'KECAMATAN WATULIMO',
@@ -119,8 +126,6 @@ class UpdateSubDistrictTest extends TestCase
 
     public function test_an_superadmin_can_update_sub_district_with_geojson_text()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
-
         $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => 3503030,
             'name' => 'KECAMATAN WATULIMO',
@@ -129,10 +134,13 @@ class UpdateSubDistrictTest extends TestCase
             'fill_color' => '#059669',
             'geojson_text_area' => json_encode($this->updateGeoJson),
         ]);
+
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
-        $this->assertJson(json_encode($this->updateGeoJson));
         $response->assertRedirect('dashboard/sub-districts/3503030/edit');
+        $response->assertSessionHasNoErrors();
+
         $subDistrict = SubDistrict::where('code', 3503030)->first();
+
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503030,
             'name' => 'KECAMATAN WATULIMO',
@@ -155,7 +163,6 @@ class UpdateSubDistrictTest extends TestCase
 
     public function test_correct_data_must_be_provided_to_update_sub_district()
     {
-        $this->assertEquals(1, $this->superAdmin->is_admin);
         $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => '',
             'name' => '',
@@ -163,13 +170,12 @@ class UpdateSubDistrictTest extends TestCase
             'longitude' => '',
             'fill_color' => '',
         ]);
+
         $response->assertInvalid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
     }
 
     public function test_an_webgis_administrator_cannot_update_sub_district()
     {
-        $this->assertEquals(0, $this->webgisAdmin->is_admin);
-
         $response = $this->actingAs($this->webgisAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => 3503020,
             'name' => 'KECAMATAN MUNJUNGAN',
@@ -178,6 +184,7 @@ class UpdateSubDistrictTest extends TestCase
             'fill_color' => '#059669',
             'geojson' => UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json'),
         ]);
+
         $response->assertForbidden();
     }
 
@@ -191,7 +198,9 @@ class UpdateSubDistrictTest extends TestCase
             'fill_color' => '#059669',
             'geojson' => UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json'),
         ]);
-        $this->assertGuest();
+
         $response->assertRedirect('/login');
+        
+        $this->assertGuest();
     }
 }
