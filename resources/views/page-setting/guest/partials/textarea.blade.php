@@ -14,7 +14,7 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-    <div class="w-full prose-xl">
+    <div class="w-full">
         <textarea name="value_text[]" id="description" rows="10">{!! old('value', $guestPageSetting->value[$i]) !!}</textarea>
     </div>
 

@@ -140,9 +140,7 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <div class="prose-xl">
-                                                <textarea name="description" id="description" placeholder="Deskripsi destinasi wisata">{!! old('description') !!}</textarea>
-                                            </div>
+                                            <textarea name="description" id="description" placeholder="Deskripsi destinasi wisata">{!! old('description') !!}</textarea>
                                             <x-input-error-validation error="description" />
                                         </div>
                                     </div>
