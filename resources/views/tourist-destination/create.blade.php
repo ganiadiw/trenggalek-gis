@@ -163,32 +163,49 @@
                                         ]
                                     }">
                                         <template x-for="(input, index) in inputs" :key="index">
-                                            <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
+                                            <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0" x-data="{ maxCharNameCount: 25, maxLengthInputName: false,  maxCharCaptionCount: 50, disableInputCaption: false }">
                                                 <div x-text="index + 1"
                                                     class="flex w-5 mt-2 mr-4 md:mt-0 md:items-center">
                                                 </div>
                                                 <div
                                                     class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
-                                                    <input x-model="input.name" type="text"
-                                                        name="tourist_attraction_names[]"
-                                                        placeholder="Nama Atraksi Wisata"
-                                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
-                                                        autocomplete="off"
-                                                        :required="input.image.trim() !== '' || input.caption.trim() !== ''">
-                                                    <input x-model="input.caption" type="text"
-                                                        name="tourist_attraction_captions[]"
-                                                        placeholder="Keterangan Atraksi Wisata"
-                                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
-                                                        autocomplete="off"
-                                                        :required="input.name.trim() !== '' || input.image.trim() !== ''">
-                                                    <input x-model="input.image" type="file"
-                                                        name="tourist_attraction_images[]"
-                                                        placeholder="Foto Atraksi Wisata"
-                                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
-                                                        autocomplete="off" accept="image/*"
-                                                        :required="input.name.trim() !== '' || input.caption.trim() !== ''">
+                                                    <div>
+                                                        <p class="mb-1 text-sm font-semibold">Nama</p>
+                                                        <input x-model="input.name" type="text"
+                                                            name="tourist_attraction_names[]"
+                                                            placeholder="Nama Atraksi Wisata"
+                                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                                            autocomplete="off"
+                                                            :required="input.image.trim() !== '' || input.caption.trim() !== ''"
+                                                            x-init="input.nameCharCount = 0"
+                                                            x-on:input="input.nameCharCount = input.name.length; maxLengthInputName = input.name.slice(0, maxCharNameCount)"
+                                                            :maxlength="maxCharNameCount">
+                                                        <p class="text-[13px]">Maksimal karakter : <span x-text="`${input.nameCharCount}/${maxCharNameCount}`"></span></p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-1 text-sm font-semibold">Caption</p>
+                                                        <input x-model="input.caption" type="text"
+                                                            name="tourist_attraction_captions[]"
+                                                            placeholder="Keterangan Atraksi Wisata"
+                                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                                            autocomplete="off"
+                                                            :required="input.name.trim() !== '' || input.image.trim() !== ''"
+                                                            x-init="input.captionCharCount = 0"
+                                                            x-on:input="input.captionCharCount = input.caption.length; maxLengthInputCaption = input.caption.slice(0, maxCharCaptionCount)"
+                                                            :maxlength="maxCharCaptionCount">
+                                                        <p class="text-[13px]">Maksimal karakter : <span x-text="`${input.captionCharCount}/${maxCharCaptionCount}`"></span></p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-1 text-sm font-semibold">Foto</p>
+                                                        <input x-model="input.image" type="file"
+                                                            name="tourist_attraction_images[]"
+                                                            placeholder="Foto Atraksi Wisata"
+                                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
+                                                            autocomplete="off" accept="image/png, image/jpg, image/jpeg"
+                                                            :required="input.name.trim() !== '' || input.caption.trim() !== ''">
+                                                    </div>
                                                 </div>
-                                                <div class="flex mt-[4px] space-x-2 ml-2">
+                                                <div class="flex mt-[28px] space-x-2 ml-2">
                                                     <button type="button" @click="inputs.splice(index, 1)"
                                                         x-tooltip.raw="Hapus baris"
                                                         class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200">
@@ -244,7 +261,7 @@
         @include('js.leaflet-find-marker')
         @include('js.tinymce')
         <script>
-            let subDistrict = document.getElementById('sub_district');
+            let subDistrict = document.getElementById('sub_district_id');
 
             subDistrict.addEventListener('change', function() {
                 let geoJSON = JSON.parse(subDistrict.value);
