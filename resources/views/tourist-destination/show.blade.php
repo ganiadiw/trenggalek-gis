@@ -9,7 +9,6 @@
             .swiper-slide {
                 text-align: center;
                 font-size: 18px;
-                background: #fff;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -26,12 +25,12 @@
     @endsection
 
     <div class="py-4 pb-20">
-        <div class="px-4 mx-auto mt-4 text-base text-gray-600 sm:px-6 lg:px-8">
-            <div>
+        <div class="px-4 mx-auto mt-4 text-base text-gray-600">
+            <div class="px-5 sm:px-10 md:px-16 lg:px-32">
                 <h1 class="text-3xl font-bold text-gray-700">{{ $touristDestination->name }}</h1>
             </div>
-            <div class="w-full mt-5 text-gray-900 lg:flex lg:space-x-4 mb">
-                <div class="w-full lg:w-9/12">
+            <div class="w-full mt-5 text-gray-900 xl:flex xl:space-x-4 mb">
+                <div class="w-full px-5 sm:px-10 md:px-16 lg:px-32 xl:w-9/12">
                     <div>
                         <img class="rounded-md w-full sm:h-[20rem] md:h-[25rem] lg:h-[30rem]"
                             src="{{ asset('storage/cover-images/' . $touristDestination->cover_image_name) }}"
@@ -43,9 +42,9 @@
                             <div>
                                 <h2 class="font-semibold">Alamat Destinasi
                                     Wisata</h2>
-                                <p id="address" class="flex items-center mt-2">
+                                <p id="address" class="flex mt-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        class="w-5 text-red-700" fill="currentColor" class="mr-2 bi bi-geo-alt-fill"
+                                        class="w-5 mt-1 text-red-700" fill="currentColor" class="mr-2 bi bi-geo-alt-fill"
                                         viewBox="0 0 16 16">
                                         <path
                                             d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
@@ -55,7 +54,7 @@
                             </div>
                             <div>
                                 <h2 class="font-semibold text-gray-900">Wilayah Kecamatan</h2>
-                                <p id="address" class="flex items-center mt-2">
+                                <p id="address" class="flex mt-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 icon icon-tabler icon-tabler-map"
                                         width="24" height="24" viewBox="0 0 24 24" stroke-width="1"
                                         stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -70,7 +69,7 @@
                             <div>
                                 <h2 class="font-semibold">Kategori Destinasi
                                     Wisata</h2>
-                                <p id="category" class="flex items-center mt-2">
+                                <p id="category" class="flex mt-2">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="w-5 text-orange-400 icon icon-tabler icon-tabler-category" width="24"
                                         height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -86,9 +85,9 @@
                             </div>
                             <div>
                                 <h2 class="font-semibold">Jarak dari Pusat Kota</h2>
-                                <p id="distance" class="flex items-center mt-2">
+                                <p id="distance" class="flex mt-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        class="w-5 text-green-700" fill="currentColor" class="bi bi-geo-fill"
+                                        class="w-5 mt-1 text-green-700" fill="currentColor" class="bi bi-geo-fill"
                                         viewBox="0 0 16 16">
                                         <path fill-rule="evenodd"
                                             d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z" />
@@ -98,9 +97,9 @@
                             </div>
                             <div>
                                 <h2 class="font-semibold">Pengelola</h2>
-                                <p id="manager" class="flex items-center mt-2">
+                                <p id="manager" class="flex mt-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        class="w-5 text-stone-700" fill="currentColor" class="bi bi-building"
+                                        class="w-5 mt-1 text-stone-700" fill="currentColor" class="bi bi-building"
                                         viewBox="0 0 16 16">
                                         <path
                                             d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z" />
@@ -128,15 +127,17 @@
                         </div>
                     </div>
                     <div>
-                        <div class="mt-6 leading-7">
-                            {!! $touristDestination->description !!}
+                        <div class="w-full mt-6">
+                            <article class="w-full mt-6 prose text-justify text-gray-800 max-w-none">
+                                {!! $touristDestination->description !!}
+                            </article>
                         </div>
                         <div class="mt-5">
                             <h2 class="mb-2 font-semibold">Fasilitas</h2>
-                            <div class="grid grid-cols-4">
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3">
                                 @foreach ($touristDestination->facility as $facility)
-                                    <div class="flex items-center">
-                                        <svg class="w-4 h-4 mr-1.5 text-green-500 flex-shrink-0" fill="currentColor"
+                                    <div class="flex">
+                                        <svg class="w-4 h-4 mr-1.5 mt-1 text-green-500 flex-shrink-0" fill="currentColor"
                                             viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd"
                                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -173,9 +174,9 @@
                             </div>
                         @endif
                     </div>
+                    {{-- Only show when screen size above large --}}
                 </div>
-                {{-- Only show when screen size above large --}}
-                <div class="hidden w-3/12 lg:block">
+                <div class="hidden w-3/12 xl:block">
                     @include('tourist-destination.partials.side-content')
                 </div>
                 @if (
@@ -183,12 +184,12 @@
                         $touristDestination->instagram_url ||
                         $touristDestination->twitter_url ||
                         $touristDestination->youtube_url)
-                    <div class="mt-5 lg:hidden">
+                    <div class="w-full px-5 mt-5 sm:px-10 md:px-16 lg:px-32 xl:hidden">
                         <h2 class="mb-2 font-semibold">Media Sosial Destinasi Wisata</h2>
-                        <div class="grid grid-cols-2">
+                        <div class="grid md:grid-cols-2">
                             @if ($touristDestination->facebook_url)
                                 <div class="p-1 text-facebook-brand">
-                                    <a href="{{ $touristDestination->facebook_url }}" class="flex items-center">
+                                    <a href="{{ $touristDestination->facebook_url }}" class="flex">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" width="16"
                                             height="16" fill="currentColor" class="bi bi-facebook"
                                             viewBox="0 0 16 16">
@@ -277,8 +278,22 @@
             @endif
 
             let swiper = new Swiper(".mySwiper", {
-                slidesPerView: 3,
+                slidesPerView: 1,
                 spaceBetween: 30,
+                breakpoints: {
+                    590: {
+                        slidesPerView: 2
+                    },
+                    1024: {
+                        slidesPerView: 3
+                    },
+                    1280: {
+                        slidesPerView: 2
+                    },
+                    1500: {
+                        slidesPerView: 3
+                    }
+                },
                 autoplay: {
                     delay: 2500,
                     disableOnInteraction: false,

@@ -95,8 +95,8 @@
                     <ul id="socialMedia" class="mt-3 space-y-2">
                         @if ($touristDestination->facebook_url)
                             <li class="p-1 text-facebook-brand">
-                                <a href="{{ $touristDestination->facebook_url }}" class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" width="16"
+                                <a href="{{ $touristDestination->facebook_url }}" class="flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mt-[2px]" width="16"
                                         height="16" fill="currentColor" class="bi bi-facebook"
                                         viewBox="0 0 16 16">
                                         <path
@@ -109,8 +109,8 @@
                         @endif
                         @if ($touristDestination->instagram_url)
                             <li class="p-1 text-instragram-brand">
-                                <a href="{{ $touristDestination->instagram_url }}" class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" width="16"
+                                <a href="{{ $touristDestination->instagram_url }}" class="flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mt-[2px]" width="16"
                                         height="16" fill="currentColor" class="bi bi-instagram"
                                         viewBox="0 0 16 16">
                                         <path
@@ -123,8 +123,8 @@
                         @endif
                         @if ($touristDestination->twitter_url)
                             <li class="p-1 text-twitter-brand">
-                                <a href="{{ $touristDestination->twitter_url }}" class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" width="16"
+                                <a href="{{ $touristDestination->twitter_url }}" class="flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5  mt-[2px]" width="16"
                                         height="16" fill="currentColor" class="bi bi-twitter"
                                         viewBox="0 0 16 16">
                                         <path
@@ -137,8 +137,8 @@
                         @endif
                         @if ($touristDestination->youtube_url)
                             <li class="p-1 text-youtube-brand">
-                                <a href="{{ $touristDestination->youtube_url }}" class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" width="16"
+                                <a href="{{ $touristDestination->youtube_url }}" class="flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mt-[2px]" width="16"
                                         height="16" fill="currentColor" class="bi bi-youtube"
                                         viewBox="0 0 16 16">
                                         <path
