@@ -1,5 +1,5 @@
 <section>
-    <div class="px-6 py-2 bg-gray-100 rounded-md h-fit">
+    <div class="px-6 py-2 bg-gray-200 rounded-md h-fit">
         <ul class="space-y-5">
             <li>
                 <label class="font-semibold text-gray-900">Alamat Destinasi

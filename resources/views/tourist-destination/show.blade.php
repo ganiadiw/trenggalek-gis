@@ -25,19 +25,19 @@
     @endsection
 
     <div class="py-4 pb-20">
-        <div class="px-4 mx-auto mt-4 text-base text-gray-600">
+        <div class="px-4 mx-auto mt-4 text-base text-gray-600 xl:px-10">
             <div class="px-5 sm:px-10 md:px-16 lg:px-32">
                 <h1 class="text-3xl font-bold text-gray-700">{{ $touristDestination->name }}</h1>
             </div>
             <div class="w-full mt-5 text-gray-900 xl:flex xl:space-x-4 mb">
-                <div class="w-full px-5 sm:px-10 md:px-16 lg:px-32 xl:w-9/12">
+                <div class="w-full px-5 sm:px-10 md:px-28 lg:px-32 xl:w-9/12">
                     <div>
-                        <img class="rounded-md w-full sm:h-[20rem] md:h-[25rem] lg:h-[30rem]"
+                        <img class="rounded-md w-full sm:h-[20rem] md:h-[25rem] lg:h-[30rem] xl:h-[25rem] 2xl:h-[30rem] "
                             src="{{ asset('storage/cover-images/' . $touristDestination->cover_image_name) }}"
                             alt="{{ $touristDestination->cover_image_name }}">
                     </div>
                     {{-- Hidden when screen size above large --}}
-                    <div class="lg:hidden">
+                    <div class="xl:hidden">
                         <div class="grid gap-4 mt-10 sm:grid-cols-2 lg:grid-cols-3">
                             <div>
                                 <h2 class="font-semibold">Alamat Destinasi
@@ -155,14 +155,16 @@
                                     <div class="swiper-wrapper">
                                         @foreach ($touristDestination->touristAttractions as $key => $value)
                                             <div class="swiper-slide">
-                                                <div class="relative">
-                                                    <img class="bg-gray-100"
+                                                <div>
+                                                    <div class="relative">
+                                                        <img class="bg-gray-100"
                                                         src="{{ asset('storage/tourist-attractions/' . $value->image_name) }}"
                                                         alt="{{ $value->image_name }}">
                                                     <p
-                                                        class="absolute flex items-center w-full h-20 px-2 mt-2 text-xl pt-8 font-semibold text-white bottom-[28px] rounded-b-md bg-gradient-to-t from-gray-900">
+                                                        class="absolute bottom-0 w-full px-2 pb-2 mt-2 text-lg font-semibold text-left text-white align-bottom pt-9 rounded-b-md bg-gradient-to-t from-gray-900">
                                                         {{ $value->name }}</p>
-                                                    <p class="flex items-start mx-2 mt-2 text-sm">
+                                                    </div>
+                                                    <p class="mx-2 mt-2 text-sm text-left text-gray-700">
                                                         {{ $value->caption }}</p>
                                                 </div>
                                             </div>
@@ -284,7 +286,7 @@
                     590: {
                         slidesPerView: 2
                     },
-                    1024: {
+                    1132: {
                         slidesPerView: 3
                     },
                     1280: {
