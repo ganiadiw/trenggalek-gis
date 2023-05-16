@@ -163,7 +163,7 @@
                                         ]
                                     }">
                                         <template x-for="(input, index) in inputs" :key="index">
-                                            <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0" x-data="{ maxCharNameCount: 25, maxLengthInputName: false,  maxCharCaptionCount: 50, disableInputCaption: false }">
+                                            <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0" x-data="{ maxCharNameCount: 25, maxLengthInputName: false,  maxCharCaptionCount: 50 }">
                                                 <div x-text="index + 1"
                                                     class="flex w-5 mt-2 mr-4 md:mt-0 md:items-center">
                                                 </div>
@@ -183,7 +183,7 @@
                                                         <p class="text-[13px]">Maksimal karakter : <span x-text="`${input.nameCharCount}/${maxCharNameCount}`"></span></p>
                                                     </div>
                                                     <div>
-                                                        <p class="mb-1 text-sm font-semibold">Caption</p>
+                                                        <p class="mb-1 text-sm font-semibold">Keterangan Singkat</p>
                                                         <input x-model="input.caption" type="text"
                                                             name="tourist_attraction_captions[]"
                                                             placeholder="Keterangan Atraksi Wisata"
@@ -260,26 +260,13 @@
     @section('script')
         @include('js.leaflet-find-marker')
         @include('js.tinymce')
+        @include('tourist-destination.js.find-gejson-layer')
         <script>
-            let subDistrict = document.getElementById('sub_district_id');
+            let latitude = document.getElementById('latitude');
+            let longitude = document.getElementById('longitude');
 
-            subDistrict.addEventListener('change', function() {
-                let geoJSON = JSON.parse(subDistrict.value);
-
-                if (layer) {
-                    map.removeLayer(layer)
-                }
-
-                layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/') }}' + '/' + geoJSON.geojson_name], {
-                    style: {
-                        'color': geoJSON.fill_color,
-                        'weight': 2,
-                        'opacity': 0.4,
-                    }
-                }).addTo(map);
-                map.setView([geoJSON.latitude, geoJSON.longitude], 11);
-            })
-
+            marker = L.marker([latitude.value, longitude.value]).addTo(map);
+            
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
                 FilePondPluginFileValidateType,

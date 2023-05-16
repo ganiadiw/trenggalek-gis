@@ -4,7 +4,7 @@
             <div class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg">
                 <h1 class="w-full text-lg font-bold">Edit Data Destinasi Wisata</h1>
                 <div class="w-full mt-5">
-                    <form x-data="{ deletedTouristAttractions: [] }" method="POST"
+                    <form x-data="{ deletedTouristAttractions: [] }" x-ref="editForm" method="POST"
                         action="{{ route('dashboard.tourist-destinations.update', ['tourist_destination' => $touristDestination]) }}"
                         enctype="multipart/form-data">
                         @csrf
@@ -175,71 +175,85 @@
                                                 </div>
                                             </div>
                                             @foreach ($touristDestination->touristAttractions as $key => $value)
-                                                <div x-data x-ref="row"
-                                                    class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
-                                                    <div class="flex w-5 mt-2 mr-4 md:-mt-10 md:items-center">
-                                                        {{ $key + 1 }}</div>
-                                                    <div
-                                                        class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
-                                                        <input type="hidden" name="tourist_attraction_id[]"
-                                                            value="{{ $value->id }}">
-                                                        <input type="text" name="tourist_attraction_names[]"
-                                                            placeholder="Nama Atraksi Wisata"
-                                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
-                                                            autocomplete="off" value="{{ $value->name }}" required>
-                                                        <input type="text" name="tourist_attraction_captions[]"
-                                                            placeholder="Keterangan Atraksi Wisata"
-                                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
-                                                            autocomplete="off" value="{{ $value->caption }}"
-                                                            required>
-                                                        <div x-data="handleImageUpload()"
-                                                            class="grid gap-3 md:grid-cols-2">
-                                                            <div class="flex justify-center">
-                                                                <img x-ref="imagePreview"
-                                                                    class="w-auto rounded-md max-h-[5rem]"
-                                                                    src="{{ asset('storage/tourist-attractions/' . $value->image_name) }}"
-                                                                    alt="{{ $value->image_name }}">
+                                                <div x-data="{ maxCharNameCount: 25, maxLengthInputName: false, maxCharCaptionCount: 50 }">
+                                                    <div x-data x-ref="row"
+                                                        class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
+                                                        <div class="flex w-5 mt-2 mr-4 md:-mt-5 md:items-center">
+                                                            {{ $key + 1 }}</div>
+                                                        <div
+                                                            class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
+                                                            <input type="hidden" name="tourist_attraction_id[]"
+                                                                value="{{ $value->id }}">
+                                                            <div x-data="{ attractionName: '{{ $value->name }}' }">
+                                                                <p class="mb-1 text-sm font-semibold">Nama</p>
+                                                                <input type="text" name="tourist_attraction_names[]"
+                                                                    placeholder="Nama Atraksi Wisata"
+                                                                    x-model="attractionName"
+                                                                    class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                                                    autocomplete="off" value="{{ $value->name }}" required :maxlength="maxCharNameCount">
+                                                                <p class="text-[13px]">Maksimal karakter : <span x-text="`${attractionName.length}/${maxCharNameCount}`"></span></p>
                                                             </div>
-                                                            <div>
-                                                                <input x-ref="inputImage" type="file"
-                                                                    id="inputImage" name="tourist_attraction_images[]"
-                                                                    placeholder="Foto Atraksi Wisata"
-                                                                    class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full"
-                                                                    autocomplete="off" accept="image/*"
-                                                                    x-on:change="upload({{ $value->id }});">
-                                                                <label for="inputImage"
-                                                                    class="text-xs italic font-semibold text-red-500">Ubah
-                                                                    hanya jika ingin
-                                                                    mengubahnya</label>
+                                                            <div x-data="{ attractionCaption: '{{ $value->caption }}' }">
+                                                                <p class="mb-1 text-sm font-semibold">Keterangan Singkat</p>
+                                                                <input type="text" name="tourist_attraction_captions[]"
+                                                                    placeholder="Keterangan Atraksi Wisata"
+                                                                    x-model="attractionCaption"
+                                                                    class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                                                    autocomplete="off" value="{{ $value->caption }}"
+                                                                    required :maxlength="maxCharCaptionCount">
+                                                                <p class="text-[13px]">Maksimal karakter : <span x-text="`${attractionCaption.length}/${maxCharCaptionCount}`"></span></p>
+                                                            </div>
+                                                            <div x-data="handleImageUpload()" class="grid gap-3 md:grid-cols-2">
+                                                                <div>
+                                                                    <p class="pl-4 mb-1 text-sm font-semibold">Foto</p>
+                                                                    <div class="flex justify-center">
+                                                                        <img x-ref="imagePreview"
+                                                                            class="w-auto rounded-md max-h-[5rem]"
+                                                                            src="{{ asset('storage/tourist-attractions/' . $value->image_name) }}"
+                                                                            alt="{{ $value->image_name }}">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mt-6">
+                                                                    <input x-ref="inputImage" type="file"
+                                                                        id="inputImage" name="tourist_attraction_images[]"
+                                                                        placeholder="Foto Atraksi Wisata"
+                                                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full"
+                                                                        autocomplete="off" accept="image/*"
+                                                                        x-on:change="upload({{ $value->id }});">
+                                                                    <label for="inputImage"
+                                                                        class="text-xs italic font-semibold text-red-500">Ubah
+                                                                        hanya jika ingin
+                                                                        mengubahnya</label>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="flex mt-[4px] space-x-2 ml-2">
-                                                        <button x-data type="button"
-                                                            x-on:click="
-                                                deletedTouristAttractions.push({{ $value->id }});
-                                                $refs.row.remove();
-                                                deletedTouristAttractionCount++;
-                                            "
-                                                            x-tooltip.raw="Hapus dari database"
-                                                            class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="text-red-500 icon icon-tabler icon-tabler-trash"
-                                                                width="24" height="24" viewBox="0 0 24 24"
-                                                                stroke-width="2" stroke="currentColor" fill="none"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z"
-                                                                    fill="none"></path>
-                                                                <path d="M4 7l16 0"></path>
-                                                                <path d="M10 11l0 6"></path>
-                                                                <path d="M14 11l0 6"></path>
-                                                                <path
-                                                                    d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
-                                                                </path>
-                                                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
-                                                                </path>
-                                                            </svg>
-                                                        </button>
+                                                        <div class="flex mt-6 ml-2 space-x-2">
+                                                            <button x-data type="button"
+                                                                x-on:click="
+                                                                    deletedTouristAttractions.push({{ $value->id }});
+                                                                    $refs.row.remove();
+                                                                    deletedTouristAttractionCount++;
+                                                                "
+                                                                x-tooltip.raw="Hapus dari database"
+                                                                class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="text-red-500 icon icon-tabler icon-tabler-trash"
+                                                                    width="24" height="24" viewBox="0 0 24 24"
+                                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z"
+                                                                        fill="none"></path>
+                                                                    <path d="M4 7l16 0"></path>
+                                                                    <path d="M10 11l0 6"></path>
+                                                                    <path d="M14 11l0 6"></path>
+                                                                    <path
+                                                                        d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
+                                                                    </path>
+                                                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
+                                                                    </path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -248,47 +262,66 @@
                                     @endif
                                     <div x-cloak x-data="{
                                         inputs: [
-                                            @if (old('new_tourist_attraction_names')) @foreach (old('new_tourist_attraction_names') as $key => $value)
-                                    {
-                                        name: '{{ $value }}',
-                                        caption: '{{ old('new_tourist_attraction_captions')[$key] }}'
-                                        image: '',
-                                    }{{ $loop->last ? '' : ',' }}
-                                @endforeach
-                            @else
-                                { name: '', caption: '', image: '' } @endif
+                                            @if (old('new_tourist_attraction_names'))
+                                                @foreach (old('new_tourist_attraction_names') as $key => $value)
+                                                    {
+                                                        name: '{{ $value }}',
+                                                        caption: '{{ old('new_tourist_attraction_captions')[$key] }}',
+                                                        image: '',
+                                                    }{{ $loop->last ? '' : ',' }}
+                                                @endforeach
+                                            @else
+                                                { name: '', caption: '', image: '' }
+                                            @endif
                                         ]
                                     }">
                                         <div class="mt-3 text-sm font-medium text-green-500">
                                             <p>Tambah atraksi wisata baru</p>
                                         </div>
                                         <template x-for="(input, index) in inputs" :key="index">
-                                            <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0">
+                                            <div class="flex p-3 mt-2 mb-5 bg-gray-100 rounded-md md:mb-0" x-data="{ maxCharNameCount: 25, maxLengthInputName: false,  maxCharCaptionCount: 50, disableInputCaption: false }">
                                                 <div x-text="index + 1"
-                                                    class="flex w-5 mt-2 mr-4 md:mt-0 md:items-center"></div>
+                                                    class="flex w-5 mt-2 mr-4 md:mt-0 md:items-center">
+                                                </div>
                                                 <div
                                                     class="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-y-3 md:gap-y-0 gap-x-3">
-                                                    <input x-model="input.name" type="text"
-                                                        name="new_tourist_attraction_names[]"
-                                                        placeholder="Nama Atraksi Wisata"
-                                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
-                                                        autocomplete="off"
-                                                        :required="input.image.trim() !== '' || input.caption.trim() !== ''"
-                                                        type="text">
-                                                    <input x-model="input.caption" type="text"
-                                                        name="new_tourist_attraction_captions[]"
-                                                        placeholder="Keterangan Atraksi Wisata"
-                                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
-                                                        autocomplete="off"
-                                                        :required="input.name.trim() !== '' || input.image.trim() !== ''">
-                                                    <input x-model="input.image" type="file"
-                                                        name="new_tourist_attraction_images[]"
-                                                        placeholder="Foto Atraksi Wisata"
-                                                        class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
-                                                        autocomplete="off" accept="image/*"
-                                                        :required="input.name.trim() !== '' || input.caption.trim() !== ''">
+                                                    <div>
+                                                        <p class="mb-1 text-sm font-semibold">Nama</p>
+                                                        <input x-model="input.name" type="text"
+                                                            name="new_tourist_attraction_names[]"
+                                                            placeholder="Nama Atraksi Wisata"
+                                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                                            autocomplete="off"
+                                                            :required="input.image.trim() !== '' || input.caption.trim() !== ''"
+                                                            x-init="input.nameCharCount = 0"
+                                                            x-on:input="input.nameCharCount = input.name.length; maxLengthInputName = input.name.slice(0, maxCharNameCount)"
+                                                            :maxlength="maxCharNameCount">
+                                                        <p class="text-[13px]">Maksimal karakter : <span x-text="`${input.nameCharCount}/${maxCharNameCount}`"></span></p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-1 text-sm font-semibold">Keterangan Singkat</p>
+                                                        <input x-model="input.caption" type="text"
+                                                            name="new_tourist_attraction_captions[]"
+                                                            placeholder="Keterangan Atraksi Wisata"
+                                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                                            autocomplete="off"
+                                                            :required="input.name.trim() !== '' || input.image.trim() !== ''"
+                                                            x-init="input.captionCharCount = 0"
+                                                            x-on:input="input.captionCharCount = input.caption.length; maxLengthInputCaption = input.caption.slice(0, maxCharCaptionCount)"
+                                                            :maxlength="maxCharCaptionCount">
+                                                        <p class="text-[13px]">Maksimal karakter : <span x-text="`${input.captionCharCount}/${maxCharCaptionCount}`"></span></p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-1 text-sm font-semibold">Foto</p>
+                                                        <input x-model="input.image" type="file"
+                                                            name="new_tourist_attraction_images[]"
+                                                            placeholder="Foto Atraksi Wisata"
+                                                            class="bg-gray-50 border h-[39px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-4"
+                                                            autocomplete="off" accept="image/png, image/jpg, image/jpeg"
+                                                            :required="input.name.trim() !== '' || input.caption.trim() !== ''">
+                                                    </div>
                                                 </div>
-                                                <div class="flex mt-[4px] space-x-2 ml-2">
+                                                <div class="flex mt-[28px] space-x-2 ml-2">
                                                     <button type="button" @click="inputs.splice(index, 1)"
                                                         x-tooltip.raw="Hapus baris"
                                                         class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-red-200">
@@ -300,11 +333,9 @@
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none">
                                                             </path>
                                                             <line x1="18" y1="6" x2="6"
-                                                                y2="18">
-                                                            </line>
+                                                                y2="18"></line>
                                                             <line x1="6" y1="6" x2="18"
-                                                                y2="18">
-                                                            </line>
+                                                                y2="18"></line>
                                                         </svg>
                                                     </button>
                                                 </div>
@@ -348,36 +379,12 @@
     @section('script')
         @include('js.leaflet-find-marker')
         @include('js.tinymce')
+        @include('tourist-destination.js.find-gejson-layer')
         <script>
-            marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}]).addTo(map);
+            let latitude = document.getElementById('latitude');
+            let longitude = document.getElementById('longitude');
 
-            let subDistrict = document.getElementById('sub_district');
-            let geoJSON = JSON.parse(subDistrict.value);
-            layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson') }}' + '/' + geoJSON.geojson_name], {
-                style: {
-                    'color': geoJSON.fill_color,
-                    'weight': 2,
-                    'opacity': 0.4,
-                }
-            }).addTo(map);
-            map.setView([geoJSON.latitude, geoJSON.longitude], 11);
-
-            subDistrict.addEventListener('change', function() {
-                let geoJSON = JSON.parse(subDistrict.value);
-
-                if (layer) {
-                    map.removeLayer(layer)
-                }
-
-                layer = new L.GeoJSON.AJAX(['{{ asset('storage/geojson/') }}' + '/' + geoJSON.geojson_name], {
-                    style: {
-                        'color': geoJSON.fill_color,
-                        'weight': 2,
-                        'opacity': 0.4,
-                    }
-                }).addTo(map);
-                map.setView([geoJSON.latitude, geoJSON.longitude], 11);
-            })
+            marker = L.marker([latitude.value, longitude.value]).addTo(map);
 
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
