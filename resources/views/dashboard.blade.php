@@ -203,7 +203,7 @@
                                 </ul>
                             </div>
                             <div class="flex space-x-2">
-                                <a href="{{ route('dashboard.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"
+                                <a href="{{ route('guest.tourist-destinations.show', ['tourist_destination' => $touristDestination]) }}"
                                     class="inline-flex items-center px-5 py-2 text-sm font-medium bg-green-700 rounded-md hover:bg-green-800 focus:ring-1 focus:ring-green-300">
                                     <span class="text-white">Lihat detail</span>
                                 </a>
@@ -225,7 +225,7 @@
 
                 @if ($touristDestination->category && $touristDestination->category->svg_name)
                     textColor = 'bg-inherit border-0 shadow-none font-[720]' + ' ' + 'text-[{{ $touristDestination->category->hex_code }}]';
-                    
+
                     icon = L.AwesomeMarkers.icon({
                                 icon: '{{ $touristDestination->category->svg_name }}',
                                 markerColor: '{{ $touristDestination->category->color }}'
