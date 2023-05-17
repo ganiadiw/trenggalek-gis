@@ -55,6 +55,9 @@
         toolbar: 'fullscreen undo redo | blocks fontfamily fontsize | bold italic underline strikethrough forecolor backcolor | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap visualblocks | removeformat preview',
         referrer_policy: 'origin',
         promotion: false,
+        height: 550,
+        forced_root_block: 'div',
+        elementpath: false,
         setup: (editor) => {
             let imageFilesInit = [];
             let editorContentInit;
