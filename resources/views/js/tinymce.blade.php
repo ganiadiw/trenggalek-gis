@@ -119,7 +119,6 @@
         image_description: false,
         image_uploadtab: false,
         images_file_types: 'png,jpg,jpeg,gif',
-        image_caption: true,
         color_map: [
             '000000', 'Black',
             '808080', 'Gray',
