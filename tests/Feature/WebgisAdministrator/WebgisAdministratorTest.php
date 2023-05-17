@@ -33,13 +33,14 @@ class WebgisAdministratorTest extends TestCase
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users');
 
         $response->assertStatus(200);
-        $response->assertSeeText('Kelola Data Administrator Sistem Informasi Geografis Wisata Trenggalek');
+        $response->assertSeeText('Kelola Data Administrator');
     }
 
     public function test_an_superadmin_can_search_contains_webgis_administrator_data()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=hugo');
 
+        $response->assertStatus(200);
         $response->assertSeeText($this->webgisAdmin->name);
         $response->assertSessionHasNoErrors();
 
@@ -48,11 +49,12 @@ class WebgisAdministratorTest extends TestCase
         ]);
     }
 
-    public function test_an_superadmin_cannot_search_contains_no_webgis_administrator_data()
+    public function test_an_superadmin_can_search_contains_no_webgis_administrator_data()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=john');
 
         $response->assertSessionHasNoErrors();
+        $response->assertSeeText('Data tidak tersedia');
 
         $this->assertDatabaseMissing('users', [
             'name' => 'John',
@@ -64,6 +66,7 @@ class WebgisAdministratorTest extends TestCase
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin->username);
 
         $response->assertStatus(200);
+        $response->assertSeeText('Detail Profil');
         $response->assertSessionHasNoErrors();
 
         $this->assertEquals('Hugo First', $this->webgisAdmin->name);
