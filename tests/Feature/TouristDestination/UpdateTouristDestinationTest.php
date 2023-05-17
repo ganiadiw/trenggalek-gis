@@ -7,6 +7,7 @@ use App\Models\SubDistrict;
 use App\Models\TouristAttraction;
 use App\Models\TouristDestination;
 use App\Models\User;
+use DOMDocument;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -140,6 +141,9 @@ class UpdateTouristDestinationTest extends TestCase
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
+        $tourisDestination = TouristDestination::first();
+
+        $this->assertEquals('<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>', $tourisDestination->description);
         $this->assertFalse(Storage::exists('public/cover-images/' . $this->touristDestination->cover_image_name));
         $this->assertTrue(Storage::exists('public/cover-images/' . $coverImage->hashName()));
         $this->assertDatabaseHas('tourist_destinations', [
@@ -173,7 +177,7 @@ class UpdateTouristDestinationTest extends TestCase
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
+            'description' => '<p>Pantai</p><img title="image1678273485413.png" src="../../storage/tmp/media/images/image1678273485413.png" alt="">',
             'distance_from_city_center' => '56 KM',
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
             'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
@@ -243,7 +247,7 @@ class UpdateTouristDestinationTest extends TestCase
             'name' => 'Pantai Konang Indah',
             'manager' => 'LDMH',
             'address' => 'Dusun Nglebeng, Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
+            'description' => '<p>Pantai</p><img title="image1678273485732.png" src="../../storage/tmp/media/images/image1678273485732.png" alt="">',
             'distance_from_city_center' => '56 KM',
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
             'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
@@ -271,7 +275,11 @@ class UpdateTouristDestinationTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $tourisDestination = TouristDestination::first();
+        $dom = new DOMDocument();
+        $dom->loadHTML($tourisDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $expectedDescription = '<p>Pantai<img title="image1678273485732.png" src="http://localhost:8000/storage/media/1/image1678273485732.png" alt=""></p>';
 
+        $this->assertEquals(trim($expectedDescription), trim($dom->saveHTML()));
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Konang Indah',
             'latitude' => -8.27466803,

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\SubDistrict;
 use App\Models\TouristDestination;
 use App\Models\User;
+use DOMDocument;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -160,7 +161,7 @@ class CreateTouristDestinationTest extends TestCase
             'cover_image' => UploadedFile::fake()->create('pantai-pelang.png'),
             'latitude' => -8.25702326,
             'longitude' => 111.42379872,
-            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'description' => '<p>Pantai</p><img title="image1678273485413.png" src="../../storage/tmp/media/images/image1678273485413.png" alt=""><img title="image1678273485552.png" src="../../tmp/media/images/image1678273485552.png" alt="">',
             'tourist_attraction_names' => [null],
             'tourist_attraction_images' => [null],
             'tourist_attraction_captions' => [null],
@@ -182,7 +183,11 @@ class CreateTouristDestinationTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $tourisDestination = TouristDestination::first();
+        $dom = new DOMDocument();
+        $dom->loadHTML($tourisDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $expectedDescription = '<p>Pantai<img title="image1678273485413.png" src="http://localhost:8000/storage/media/1/image1678273485413.png" alt=""><img title="image1678273485552.png" src="http://localhost:8000/storage/media/2/image1678273485552.png" alt=""></p>';
 
+        $this->assertEquals(trim($expectedDescription), trim($dom->saveHTML()));
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
             'latitude' => -8.25702326,
@@ -238,7 +243,7 @@ class CreateTouristDestinationTest extends TestCase
             'cover_image' => UploadedFile::fake()->create('pantai-pelang.png'),
             'latitude' => -8.25702326,
             'longitude' => 111.42379872,
-            'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
+            'description' => '<p>Pantai</p><img title="image1678273485413.png" src="../../storage/tmp/media/images/image1678273485413.png" alt="">',
             'tourist_attraction_names' => [null],
             'tourist_attraction_images' => [null],
             'tourist_attraction_captions' => [null],
@@ -261,7 +266,11 @@ class CreateTouristDestinationTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $tourisDestination = TouristDestination::first();
+        $dom = new DOMDocument();
+        $dom->loadHTML($tourisDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $expectedDescription = '<p>Pantai<img title="image1678273485413.png" src="http://localhost:8000/storage/media/1/image1678273485413.png" alt=""></p>';
 
+        $this->assertEquals(trim($expectedDescription), trim($dom->saveHTML()));
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
             'latitude' => -8.25702326,
