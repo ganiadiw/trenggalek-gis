@@ -266,7 +266,7 @@
             let longitude = document.getElementById('longitude');
 
             marker = L.marker([latitude.value, longitude.value]).addTo(map);
-            
+
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
                 FilePondPluginFileValidateType,
