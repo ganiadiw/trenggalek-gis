@@ -75,9 +75,18 @@ class CategoryController extends Controller
                 return $item['name'] === $validated['color'];
             });
             $validated['hex_code'] = $matchedColor['hex_code'];
+
+            $category->update($validated);
         }
 
-        $category->update($validated);
+        if (! isset($validated['color'])) {
+            $validated['color'] = null;
+            $validated['svg_name'] = null;
+            $validated['hex_code'] = null;
+
+            $category->update($validated);
+        }
+
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
