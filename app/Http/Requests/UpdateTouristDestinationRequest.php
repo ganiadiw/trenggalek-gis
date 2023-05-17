@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Mews\Purifier\Facades\Purifier;
 
 class UpdateTouristDestinationRequest extends FormRequest
 {
@@ -76,6 +77,15 @@ class UpdateTouristDestinationRequest extends FormRequest
             'instagram_url' => 'Alamat URL Instragram',
             'twitter_url' => 'Alamat URL Twitter',
             'youtube_url' => 'Alamat URL Youtube',
+        ];
+    }
+
+    public function passedValidation()
+    {
+        return [
+            $this->merge([
+                'description' => Purifier::clean($this->description),
+            ]),
         ];
     }
 }

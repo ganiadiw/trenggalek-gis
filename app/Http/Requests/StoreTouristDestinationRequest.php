@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
+use Mews\Purifier\Facades\Purifier;
 
 class StoreTouristDestinationRequest extends FormRequest
 {
@@ -54,6 +55,15 @@ class StoreTouristDestinationRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug($this->name) . '-' . Str::random(5),
         ]);
+    }
+
+    public function passedValidation()
+    {
+        return [
+            $this->merge([
+                'description' => Purifier::clean($this->description),
+            ]),
+        ];
     }
 
     public function attributes()
