@@ -3,7 +3,7 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="relative rounded-md shadow-md">
                 <div class="px-5 pt-5 pb-1 text-lg text-left text-gray-900 bg-white rounded-md">
-                    <h1 class="font-bold">Kelola Data Administrator Sistem Informasi Geografis Wisata Trenggalek</h1>
+                    <h1 class="font-bold">Kelola Data Administrator</h1>
                     <div class="w-full mt-10 md:flex md:justify-between">
                         <div class="h-full mt-[3px] mb-5 md:mb-0">
                             <a href="{{ route('dashboard.users.create') }}"
