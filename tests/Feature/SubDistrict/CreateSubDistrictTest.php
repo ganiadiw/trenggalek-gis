@@ -6,7 +6,6 @@ use App\Models\SubDistrict;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class CreateSubDistrictTest extends TestCase

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Mews\Purifier\Casts\CleanHtml;
 
 class Category extends Model
 {
@@ -15,7 +14,7 @@ class Category extends Model
         'slug',
         'color',
         'svg_name',
-        'hex_code'
+        'hex_code',
     ];
 
     const COLORS = [

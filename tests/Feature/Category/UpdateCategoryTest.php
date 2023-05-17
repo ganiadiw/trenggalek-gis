@@ -4,8 +4,6 @@ namespace Tests\Feature\Category;
 
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class UpdateCategoryTest extends TestCase
@@ -77,7 +75,7 @@ class UpdateCategoryTest extends TestCase
         $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
             'name' => 'Wisata Pantai Pesisir',
             'color' => 'green',
-            'svg_name' => 'apple-whole'
+            'svg_name' => 'apple-whole',
         ]);
 
         $response->assertValid(['name', 'color', 'svg_name']);
@@ -90,7 +88,7 @@ class UpdateCategoryTest extends TestCase
         $this->assertDatabaseHas('categories', [
             'name' => 'Wisata Pantai Pesisir',
             'color' => 'green',
-            'svg_name' => 'apple-whole'
+            'svg_name' => 'apple-whole',
         ]);
     }
 

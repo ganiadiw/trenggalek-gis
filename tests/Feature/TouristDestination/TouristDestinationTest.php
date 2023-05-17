@@ -30,7 +30,6 @@ class TouristDestinationTest extends TestCase
             'cover_image_name' => $image,
             'cover_image_path' => 'public/cover-images/' . $image,
         ]);
-
     }
 
     public function test_an_authenticated_user_can_see_tourist_destination_management_page()

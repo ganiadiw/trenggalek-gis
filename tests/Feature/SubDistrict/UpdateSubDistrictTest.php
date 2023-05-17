@@ -200,7 +200,7 @@ class UpdateSubDistrictTest extends TestCase
         ]);
 
         $response->assertRedirect('/login');
-        
+
         $this->assertGuest();
     }
 }

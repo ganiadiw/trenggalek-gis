@@ -101,7 +101,7 @@ class CreateWebgisAdministratorTest extends TestCase
         ]);
 
         $response->assertRedirect(route('login'));
-        
+
         $this->assertGuest();
     }
 }

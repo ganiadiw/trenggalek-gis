@@ -75,7 +75,7 @@ class DeleteWebgisAdministratorTest extends TestCase
         $response = $this->delete('/dashboard/users/' . $this->webgisAdmin2->username);
 
         $response->assertRedirect('/login');
-        
+
         $this->assertGuest();
     }
 }

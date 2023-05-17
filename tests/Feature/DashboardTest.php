@@ -57,7 +57,7 @@ class DashboardTest extends TestCase
         $this->assertEquals(0, $webgisAdmin->is_admin);
 
         $response = $this->actingAs($webgisAdmin)->get('/dashboard');
-        
+
         $response->assertStatus(200);
         $response->assertDontSeeText('Administrator WebGIS');
         $response->assertDontSeeText('Data Kecamatan');

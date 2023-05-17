@@ -28,7 +28,6 @@ class CreateTouristDestinationTest extends TestCase
         $this->user = User::factory()->create();
         $this->category = Category::factory()->create();
         $this->subDistrict = SubDistrict::factory()->create();
-
     }
 
     public function test_a_tourist_destination_create_page_is_displayed()

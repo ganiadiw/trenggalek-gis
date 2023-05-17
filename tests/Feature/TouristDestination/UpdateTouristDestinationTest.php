@@ -544,7 +544,7 @@ class UpdateTouristDestinationTest extends TestCase
         ]);
 
         $response->assertRedirect('/login');
-        
+
         $this->assertGuest();
     }
 }

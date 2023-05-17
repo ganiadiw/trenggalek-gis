@@ -4,8 +4,6 @@ namespace Tests\Feature\Category;
 
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class DeleteCategoryTest extends TestCase

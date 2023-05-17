@@ -80,7 +80,6 @@ class UpdateWebgisAdministratorTest extends TestCase
             'phone_number' => '081234567890',
         ]);
 
-
         $response->assertValid();
         $response->assertRedirect('/dashboard/users/hugofirsttime/edit');
         $response->assertSessionHasNoErrors();

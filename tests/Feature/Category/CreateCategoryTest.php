@@ -2,10 +2,7 @@
 
 namespace Tests\Feature\Category;
 
-use App\Models\Category;
 use App\Models\User;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CreateCategoryTest extends TestCase
@@ -70,7 +67,7 @@ class CreateCategoryTest extends TestCase
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
             'name' => 'Wisata Pertanian',
             'color' => 'green',
-            'svg_name' => 'apple-whole'
+            'svg_name' => 'apple-whole',
         ]);
 
         $response->assertValid(['name', 'color', 'svg_name']);
@@ -80,7 +77,7 @@ class CreateCategoryTest extends TestCase
         $this->assertDatabaseHas('categories', [
             'name' => 'Wisata Pertanian',
             'color' => 'green',
-            'svg_name' => 'apple-whole'
+            'svg_name' => 'apple-whole',
         ]);
     }
 
