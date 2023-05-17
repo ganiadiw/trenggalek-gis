@@ -10,11 +10,9 @@
         </testsuite>
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
-            <exclude>./tests/Feature/Auth/EmailVerificationTest.php</exclude>
-            <exclude>./tests/Feature/Auth/PasswordConfirmationTest.php</exclude>
-            <exclude>./tests/Feature/Auth/PasswordResetTest.php</exclude>
-            <exclude>./tests/Feature/Auth/PasswordUpdateTest.php</exclude>
-            <exclude>./tests/Feature/Auth/RegistrationTest.php</exclude>
+            <exclude>
+                <directory suffix=".php">./tests/Feature/Auth</directory>
+            </exclude>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
@@ -25,6 +23,7 @@
             <directory suffix=".php">./app/Console</directory>
             <directory suffix=".php">./app/Exceptions</directory>
             <directory suffix=".php">./app/Providers</directory>
+            <directory suffix=".php">./app/Http/Controllers/Auth</directory>
             <file>./app/Http/Controllers/Controller.php</file>
             <file>./app/Http/Kernel.php</file>
             <file>./app/Http/Middleware/Authenticate.php</file>
@@ -37,14 +36,7 @@
             <file>./app/Http/Middleware/TrustProxies.php</file>
             <file>./app/Http/Middleware/ValidateSignature.php</file>
             <file>./app/Http/Middleware/VerifyCsrfToken.php</file>
-            <file>./app/Http/Controllers/Auth/ConfirmablePasswordController.php</file>
-            <file>./app/Http/Controllers/Auth/EmailVerificationNotificationController.php</file>
-            <file>./app/Http/Controllers/Auth/EmailVerificationPromptController.php</file>
-            <file>./app/Http/Controllers/Auth/NewPasswordController.php</file>
-            <file>./app/Http/Controllers/Auth/PasswordController.php</file>
-            <file>./app/Http/Controllers/Auth/PasswordResetLinkController.php</file>
-            <file>./app/Http/Controllers/Auth/RegisteredUserController.php</file>
-            <file>./app/Http/Controllers/Auth/VerifyEmailController.php</file>
+            <file>./app/Http/Requests/Auth/LoginRequest.php</file>
         </exclude>
     </coverage>
     <php>
