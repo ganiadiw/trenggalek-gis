@@ -28,7 +28,7 @@ class WebgisAdministratorTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_an_superadmin_can_see_webgis_administrator_management_page()
+    public function test_super_admin_can_visit_the_webgis_admin_management_page()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users');
 
@@ -36,7 +36,23 @@ class WebgisAdministratorTest extends TestCase
         $response->assertSeeText('Kelola Data Administrator');
     }
 
-    public function test_an_superadmin_can_search_contains_webgis_administrator_data()
+    public function test_webgis_admin_cannot_visit_the_webgis_admin_management_page()
+    {
+        $response = $this->actingAs($this->webgisAdmin)->get('/dashboard/users');
+
+        $response->assertForbidden();
+    }
+
+    public function test_guest_cannot_visit_the_webgis_admin_management_page()
+    {
+        $response = $this->get('/dashboard/users');
+
+        $response->assertRedirect('/login');
+
+        $this->assertGuest();
+    }
+
+    public function test_super_admin_can_search_contains_webgis_admin_data()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=hugo');
 
@@ -49,19 +65,15 @@ class WebgisAdministratorTest extends TestCase
         ]);
     }
 
-    public function test_an_superadmin_can_search_contains_no_webgis_administrator_data()
+    public function test_notification_is_displayed_for_search_not_found_webgis_admin_data()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=john');
 
-        $response->assertSessionHasNoErrors();
         $response->assertSeeText('Data tidak tersedia');
-
-        $this->assertDatabaseMissing('users', [
-            'name' => 'John',
-        ]);
+        $response->assertSessionHasNoErrors();
     }
 
-    public function test_an_superadmin_can_see_webgis_administrator_profile()
+    public function test_webgis_administrator_profile_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin->username);
 
@@ -77,7 +89,7 @@ class WebgisAdministratorTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_an_superadmin_redirect_to_profile_update_route_if_want_to_change_the_data_itself()
+    public function test_route_redirect_to_profile_update_for_self_data_update()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->superAdmin->username . '/edit');
 

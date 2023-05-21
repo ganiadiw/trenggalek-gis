@@ -64,7 +64,7 @@ class CreateSubDistrictTest extends TestCase
         $this->assertJson(json_encode($this->createGeoJson));
     }
 
-    public function test_a_sub_district_create_page_is_displayed()
+    public function test_sub_district_create_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/sub-districts/create');
 
@@ -72,7 +72,22 @@ class CreateSubDistrictTest extends TestCase
         $response->assertSeeText('Tambah Data Kecamatan');
     }
 
-    public function test_an_superadmin_can_create_sub_district_with_upload_geojson_file()
+    public function test_sub_district_create_input_validation()
+    {
+        $response = $this->actingAs($this->superAdmin)->post('dashboard/sub-districts', [
+            'code' => '',
+            'name' => '',
+            'latitude' => '',
+            'longitude' => '',
+            'fill_color' => '',
+            'geojson' => '',
+            'geojson_text_area' => '',
+        ]);
+
+        $response->assertInvalid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
+    }
+
+    public function test_super_admin_can_create_sub_district_with_upload_geojson_file()
     {
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/sub-districts', [
             'code' => 3503010,
@@ -96,7 +111,7 @@ class CreateSubDistrictTest extends TestCase
         ]);
     }
 
-    public function test_an_superadmin_can_create_sub_district_with_geojson_text()
+    public function test_super_admin_can_create_sub_district_with_geojson_text()
     {
         $response = $this->actingAs($this->superAdmin)->post('dashboard/sub-districts', [
             'code' => 3503010,
@@ -124,22 +139,7 @@ class CreateSubDistrictTest extends TestCase
         $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
     }
 
-    public function test_correct_data_must_be_provided_to_create_sub_district()
-    {
-        $response = $this->actingAs($this->superAdmin)->post('dashboard/sub-districts', [
-            'code' => '',
-            'name' => '',
-            'latitude' => '',
-            'longitude' => '',
-            'fill_color' => '',
-            'geojson' => '',
-            'geojson_text_area' => '',
-        ]);
-
-        $response->assertInvalid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
-    }
-
-    public function test_an_webgis_administrator_cannot_create_sub_district()
+    public function test_webgis_admin_cannot_create_sub_district()
     {
         $response = $this->actingAs($this->webgisAdmin)->post('dashboard/sub-districts', [
             'code' => 3503010,
@@ -153,7 +153,7 @@ class CreateSubDistrictTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_create_sub_district()
+    public function test_guest_cannot_create_sub_district()
     {
         $response = $this->post('dashboard/sub-districts', [
             'code' => 3503010,

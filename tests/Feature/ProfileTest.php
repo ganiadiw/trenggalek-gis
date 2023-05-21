@@ -61,7 +61,7 @@ class ProfileTest extends TestCase
         $this->assertSame('test@example.com', $this->user->email);
     }
 
-    public function test_correct_data_must_be_provided_to_update_profile_information()
+    public function test_profile_information_input_validation()
     {
         $response = $this->actingAs($this->user)->put('/profile', [
             'name' => '',
@@ -121,5 +121,21 @@ class ProfileTest extends TestCase
             'email' => 'hugofirst@example.com',
             'username' => 'hugofirst',
         ]);
+    }
+
+    public function test_password_can_be_updated()
+    {
+        $response = $this->actingAs($this->user)->put('/profile', [
+            'name' => 'Hugo First Time',
+            'email' => 'hugofirsttime@example.com',
+            'username' => 'hugofirsttime',
+            'address' => 'Desa Sumberbening, Kecamatan Dongko',
+            'phone_number' => '081234567890',
+            'password' => 'qwertyuiop',
+            'password_confirmation' => 'qwertyuiop',
+        ]);
+        $response->assertValid();
+        $response->assertRedirect('/profile');
+        $response->assertSessionHasNoErrors();
     }
 }

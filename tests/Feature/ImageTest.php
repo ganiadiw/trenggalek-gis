@@ -23,7 +23,7 @@ class ImageTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-    public function test_an_authenticated_use_can_post_an_temporary_image_file()
+    public function test_authenticated_user_can_post_a_temporary_image()
     {
         $response = $this->actingAs($this->user)->postJson('/dashboard/images', [
             'image' => UploadedFile::fake()->image('image1678273485413.png'),
@@ -41,7 +41,7 @@ class ImageTest extends TestCase
         $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485413.png'));
     }
 
-    public function test_an_authenticated_use_can_delete_an_temporary_image_file()
+    public function test_authenticated_user_can_delete_a_temporary_image()
     {
         Storage::disk('local')->put('public/cover-images/image1678273485413.png', '');
         TemporaryFile::create([
@@ -62,7 +62,7 @@ class ImageTest extends TestCase
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485413.png'));
     }
 
-    public function test_an_authenticated_user_can_update_tourist_attraction_image()
+    public function test_authenticated_user_can_update_tourist_attraction_image()
     {
         SubDistrict::factory()->create();
         Category::factory()->create();

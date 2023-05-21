@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class MapDrawerTest extends TestCase
 {
-    public function test_a_map_drawer_page_is_displayed()
+    public function test_map_drawer_page_is_displayed()
     {
         $user = User::factory()->create();
 

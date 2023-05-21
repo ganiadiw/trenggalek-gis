@@ -34,7 +34,7 @@ class UpdateCategoryTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_a_category_edit_page_is_displayed()
+    public function test_category_edit_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('dashboard/categories/' . $this->category->slug . '/edit');
 
@@ -43,7 +43,7 @@ class UpdateCategoryTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_correct_data_must_be_provided_to_update_category()
+    public function test_category_update_input_validation()
     {
         $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
             'name' => '',
@@ -52,25 +52,7 @@ class UpdateCategoryTest extends TestCase
         $response->assertInvalid(['name']);
     }
 
-    public function test_an_superadmin_can_update_category()
-    {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
-            'name' => 'Wisata Pantai Pesisir',
-        ]);
-
-        $response->assertValid(['name']);
-        $response->assertRedirect(url()->previous());
-        $response->assertSessionHasNoErrors();
-
-        $this->assertDatabaseMissing('categories', [
-            'name' => $this->category->name,
-        ]);
-        $this->assertDatabaseHas('categories', [
-            'name' => 'Wisata Pantai Pesisir',
-        ]);
-    }
-
-    public function test_an_superadmin_can_update_category_with_icon_marker()
+    public function test_super_admin_can_update_category_with_icon_marker()
     {
         $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
             'name' => 'Wisata Pantai Pesisir',
@@ -92,7 +74,25 @@ class UpdateCategoryTest extends TestCase
         ]);
     }
 
-    public function test_an_webgis_admin_cannot_update_category()
+    public function test_super_admin_can_update_category_without_icon_marker()
+    {
+        $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
+            'name' => 'Wisata Pantai Pesisir',
+        ]);
+
+        $response->assertValid(['name']);
+        $response->assertRedirect(url()->previous());
+        $response->assertSessionHasNoErrors();
+
+        $this->assertDatabaseMissing('categories', [
+            'name' => $this->category->name,
+        ]);
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Wisata Pantai Pesisir',
+        ]);
+    }
+
+    public function test_webgis_admin_cannot_update_category()
     {
         $response = $this->actingAs($this->webgisAdmin)->put('dashboard/categories/' . $this->category->slug, [
             'name' => 'Wisata Pantai Pesisir',
@@ -101,7 +101,7 @@ class UpdateCategoryTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_update_category()
+    public function test_guest_cannot_update_category()
     {
         $response = $this->put('dashboard/categories/' . $this->category->slug, [
             'name' => 'Wisata Pantai Pesisir',

@@ -45,7 +45,7 @@ class DeleteSubDistrictTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_an_superadmin_can_delete_sub_district()
+    public function test_super_admin_can_delete_sub_district()
     {
         $response = $this->actingAs($this->superAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
 
@@ -62,7 +62,7 @@ class DeleteSubDistrictTest extends TestCase
         $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
-    public function test_delete_data_will_be_redirected_if_the_sub_district_has_relationship_to_tourist_destinations()
+    public function test_delete_data_redirect_to_related_data_for_sub_district_with_relationship_to_tourist_destinations()
     {
         Category::factory()->create();
         TouristDestination::factory()->create();
@@ -73,14 +73,14 @@ class DeleteSubDistrictTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_an_webgis_administrator_cannot_delete_sub_district()
+    public function test_webgis_admin_cannot_delete_sub_district()
     {
         $response = $this->actingAs($this->webgisAdmin)->delete('dashboard/sub-districts/' . $this->subDistrict->code);
 
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_delete_sub_district()
+    public function test_guest_cannot_delete_sub_district()
     {
         $response = $this->delete('dashboard/sub-districts/' . $this->subDistrict->code);
 

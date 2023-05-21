@@ -49,7 +49,7 @@ class DeleteWebgisAdministratorTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin2->is_admin);
     }
 
-    public function test_an_superadmin_can_delete_webgis_administrator()
+    public function test_super_admin_can_delete_webgis_admin()
     {
         $response = $this->actingAs($this->superAdmin)->delete('/dashboard/users/' . $this->webgisAdmin2->username);
 
@@ -62,7 +62,7 @@ class DeleteWebgisAdministratorTest extends TestCase
         $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin2->avatar_name));
     }
 
-    public function test_an_webgis_administrator_cannot_delete_webgis_administrator()
+    public function test_webgis_admin_cannot_delete_webgis_admin()
     {
         $this->assertEquals(0, $this->webgisAdmin1->is_admin);
 
@@ -70,7 +70,7 @@ class DeleteWebgisAdministratorTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_delete_webgis_administrator()
+    public function test_guest_cannot_delete_webgis_admin()
     {
         $response = $this->delete('/dashboard/users/' . $this->webgisAdmin2->username);
 

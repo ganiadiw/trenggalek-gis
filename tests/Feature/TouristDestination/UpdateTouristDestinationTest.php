@@ -37,7 +37,7 @@ class UpdateTouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_a_tourist_destination_edit_page_is_displayed()
+    public function test_tourist_destination_edit_page_is_displayed()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug . '/edit');
 
@@ -51,7 +51,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertEquals('111.45297354', $this->touristDestination->longitude);
     }
 
-    public function test_correct_data_must_be_provided_to_update_tourist_destination()
+    public function test_tourist_destination_update_input_validation()
     {
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
             'name' => '',
@@ -62,7 +62,7 @@ class UpdateTouristDestinationTest extends TestCase
         $response->assertRedirect(url()->previous());
     }
 
-    public function test_an_authenticated_user_can_update_tourist_destination_without_change_any_not_required_field()
+    public function test_authenticated_user_can_update_tourist_destination_without_change_any_not_required_field()
     {
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
             'sub_district_id' => $this->subDistrict->id,
@@ -107,7 +107,7 @@ class UpdateTouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_an_authenticated_user_can_update_tourist_destination_with_change_cover_image()
+    public function test_authenticated_user_can_update_tourist_destination_with_change_cover_image()
     {
         $coverImage = UploadedFile::fake()->image('pantai-konang-indah.jpg');
 
@@ -161,7 +161,7 @@ class UpdateTouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_an_authenticated_user_can_update_tourist_destination_with_image_in_description_editor_and_remove_old_image_if_no_longer_used()
+    public function test_authenticated_user_can_update_tourist_destination_with_image_in_description_editor_and_remove_old_image()
     {
         $image1 = UploadedFile::fake()->image('image1678273485413.png');
         $image2 = UploadedFile::fake()->image('image1678273485552.png');
@@ -229,7 +229,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertFalse(Storage::exists('public/media/2/image1678273485552.png'));
     }
 
-    public function test_an_authenticated_user_can_update_tourist_destination_with_add_new_image_in_description_editor()
+    public function test_authenticated_user_can_update_tourist_destination_with_add_new_image_in_description_editor()
     {
         $this->actingAs($this->user)->postJson('/dashboard/images', [
             'image' => UploadedFile::fake()->image('image1678273485732.png'),
@@ -294,7 +294,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485732.png'));
     }
 
-    public function test_an_authenticated_user_can_update_tourist_destination_with_delete_existing_tourist_attraction()
+    public function test_authenticated_user_can_update_tourist_destination_with_delete_existing_tourist_attraction()
     {
         Storage::disk('local')->put('public/tourist-attractions/attraction-1.jpg', '');
         Storage::disk('local')->put('public/tourist-attractions/attraction-2.jpg', '');
@@ -370,7 +370,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertFalse(Storage::exists('public/tourist-attractions/attraction-2.jpg'));
     }
 
-    public function test_an_authenticated_user_can_update_tourist_destination_with_update_existing_tourist_attraction()
+    public function test_authenticated_user_can_update_tourist_destination_with_update_existing_tourist_attraction()
     {
         Storage::disk('local')->put('public/tourist-attractions/attraction-1.jpg', '');
         Storage::disk('local')->put('public/tourist-attractions/attraction-2.jpg', '');
@@ -460,7 +460,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/tourist-attractions/attraction-2.jpg'));
     }
 
-    public function test_an_authenticated_user_can_update_tourist_destination_with_add_new_tourist_attraction()
+    public function test_authenticated_user_can_update_tourist_destination_with_add_new_tourist_attraction()
     {
         $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
             'sub_district_id' => $this->subDistrict->id,
@@ -525,7 +525,7 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/tourist-attractions/' . $tourisAttractions[1]['image_name']));
     }
 
-    public function test_a_guest_cannot_update_new_tourist_destination()
+    public function test_guest_cannot_update_tourist_destination()
     {
         $response = $this->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
             'sub_district_id' => $this->subDistrict->id,

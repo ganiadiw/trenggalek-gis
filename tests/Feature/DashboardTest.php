@@ -16,7 +16,7 @@ class DashboardTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-    public function test_an_authenticated_user_can_see_dashboard_page()
+    public function test_authenticated_user_can_visit_the_dashboard_page()
     {
         $response = $this->actingAs($this->user)->get('/dashboard');
 
@@ -25,7 +25,7 @@ class DashboardTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_an_unauthenticated_user_cannot_see_dashboard_page()
+    public function test_guest_cannot_visit_the_dashboard_page()
     {
         $response = $this->get('/dashboard');
 
@@ -34,7 +34,7 @@ class DashboardTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_an_superadmin_can_see_all_menu()
+    public function test_super_admin_can_see_all_menu()
     {
         $this->assertEquals(1, $this->user->is_admin);
 
@@ -45,7 +45,7 @@ class DashboardTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_an_webgis_admin_cannot_see_superadmin_menu()
+    public function test_webgis_admin_cannot_see_super_admin_menu()
     {
         $webgisAdmin = User::factory()->create([
             'name' => 'John Doe',

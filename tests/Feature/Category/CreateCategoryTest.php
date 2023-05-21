@@ -30,7 +30,7 @@ class CreateCategoryTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_a_category_create_page_is_displayed()
+    public function test_category_create_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/create');
 
@@ -38,7 +38,7 @@ class CreateCategoryTest extends TestCase
         $response->assertSeeText('Tambah Data Kategori Destinasi Wisata');
     }
 
-    public function test_correct_data_must_be_provided_to_create_category()
+    public function test_category_create_input_validation()
     {
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
             'name' => '',
@@ -47,7 +47,7 @@ class CreateCategoryTest extends TestCase
         $response->assertInvalid(['name']);
     }
 
-    public function test_an_superadmin_can_create_category()
+    public function test_super_admin_can_create_category_without_icon_marker()
     {
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
             'name' => 'Wisata Pertanian',
@@ -62,7 +62,7 @@ class CreateCategoryTest extends TestCase
         ]);
     }
 
-    public function test_an_superadmin_can_create_category_with_icon_marker()
+    public function test_super_admin_can_create_category_with_icon_marker()
     {
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
             'name' => 'Wisata Pertanian',
@@ -81,7 +81,7 @@ class CreateCategoryTest extends TestCase
         ]);
     }
 
-    public function test_an_webgis_administrator_cannot_create_category()
+    public function test_webgis_admin_cannot_create_category()
     {
         $response = $this->actingAs($this->webgisAdmin)->post('/dashboard/categories', [
             'name' => 'Wisata Pertanian',
@@ -90,7 +90,7 @@ class CreateCategoryTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_create_category()
+    public function test_guest_cannot_create_category()
     {
         $response = $this->post('/dashboard/categories', [
             'name' => 'Wisata Pertanian',

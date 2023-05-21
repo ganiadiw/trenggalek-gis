@@ -32,7 +32,7 @@ class DeleteTouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_an_authenticated_user_can_delete_tourist_destination()
+    public function test_authenticated_user_can_delete_tourist_destination()
     {
         $response = $this->actingAs($this->user)->delete('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
 
@@ -48,7 +48,7 @@ class DeleteTouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_a_guest_cannot_delete_new_tourist_destination()
+    public function test_guest_cannot_delete_tourist_destination()
     {
         $response = $this->delete('/dashboard/tourist-destinations/' . $this->touristDestination->id);
 

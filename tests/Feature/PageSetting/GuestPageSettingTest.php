@@ -24,7 +24,7 @@ class GuestPageSettingTest extends TestCase
         $this->assertEquals(1, $this->user->is_admin);
     }
 
-    public function test_an_authenticated_user_can_see_guest_page_setting_page()
+    public function test_authenticated_user_can_visit_the_guest_page_setting_page()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/page-settings/guest');
 
@@ -33,7 +33,7 @@ class GuestPageSettingTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_update_guest_page_setting_is_displayed()
+    public function test_the_edit_guest_page_setting_is_displayed()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/page-settings/guest/' . $this->guestPageSetting->id);
 
@@ -62,7 +62,7 @@ class GuestPageSettingTest extends TestCase
         ]);
     }
 
-    public function test_file_field_can_be_updated()
+    public function test_image_field_can_be_updated()
     {
         Storage::disk('local')->put('public/page-settings/hero_image/12345-image.png', '');
         Storage::disk('local')->put('public/page-settings/hero_image/56789-image.png', '');

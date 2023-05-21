@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 class WelcomeTest extends TestCase
 {
-    public function test_a_welcome_page_is_displayed()
+    public function test_welcome_page_is_displayed()
     {
         $this->seed();
 

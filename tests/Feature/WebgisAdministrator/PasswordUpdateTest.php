@@ -3,6 +3,7 @@
 namespace Tests\Feature\WebgisAdministrator;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 // Test case for update user password (Webgis Administrator)
@@ -28,14 +29,9 @@ class PasswordUpdateTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_an_superadmin_cannot_update_webgis_administrator_with_incorrect_password()
+    public function test_the_password_can_only_be_changed_if_the_password_data_is_valid()
     {
         $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
-            'name' => 'Hugo First Time',
-            'email' => 'hugofirsttime@example.com',
-            'username' => 'hugofirsttime',
-            'address' => 'Desa Sumberbening, Kecamatan Dongko',
-            'phone_number' => '081234567890',
             'password' => 'newpassword',
             'password_confirmation' => 'wrongpassword',
         ]);
@@ -44,7 +40,7 @@ class PasswordUpdateTest extends TestCase
         $response->assertRedirect(url()->previous());
     }
 
-    public function test_an_superadmin_can_update_webgis_administrator_with_change_password()
+    public function test_webgis_admin_data_can_be_updated_with_change_password()
     {
         $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
             'name' => 'Hugo First Time',

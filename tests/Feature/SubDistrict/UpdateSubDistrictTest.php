@@ -78,7 +78,7 @@ class UpdateSubDistrictTest extends TestCase
         $this->assertJson(json_encode($this->updateGeoJson));
     }
 
-    public function test_a_sub_district_edit_page_is_displayed()
+    public function test_sub_district_edit_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code . '/edit');
 
@@ -87,7 +87,20 @@ class UpdateSubDistrictTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_an_superadmin_can_update_sub_district_with_upload_geojson_file()
+    public function test_sub_district_update_input_validation()
+    {
+        $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
+            'code' => '',
+            'name' => '',
+            'latitude' => '',
+            'longitude' => '',
+            'fill_color' => '',
+        ]);
+
+        $response->assertInvalid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
+    }
+
+    public function test_super_admin_can_update_sub_district_with_upload_geojson_file()
     {
         $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => 3503030,
@@ -124,7 +137,7 @@ class UpdateSubDistrictTest extends TestCase
         $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
-    public function test_an_superadmin_can_update_sub_district_with_geojson_text()
+    public function test_super_admin_can_update_sub_district_with_geojson_text()
     {
         $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => 3503030,
@@ -161,20 +174,7 @@ class UpdateSubDistrictTest extends TestCase
         $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
-    public function test_correct_data_must_be_provided_to_update_sub_district()
-    {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
-            'code' => '',
-            'name' => '',
-            'latitude' => '',
-            'longitude' => '',
-            'fill_color' => '',
-        ]);
-
-        $response->assertInvalid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
-    }
-
-    public function test_an_webgis_administrator_cannot_update_sub_district()
+    public function test_webgis_admin_cannot_update_sub_district()
     {
         $response = $this->actingAs($this->webgisAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => 3503020,
@@ -188,7 +188,7 @@ class UpdateSubDistrictTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_update_sub_district()
+    public function test_guest_cannot_update_sub_district()
     {
         $response = $this->put('dashboard/sub-districts/' . $this->subDistrict->code, [
             'code' => 3503020,

@@ -34,7 +34,7 @@ class DeleteCategoryTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_an_superadmin_can_delete_category()
+    public function test_super_admin_can_delete_category()
     {
         $response = $this->actingAs($this->superAdmin)->delete('/dashboard/categories/' .  $this->category->slug);
 
@@ -46,14 +46,14 @@ class DeleteCategoryTest extends TestCase
         ]);
     }
 
-    public function test_an_webgis_administrator_cannot_delete_category()
+    public function test_webgis_admin_cannot_delete_category()
     {
         $response = $this->actingAs($this->webgisAdmin)->delete('/dashboard/categories/' .  $this->category->slug);
 
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_delete_category()
+    public function test_guest_cannot_delete_category()
     {
         $response = $this->delete('/dashboard/categories/' .  $this->category->slug);
 

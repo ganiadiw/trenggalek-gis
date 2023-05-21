@@ -28,7 +28,7 @@ class TouristDestinationTest extends TestCase
         ]);
     }
 
-    public function test_an_guest_can_see_tourist_destination_page()
+    public function test_guest_can_visit_the_tourist_destination_page()
     {
         $response = $this->get('tourist-destinations/' . $this->touristDestination->slug);
 

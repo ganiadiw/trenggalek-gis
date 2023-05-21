@@ -49,7 +49,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin2->is_admin);
     }
 
-    public function test_a_edit_page_is_displayed()
+    public function test_webgis_admin_edit_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin1->username . '/edit');
 
@@ -58,7 +58,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_correct_data_must_be_provided_to_update_webgis_administrator()
+    public function test_webgis_admin_update_input_validation()
     {
         $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
             'name' => '',
@@ -70,7 +70,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         $response->assertRedirect(url()->previous());
     }
 
-    public function test_an_superadmin_can_update_webgis_administrator_without_change_avatar()
+    public function test_super_admin_can_update_webgis_admin_without_change_avatar()
     {
         $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
             'name' => 'Hugo First Time',
@@ -95,7 +95,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         ]);
     }
 
-    public function test_an_superadmin_can_update_webgis_administrator_with_change_avatar_and_remove_old_file()
+    public function test_super_admin_can_update_webgis_admin_with_change_avatar_and_delete_old_file()
     {
         $avatar = UploadedFile::fake()->image('avatar.png');
 
@@ -125,7 +125,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         ]);
     }
 
-    public function test_an_webgis_administrator_cannot_update_webgis_administrator()
+    public function test_webgis_admin_cannot_update_other_webgis_admin()
     {
         $response = $this->actingAs($this->webgisAdmin1)->put('/dashboard/users/' . $this->webgisAdmin2->username, [
             'name' => 'Micahel John Doe',
@@ -138,7 +138,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_update_webgis_administrator()
+    public function test_guest_cannot_update_webgis_admin()
     {
         $response = $this->put('/dashboard/users/' . $this->webgisAdmin1->username, [
             'name' => 'Micahel John Doe',

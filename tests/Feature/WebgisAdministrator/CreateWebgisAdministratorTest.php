@@ -5,7 +5,6 @@ namespace Tests\Feature\WebgisAdministrator;
 use App\Models\User;
 use Tests\TestCase;
 
-// Test case for creating user (Webgis Administrator)
 class CreateWebgisAdministratorTest extends TestCase
 {
     private User $superAdmin; // Super Admin
@@ -28,7 +27,7 @@ class CreateWebgisAdministratorTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_a_webgis_administrator_create_page_is_displayed()
+    public function test_webgis_admin_create_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/create');
 
@@ -36,7 +35,7 @@ class CreateWebgisAdministratorTest extends TestCase
         $response->assertSeeText('Tambah Data Administrator');
     }
 
-    public function test_correct_data_must_be_provided_to_create_new_webgis_administrator()
+    public function test_webgis_admin_create_input_validation()
     {
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/users', [
             'name' => '',
@@ -51,7 +50,7 @@ class CreateWebgisAdministratorTest extends TestCase
         $response->assertRedirect(url()->previous());
     }
 
-    public function test_an_superadmin_can_create_new_webgis_administrator()
+    public function test_super_admin_can_create_webgis_admin()
     {
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/users', [
             'name' => 'Lois Di Nominator',
@@ -73,7 +72,7 @@ class CreateWebgisAdministratorTest extends TestCase
         ]);
     }
 
-    public function test_an_webgis_administrator_cannot_create_new_webgis_administrator()
+    public function test_webgis_admin_cannot_create_webgis_admin()
     {
         $response = $this->actingAs($this->webgisAdmin)->post('/dashboard/users', [
             'name' => 'Lois Di Nominator',
@@ -88,7 +87,7 @@ class CreateWebgisAdministratorTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_create_new_webgis_administrator()
+    public function test_guest_cannot_create_webgis_admin()
     {
         $response = $this->post('/dashboard/users', [
             'name' => 'Lois Di Nominator',

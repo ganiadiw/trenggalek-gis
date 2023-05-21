@@ -34,7 +34,7 @@ class CategoryTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_an_superadmin_can_see_category_management_page()
+    public function test_super_admin_can_visit_the_category_management_page()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories');
 
@@ -44,14 +44,14 @@ class CategoryTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_an_webgis_admin_cannot_see_category_management_page()
+    public function test_webgis_admin_cannot_visit_the_category_management_page()
     {
         $response = $this->actingAs($this->webgisAdmin)->get('/dashboard/categories');
 
         $response->assertForbidden();
     }
 
-    public function test_an_guest_cannot_see_category_management_page()
+    public function test_guest_cannot_visit_the_category_management_page()
     {
         $response = $this->get('/dashboard/categories');
 
@@ -60,7 +60,24 @@ class CategoryTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_an_superadmin_can_see_category_show_page()
+    public function test_super_admin_can_search_contains_category_data()
+    {
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search?column_name=name&search_value=wisata');
+
+        $response->assertStatus(200);
+        $response->assertSeeText($this->category->name);
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_notification_is_displayed_for_search_not_found_category_data()
+    {
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search?column_name=name&search_value=123');
+
+        $response->assertSeeText('Data tidak tersedia');
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_category_show_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/' . $this->category->slug);
 
@@ -70,13 +87,5 @@ class CategoryTest extends TestCase
 
         $this->assertEquals(1, $this->category->id);
         $this->assertEquals('Wisata Pantai', $this->category->name);
-    }
-
-    public function test_an_superadmin_can_search_contaions_category_data()
-    {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search?column_name=name&search_value=wisata');
-
-        $response->assertSeeText($this->category->name);
-        $response->assertSessionHasNoErrors();
     }
 }
