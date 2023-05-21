@@ -39,10 +39,6 @@ class GuestPageSettingController extends Controller
                 }
             }
 
-            if (count($existingFilename) != $guestPageSetting->max_value) {
-                array_push($existingFilename, $newFilename);
-            }
-
             foreach ($existingFilename as $key => $value) {
                 if (array_key_exists($key, $newFilename)) {
                     $existingFilename[$key] = $newFilename[$key];
