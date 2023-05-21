@@ -293,7 +293,7 @@
                                 offset: [-20, -20],
                                 permanent: true,
                                 direction: 'left',
-                                className: 'bg-inherit border-0 shadow-none text-[{{ $touristDestination->category->hex_code }}] font-[720]'
+                                className: 'bg-inherit border-0 shadow-none font-[720]' + ' ' + 'text-[{{ $touristDestination->category->hex_code }}]'
                             });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
