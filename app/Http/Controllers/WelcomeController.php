@@ -12,15 +12,10 @@ class WelcomeController extends Controller
     public function index()
     {
         $heroImages = GuestPageSetting::where('key', 'hero_image')->select('key', 'value')->first();
-        $heroImagesCount = 0;
 
-        if ($heroImages) {
-            foreach ($heroImages->value as $heroImage) {
-                if ($heroImage != null) {
-                    $heroImagesCount++;
-                }
-            }
-        }
+        $heroImagesCount = count(array_filter($heroImages->value, function ($value) {
+            return $value !== null;
+        }));
 
         return view('welcome', [
             'pageTitle' => GuestPageSetting::where('key', 'page_title')->select('key', 'value')->first(),
