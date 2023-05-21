@@ -3,7 +3,6 @@
 namespace Tests\Feature\WebgisAdministrator;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 // Test case for update user password (Webgis Administrator)
