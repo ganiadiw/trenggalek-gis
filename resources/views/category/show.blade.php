@@ -2,7 +2,7 @@
     <div>
         <div class="px-4 py-4 mx-auto text-gray-900 max-w-7xl sm:px-6 lg:px-8">
             <div class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg">
-                <h1 class="w-full text-lg font-bold">Informasi Kategori Destinasi Wisata</h1>
+                <h1 class="w-full text-lg font-bold">Detail Informasi Kategori Destinasi Wisata</h1>
                 <div class="w-full mt-5">
                     <div class="grid">
                         <div>
@@ -12,18 +12,27 @@
                                 <x-input-default-form type="text" name="name" :value="$category->name" id="name"
                                     labelTitle="Nama Kategori*" error='name'
                                     placeholder="Kategori Destinasi Wisata" :disabled=true />
-                                @if ($category->icon_name)
-                                    <div>
-                                        <h3 class="mb-2 text-sm font-medium text-gray-900">Icon saat ini</h3>
-                                        <div class="p-2 bg-gray-100 border border-gray-300 rounded-lg w-fit">
+                                <div>
+                                    <h3 class="mb-2 text-sm font-medium text-gray-900">Marker Kustom</h3>
+                                    @if ($category->svg_name)
+                                        <div class="flex items-center space-x-3 text-sm h-9">
                                             <div class="flex items-center">
-                                                <div class="px-5">
-                                                    <img class="flex items-center w-7 h-7" src="{{ asset('storage/categories/icon/' . $category->icon_name) }}" alt="icon">
+                                                <p>Warna Marker:</p>
+                                                <div class="flex items-center ml-3 rounded-sm w-7 h-7" style="background-color: {{ $category->hex_code }}"></div>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div>
+                                                    Icon Marker :
+                                                </div>
+                                                <div class="ml-3">
+                                                    <i class="{{ $category->svg_name }}"></i>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endif
+                                    @else
+                                        <p class="flex items-center text-sm h-9">Tidak ada marker kustom</p>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
