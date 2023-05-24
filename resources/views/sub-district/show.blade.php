@@ -2,8 +2,10 @@
     <div class="py-8">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="h-full py-5 bg-white rounded-md shadow-lg px-7 sm:px-10 border-1 border-slate-300">
-                <h1 class="flex justify-center mt-5 mb-10 font-bold text-gray-700">Detail Informasi Kecamatan
-                    {{ $subDistrict->name }}</h1>
+                <div class="mt-5 mb-10">
+                    <h1 class="flex justify-center text-lg font-bold text-gray-700">Detail Informasi Kecamatan</h1>
+                    <p class="flex justify-center text-base">{{ $subDistrict->name }}</p>
+                </div>
                 <div class="grid gap-5 mb-8 sm:grid-cols-2">
                     <x-statistic-card>
                         <x-slot name='svgIcon'>
