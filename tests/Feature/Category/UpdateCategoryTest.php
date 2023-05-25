@@ -52,6 +52,24 @@ class UpdateCategoryTest extends TestCase
         $response->assertInvalid(['name']);
     }
 
+    public function test_super_admin_can_update_category_without_icon_marker()
+    {
+        $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
+            'name' => 'Wisata Pantai Pesisir',
+        ]);
+
+        $response->assertValid(['name']);
+        $response->assertRedirect(url()->previous());
+        $response->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Wisata Pantai Pesisir',
+        ]);
+        $this->assertDatabaseMissing('categories', [
+            'name' => $this->category->name,
+        ]);
+    }
+
     public function test_super_admin_can_update_category_with_icon_marker()
     {
         $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
@@ -64,31 +82,13 @@ class UpdateCategoryTest extends TestCase
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseMissing('categories', [
-            'name' => $this->category->name,
-        ]);
         $this->assertDatabaseHas('categories', [
             'name' => 'Wisata Pantai Pesisir',
             'color' => 'green',
             'svg_name' => 'apple-whole',
         ]);
-    }
-
-    public function test_super_admin_can_update_category_without_icon_marker()
-    {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
-            'name' => 'Wisata Pantai Pesisir',
-        ]);
-
-        $response->assertValid(['name']);
-        $response->assertRedirect(url()->previous());
-        $response->assertSessionHasNoErrors();
-
         $this->assertDatabaseMissing('categories', [
             'name' => $this->category->name,
-        ]);
-        $this->assertDatabaseHas('categories', [
-            'name' => 'Wisata Pantai Pesisir',
         ]);
     }
 

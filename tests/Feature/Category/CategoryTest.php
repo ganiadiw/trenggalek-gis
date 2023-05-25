@@ -73,6 +73,7 @@ class CategoryTest extends TestCase
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search?column_name=name&search_value=123');
 
+        $response->assertStatus(200);
         $response->assertSeeText('Data tidak tersedia');
         $response->assertSessionHasNoErrors();
     }
@@ -82,10 +83,11 @@ class CategoryTest extends TestCase
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/' . $this->category->slug);
 
         $response->assertStatus(200);
-        $response->assertSeeText('Informasi Kategori Destinasi Wisata');
+        $response->assertSeeText('Detail Informasi Kategori Destinasi Wisata');
         $response->assertSessionHasNoErrors();
 
         $this->assertEquals(1, $this->category->id);
         $this->assertEquals('Wisata Pantai', $this->category->name);
+        $this->assertEquals('wisata-pantai-12345', $this->category->slug);
     }
 }

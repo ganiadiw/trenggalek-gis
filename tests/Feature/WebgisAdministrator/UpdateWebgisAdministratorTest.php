@@ -67,7 +67,6 @@ class UpdateWebgisAdministratorTest extends TestCase
         ]);
 
         $response->assertInvalid();
-        $response->assertRedirect(url()->previous());
     }
 
     public function test_super_admin_can_update_webgis_admin_without_change_avatar()
@@ -129,7 +128,7 @@ class UpdateWebgisAdministratorTest extends TestCase
     {
         $response = $this->actingAs($this->webgisAdmin1)->put('/dashboard/users/' . $this->webgisAdmin2->username, [
             'name' => 'Micahel John Doe',
-            'username' => 'johdoe_mic',
+            'username' => 'johndoe_mic',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
             'email' => 'michaeljohndoe@example.com',

@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class GuestPageSettingTest extends TestCase
 {
-    private User $user;
+    private User $superAdmin;
 
     private GuestPageSetting $guestPageSetting;
 
@@ -18,24 +18,24 @@ class GuestPageSettingTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create();
+        $this->superAdmin = User::factory()->create();
         $this->guestPageSetting = GuestPageSetting::factory()->create();
 
-        $this->assertEquals(1, $this->user->is_admin);
+        $this->assertEquals(1, $this->superAdmin->is_admin);
     }
 
-    public function test_authenticated_user_can_visit_the_guest_page_setting_page()
+    public function test_super_admin_user_can_visit_the_guest_page_setting_page()
     {
-        $response = $this->actingAs($this->user)->get('/dashboard/page-settings/guest');
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/page-settings/guest');
 
         $response->assertStatus(200);
         $response->assertSeeText('Pengaturan Halaman');
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_the_edit_guest_page_setting_is_displayed()
+    public function test_edit_guest_page_setting_is_displayed()
     {
-        $response = $this->actingAs($this->user)->get('/dashboard/page-settings/guest/' . $this->guestPageSetting->id);
+        $response = $this->actingAs($this->superAdmin)->get('/dashboard/page-settings/guest/' . $this->guestPageSetting->id);
 
         $response->assertStatus(200);
         $response->assertSeeText('Edit Data Pengaturan Halaman');
@@ -44,7 +44,7 @@ class GuestPageSettingTest extends TestCase
 
     public function test_text_field_can_be_updated()
     {
-        $response = $this->actingAs($this->user)->put('/dashboard/page-settings/guest/' . $this->guestPageSetting->id, [
+        $response = $this->actingAs($this->superAdmin)->put('/dashboard/page-settings/guest/' . $this->guestPageSetting->id, [
             'value_text' => [
                 'Destinasi Wisata Trenggalek',
             ],
@@ -54,11 +54,11 @@ class GuestPageSettingTest extends TestCase
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseMissing('guest_page_settings', [
-            'value' => ['Wisata Trenggalek'],
-        ]);
         $this->assertDatabaseHas('guest_page_settings', [
             'value' => '["Destinasi Wisata Trenggalek"]',
+        ]);
+        $this->assertDatabaseMissing('guest_page_settings', [
+            'value' => ['Wisata Trenggalek'],
         ]);
     }
 
@@ -73,7 +73,7 @@ class GuestPageSettingTest extends TestCase
             'max_value' => 2,
         ]);
 
-        $response = $this->actingAs($this->user)->put('/dashboard/page-settings/guest/' . $guestPageSetting->id, [
+        $response = $this->actingAs($this->superAdmin)->put('/dashboard/page-settings/guest/' . $guestPageSetting->id, [
             'value_image' => [
                 UploadedFile::fake()->image('54321-image.png'),
                 UploadedFile::fake()->image('98765-image.png'),
@@ -85,7 +85,7 @@ class GuestPageSettingTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $guestPageSetting = GuestPageSetting::where('key', 'hero_image')->first();
-
+        
         $this->assertDatabaseMissing('guest_page_settings', [
             'value' => ['12345-image.png', '98765-image.png'],
         ]);
@@ -106,7 +106,7 @@ class GuestPageSettingTest extends TestCase
             'max_value' => 2,
         ]);
 
-        $response = $this->actingAs($this->user)->deleteJson('/dashboard/page-settings/guest/delete-image/' . $guestPageSetting->key . '/' . '12345-image.png');
+        $response = $this->actingAs($this->superAdmin)->deleteJson('/dashboard/page-settings/guest/delete-image/' . $guestPageSetting->key . '/' . '12345-image.png');
 
         $response->assertStatus(200);
         $response->assertJson([

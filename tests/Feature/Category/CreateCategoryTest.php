@@ -47,7 +47,7 @@ class CreateCategoryTest extends TestCase
         $response->assertInvalid(['name']);
     }
 
-    public function test_super_admin_can_create_category_without_icon_marker()
+    public function test_super_admin_can_create_category_without_custom_icon_marker()
     {
         $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
             'name' => 'Wisata Pertanian',

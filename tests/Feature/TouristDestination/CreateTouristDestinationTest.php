@@ -85,11 +85,21 @@ class CreateTouristDestinationTest extends TestCase
         $response->assertRedirect('/dashboard/tourist-destinations');
         $response->assertSessionHasNoErrors();
 
+        $touristDestinations = TouristDestination::with('TouristAttractions')->first();
+
+        $this->assertTrue(Storage::exists('public/cover-images/' . $touristDestinations->cover_image_name));
+        $this->assertTrue(Storage::exists('public/tourist-attractions/' . $touristDestinations->touristAttractions[0]->image_name));
+        $this->assertTrue(Storage::exists('public/tourist-attractions/' . $touristDestinations->touristAttractions[1]->image_name));
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',
             'latitude' => -8.25702326,
             'longitude' => 111.42379872,
+        ]);
+        $this->assertDatabaseHas('tourist_attractions', [
+            'id' => $touristDestinations->id,
+            'name' => 'Air Terjun',
+            'image_name' => $touristDestinations->touristAttractions[0]->image_name,
         ]);
     }
 
@@ -121,6 +131,9 @@ class CreateTouristDestinationTest extends TestCase
         $response->assertRedirect('/dashboard/tourist-destinations');
         $response->assertSessionHasNoErrors();
 
+        $touristDestinations = TouristDestination::with('TouristAttractions')->first();
+
+        $this->assertTrue(Storage::exists('public/cover-images/' . $touristDestinations->cover_image_name));
         $this->assertDatabaseHas('tourist_destinations', [
             'name' => 'Pantai Pelang',
             'description' => '<p>Salah satu pantai yang mempunyai air terjun di pesisir pantainya</p>',

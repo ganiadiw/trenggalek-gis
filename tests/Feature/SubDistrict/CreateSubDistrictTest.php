@@ -104,9 +104,11 @@ class CreateSubDistrictTest extends TestCase
 
         $subDistrict = SubDistrict::where('code', 3503010)->first();
 
+        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503010,
             'name' => 'Panggul',
+            'fill_color' => '#0ea5e9',
             'geojson_name' => $subDistrict->geojson_name,
         ]);
     }
@@ -128,6 +130,7 @@ class CreateSubDistrictTest extends TestCase
 
         $subDistrict = SubDistrict::where('code', 3503010)->first();
 
+        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503010,
             'name' => 'Panggul',
@@ -136,7 +139,6 @@ class CreateSubDistrictTest extends TestCase
             'fill_color' => '#0ea5e9',
             'geojson_name' => $subDistrict->geojson_name,
         ]);
-        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
     }
 
     public function test_webgis_admin_cannot_create_sub_district()

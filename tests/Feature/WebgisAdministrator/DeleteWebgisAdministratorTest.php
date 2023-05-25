@@ -56,10 +56,10 @@ class DeleteWebgisAdministratorTest extends TestCase
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
+        $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin2->avatar_name));
         $this->assertDatabaseMissing('users', [
             'email' => 'johndoe@example.com',
         ]);
-        $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin2->avatar_name));
     }
 
     public function test_webgis_admin_cannot_delete_webgis_admin()

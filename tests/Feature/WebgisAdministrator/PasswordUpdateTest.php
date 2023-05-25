@@ -28,15 +28,16 @@ class PasswordUpdateTest extends TestCase
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 
-    public function test_the_password_can_only_be_changed_if_the_password_data_is_valid()
+    public function test_the_password_can_only_be_changed_if_the_password_confirmation_is_valid()
     {
         $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
             'password' => 'newpassword',
             'password_confirmation' => 'wrongpassword',
         ]);
 
-        $response->assertSessionHasErrors(['password']);
+        $response->assertInvalid();
         $response->assertRedirect(url()->previous());
+        $response->assertSessionHasErrors(['password']);
     }
 
     public function test_webgis_admin_data_can_be_updated_with_change_password()
@@ -51,6 +52,7 @@ class PasswordUpdateTest extends TestCase
             'password_confirmation' => 'newpassword',
         ]);
 
+        $response->assertValid();
         $response->assertRedirect('/dashboard/users/hugofirsttime/edit');
         $response->assertSessionHasNoErrors();
 

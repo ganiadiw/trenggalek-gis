@@ -59,15 +59,16 @@ class TouristDestinationTest extends TestCase
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_notification_is_displayed_for_search_not_foundtourist_destination_data()
+    public function test_notification_is_displayed_for_search_not_found_tourist_destination_data()
     {
-        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/search?column_name=name&search_value=konangadsdee');
+        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/search?column_name=name&search_value=gadsdee');
 
+        $response->assertStatus(200);
         $response->assertSeeText('Data tidak tersedia');
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_tourist_destinations_show_page_is_displayed()
+    public function test_route_redirect_to_guest_tourist_destination_show_page()
     {
         $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
 

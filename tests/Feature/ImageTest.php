@@ -67,13 +67,13 @@ class ImageTest extends TestCase
         SubDistrict::factory()->create();
         Category::factory()->create();
         TouristDestination::factory()->create();
-        Storage::disk('local')->put('public/touris_attractions/image123.jpg', '');
+        Storage::disk('local')->put('public/tourist_attractions/image123.jpg', '');
         $touristAttraction = TouristAttraction::create([
             'tourist_destination_id' => TouristDestination::first()->id,
             'name' => 'Tourist Attraction Name',
             'caption' => 'Touris Attraction Caption',
             'image_name' => 'image123.jpg',
-            'image_path' => 'public/touris_attractions/image123.jpg',
+            'image_path' => 'public/tourist_attractions/image123.jpg',
         ]);
 
         $response = $this->actingAs($this->user)->postJson('/dashboard/images/tourist-attraction/update', [
@@ -91,8 +91,8 @@ class ImageTest extends TestCase
             'image_path' => $touristAttraction->image_path,
         ]);
         $this->assertDatabaseMissing('tourist_attractions', [
-            'foldername' => 'public/touris_attractions/image123.jpg',
-            'filename' => 'image123.jpg',
+            'image_name' => 'image123.jpg',
+            'image_path' => 'public/tourist_attractions/image123.jpg',
         ]);
         $this->assertTrue(Storage::exists('public/tourist-attractions/' . $touristAttraction->image_name));
         $this->assertFalse(Storage::exists('public/tourist-attractions/image123.jpg'));

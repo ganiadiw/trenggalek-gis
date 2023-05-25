@@ -59,21 +59,18 @@ class WebgisAdministratorTest extends TestCase
         $response->assertStatus(200);
         $response->assertSeeText($this->webgisAdmin->name);
         $response->assertSessionHasNoErrors();
-
-        $this->assertDatabaseHas('users', [
-            'name' => 'Hugo First',
-        ]);
     }
 
     public function test_notification_is_displayed_for_search_not_found_webgis_admin_data()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=john');
 
+        $response->assertStatus(200);
         $response->assertSeeText('Data tidak tersedia');
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_webgis_administrator_profile_page_is_displayed()
+    public function test_webgis_admin_profile_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin->username);
 

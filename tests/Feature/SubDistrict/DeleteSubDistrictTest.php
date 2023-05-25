@@ -52,6 +52,7 @@ class DeleteSubDistrictTest extends TestCase
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
+        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
         $this->assertDatabaseMissing('sub_districts', [
             'code' => 3503020,
             'name' => 'KECAMATAN MUNJUNGAN',
@@ -59,7 +60,6 @@ class DeleteSubDistrictTest extends TestCase
             'longitude' => 111.45431483,
             'fill_color' => '#16a34a',
         ]);
-        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
     public function test_delete_data_redirect_to_related_data_for_sub_district_with_relationship_to_tourist_destinations()

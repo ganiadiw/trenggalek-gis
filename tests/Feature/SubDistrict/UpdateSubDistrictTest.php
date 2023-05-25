@@ -108,7 +108,7 @@ class UpdateSubDistrictTest extends TestCase
             'latitude' => -8.26538086,
             'longitude' => 111.71334564,
             'fill_color' => '#059669',
-            'geojson' => UploadedFile::fake()->create('3503020.geojson', 25, 'application/json'),
+            'geojson' => UploadedFile::fake()->create('3503030.geojson', 25, 'application/json'),
         ]);
 
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
@@ -117,6 +117,8 @@ class UpdateSubDistrictTest extends TestCase
 
         $subDistrict = SubDistrict::where('code', 3503030)->first();
 
+        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
+        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
         $this->assertDatabaseHas('sub_districts', [
             'code' => 3503030,
             'name' => 'KECAMATAN WATULIMO',
@@ -133,8 +135,6 @@ class UpdateSubDistrictTest extends TestCase
             'fill_color' => '#16a34a',
             'geojson_name' => $this->subDistrict->geojson_name,
         ]);
-        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
-        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
     }
 
     public function test_super_admin_can_update_sub_district_with_geojson_text()

@@ -32,36 +32,14 @@ class ProfileTest extends TestCase
 
     public function test_profile_page_is_displayed()
     {
-        $response = $this
-            ->actingAs($this->user)
-            ->get('/profile');
+        $response = $this->actingAs($this->user)->get('/profile');
 
-        $response->assertOk();
+        $response->assertStatus(200);
+        $response->assertSeeText('Edit Profile');
+        $response->assertSessionHasNoErrors();
     }
 
-    public function test_profile_information_can_be_updated()
-    {
-        $response = $this
-            ->actingAs($this->user)
-            ->put('/profile', [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-                'username' => 'newusername',
-                'address' => 'New Address',
-                'phone_number' => 1234567899,
-            ]);
-
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
-
-        $this->user->refresh();
-
-        $this->assertSame('Test User', $this->user->name);
-        $this->assertSame('test@example.com', $this->user->email);
-    }
-
-    public function test_profile_information_input_validation()
+    public function test_profile_information_update_input_validation()
     {
         $response = $this->actingAs($this->user)->put('/profile', [
             'name' => '',
@@ -69,7 +47,6 @@ class ProfileTest extends TestCase
             'email' => '',
         ]);
         $response->assertInvalid();
-        $response->assertRedirect(url()->previous());
     }
 
     public function test_profile_information_can_be_updated_without_change_avatar()
@@ -137,5 +114,14 @@ class ProfileTest extends TestCase
         $response->assertValid();
         $response->assertRedirect('/profile');
         $response->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'hugofirsttime@example.com',
+            'username' => 'hugofirsttime',
+        ]);
+        $this->assertDatabaseMissing('users', [
+            'email' => 'hugofirst@example.com',
+            'username' => 'hugofirst',
+        ]);
     }
 }

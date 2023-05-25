@@ -73,6 +73,7 @@ class SubDistrictTest extends TestCase
     {
         $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/search?column_name=name&search_value=munjungan');
 
+        $response->assertStatus(200);
         $response->assertSeeText($this->subDistrict->name);
         $response->assertSessionHasNoErrors();
     }
@@ -81,15 +82,17 @@ class SubDistrictTest extends TestCase
     {
         $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/search?column_name=name&search_value=12wd3');
 
+        $response->assertStatus(200);
         $response->assertSeeText('Data tidak tersedia');
         $response->assertSessionHasNoErrors();
     }
 
-    public function test_the_sub_district_show_page_is_displayed()
+    public function test_sub_district_show_page_is_displayed()
     {
         $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code);
 
         $response->assertStatus(200);
+        $response->assertSeeText('Detail Informasi Kecamatan');
         $response->assertSessionHasNoErrors();
 
         $this->assertEquals('3503020', $this->subDistrict->code);
@@ -107,7 +110,6 @@ class SubDistrictTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSeeText('Data Destinasi Wisata yang Berada di ' . $this->subDistrict->name);
-        $response->assertSeeText(['Pantai Konang', 'LDMH', 'Desa Nglebeng, Kecamatan Panggul']);
         $response->assertSessionHasNoErrors();
     }
 
