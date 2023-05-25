@@ -17,27 +17,24 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'Gani Adi Wiranata',
-            'email' => 'ganiadiw@example.com',
-            'username' => 'ganiadiw',
-            'address' => 'Desa Gayam, Kecamatan Panggul',
-            'phone_number' => '081234567890',
-            'is_admin' => 1,
-            'password' => Hash::make('password'),
-        ]);
-
-        $faker = Faker::create('id_ID');
-
-        for ($i = 0; $i < 20; $i++) {
-            DB::table('users')->insert([
-                'name' => $faker->name(),
-                'email' => $faker->safeEmail(),
-                'username' => $faker->userName(),
-                'address' => $faker->address(),
-                'phone_number' => $faker->phoneNumber(),
+            [
+                'name' => 'Super Admin',
+                'email' => 'superadmin@example.com',
+                'username' => 'superadmin',
+                'address' => 'Kecamatan Trenggalek',
+                'phone_number' => '081234567890',
+                'is_admin' => 1,
+                'password' => Hash::make('password'),
+            ],
+            [
+                'name' => 'Webgis Admin',
+                'email' => 'webgisadmin@example.com',
+                'username' => 'webgisadmin',
+                'address' => 'Kecamatan Karangan',
+                'phone_number' => '081234567891',
                 'is_admin' => 0,
                 'password' => Hash::make('password'),
-            ]);
-        }
+            ]
+        ]);
     }
 }
