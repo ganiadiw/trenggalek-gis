@@ -31,8 +31,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <script src="https://cdn.tiny.cloud/1/3e5fngs61v628hiv11876o7vhcv1akokhq9ybh6fihse10me/tinymce/6/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/3e5fngs61v628hiv11876o7vhcv1akokhq9ybh6fihse10me/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet.fullscreen@latest/Control.FullScreen.js"></script>
