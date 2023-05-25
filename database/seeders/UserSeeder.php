@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -34,7 +33,7 @@ class UserSeeder extends Seeder
                 'phone_number' => '081234567891',
                 'is_admin' => 0,
                 'password' => Hash::make('password'),
-            ]
+            ],
         ]);
     }
 }

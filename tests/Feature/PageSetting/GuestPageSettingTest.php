@@ -85,7 +85,7 @@ class GuestPageSettingTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $guestPageSetting = GuestPageSetting::where('key', 'hero_image')->first();
-        
+
         $this->assertDatabaseMissing('guest_page_settings', [
             'value' => ['12345-image.png', '98765-image.png'],
         ]);
