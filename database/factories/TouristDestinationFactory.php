@@ -21,7 +21,7 @@ class TouristDestinationFactory extends Factory
             'sub_district_id' => 1,
             'category_id' => 1,
             'name' => 'Pantai Konang',
-            'slug' => Str::slug('Pantai Konang') . '-' . Str::random(5),
+            'slug' => 'pantai-konang-12345',
             'manager' => 'LDMH',
             'address' => 'Desa Nglebeng, Kecamatan Panggul',
             'description' => '<p>Terkenal dengan keindahan pantai dan kuliner ikan bakar</p>',

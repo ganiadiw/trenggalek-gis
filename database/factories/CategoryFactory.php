@@ -18,7 +18,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => 'Wisata Pantai',
-            'slug' => str()->slug('Wisata Pantai') . '-' . str()->random(5),
+            'slug' => 'wisata-pantai-12345',
         ];
     }
 }
