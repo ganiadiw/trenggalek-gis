@@ -23,6 +23,10 @@
         </style>
     @endsection
 
+    <x-slot name="pageTitle">
+        {{ $pageTitle->value[0] }}
+    </x-slot>
+
     <div class="relative h-fit bg-slate-950">
         <div class="pt-14 md:pt-20 pb-14 md:pb-20 px-7 md:px-14 lg:px-28">
             {{-- Mobile Swipper --}}

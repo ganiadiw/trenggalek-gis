@@ -4,7 +4,12 @@
             <div class="flex items-center">
                 <a href="{{ route('welcome') }}" class="flex items-center">
                     <img src="{{ asset('assets/images/trenggalek.png') }}" class="h-12 px-[1px] py-[2px] mr-3 bg-gray-800 rounded-md" alt="Flowbite Logo" />
-                    <span class="self-center text-xl font-bold whitespace-nowrap">Wisata Trenggalek</span>
+                    @isset($pageTitle)
+                        <span class="self-center text-xl font-bold whitespace-nowrap">{{ $pageTitle }}</span>
+                    @endisset
+                    @empty($pageTitle)
+                        <span class="self-center text-xl font-bold whitespace-nowrap">Wisata Trenggalek</span>
+                    @endempty
                 </a>
                 <div class="ml-10">
                     <ul class="flex items-center w-full py-2 space-x-2">
