@@ -21,26 +21,15 @@ class ProfileUpdateRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function attributes()
     {
         return [
-            'name.required' => 'Nama harus diisi',
-            'name.max' => 'Maksimal 255 karakter',
-            'email.required' => 'Email harus diisi',
-            'email.eamil' => 'Email tidak valid',
-            'email.unique' => 'Email sudah terdaftar',
-            'email.max' => 'Maksimal 255 karakter',
-            'username.required' => 'Username harus diisi',
-            'username.unique' => 'Username sudah terdaftar',
-            'username.max' => 'Maksimal 255 karakter',
-            'password.min' => 'Password minimal 8 karakter',
-            'password.max' => 'Maksimal 255 karakter',
-            'password.confirmed' => 'Konfirmasi password tidak sesuai',
-            'address.required' => 'Alamat harus diisi',
-            'address.max' => 'Maksimal 255 karakter',
-            'phone_number.required' => 'Nomor telepon harus diisi',
-            'avatar.image' => 'Foto profil harus berformat gambar dengan ekstensi .png atau .jpg',
-            'avatar.max' => 'Ukuran maksimal foto profil adalah 2048KB atau 2MB',
+            'name' => 'Nama',
+            'email' => 'Surel',
+            'username' => 'Nama Pengguna',
+            'password' => 'Kata Sandi',
+            'address' => 'Alamat',
+            'phone_number' => 'Nomor Handphone',
         ];
     }
 }
