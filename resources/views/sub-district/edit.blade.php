@@ -66,10 +66,10 @@
                                                     mengubahnya!
                                                 </p>
                                                 <p class="my-2 text-sm italic text-yellow-600">
-                                                    File atau text geojson dapat diperoleh dari website <a target="_blank" class="font-medium hover:underline text-blue-500 after:content-['↗'] after:font-bold" href="https://geojson.io/#map=2/0/20">geojson.io</a>
+                                                    File atau text geojson dapat diperoleh dari website <a target="_blank" class="font-medium hover:underline text-blue-500 after:content-['↗'] after:font-bold" href="https://geojson.io/#map=2/0/20" rel="noopener">geojson.io</a>
                                                     ,
-                                                    <a target="_blank" class="font-medium hover:underline text-blue-500 after:content-['↗'] after:font-bold" href="https://geoman.io/geojson-editor">geoman.io</a>
-                                                    , atau pada menu <a target="_blank" class="font-medium text-blue-500 hover:underline after:content-['↗'] after:font-bold" href="{{ route('dashboard.map-drawer') }}">Map Drawer</a>
+                                                    <a target="_blank" class="font-medium hover:underline text-blue-500 after:content-['↗'] after:font-bold" href="https://geoman.io/geojson-editor" rel="noopener">geoman.io</a>
+                                                    , atau pada menu <a target="_blank" class="font-medium text-blue-500 hover:underline after:content-['↗'] after:font-bold" href="{{ route('dashboard.map-drawer') }}" rel="noopener">Map Drawer</a>
                                                 </p>
                                                 <div class="text-sm text-center text-black border-b border-gray-400">
                                                     <ul class="flex flex-wrap -mb-px">

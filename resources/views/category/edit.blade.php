@@ -71,7 +71,7 @@
                                                 <p class="flex items-center mb-2 text-sm font-medium text-gray-900">
                                                     Live SVG Icon Preview (akan tampil jika nama icon benar) :
                                                     <span class="ml-3">
-                                                        <i class="w-10" x-bind:class="svgName"></i>
+                                                        <em class="w-10" x-bind:class="svgName"></em>
                                                     </span>
                                                 </p>
                                             </div>
@@ -110,7 +110,7 @@
                                     <div class="flex">
                                         <p class="w-5">1.</p>
                                         <p class="ml-2">
-                                            Buka halaman website <a target="_blank" class="font-semibold hover:underline text-sky-700 after:content-['↗'] after:font-bold" href="https://icons.getbootstrap.com/">Bootstrap Icon</a>
+                                            Buka halaman website <a target="_blank" class="font-semibold hover:underline text-sky-700 after:content-['↗'] after:font-bold" href="https://icons.getbootstrap.com/" rel="noopener">Bootstrap Icon</a>
                                         </p>
                                     </div>
                                     <div class="mt-2 ml-7">

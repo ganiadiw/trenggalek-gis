@@ -25,7 +25,7 @@
                                                     Icon Marker :
                                                 </div>
                                                 <div class="ml-3">
-                                                    <i class="{{ $category->svg_name }}"></i>
+                                                    <em class="{{ $category->svg_name }}"></em>
                                                 </div>
                                             </div>
                                         </div>
