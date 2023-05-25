@@ -28,7 +28,7 @@ class StoreSubDistrictRequest extends FormRequest
             'name' => ['required', 'max:255'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
-            'geojson' => ['required_without:geojson_text_area', 'file', 'mimetypes:application/json'],
+            'geojson' => ['required_without:geojson_text_area', 'file', 'mimetypes:application/json', 'max:1024'],
             'geojson_text_area' => ['required_without:geojson'],
             'fill_color' => ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
         ];

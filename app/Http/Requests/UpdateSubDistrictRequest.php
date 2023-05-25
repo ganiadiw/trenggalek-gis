@@ -29,7 +29,7 @@ class UpdateSubDistrictRequest extends FormRequest
             'name' => ['required', 'max:255'],
             'latitude' => ['required'],
             'longitude' => ['required'],
-            'geojson' => ['nullable', 'file', 'mimetypes:application/json'],
+            'geojson' => ['nullable', 'file','mimetypes:application/json', 'max:1024'],
             'geojson_text_area' => ['nullable'],
             'fill_color' => ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
         ];
