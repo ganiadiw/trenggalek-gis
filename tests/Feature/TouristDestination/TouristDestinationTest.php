@@ -16,6 +16,8 @@ class TouristDestinationTest extends TestCase
 
     private TouristDestination $touristDestination;
 
+    const MAIN_URL = '/dashboard/tourist-destinations/';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -34,7 +36,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_authenticated_user_can_visit_the_tourist_destination_management_page()
     {
-        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations');
+        $response = $this->actingAs($this->user)->get(self::MAIN_URL);
 
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Destinasi Wisata');
@@ -43,7 +45,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_guest_cannot_visit_the_tourist_destination_management_page()
     {
-        $response = $this->get('/dashboard/tourist-destinations');
+        $response = $this->get(self::MAIN_URL);
 
         $response->assertRedirect('/login');
 
@@ -52,7 +54,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_authenticated_user_can_search_contains_tourist_destination_data()
     {
-        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/search?column_name=name&search_value=konang');
+        $response = $this->actingAs($this->user)->get(self::MAIN_URL . 'search?column_name=name&search_value=konang');
 
         $response->assertStatus(200);
         $response->assertSeeText($this->touristDestination->name);
@@ -61,7 +63,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_notification_is_displayed_for_search_not_found_tourist_destination_data()
     {
-        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/search?column_name=name&search_value=gadsdee');
+        $response = $this->actingAs($this->user)->get(self::MAIN_URL . 'search?column_name=name&search_value=gadsdee');
 
         $response->assertStatus(200);
         $response->assertSeeText('Data tidak tersedia');
@@ -70,7 +72,7 @@ class TouristDestinationTest extends TestCase
 
     public function test_route_redirect_to_guest_tourist_destination_show_page()
     {
-        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug);
+        $response = $this->actingAs($this->user)->get(self::MAIN_URL . $this->touristDestination->slug);
 
         $response->assertRedirect('/tourist-destinations/' . $this->touristDestination->slug);
         $response->assertSessionHasNoErrors();

@@ -18,6 +18,8 @@ class SubDistrictTest extends TestCase
 
     private SubDistrict $subDistrict;
 
+    const MAIN_URL = '/dashboard/sub-districts/';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,9 +32,6 @@ class SubDistrictTest extends TestCase
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'address' => 'Desa Panggul, Kecamatan Panggul',
-            'phone_number' => '081234567890',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'is_admin' => 0,
         ]);
         $this->subDistrict = SubDistrict::factory()->create([
@@ -46,7 +45,7 @@ class SubDistrictTest extends TestCase
 
     public function test_super_admin_can_visit_the_sub_district_management_page()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/sub-districts');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL);
 
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Kecamatan');
@@ -55,14 +54,14 @@ class SubDistrictTest extends TestCase
 
     public function test_webgis_admin_cannot_visit_the_sub_district_management_page()
     {
-        $response = $this->actingAs($this->webgisAdmin)->get('/dashboard/sub-districts');
+        $response = $this->actingAs($this->webgisAdmin)->get(self::MAIN_URL);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_visit_the_sub_district_management_page()
     {
-        $response = $this->get('/dashboard/sub-districts');
+        $response = $this->get(self::MAIN_URL);
 
         $response->assertRedirect('/login');
 
@@ -71,7 +70,8 @@ class SubDistrictTest extends TestCase
 
     public function test_super_admin_can_search_contains_sub_district_data()
     {
-        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/search?column_name=name&search_value=munjungan');
+        $response = $this->actingAs($this->superAdmin)
+                    ->get(self::MAIN_URL . 'search?column_name=name&search_value=munjungan');
 
         $response->assertStatus(200);
         $response->assertSeeText($this->subDistrict->name);
@@ -80,7 +80,8 @@ class SubDistrictTest extends TestCase
 
     public function test_notification_is_displayed_for_search_not_found_sub_district_data()
     {
-        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/search?column_name=name&search_value=12wd3');
+        $response = $this->actingAs($this->superAdmin)
+                    ->get(self::MAIN_URL . 'search?column_name=name&search_value=12wd3');
 
         $response->assertStatus(200);
         $response->assertSeeText('Data tidak tersedia');
@@ -89,7 +90,8 @@ class SubDistrictTest extends TestCase
 
     public function test_sub_district_show_page_is_displayed()
     {
-        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code);
+        $response = $this->actingAs($this->superAdmin)
+                    ->get(self::MAIN_URL . $this->subDistrict->code);
 
         $response->assertStatus(200);
         $response->assertSeeText('Detail Informasi Kecamatan');
@@ -106,7 +108,7 @@ class SubDistrictTest extends TestCase
         Category::factory()->create();
         TouristDestination::factory()->create();
 
-        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code . '/related-tourist-destination');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . $this->subDistrict->code . '/related-tourist-destination');
 
         $response->assertStatus(200);
         $response->assertSeeText('Data Destinasi Wisata yang Berada di ' . $this->subDistrict->name);
@@ -119,7 +121,7 @@ class SubDistrictTest extends TestCase
         TouristDestination::factory()->create();
 
         $response = $this->actingAs($this->superAdmin)
-                    ->get('dashboard/sub-districts/' . $this->subDistrict->code . '/related-tourist-destination/search?column_name=name&search_value=konang');
+                    ->get(self::MAIN_URL . $this->subDistrict->code . '/related-tourist-destination/search?column_name=name&search_value=konang');
 
         $response->assertStatus(200);
         $response->assertSeeText('Data Destinasi Wisata yang Berada di ' . $this->subDistrict->name);
@@ -129,7 +131,7 @@ class SubDistrictTest extends TestCase
 
     public function test_sub_district_geojson_file_can_be_downloaded()
     {
-        $this->actingAs($this->superAdmin)->post('/dashboard/sub-districts', [
+        $this->actingAs($this->superAdmin)->post(self::MAIN_URL, [
             'code' => 3503010,
             'name' => 'Panggul',
             'latitude' => -8.2402961,
@@ -138,7 +140,7 @@ class SubDistrictTest extends TestCase
             'geojson' => UploadedFile::fake()->create('3503010.geojson', 25, 'application/json'),
         ]);
 
-        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/3503010/download');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL. '3503010/download');
         $response->assertStatus(200);
         $response->assertSessionHasNoErrors();
     }

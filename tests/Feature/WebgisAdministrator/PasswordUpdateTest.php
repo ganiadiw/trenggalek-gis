@@ -12,6 +12,8 @@ class PasswordUpdateTest extends TestCase
 
     private User $webgisAdmin; // Webgis Administrator
 
+    const MAIN_URL = '/dashboard/users/';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,7 +32,7 @@ class PasswordUpdateTest extends TestCase
 
     public function test_the_password_can_only_be_changed_if_the_password_confirmation_is_valid()
     {
-        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->webgisAdmin->username, [
             'password' => 'newpassword',
             'password_confirmation' => 'wrongpassword',
         ]);
@@ -42,7 +44,7 @@ class PasswordUpdateTest extends TestCase
 
     public function test_webgis_admin_data_can_be_updated_with_change_password()
     {
-        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin->username, [
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->webgisAdmin->username, [
             'name' => 'Hugo First Time',
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
@@ -53,7 +55,7 @@ class PasswordUpdateTest extends TestCase
         ]);
 
         $response->assertValid();
-        $response->assertRedirect('/dashboard/users/hugofirsttime/edit');
+        $response->assertRedirect(self::MAIN_URL . 'hugofirsttime/edit');
         $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('users', [

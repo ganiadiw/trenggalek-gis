@@ -11,6 +11,12 @@ class CreateCategoryTest extends TestCase
 
     private User $webgisAdmin;
 
+    const MAIN_URL = '/dashboard/categories/';
+
+    private $data = [
+        'name' => 'Wisata Pertanian'
+    ];
+
     public function setUp(): void
     {
         parent::setUp();
@@ -20,9 +26,6 @@ class CreateCategoryTest extends TestCase
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'address' => 'Desa Panggul, Kecamatan Panggul',
-            'phone_number' => '081234567890',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'is_admin' => 0,
         ]);
 
@@ -32,7 +35,7 @@ class CreateCategoryTest extends TestCase
 
     public function test_category_create_page_is_displayed()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/create');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . 'create');
 
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Kategori Destinasi Wisata');
@@ -40,61 +43,48 @@ class CreateCategoryTest extends TestCase
 
     public function test_category_create_input_validation()
     {
-        $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
-            'name' => '',
-        ]);
+        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, ['']);
 
         $response->assertInvalid(['name']);
     }
 
     public function test_super_admin_can_create_category_without_custom_icon_marker()
     {
-        $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
-            'name' => 'Wisata Pertanian',
-        ]);
+        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, $this->data);
 
         $response->assertValid(['name']);
-        $response->assertRedirect('/dashboard/categories');
+        $response->assertRedirect(self::MAIN_URL);
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('categories', [
-            'name' => 'Wisata Pertanian',
-        ]);
+        $this->assertDatabaseHas('categories', $this->data);
     }
 
     public function test_super_admin_can_create_category_with_icon_marker()
     {
-        $response = $this->actingAs($this->superAdmin)->post('/dashboard/categories', [
-            'name' => 'Wisata Pertanian',
+        $data = array_merge($this->data, [
             'color' => 'green',
             'svg_name' => 'apple-whole',
         ]);
+
+        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, $data);
 
         $response->assertValid(['name', 'color', 'svg_name']);
-        $response->assertRedirect('/dashboard/categories');
+        $response->assertRedirect(self::MAIN_URL);
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('categories', [
-            'name' => 'Wisata Pertanian',
-            'color' => 'green',
-            'svg_name' => 'apple-whole',
-        ]);
+        $this->assertDatabaseHas('categories', $data);
     }
 
     public function test_webgis_admin_cannot_create_category()
     {
-        $response = $this->actingAs($this->webgisAdmin)->post('/dashboard/categories', [
-            'name' => 'Wisata Pertanian',
-        ]);
+        $response = $this->actingAs($this->webgisAdmin)->post(self::MAIN_URL, $this->data);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_create_category()
     {
-        $response = $this->post('/dashboard/categories', [
-            'name' => 'Wisata Pertanian',
-        ]);
+        $response = $this->post(self::MAIN_URL, $this->data);
 
         $response->assertRedirect('/login');
 
