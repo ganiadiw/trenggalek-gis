@@ -14,6 +14,8 @@ class DeleteCategoryTest extends TestCase
 
     private Category $category;
 
+    const MAIN_URL = '/dashboard/categories/';
+
     public function setUp(): void
     {
         parent::setUp();
@@ -23,9 +25,6 @@ class DeleteCategoryTest extends TestCase
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'address' => 'Desa Panggul, Kecamatan Panggul',
-            'phone_number' => '081234567890',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'is_admin' => 0,
         ]);
         $this->category = Category::factory()->create();
@@ -36,7 +35,7 @@ class DeleteCategoryTest extends TestCase
 
     public function test_super_admin_can_delete_category()
     {
-        $response = $this->actingAs($this->superAdmin)->delete('/dashboard/categories/' .  $this->category->slug);
+        $response = $this->actingAs($this->superAdmin)->delete(self::MAIN_URL .  $this->category->slug);
 
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
@@ -48,14 +47,14 @@ class DeleteCategoryTest extends TestCase
 
     public function test_webgis_admin_cannot_delete_category()
     {
-        $response = $this->actingAs($this->webgisAdmin)->delete('/dashboard/categories/' .  $this->category->slug);
+        $response = $this->actingAs($this->webgisAdmin)->delete(self::MAIN_URL .  $this->category->slug);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_delete_category()
     {
-        $response = $this->delete('/dashboard/categories/' .  $this->category->slug);
+        $response = $this->delete(self::MAIN_URL .  $this->category->slug);
 
         $response->assertRedirect();
 

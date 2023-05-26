@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class GuestPageSettingController extends Controller
 {
+    const PAGE_SETTING_PATH = 'public/page-settings/';
+
     public function index()
     {
         $settings = GuestPageSetting::select('id', 'key', 'value', 'input_type')->orderBy('key', 'ASC')->get();
@@ -31,11 +33,11 @@ class GuestPageSettingController extends Controller
 
             foreach ($validated['value_image'] as $key => $value) {
                 $imageName = str()->random(2) . substr((time() - strtotime('June 8, 1995')), -5) . '-' . $value->getClientOriginalName();
-                $value->storeAs('public/page-settings/' . $guestPageSetting->key, $imageName);
+                $value->storeAs(self::PAGE_SETTING_PATH . $guestPageSetting->key, $imageName);
                 $newFilename[$key] = $imageName;
 
-                if (Storage::exists('public/page-settings/' . $guestPageSetting->key . '/' . $guestPageSetting->value[$key])) {
-                    Storage::delete('public/page-settings/' . $guestPageSetting->key . '/' . $guestPageSetting->value[$key]);
+                if (Storage::exists(self::PAGE_SETTING_PATH . $guestPageSetting->key . '/' . $guestPageSetting->value[$key])) {
+                    Storage::delete(self::PAGE_SETTING_PATH . $guestPageSetting->key . '/' . $guestPageSetting->value[$key]);
                 }
             }
 
@@ -66,14 +68,14 @@ class GuestPageSettingController extends Controller
         $settings = GuestPageSetting::where('key', $key)->first();
         $value = $settings->value;
 
-        if (Storage::exists('public/page-settings/' . $key . '/' . $filename)) {
+        if (Storage::exists(self::PAGE_SETTING_PATH . $key . '/' . $filename)) {
             $arrayKey = array_search($filename, $value);
             $value[$arrayKey] = null;
 
             $settings->update([
                 'value' => $value,
             ]);
-            Storage::delete('public/page-settings/' . $key . '/' . $filename);
+            Storage::delete(self::PAGE_SETTING_PATH . $key . '/' . $filename);
 
             return response()->json([
                 'message' => 'Delete image successfully',

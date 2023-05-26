@@ -14,6 +14,8 @@ class CategoryTest extends TestCase
 
     private Category $category;
 
+    const MAIN_URL = '/dashboard/categories/';
+
     public function setUp(): void
     {
         parent::setUp();
@@ -23,9 +25,6 @@ class CategoryTest extends TestCase
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'address' => 'Desa Panggul, Kecamatan Panggul',
-            'phone_number' => '081234567890',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'is_admin' => 0,
         ]);
         $this->category = Category::factory()->create();
@@ -36,7 +35,7 @@ class CategoryTest extends TestCase
 
     public function test_super_admin_can_visit_the_category_management_page()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL);
 
         $response->assertSeeText('Kelola Data Kategori Destinasi Wisata');
         $response->assertSeeText('Destinasi Wisata');
@@ -46,14 +45,14 @@ class CategoryTest extends TestCase
 
     public function test_webgis_admin_cannot_visit_the_category_management_page()
     {
-        $response = $this->actingAs($this->webgisAdmin)->get('/dashboard/categories');
+        $response = $this->actingAs($this->webgisAdmin)->get(self::MAIN_URL);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_visit_the_category_management_page()
     {
-        $response = $this->get('/dashboard/categories');
+        $response = $this->get(self::MAIN_URL);
 
         $response->assertRedirect('/login');
 
@@ -62,7 +61,8 @@ class CategoryTest extends TestCase
 
     public function test_super_admin_can_search_contains_category_data()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search?column_name=name&search_value=wisata');
+        $response = $this->actingAs($this->superAdmin)
+                    ->get(self::MAIN_URL . 'search?column_name=name&search_value=wisata');
 
         $response->assertStatus(200);
         $response->assertSeeText($this->category->name);
@@ -71,7 +71,8 @@ class CategoryTest extends TestCase
 
     public function test_notification_is_displayed_for_search_not_found_category_data()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/search?column_name=name&search_value=123');
+        $response = $this->actingAs($this->superAdmin)
+                    ->get(self::MAIN_URL . 'search?column_name=name&search_value=123');
 
         $response->assertStatus(200);
         $response->assertSeeText('Data tidak tersedia');
@@ -80,7 +81,7 @@ class CategoryTest extends TestCase
 
     public function test_category_show_page_is_displayed()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/categories/' . $this->category->slug);
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . $this->category->slug);
 
         $response->assertStatus(200);
         $response->assertSeeText('Detail Informasi Kategori Destinasi Wisata');

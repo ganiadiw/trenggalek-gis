@@ -15,31 +15,108 @@ use Tests\TestCase;
 
 class UpdateTouristDestinationTest extends TestCase
 {
+    const MAIN_URL = '/dashboard/tourist-destinations/';
+
+    const IMAGE_UPLOAD_URL = '/dashboard/images';
+
+    const COVER_IMAGE_PATH = 'public/cover-images/';
+
+    const TMP_IMAGE_PATH = 'public/tmp/media/images';
+
+    const ATTRACTION_IMAGE_PATH = 'public/tourist-attractions/';
+
     private User $user;
 
     private TouristDestination $touristDestination;
 
     private SubDistrict $subDistrict;
 
+    private $data;
+
+    private $dataToCheck;
+
+    private $missingData;
+
+    private $touristAttraction1;
+
+    private $touristAttraction2;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $image = UploadedFile::fake()->image('pantai-konang.jpg')->hashName();
-        Storage::disk('local')->put('public/cover-images/' . $image, '');
+        Storage::disk('local')->put(self::COVER_IMAGE_PATH . $image, '');
 
         $this->user = User::factory()->create();
         Category::factory()->create();
         $this->subDistrict = $this->subDistrict = SubDistrict::factory()->create();
         $this->touristDestination = TouristDestination::factory()->create([
             'cover_image_name' => $image,
-            'cover_image_path' => 'public/cover-images/' . $image,
+            'cover_image_path' => self::COVER_IMAGE_PATH . $image,
         ]);
+        $this->data = [
+            'sub_district_id' => $this->subDistrict->id,
+            'category_id' => 1,
+            'name' => 'Pantai Konang Indah',
+            'manager' => 'LDMH',
+            'address' => 'Desa Nglebeng, Kecamatan Panggul',
+            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
+            'distance_from_city_center' => '56 KM',
+            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
+            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
+            'latitude' => -8.27466803,
+            'longitude' => 111.45297354,
+            'tourist_attraction_id' => [null],
+            'tourist_attraction_names' => [null],
+            'tourist_attraction_captions' => [null],
+            'new_tourist_attraction_names' => [null],
+            'new_tourist_attraction_images' => [null],
+            'new_tourist_attraction_captions' => [null],
+            'deleted_tourist_attractions' => [null],
+            'media_files' => json_encode([
+                'used_images' => null,
+                'unused_images' => null,
+            ]),
+        ];
+        $this->dataToCheck = [
+            'name' => 'Pantai Konang Indah',
+            'address' => 'Desa Nglebeng, Kecamatan Panggul',
+            'latitude' => -8.27466803,
+            'longitude' => 111.45297354,
+        ];
+        $this->missingData = [
+            'name' => 'Pantai Konang',
+            'address' => 'Desa Nglebeng, Kecamatan Panggul',
+            'latitude' => -8.27466803,
+            'longitude' => 111.45297354,
+        ];
+
+        Storage::disk('local')->put(self::ATTRACTION_IMAGE_PATH . 'attraction-1.jpg', '');
+        Storage::disk('local')->put(self::ATTRACTION_IMAGE_PATH . 'attraction-2.jpg', '');
+
+        $this->touristAttraction1 = [
+            'tourist_destination_id' => 1,
+            'name' => 'Attraction 1',
+            'image_name' => 'attraction-1.jpg',
+            'image_path' => self::ATTRACTION_IMAGE_PATH . 'attraction-1.jpg',
+            'caption' => 'Attraction 1 caption',
+        ];
+        $this->touristAttraction2 = [
+            'tourist_destination_id' => 1,
+            'name' => 'Attraction 2',
+            'image_name' => 'attraction-2.jpg',
+            'image_path' => self::ATTRACTION_IMAGE_PATH . 'attraction-2.jpg',
+            'caption' => 'Attraction 2 caption',
+        ];
+
+        $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . 'attraction-1.jpg'));
+        $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . 'attraction-2.jpg'));
     }
 
     public function test_tourist_destination_edit_page_is_displayed()
     {
-        $response = $this->actingAs($this->user)->get('/dashboard/tourist-destinations/' . $this->touristDestination->slug . '/edit');
+        $response = $this->actingAs($this->user)->get(self::MAIN_URL . $this->touristDestination->slug . '/edit');
 
         $response->assertStatus(200);
         $response->assertSeeText('Edit Data Destinasi Wisata');
@@ -53,105 +130,37 @@ class UpdateTouristDestinationTest extends TestCase
 
     public function test_tourist_destination_update_input_validation()
     {
-        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'name' => '',
-        ]);
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL . $this->touristDestination->slug, ['']);
 
         $response->assertInvalid();
     }
 
     public function test_authenticated_user_can_update_tourist_destination()
     {
-        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => $this->subDistrict->id,
-            'category_id' => 1,
-            'name' => 'Pantai Konang Indah',
-            'manager' => 'LDMH',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
-            'distance_from_city_center' => '56 KM',
-            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-            'tourist_attraction_id' => [null],
-            'tourist_attraction_names' => [null],
-            'tourist_attraction_captions' => [null],
-            'new_tourist_attraction_names' => [null],
-            'new_tourist_attraction_images' => [null],
-            'new_tourist_attraction_captions' => [null],
-            'deleted_tourist_attractions' => [null],
-            'media_files' => json_encode([
-                'used_images' => null,
-                'unused_images' => null,
-            ]),
-        ]);
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL . $this->touristDestination->slug, $this->data);
 
         $response->assertValid();
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('tourist_destinations', [
-            'name' => 'Pantai Konang Indah',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-        ]);
-        $this->assertDatabaseMissing('tourist_destinations', [
-            'name' => 'Pantai Konang',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner ikan bakar</p>',
-            'facility' => 'MCK, Mushola, Lahan Parkir',
-        ]);
+        $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
+        $this->assertDatabaseMissing('tourist_destinations', $this->missingData);
     }
 
     public function test_authenticated_user_can_update_tourist_destination_with_change_cover_image()
     {
         $coverImage = UploadedFile::fake()->image('pantai-konang-indah.jpg');
 
-        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => $this->subDistrict->id,
-            'category_id' => 1,
-            'name' => 'Pantai Konang Indah',
-            'manager' => 'LDMH',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
-            'distance_from_city_center' => '56 KM',
-            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'cover_image' => $coverImage,
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-            'tourist_attraction_id' => [null],
-            'tourist_attraction_names' => [null],
-            'tourist_attraction_captions' => [null],
-            'new_tourist_attraction_names' => [null],
-            'new_tourist_attraction_images' => [null],
-            'new_tourist_attraction_captions' => [null],
-            'deleted_tourist_attractions' => [null],
-            'media_files' => json_encode([
-                'used_images' => null,
-                'unused_images' => null,
-            ]),
-        ]);
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL . $this->touristDestination->slug, array_merge($this->data, ['cover_image' => $coverImage]));
 
         $response->assertValid();
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertFalse(Storage::exists('public/cover-images/' . $this->touristDestination->cover_image_name));
-        $this->assertTrue(Storage::exists('public/cover-images/' . $coverImage->hashName()));
-        $this->assertDatabaseHas('tourist_destinations', [
-            'name' => 'Pantai Konang Indah',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'cover_image_name' => $coverImage->hashName(),
-        ]);
-        $this->assertDatabaseMissing('tourist_destinations', [
-            'name' => 'Pantai Konang',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner ikan bakar</p>',
-            'facility' => 'MCK, Mushola, Lahan Parkir',
-        ]);
+        $this->assertFalse(Storage::exists(self::COVER_IMAGE_PATH . $this->touristDestination->cover_image_name));
+        $this->assertTrue(Storage::exists(self::COVER_IMAGE_PATH . $coverImage->hashName()));
+        $this->assertDatabaseHas('tourist_destinations', array_merge($this->dataToCheck, ['cover_image_name' => $coverImage->hashName()]));
+        $this->assertDatabaseMissing('tourist_destinations', $this->missingData);
     }
 
     public function test_authenticated_user_can_update_tourist_destination_with_delete_image_in_description_editor()
@@ -164,25 +173,8 @@ class UpdateTouristDestinationTest extends TestCase
         $this->assertTrue(Storage::exists('public/media/1/image1678273485413.png'));
         $this->assertTrue(Storage::exists('public/media/2/image1678273485552.png'));
 
-        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => $this->subDistrict->id,
-            'category_id' => 1,
-            'name' => 'Pantai Konang Indah',
-            'manager' => 'LDMH',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
+        $description = [
             'description' => '<p>Pantai<img title="image1678273485413.png" src="http://localhost:8000/storage/media/1/image1678273485413.png" alt=""></p>',
-            'distance_from_city_center' => '56 KM',
-            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-            'tourist_attraction_id' => [null],
-            'tourist_attraction_names' => [null],
-            'tourist_attraction_captions' => [null],
-            'new_tourist_attraction_names' => [null],
-            'new_tourist_attraction_images' => [null],
-            'new_tourist_attraction_captions' => [null],
-            'deleted_tourist_attractions' => [null],
             'media_files' => json_encode([
                 'used_images' => [
                     [
@@ -195,7 +187,9 @@ class UpdateTouristDestinationTest extends TestCase
                     ],
                 ],
             ]),
-        ]);
+        ];
+
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL . $this->touristDestination->slug, array_merge($this->data, $description));
 
         $response->assertValid();
         $response->assertRedirect(url()->previous());
@@ -207,11 +201,8 @@ class UpdateTouristDestinationTest extends TestCase
         $expectedDescription = '<p>Pantai<img title="image1678273485413.png" src="http://localhost:8000/storage/media/1/image1678273485413.png" alt=""></p>';
 
         $this->assertEquals(trim($expectedDescription), trim($dom->saveHTML()));
-        $this->assertDatabaseHas('tourist_destinations', [
-            'name' => 'Pantai Konang Indah',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-        ]);
+        $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
+        $this->assertDatabaseMissing('tourist_destinations', $this->missingData);
         // Use Spatie Media Libary Package
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
@@ -228,35 +219,18 @@ class UpdateTouristDestinationTest extends TestCase
 
     public function test_authenticated_user_can_update_tourist_destination_with_add_new_image_in_description_editor()
     {
-        $this->actingAs($this->user)->postJson('/dashboard/images', [
+        $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
             'image' => UploadedFile::fake()->image('image1678273485732.png'),
         ]);
         $this->assertDatabaseHas('temporary_files', [
-            'foldername' => 'public/tmp/media/images',
+            'foldername' => self::TMP_IMAGE_PATH,
             'filename' => 'image1678273485732.png',
         ]);
 
-        $this->assertTrue(Storage::exists('public/tmp/media/images/image1678273485732.png'));
+        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485732.png'));
 
-        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => $this->subDistrict->id,
-            'category_id' => 1,
-            'name' => 'Pantai Konang Indah',
-            'manager' => 'LDMH',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
+        $description = [
             'description' => '<p>Pantai</p><img title="image1678273485732.png" src="../../storage/tmp/media/images/image1678273485732.png" alt="">',
-            'distance_from_city_center' => '56 KM',
-            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-            'tourist_attraction_id' => [null],
-            'tourist_attraction_names' => [null],
-            'tourist_attraction_captions' => [null],
-            'new_tourist_attraction_names' => [null],
-            'new_tourist_attraction_images' => [null],
-            'new_tourist_attraction_captions' => [null],
-            'deleted_tourist_attractions' => [null],
             'media_files' => json_encode([
                 'used_images' => [
                     [
@@ -265,7 +239,9 @@ class UpdateTouristDestinationTest extends TestCase
                 ],
                 'unused_images' => null,
             ]),
-        ]);
+        ];
+
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL . $this->touristDestination->slug, array_merge($this->data, $description));
 
         $response->assertValid();
         $response->assertRedirect(url()->previous());
@@ -277,200 +253,78 @@ class UpdateTouristDestinationTest extends TestCase
         $expectedDescription = '<p>Pantai<img title="image1678273485732.png" src="http://localhost:8000/storage/media/1/image1678273485732.png" alt=""></p>';
 
         $this->assertEquals(trim($expectedDescription), trim($dom->saveHTML()));
-        $this->assertDatabaseHas('tourist_destinations', [
-            'name' => 'Pantai Konang Indah',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-        ]);
+        $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
+        $this->assertDatabaseMissing('tourist_destinations', $this->missingData);
         // Use Spatie Media Libary Package
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
             'file_name' => 'image1678273485732.png',
         ]);
-        $this->assertFalse(Storage::exists('public/tmp/media/images/image1678273485732.png'));
+        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485732.png'));
     }
 
     public function test_authenticated_user_can_update_tourist_destination_with_delete_existing_tourist_attraction()
     {
-        Storage::disk('local')->put('public/tourist-attractions/attraction-1.jpg', '');
-        Storage::disk('local')->put('public/tourist-attractions/attraction-2.jpg', '');
-        DB::table('tourist_attractions')->insert([
-            [
-                'tourist_destination_id' => 1,
-                'name' => 'Attraction 1',
-                'image_name' => 'attraction-1.jpg',
-                'image_path' => 'public/tourist-attractions/attraction-1.jpg',
-                'caption' => 'Attraction 1 caption',
-            ],
-            [
-                'tourist_destination_id' => 1,
-                'name' => 'Attraction 2',
-                'image_name' => 'attraction-2.jpg',
-                'image_path' => 'public/tourist-attractions/attraction-2.jpg',
-                'caption' => 'Attraction 2 caption',
-            ],
-        ]);
+        DB::table('tourist_attractions')->insert([$this->touristAttraction1, $this->touristAttraction2]);
 
-        $this->assertTrue(Storage::exists('public/tourist-attractions/attraction-1.jpg'));
-        $this->assertTrue(Storage::exists('public/tourist-attractions/attraction-2.jpg'));
-
-        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => $this->subDistrict->id,
-            'category_id' => 1,
-            'name' => 'Pantai Konang Indah',
-            'manager' => 'LDMH',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
-            'distance_from_city_center' => '56 KM',
-            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-            'tourist_attraction_id' => [null],
-            'tourist_attraction_names' => [null],
-            'tourist_attraction_captions' => [null],
-            'new_tourist_attraction_names' => [null],
-            'new_tourist_attraction_images' => [null],
-            'new_tourist_attraction_captions' => [null],
+        $touristAttraction = [
             'deleted_tourist_attractions' => ['1,2'],
-            'media_files' => json_encode([
-                'used_images' => null,
-                'unused_images' => null,
-            ]),
-        ]);
+        ];
+
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL . $this->touristDestination->slug, array_merge($this->data, $touristAttraction));
 
         $response->assertValid();
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('tourist_destinations', [
-            'name' => 'Pantai Konang Indah',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-        ]);
-        $this->assertFalse(Storage::exists('public/tourist-attractions/attraction-1.jpg'));
-        $this->assertFalse(Storage::exists('public/tourist-attractions/attraction-2.jpg'));
-        $this->assertDatabaseMissing('tourist_attractions', [
-            'tourist_destination_id' => 1,
-            'name' => 'Attraction 1',
-            'image_name' => 'attraction-1.jpg',
-            'image_path' => 'public/tourist-attractions/attraction-1.jpg',
-            'caption' => 'Attraction 1 caption',
-        ]);
-        $this->assertDatabaseMissing('tourist_attractions', [
-            'tourist_destination_id' => 2,
-            'name' => 'Attraction 2',
-            'image_name' => 'attraction-2.jpg',
-            'image_path' => 'public/tourist-attractions/attraction-2.jpg',
-            'caption' => 'Attraction 2 caption',
-        ]);
+        $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
+        $this->assertFalse(Storage::exists(self::ATTRACTION_IMAGE_PATH . 'attraction-1.jpg'));
+        $this->assertFalse(Storage::exists(self::ATTRACTION_IMAGE_PATH . 'attraction-2.jpg'));
+        $this->assertDatabaseMissing('tourist_attractions', $this->touristAttraction1);
+        $this->assertDatabaseMissing('tourist_attractions', $this->touristAttraction2);
     }
 
     public function test_authenticated_user_can_update_tourist_destination_with_update_existing_tourist_attraction()
     {
-        Storage::disk('local')->put('public/tourist-attractions/attraction-1.jpg', '');
-        Storage::disk('local')->put('public/tourist-attractions/attraction-2.jpg', '');
-        DB::table('tourist_attractions')->insert([
-            [
-                'tourist_destination_id' => 1,
-                'name' => 'Attraction 1',
-                'image_name' => 'attraction-1.jpg',
-                'image_path' => 'public/tourist-attractions/attraction-1.jpg',
-                'caption' => 'Attraction 1 caption',
-            ],
-            [
-                'tourist_destination_id' => 1,
-                'name' => 'Attraction 2',
-                'image_name' => 'attraction-2.jpg',
-                'image_path' => 'public/tourist-attractions/attraction-2.jpg',
-                'caption' => 'Attraction 2 caption',
-            ],
-        ]);
+        DB::table('tourist_attractions')->insert([$this->touristAttraction1, $this->touristAttraction2]);
 
-        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => $this->subDistrict->id,
-            'category_id' => 1,
-            'name' => 'Pantai Konang Indah',
-            'manager' => 'LDMH',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
-            'distance_from_city_center' => '56 KM',
-            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
+        $touristAttractionData = [
             'tourist_attraction_id' => [1, 2],
             'tourist_attraction_names' => ['Tourist Attraction 1', 'Tourist Attraction 2'],
             'tourist_attraction_captions' => ['Tourist Attraction 1 Caption', 'Tourist Attraction 2 Caption'],
-            'new_tourist_attraction_names' => [null],
-            'new_tourist_attraction_images' => [null],
-            'new_tourist_attraction_captions' => [null],
-            'deleted_tourist_attractions' => [null],
-            'media_files' => json_encode([
-                'used_images' => null,
-                'unused_images' => null,
-            ]),
-        ]);
+        ];
+
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL . $this->touristDestination->slug, array_merge($this->data, $touristAttractionData));
 
         $response->assertValid();
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('tourist_destinations', [
-            'name' => 'Pantai Konang Indah',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-        ]);
-        $this->assertDatabaseMissing('tourist_attractions', [
-            'tourist_destination_id' => 1,
-            'name' => 'Attraction 1',
-            'image_name' => 'attraction-1.jpg',
-            'image_path' => 'public/tourist-attractions/attraction-1.jpg',
-            'caption' => 'Attraction 1 caption',
-        ]);
-        $this->assertTrue(Storage::exists('public/tourist-attractions/attraction-1.jpg'));
-        $this->assertTrue(Storage::exists('public/tourist-attractions/attraction-2.jpg'));
-        $this->assertDatabaseMissing('tourist_attractions', [
-            'tourist_destination_id' => 2,
-            'name' => 'Attraction 2',
-            'image_name' => 'attraction-2.jpg',
-            'image_path' => 'public/tourist-attractions/attraction-2.jpg',
-            'caption' => 'Attraction 2 caption',
-        ]);
+        $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
+        $this->assertDatabaseMissing('tourist_attractions', $this->touristAttraction1);
+        $this->assertDatabaseMissing('tourist_attractions', $this->touristAttraction2);
+        $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . 'attraction-1.jpg'));
+        $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . 'attraction-2.jpg'));
         $this->assertDatabaseHas('tourist_attractions', [
             'tourist_destination_id' => 1,
             'name' => 'Tourist Attraction 1',
             'image_name' => 'attraction-1.jpg',
-            'image_path' => 'public/tourist-attractions/attraction-1.jpg',
+            'image_path' => self::ATTRACTION_IMAGE_PATH . 'attraction-1.jpg',
             'caption' => 'Tourist Attraction 1 Caption',
         ]);
         $this->assertDatabaseHas('tourist_attractions', [
             'tourist_destination_id' => 1,
             'name' => 'Tourist Attraction 2',
             'image_name' => 'attraction-2.jpg',
-            'image_path' => 'public/tourist-attractions/attraction-2.jpg',
+            'image_path' => self::ATTRACTION_IMAGE_PATH . 'attraction-2.jpg',
             'caption' => 'Tourist Attraction 2 Caption',
         ]);
     }
 
     public function test_authenticated_user_can_update_tourist_destination_with_add_new_tourist_attraction()
     {
-        $response = $this->actingAs($this->user)->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => $this->subDistrict->id,
-            'category_id' => 1,
-            'name' => 'Pantai Konang Indah',
-            'manager' => 'LDMH',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
-            'distance_from_city_center' => '56 KM',
-            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-            'tourist_attraction_id' => [null],
-            'tourist_attraction_names' => [null],
-            'tourist_attraction_captions' => [null],
+        $tourisAttractionsData = [
             'new_tourist_attraction_names' => [
                 'Air Terjun',
                 'Gardu Pandang',
@@ -483,12 +337,9 @@ class UpdateTouristDestinationTest extends TestCase
                 'Air terjun yang indah di pesisir pantai',
                 'Gardu pandang yang menjangkau seluruh wilayah pesisi pantai',
             ],
-            'deleted_tourist_attractions' => [null],
-            'media_files' => json_encode([
-                'used_images' => null,
-                'unused_images' => null,
-            ]),
-        ]);
+        ];
+
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL . $this->touristDestination->slug, array_merge($this->data, $tourisAttractionsData));
 
         $response->assertValid();
         $response->assertRedirect(url()->previous());
@@ -496,54 +347,28 @@ class UpdateTouristDestinationTest extends TestCase
 
         $tourisAttractions = TouristAttraction::where('tourist_destination_id', 1)->get();
 
-        $this->assertDatabaseHas('tourist_destinations', [
-            'name' => 'Pantai Konang Indah',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-        ]);
+        $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
         $this->assertDatabaseHas('tourist_attractions', [
             'tourist_destination_id' => 1,
             'name' => 'Air Terjun',
             'image_name' => $tourisAttractions[0]['image_name'],
-            'image_path' => 'public/tourist-attractions/' . $tourisAttractions[0]['image_name'],
+            'image_path' => self::ATTRACTION_IMAGE_PATH . $tourisAttractions[0]['image_name'],
             'caption' => 'Air terjun yang indah di pesisir pantai',
         ]);
         $this->assertDatabaseHas('tourist_attractions', [
             'tourist_destination_id' => 1,
             'name' => 'Gardu Pandang',
             'image_name' => $tourisAttractions[1]['image_name'],
-            'image_path' => 'public/tourist-attractions/' . $tourisAttractions[1]['image_name'],
+            'image_path' => self::ATTRACTION_IMAGE_PATH . $tourisAttractions[1]['image_name'],
             'caption' => 'Gardu pandang yang menjangkau seluruh wilayah pesisi pantai',
         ]);
-        $this->assertTrue(Storage::exists('public/tourist-attractions/' . $tourisAttractions[0]['image_name']));
-        $this->assertTrue(Storage::exists('public/tourist-attractions/' . $tourisAttractions[1]['image_name']));
+        $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . $tourisAttractions[0]['image_name']));
+        $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . $tourisAttractions[1]['image_name']));
     }
 
     public function test_guest_cannot_update_tourist_destination()
     {
-        $response = $this->put('/dashboard/tourist-destinations/' . $this->touristDestination->slug, [
-            'sub_district_id' => $this->subDistrict->id,
-            'category_id' => 1,
-            'name' => 'Pantai Konang Indah',
-            'manager' => 'LDMH',
-            'address' => 'Desa Nglebeng, Kecamatan Panggul',
-            'description' => '<p>Terkenal dengan keindahan pantai dan kuliner olahan hasil laut</p>',
-            'distance_from_city_center' => '56 KM',
-            'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
-            'facility' => 'MCK, Mushola, Lahan Parkir, Food Court',
-            'latitude' => -8.27466803,
-            'longitude' => 111.45297354,
-            'tourist_attraction_names' => [null],
-            'tourist_attraction_captions' => [null],
-            'new_tourist_attraction_names' => [null],
-            'new_tourist_attraction_images' => [null],
-            'new_tourist_attraction_captions' => [null],
-            'deleted_tourist_attractions' => [null],
-            'media_files' => json_encode([
-                'used_images' => null,
-                'unused_images' => null,
-            ]),
-        ]);
+        $response = $this->put(self::MAIN_URL . $this->touristDestination->slug, $this->data);
 
         $response->assertRedirect('/login');
 

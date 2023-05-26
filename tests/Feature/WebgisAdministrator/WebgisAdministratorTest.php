@@ -12,6 +12,8 @@ class WebgisAdministratorTest extends TestCase
 
     private User $webgisAdmin; // Webgis Administrator
 
+    const MAIN_URL = '/dashboard/users/';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,7 +32,7 @@ class WebgisAdministratorTest extends TestCase
 
     public function test_super_admin_can_visit_the_webgis_admin_management_page()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL);
 
         $response->assertStatus(200);
         $response->assertSeeText('Kelola Data Administrator');
@@ -38,14 +40,14 @@ class WebgisAdministratorTest extends TestCase
 
     public function test_webgis_admin_cannot_visit_the_webgis_admin_management_page()
     {
-        $response = $this->actingAs($this->webgisAdmin)->get('/dashboard/users');
+        $response = $this->actingAs($this->webgisAdmin)->get(self::MAIN_URL);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_visit_the_webgis_admin_management_page()
     {
-        $response = $this->get('/dashboard/users');
+        $response = $this->get(self::MAIN_URL);
 
         $response->assertRedirect('/login');
 
@@ -54,7 +56,7 @@ class WebgisAdministratorTest extends TestCase
 
     public function test_super_admin_can_search_contains_webgis_admin_data()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=hugo');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . 'search?column_name=name&search_value=hugo');
 
         $response->assertStatus(200);
         $response->assertSeeText($this->webgisAdmin->name);
@@ -63,7 +65,7 @@ class WebgisAdministratorTest extends TestCase
 
     public function test_notification_is_displayed_for_search_not_found_webgis_admin_data()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/search?column_name=name&search_value=john');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . 'search?column_name=name&search_value=john');
 
         $response->assertStatus(200);
         $response->assertSeeText('Data tidak tersedia');
@@ -72,7 +74,7 @@ class WebgisAdministratorTest extends TestCase
 
     public function test_webgis_admin_profile_page_is_displayed()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin->username);
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . $this->webgisAdmin->username);
 
         $response->assertStatus(200);
         $response->assertSeeText('Detail Profil');
@@ -88,7 +90,7 @@ class WebgisAdministratorTest extends TestCase
 
     public function test_route_redirect_to_profile_update_for_self_data_update()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->superAdmin->username . '/edit');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . $this->superAdmin->username . '/edit');
 
         $response->assertRedirect(route('profile.edit'));
     }

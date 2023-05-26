@@ -17,7 +17,7 @@ class UpdateSubDistrictTest extends TestCase
 
     private SubDistrict $subDistrict;
 
-    private $updateGeoJson = [
+    const UPDATE_GEOJSON = [
         'type' => 'FeatureCollection',
         'features' => [
             'type' => 'Feature',
@@ -51,6 +51,22 @@ class UpdateSubDistrictTest extends TestCase
         ],
     ];
 
+    const MAIN_URL = '/dashboard/sub-districts/';
+
+    private $data = [
+        'code' => 3503030,
+        'name' => 'KECAMATAN WATULIMO',
+        'latitude' => -8.26538086,
+        'longitude' => 111.71334564,
+        'fill_color' => '#059669',
+    ];
+
+    private $data2;
+
+    private $oldData;
+
+    const GEOJSON_PATH = 'public/geojson/';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -63,24 +79,32 @@ class UpdateSubDistrictTest extends TestCase
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'address' => 'Desa Panggul, Kecamatan Panggul',
-            'phone_number' => '081234567890',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'is_admin' => 0,
         ]);
         $this->subDistrict = SubDistrict::factory()->create([
             'geojson_name' => $geojsonName,
-            'geojson_path' => 'public/geojson/' . $geojsonName,
+            'geojson_path' => self::GEOJSON_PATH . $geojsonName,
         ]);
+        $this->data2 = array_merge($this->data, [
+            'geojson_text_area' => json_encode(self::UPDATE_GEOJSON),
+        ]);
+        $this->oldData = [
+            'code' => $this->subDistrict->code,
+            'name' => $this->subDistrict->name,
+            'latitude' => $this->subDistrict->latitude,
+            'longitude' => $this->subDistrict->longitude,
+            'fill_color' => $this->subDistrict->fill_color,
+            'geojson_name' => $this->subDistrict->geojson_name,
+        ];
 
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
-        $this->assertJson(json_encode($this->updateGeoJson));
+        $this->assertJson(json_encode(self::UPDATE_GEOJSON));
     }
 
     public function test_sub_district_edit_page_is_displayed()
     {
-        $response = $this->actingAs($this->superAdmin)->get('dashboard/sub-districts/' . $this->subDistrict->code . '/edit');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . $this->subDistrict->code . '/edit');
 
         $response->assertStatus(200);
         $response->assertSeeText('Edit Data Kecamatan');
@@ -89,115 +113,55 @@ class UpdateSubDistrictTest extends TestCase
 
     public function test_sub_district_update_input_validation()
     {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
-            'code' => '',
-            'name' => '',
-            'latitude' => '',
-            'longitude' => '',
-            'fill_color' => '',
-        ]);
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->subDistrict->code, ['']);
 
         $response->assertInvalid(['code', 'name', 'latitude', 'longitude', 'fill_color']);
     }
 
     public function test_super_admin_can_update_sub_district_with_upload_geojson_file()
     {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
-            'code' => 3503030,
-            'name' => 'KECAMATAN WATULIMO',
-            'latitude' => -8.26538086,
-            'longitude' => 111.71334564,
-            'fill_color' => '#059669',
-            'geojson' => UploadedFile::fake()->create('3503030.geojson', 25, 'application/json'),
-        ]);
+        $data = array_merge($this->data, ['geojson' => UploadedFile::fake()->create('3503030.geojson', 25, 'application/json')]);
+
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->subDistrict->code, $data);
 
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
-        $response->assertRedirect('dashboard/sub-districts/3503030/edit');
+        $response->assertRedirect(self::MAIN_URL . '3503030/edit');
         $response->assertSessionHasNoErrors();
 
         $subDistrict = SubDistrict::where('code', 3503030)->first();
 
-        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
-        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
-        $this->assertDatabaseHas('sub_districts', [
-            'code' => 3503030,
-            'name' => 'KECAMATAN WATULIMO',
-            'latitude' => -8.26538086,
-            'longitude' => 111.71334564,
-            'fill_color' => '#059669',
-            'geojson_name' => $subDistrict->geojson_name,
-        ]);
-        $this->assertDatabaseMissing('sub_districts', [
-            'code' => 3503020,
-            'name' => 'KECAMATAN MUNJUNGAN',
-            'latitude' => -8.24312247,
-            'longitude' => 111.45431483,
-            'fill_color' => '#16a34a',
-            'geojson_name' => $this->subDistrict->geojson_name,
-        ]);
+        $this->assertTrue(Storage::exists(self::GEOJSON_PATH . $subDistrict->geojson_name));
+        $this->assertFalse(Storage::exists(self::GEOJSON_PATH . $this->subDistrict->geojson_name));
+        $this->assertDatabaseHas('sub_districts', array_merge($this->data, ['geojson_name' => $subDistrict->geojson_name]));
+        $this->assertDatabaseMissing('sub_districts', $this->oldData);
     }
 
     public function test_super_admin_can_update_sub_district_with_geojson_text()
     {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
-            'code' => 3503030,
-            'name' => 'KECAMATAN WATULIMO',
-            'latitude' => -8.26538086,
-            'longitude' => 111.71334564,
-            'fill_color' => '#059669',
-            'geojson_text_area' => json_encode($this->updateGeoJson),
-        ]);
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->subDistrict->code, $this->data2);
 
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
-        $response->assertRedirect('dashboard/sub-districts/3503030/edit');
+        $response->assertRedirect(self::MAIN_URL . '3503030/edit');
         $response->assertSessionHasNoErrors();
 
         $subDistrict = SubDistrict::where('code', 3503030)->first();
 
-        $this->assertDatabaseHas('sub_districts', [
-            'code' => 3503030,
-            'name' => 'KECAMATAN WATULIMO',
-            'latitude' => -8.26538086,
-            'longitude' => 111.71334564,
-            'fill_color' => '#059669',
-            'geojson_name' => $subDistrict->geojson_name,
-        ]);
-        $this->assertDatabaseMissing('sub_districts', [
-            'code' => 3503020,
-            'name' => 'KECAMATAN MUNJUNGAN',
-            'latitude' => -8.3030696,
-            'longitude' => 111.5768607,
-            'fill_color' => '#059669',
-            'geojson_name' => $this->subDistrict->geojson_name,
-        ]);
-        $this->assertTrue(Storage::exists('public/geojson/' . $subDistrict->geojson_name));
-        $this->assertFalse(Storage::exists('public/geojson/' . $this->subDistrict->geojson_name));
+        $this->assertDatabaseHas('sub_districts', array_merge($this->data, ['geojson_name' => $subDistrict->geojson_name]));
+        $this->assertDatabaseMissing('sub_districts', $this->oldData);
+        $this->assertTrue(Storage::exists(self::GEOJSON_PATH . $subDistrict->geojson_name));
+        $this->assertFalse(Storage::exists(self::GEOJSON_PATH . $this->subDistrict->geojson_name));
     }
 
     public function test_webgis_admin_cannot_update_sub_district()
     {
-        $response = $this->actingAs($this->webgisAdmin)->put('dashboard/sub-districts/' . $this->subDistrict->code, [
-            'code' => 3503020,
-            'name' => 'KECAMATAN MUNJUNGAN',
-            'latitude' => -8.3030696,
-            'longitude' => 111.5768607,
-            'fill_color' => '#059669',
-            'geojson' => UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json'),
-        ]);
+        $response = $this->actingAs($this->webgisAdmin)->put(self::MAIN_URL . $this->subDistrict->code, $this->data2);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_update_sub_district()
     {
-        $response = $this->put('dashboard/sub-districts/' . $this->subDistrict->code, [
-            'code' => 3503020,
-            'name' => 'KECAMATAN MUNJUNGAN',
-            'latitude' => -8.3030696,
-            'longitude' => 111.5768607,
-            'fill_color' => '#059669',
-            'geojson' => UploadedFile::fake()->create('gt47g-3503020.geojson', 25, 'application/json'),
-        ]);
+        $response = $this->put(self::MAIN_URL . $this->subDistrict->code, $this->data2);
 
         $response->assertRedirect('/login');
 

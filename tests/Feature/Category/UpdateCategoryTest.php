@@ -14,6 +14,12 @@ class UpdateCategoryTest extends TestCase
 
     private Category $category;
 
+    const MAIN_URL = '/dashboard/categories/';
+
+    private $data = [
+        'name' => 'Wisata Pantai Pesisir'
+    ];
+
     public function setUp(): void
     {
         parent::setUp();
@@ -23,9 +29,6 @@ class UpdateCategoryTest extends TestCase
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'address' => 'Desa Panggul, Kecamatan Panggul',
-            'phone_number' => '081234567890',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'is_admin' => 0,
         ]);
         $this->category = Category::factory()->create();
@@ -36,7 +39,7 @@ class UpdateCategoryTest extends TestCase
 
     public function test_category_edit_page_is_displayed()
     {
-        $response = $this->actingAs($this->superAdmin)->get('dashboard/categories/' . $this->category->slug . '/edit');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . $this->category->slug . '/edit');
 
         $response->assertStatus(200);
         $response->assertSeeText('Edit Data Kategori Destinasi Wisata');
@@ -45,26 +48,20 @@ class UpdateCategoryTest extends TestCase
 
     public function test_category_update_input_validation()
     {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
-            'name' => '',
-        ]);
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->category->slug, ['']);
 
         $response->assertInvalid(['name']);
     }
 
     public function test_super_admin_can_update_category_without_icon_marker()
     {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
-            'name' => 'Wisata Pantai Pesisir',
-        ]);
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->category->slug, $this->data);
 
         $response->assertValid(['name']);
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('categories', [
-            'name' => 'Wisata Pantai Pesisir',
-        ]);
+        $this->assertDatabaseHas('categories', $this->data);
         $this->assertDatabaseMissing('categories', [
             'name' => $this->category->name,
         ]);
@@ -72,21 +69,18 @@ class UpdateCategoryTest extends TestCase
 
     public function test_super_admin_can_update_category_with_icon_marker()
     {
-        $response = $this->actingAs($this->superAdmin)->put('dashboard/categories/' . $this->category->slug, [
-            'name' => 'Wisata Pantai Pesisir',
+        $data = array_merge($this->data, [
             'color' => 'green',
             'svg_name' => 'apple-whole',
         ]);
+
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->category->slug, $data);
 
         $response->assertValid(['name', 'color', 'svg_name']);
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('categories', [
-            'name' => 'Wisata Pantai Pesisir',
-            'color' => 'green',
-            'svg_name' => 'apple-whole',
-        ]);
+        $this->assertDatabaseHas('categories', $data);
         $this->assertDatabaseMissing('categories', [
             'name' => $this->category->name,
         ]);
@@ -94,18 +88,14 @@ class UpdateCategoryTest extends TestCase
 
     public function test_webgis_admin_cannot_update_category()
     {
-        $response = $this->actingAs($this->webgisAdmin)->put('dashboard/categories/' . $this->category->slug, [
-            'name' => 'Wisata Pantai Pesisir',
-        ]);
+        $response = $this->actingAs($this->webgisAdmin)->put(self::MAIN_URL . $this->category->slug, $this->data);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_update_category()
     {
-        $response = $this->put('dashboard/categories/' . $this->category->slug, [
-            'name' => 'Wisata Pantai Pesisir',
-        ]);
+        $response = $this->put(self::MAIN_URL . $this->category->slug, $this->data);
 
         $response->assertRedirect('/login');
 

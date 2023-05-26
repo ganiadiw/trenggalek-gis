@@ -11,6 +11,18 @@ class CreateWebgisAdministratorTest extends TestCase
 
     private User $webgisAdmin; // Webgis Administrator
 
+    const MAIN_URL = '/dashboard/users/';
+
+    private $data = [
+        'name' => 'Lois Di Nominator',
+        'email' => 'loisdinominator@example.com',
+        'username' => 'loisdinominator',
+        'address' => 'Desa Cakul, Kecamatan Dongko',
+        'phone_number' => '081234567890',
+        'is_admin' => 0,
+        'password' => 'password',
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,7 +41,7 @@ class CreateWebgisAdministratorTest extends TestCase
 
     public function test_webgis_admin_create_page_is_displayed()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/create');
+        $response = $this->actingAs($this->superAdmin)->get(self::MAIN_URL . 'create');
 
         $response->assertStatus(200);
         $response->assertSeeText('Tambah Data Administrator');
@@ -37,14 +49,7 @@ class CreateWebgisAdministratorTest extends TestCase
 
     public function test_webgis_admin_create_input_validation()
     {
-        $response = $this->actingAs($this->superAdmin)->post('/dashboard/users', [
-            'name' => '',
-            'email' => '',
-            'username' => '',
-            'password' => '',
-            'address' => '',
-            'phone_number' => '',
-        ]);
+        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, ['']);
 
         $response->assertInvalid();
         $response->assertRedirect(url()->previous());
@@ -52,18 +57,10 @@ class CreateWebgisAdministratorTest extends TestCase
 
     public function test_super_admin_can_create_webgis_admin()
     {
-        $response = $this->actingAs($this->superAdmin)->post('/dashboard/users', [
-            'name' => 'Lois Di Nominator',
-            'email' => 'loisdinominator@example.com',
-            'username' => 'loisdinominator',
-            'address' => 'Desa Cakul, Kecamatan Dongko',
-            'phone_number' => '081234567890',
-            'is_admin' => 0,
-            'password' => 'password',
-        ]);
+        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, $this->data);
 
         $response->assertValid();
-        $response->assertRedirect(route('dashboard.users.index'));
+        $response->assertRedirect(self::MAIN_URL);
         $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('users', [
@@ -74,32 +71,16 @@ class CreateWebgisAdministratorTest extends TestCase
 
     public function test_webgis_admin_cannot_create_webgis_admin()
     {
-        $response = $this->actingAs($this->webgisAdmin)->post('/dashboard/users', [
-            'name' => 'Lois Di Nominator',
-            'email' => 'loisdinominator@example.com',
-            'username' => 'loisdinominator',
-            'address' => 'Desa Cakul, Kecamatan Dongko',
-            'phone_number' => '081234567890',
-            'is_admin' => 0,
-            'password' => 'password',
-        ]);
+        $response = $this->actingAs($this->webgisAdmin)->post(self::MAIN_URL, $this->data);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_create_webgis_admin()
     {
-        $response = $this->post('/dashboard/users', [
-            'name' => 'Lois Di Nominator',
-            'email' => 'loisdinominator@example.com',
-            'username' => 'loisdinominator',
-            'address' => 'Desa Cakul, Kecamatan Dongko',
-            'phone_number' => '081234567890',
-            'is_admin' => 0,
-            'password' => 'password',
-        ]);
+        $response = $this->post(self::MAIN_URL, $this->data);
 
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect('/login');
 
         $this->assertGuest();
     }

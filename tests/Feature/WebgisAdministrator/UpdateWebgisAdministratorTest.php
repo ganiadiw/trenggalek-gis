@@ -16,6 +16,24 @@ class UpdateWebgisAdministratorTest extends TestCase
 
     private User $webgisAdmin2; // Webgis Administrator
 
+    const MAIN_URL = '/dashboard/users/';
+
+    private $data1 = [
+        'name' => 'Hugo First Time',
+        'email' => 'hugofirsttime@example.com',
+        'username' => 'hugofirsttime',
+        'address' => 'Desa Sumberbening, Kecamatan Dongko',
+        'phone_number' => '081234567890',
+    ];
+
+    private $data2 = [
+        'name' => 'Micahel John Doe',
+        'username' => 'johndoe_mic',
+        'address' => 'Desa Sumberbening, Kecamatan Dongko',
+        'phone_number' => '081234567890',
+        'email' => 'michaeljohndoe@example.com',
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -51,7 +69,8 @@ class UpdateWebgisAdministratorTest extends TestCase
 
     public function test_webgis_admin_edit_page_is_displayed()
     {
-        $response = $this->actingAs($this->superAdmin)->get('/dashboard/users/' . $this->webgisAdmin1->username . '/edit');
+        $response = $this->actingAs($this->superAdmin)
+                    ->get(self::MAIN_URL . $this->webgisAdmin1->username . '/edit');
 
         $response->assertStatus(200);
         $response->assertSeeText('Edit Data Administrator');
@@ -60,27 +79,19 @@ class UpdateWebgisAdministratorTest extends TestCase
 
     public function test_webgis_admin_update_input_validation()
     {
-        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
-            'name' => '',
-            'username' => '',
-            'email' => '',
-        ]);
+        $response = $this->actingAs($this->superAdmin)
+                    ->put(self::MAIN_URL . $this->webgisAdmin1->username, ['']);
 
         $response->assertInvalid();
     }
 
     public function test_super_admin_can_update_webgis_admin_without_change_avatar()
     {
-        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
-            'name' => 'Hugo First Time',
-            'email' => 'hugofirsttime@example.com',
-            'username' => 'hugofirsttime',
-            'address' => 'Desa Sumberbening, Kecamatan Dongko',
-            'phone_number' => '081234567890',
-        ]);
+        $response = $this->actingAs($this->superAdmin)
+                    ->put(self::MAIN_URL . $this->webgisAdmin1->username, $this->data1);
 
         $response->assertValid();
-        $response->assertRedirect('/dashboard/users/hugofirsttime/edit');
+        $response->assertRedirect(self::MAIN_URL . 'hugofirsttime/edit');
         $response->assertSessionHasNoErrors();
 
         $this->assertTrue(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
@@ -98,17 +109,11 @@ class UpdateWebgisAdministratorTest extends TestCase
     {
         $avatar = UploadedFile::fake()->image('avatar.png');
 
-        $response = $this->actingAs($this->superAdmin)->put('/dashboard/users/' . $this->webgisAdmin1->username, [
-            'name' => 'Hugo First Time',
-            'email' => 'hugofirsttime@example.com',
-            'username' => 'hugofirsttime',
-            'address' => 'Desa Sumberbening, Kecamatan Dongko',
-            'phone_number' => '081234567890',
-            'avatar' => $avatar,
-        ]);
+        $response = $this->actingAs($this->superAdmin)
+                    ->put(self::MAIN_URL . $this->webgisAdmin1->username, array_merge($this->data1, ['avatar' => $avatar]));
 
         $response->assertValid();
-        $response->assertRedirect('/dashboard/users/hugofirsttime/edit');
+        $response->assertRedirect(self::MAIN_URL . 'hugofirsttime/edit');
         $response->assertSessionHasNoErrors();
 
         $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
@@ -126,26 +131,15 @@ class UpdateWebgisAdministratorTest extends TestCase
 
     public function test_webgis_admin_cannot_update_other_webgis_admin()
     {
-        $response = $this->actingAs($this->webgisAdmin1)->put('/dashboard/users/' . $this->webgisAdmin2->username, [
-            'name' => 'Micahel John Doe',
-            'username' => 'johndoe_mic',
-            'address' => 'Desa Sumberbening, Kecamatan Dongko',
-            'phone_number' => '081234567890',
-            'email' => 'michaeljohndoe@example.com',
-        ]);
+        $response = $this->actingAs($this->webgisAdmin1)
+                    ->put(self::MAIN_URL . $this->webgisAdmin2->username, $this->data2);
 
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_update_webgis_admin()
     {
-        $response = $this->put('/dashboard/users/' . $this->webgisAdmin1->username, [
-            'name' => 'Micahel John Doe',
-            'username' => 'johdoe_mic',
-            'address' => 'Desa Sumberbening, Kecamatan Dongko',
-            'phone_number' => '081234567890',
-            'email' => 'michaeljohndoe@example.com',
-        ]);
+        $response = $this->put(self::MAIN_URL . $this->webgisAdmin1->username, $this->data2);
 
         $response->assertRedirect(route('login'));
 

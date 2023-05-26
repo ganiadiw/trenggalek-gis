@@ -16,6 +16,8 @@ class DeleteWebgisAdministratorTest extends TestCase
 
     private User $webgisAdmin2; // Webgis Administrator
 
+    const MAIN_URL = '/dashboard/users/';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -51,7 +53,7 @@ class DeleteWebgisAdministratorTest extends TestCase
 
     public function test_super_admin_can_delete_webgis_admin()
     {
-        $response = $this->actingAs($this->superAdmin)->delete('/dashboard/users/' . $this->webgisAdmin2->username);
+        $response = $this->actingAs($this->superAdmin)->delete(self::MAIN_URL . $this->webgisAdmin2->username);
 
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
@@ -66,13 +68,13 @@ class DeleteWebgisAdministratorTest extends TestCase
     {
         $this->assertEquals(0, $this->webgisAdmin1->is_admin);
 
-        $response = $this->actingAs($this->webgisAdmin1)->delete('/dashboard/users/' . $this->webgisAdmin2->username);
+        $response = $this->actingAs($this->webgisAdmin1)->delete(self::MAIN_URL . $this->webgisAdmin2->username);
         $response->assertForbidden();
     }
 
     public function test_guest_cannot_delete_webgis_admin()
     {
-        $response = $this->delete('/dashboard/users/' . $this->webgisAdmin2->username);
+        $response = $this->delete(self::MAIN_URL . $this->webgisAdmin2->username);
 
         $response->assertRedirect('/login');
 
