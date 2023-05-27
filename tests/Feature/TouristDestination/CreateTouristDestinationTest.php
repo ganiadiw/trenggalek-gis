@@ -158,8 +158,8 @@ class CreateTouristDestinationTest extends TestCase
             'foldername' => self::TMP_IMAGE_PATH,
             'filename' => self::IMAGE2,
         ]);
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485413.png'));
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485552.png'));
+        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
+        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
 
         $description = [
             'description' => '<p>Pantai</p><img title="image1678273485413.png" src="../../storage/tmp/media/images/image1678273485413.png" alt=""><img title="image1678273485552.png" src="../../tmp/media/images/image1678273485552.png" alt="">',
@@ -203,8 +203,8 @@ class CreateTouristDestinationTest extends TestCase
             'foldername' => self::TMP_IMAGE_PATH,
             'filename' => self::IMAGE2,
         ]);
-        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485413.png'));
-        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485552.png'));
+        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
+        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
     }
 
     public function test_authenticated_user_can_create_tourist_destination_with_deleted_image_in_description_editor()
@@ -224,8 +224,8 @@ class CreateTouristDestinationTest extends TestCase
             'foldername' => self::TMP_IMAGE_PATH,
             'filename' => self::IMAGE2,
         ]);
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485413.png'));
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485552.png'));
+        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
+        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
 
         $description = [
             'description' => '<p>Pantai</p><img title="image1678273485413.png" src="../../storage/tmp/media/images/image1678273485413.png" alt="">',
@@ -269,8 +269,8 @@ class CreateTouristDestinationTest extends TestCase
             'foldername' => self::TMP_IMAGE_PATH,
             'filename' => self::IMAGE2,
         ]);
-        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485413.png'));
-        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485552.png'));
+        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
+        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
     }
 
     public function test_guest_cannot_create_tourist_destination()

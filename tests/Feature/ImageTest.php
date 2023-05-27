@@ -22,6 +22,10 @@ class ImageTest extends TestCase
 
     const ATTRACTION_IMAGE_PATH = 'public/tourist-attractions';
 
+    const IMAGE1 = 'image1678273485413.png';
+
+    const IMAGE2 = 'image123.jpg';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,30 +36,30 @@ class ImageTest extends TestCase
     public function test_authenticated_user_can_post_a_temporary_image()
     {
         $response = $this->actingAs($this->user)->postJson(self::MAIN_URL, [
-            'image' => UploadedFile::fake()->image('image1678273485413.png'),
+            'image' => UploadedFile::fake()->image(self::IMAGE1),
         ]);
 
         $response->assertStatus(200);
         $response->assertJson([
-            'location' => '/storage/tmp/media/images/image1678273485413.png',
-            'filename' => 'image1678273485413.png',
+            'location' => '/storage/tmp/media/images/' . self::IMAGE1,
+            'filename' => self::IMAGE1,
         ]);
         $this->assertDatabaseHas('temporary_files', [
             'foldername' => self::TMP_IMAGE_PUBLIC_PATH,
-            'filename' => 'image1678273485413.png',
+            'filename' => self::IMAGE1,
         ]);
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PUBLIC_PATH . '/image1678273485413.png'));
+        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PUBLIC_PATH . '/' . self::IMAGE1));
     }
 
     public function test_authenticated_user_can_delete_a_temporary_image()
     {
-        Storage::disk('local')->put(self::TMP_IMAGE_PUBLIC_PATH . '/image1678273485413.png', '');
+        Storage::disk('local')->put(self::TMP_IMAGE_PUBLIC_PATH . '/' . self::IMAGE1, '');
         TemporaryFile::create([
             'foldername' => self::TMP_IMAGE_PUBLIC_PATH,
-            'filename' => 'image1678273485413.png',
+            'filename' => self::IMAGE1,
         ]);
 
-        $response = $this->actingAs($this->user)->deleteJson(self::MAIN_URL . '/image1678273485413.png');
+        $response = $this->actingAs($this->user)->deleteJson(self::MAIN_URL . '/' . self::IMAGE1);
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -63,9 +67,9 @@ class ImageTest extends TestCase
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => self::TMP_IMAGE_PUBLIC_PATH,
-            'filename' => 'image1678273485413.png',
+            'filename' => self::IMAGE1,
         ]);
-        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PUBLIC_PATH . '/image1678273485413.png'));
+        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PUBLIC_PATH . '/' . self::IMAGE1));
     }
 
     public function test_authenticated_user_can_update_tourist_attraction_image()
@@ -73,13 +77,13 @@ class ImageTest extends TestCase
         SubDistrict::factory()->create();
         Category::factory()->create();
         TouristDestination::factory()->create();
-        Storage::disk('local')->put(self::ATTRACTION_IMAGE_PATH . '/image123.jpg', '');
+        Storage::disk('local')->put(self::ATTRACTION_IMAGE_PATH . '/' . self::IMAGE2, '');
         $touristAttraction = TouristAttraction::create([
             'tourist_destination_id' => TouristDestination::first()->id,
             'name' => 'Tourist Attraction Name',
             'caption' => 'Touris Attraction Caption',
-            'image_name' => 'image123.jpg',
-            'image_path' => self::ATTRACTION_IMAGE_PATH . '/image123.jpg',
+            'image_name' => self::IMAGE2,
+            'image_path' => self::ATTRACTION_IMAGE_PATH . '/' . self::IMAGE2,
         ]);
 
         $response = $this->actingAs($this->user)->postJson(self::MAIN_URL . '/tourist-attraction/update', [
@@ -97,10 +101,10 @@ class ImageTest extends TestCase
             'image_path' => $touristAttraction->image_path,
         ]);
         $this->assertDatabaseMissing('tourist_attractions', [
-            'image_name' => 'image123.jpg',
-            'image_path' => self::ATTRACTION_IMAGE_PATH . '/image123.jpg',
+            'image_name' => self::IMAGE2,
+            'image_path' => self::ATTRACTION_IMAGE_PATH . '/' . self::IMAGE2,
         ]);
         $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . '/' . $touristAttraction->image_name));
-        $this->assertFalse(Storage::exists(self::ATTRACTION_IMAGE_PATH . '/image123.jpg'));
+        $this->assertFalse(Storage::exists(self::ATTRACTION_IMAGE_PATH . '/' . self::IMAGE2));
     }
 }
