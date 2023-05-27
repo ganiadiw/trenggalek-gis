@@ -18,6 +18,8 @@ class UpdateWebgisAdministratorTest extends TestCase
 
     const MAIN_URL = '/dashboard/users/';
 
+    const AVATAR_PATH = 'public/avatars/';
+
     private $data1 = [
         'name' => 'Hugo First Time',
         'email' => 'hugofirsttime@example.com',
@@ -40,15 +42,15 @@ class UpdateWebgisAdministratorTest extends TestCase
 
         $avatar1 = UploadedFile::fake()->image('avatar1.png')->hashName();
         $avatar2 = UploadedFile::fake()->image('avatar2.png')->hashName();
-        Storage::disk('local')->put('public/avatars/' . $avatar1, '');
-        Storage::disk('local')->put('public/avatars/' . $avatar2, '');
+        Storage::disk('local')->put(self::AVATAR_PATH . $avatar1, '');
+        Storage::disk('local')->put(self::AVATAR_PATH . $avatar2, '');
 
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'avatar_path' => 'public/avatars/' . $avatar1,
+            'avatar_path' => self::AVATAR_PATH . $avatar1,
             'avatar_name' => $avatar1,
             'is_admin' => 0,
         ]);
@@ -57,7 +59,7 @@ class UpdateWebgisAdministratorTest extends TestCase
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'username' => 'johndoe',
-            'avatar_path' => 'public/avatars/' . $avatar2,
+            'avatar_path' => self::AVATAR_PATH . $avatar2,
             'avatar_name' => $avatar2,
             'is_admin' => 0,
         ]);
@@ -94,7 +96,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         $response->assertRedirect(self::MAIN_URL . 'hugofirsttime/edit');
         $response->assertSessionHasNoErrors();
 
-        $this->assertTrue(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
+        $this->assertTrue(Storage::exists(self::AVATAR_PATH . $this->webgisAdmin1->avatar_name));
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',
@@ -116,8 +118,8 @@ class UpdateWebgisAdministratorTest extends TestCase
         $response->assertRedirect(self::MAIN_URL . 'hugofirsttime/edit');
         $response->assertSessionHasNoErrors();
 
-        $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin1->avatar_name));
-        $this->assertTrue(Storage::exists('public/avatars/' . $avatar->hashName()));
+        $this->assertFalse(Storage::exists(self::AVATAR_PATH . $this->webgisAdmin1->avatar_name));
+        $this->assertTrue(Storage::exists(self::AVATAR_PATH . $avatar->hashName()));
         $this->assertDatabaseHas('users', [
             'email' => 'hugofirsttime@example.com',
             'username' => 'hugofirsttime',

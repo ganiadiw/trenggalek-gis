@@ -18,21 +18,23 @@ class DeleteWebgisAdministratorTest extends TestCase
 
     const MAIN_URL = '/dashboard/users/';
 
+    const AVATAR_PATH = 'public/avatars/';
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $avatar1 = UploadedFile::fake()->image('avatar1.png')->hashName();
         $avatar2 = UploadedFile::fake()->image('avatar2.png')->hashName();
-        Storage::disk('local')->put('public/avatars/' . $avatar1, '');
-        Storage::disk('local')->put('public/avatars/' . $avatar2, '');
+        Storage::disk('local')->put(self::AVATAR_PATH . $avatar1, '');
+        Storage::disk('local')->put(self::AVATAR_PATH . $avatar2, '');
 
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
             'email' => 'hugofirst@example.com',
-            'avatar_path' => 'public/avatars/' . $avatar1,
+            'avatar_path' => self::AVATAR_PATH . $avatar1,
             'avatar_name' => $avatar1,
             'is_admin' => 0,
         ]);
@@ -41,7 +43,7 @@ class DeleteWebgisAdministratorTest extends TestCase
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'username' => 'johndoe',
-            'avatar_path' => 'public/avatars/' . $avatar2,
+            'avatar_path' => self::AVATAR_PATH . $avatar2,
             'avatar_name' => $avatar2,
             'is_admin' => 0,
         ]);
@@ -58,7 +60,7 @@ class DeleteWebgisAdministratorTest extends TestCase
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertFalse(Storage::exists('public/avatars/' . $this->webgisAdmin2->avatar_name));
+        $this->assertFalse(Storage::exists(self::AVATAR_PATH . $this->webgisAdmin2->avatar_name));
         $this->assertDatabaseMissing('users', [
             'email' => 'johndoe@example.com',
         ]);

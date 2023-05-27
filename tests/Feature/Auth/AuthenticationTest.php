@@ -11,9 +11,11 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
+    const MAIN_URL = '/login';
+
     public function test_login_screen_is_displayed()
     {
-        $response = $this->get('/login');
+        $response = $this->get(self::MAIN_URL);
 
         $response->assertStatus(200);
     }
@@ -22,7 +24,7 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/login', [
+        $response = $this->post(self::MAIN_URL, [
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -35,7 +37,7 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->post('/login', [
+        $this->post(self::MAIN_URL, [
             'email' => $user->email,
             'password' => 'wrong-password',
         ]);

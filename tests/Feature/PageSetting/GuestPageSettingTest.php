@@ -18,9 +18,13 @@ class GuestPageSettingTest extends TestCase
 
     const HERO_IMAGE_PATH = 'public/page-settings/hero_image/';
 
+    const IMAGE1 = '12345-image.png';
+
+    const IMAGE2 = '56789-image.png';
+
     private $data = [
         'key' => 'hero_image',
-        'value' => ['12345-image.png', '56789-image.png'],
+        'value' => [self::IMAGE1, self::IMAGE2],
         'input_type' => 'file',
         'max_value' => 2,
     ];
@@ -75,11 +79,11 @@ class GuestPageSettingTest extends TestCase
 
     public function test_image_field_can_be_updated()
     {
-        Storage::disk('local')->put(self::HERO_IMAGE_PATH . '12345-image.png', '');
-        Storage::disk('local')->put(self::HERO_IMAGE_PATH . '56789-image.png', '');
-        $guestPageSetting = GuestPageSetting::factory()->create($this->data);
+        Storage::disk('local')->put(self::HERO_IMAGE_PATH . self::IMAGE1, '');
+        Storage::disk('local')->put(self::HERO_IMAGE_PATH . self::IMAGE2, '');
+        $pageSetting = GuestPageSetting::factory()->create($this->data);
 
-        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $guestPageSetting->id, [
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $pageSetting->id, [
             'value_image' => [
                 UploadedFile::fake()->image('54321-image.png'),
                 UploadedFile::fake()->image('98765-image.png'),
@@ -90,30 +94,30 @@ class GuestPageSettingTest extends TestCase
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $guestPageSetting = GuestPageSetting::where('key', 'hero_image')->first();
+        $pageSetting = GuestPageSetting::where('key', 'hero_image')->first();
 
         $this->assertDatabaseMissing('guest_page_settings', [
-            'value' => ['12345-image.png', '98765-image.png'],
+            'value' => [self::IMAGE1, self::IMAGE2],
         ]);
-        $this->assertFalse(Storage::exists(self::HERO_IMAGE_PATH . '12345-image.png'));
-        $this->assertFalse(Storage::exists(self::HERO_IMAGE_PATH . '56789-image.png'));
-        $this->assertTrue(Storage::exists(self::HERO_IMAGE_PATH . $guestPageSetting->value[0]));
-        $this->assertTrue(Storage::exists(self::HERO_IMAGE_PATH . $guestPageSetting->value[1]));
+        $this->assertFalse(Storage::exists(self::HERO_IMAGE_PATH . self::IMAGE1));
+        $this->assertFalse(Storage::exists(self::HERO_IMAGE_PATH . self::IMAGE2));
+        $this->assertTrue(Storage::exists(self::HERO_IMAGE_PATH . $pageSetting->value[0]));
+        $this->assertTrue(Storage::exists(self::HERO_IMAGE_PATH . $pageSetting->value[1]));
     }
 
     public function test_image_file_can_be_deleted()
     {
-        Storage::disk('local')->put(self::HERO_IMAGE_PATH . '12345-image.png', '');
-        Storage::disk('local')->put(self::HERO_IMAGE_PATH . '56789-image.png', '');
-        $guestPageSetting = GuestPageSetting::factory()->create($this->data);
+        Storage::disk('local')->put(self::HERO_IMAGE_PATH . self::IMAGE1, '');
+        Storage::disk('local')->put(self::HERO_IMAGE_PATH . self::IMAGE2, '');
+        $pageSetting2 = GuestPageSetting::factory()->create($this->data);
 
-        $response = $this->actingAs($this->superAdmin)->deleteJson(self::MAIN_URL . 'delete-image/' . $guestPageSetting->key . '/' . '12345-image.png');
+        $response = $this->actingAs($this->superAdmin)->deleteJson(self::MAIN_URL . 'delete-image/' . $pageSetting2->key . '/' . self::IMAGE1);
 
         $response->assertStatus(200);
         $response->assertJson([
             'message' => 'Delete image successfully',
         ]);
 
-        $this->assertFalse(Storage::exists(self::HERO_IMAGE_PATH . '12345-image.png'));
+        $this->assertFalse(Storage::exists(self::HERO_IMAGE_PATH . self::IMAGE1));
     }
 }

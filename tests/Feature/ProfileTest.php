@@ -60,7 +60,7 @@ class ProfileTest extends TestCase
     public function test_profile_information_can_be_updated_without_change_avatar()
     {
         $response = $this->actingAs($this->user)->put(self::MAIN_URL, $this->data);
-        
+
         $response->assertValid();
         $response->assertRedirect(self::MAIN_URL);
         $response->assertSessionHasNoErrors();
@@ -72,28 +72,28 @@ class ProfileTest extends TestCase
 
     public function test_profile_information_can_be_updated_with_change_avatar_and_remove_old_file()
     {
-        $avatar = UploadedFile::fake()->image('avatar.png');
+        $avatar2 = UploadedFile::fake()->image('avatar.png');
 
-        $response = $this->actingAs($this->user)->put(self::MAIN_URL, array_merge($this->data, ['avatar' => $avatar]));
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL, array_merge($this->data, ['avatar' => $avatar2]));
 
         $response->assertValid();
         $response->assertRedirect(self::MAIN_URL);
         $response->assertSessionHasNoErrors();
 
         $this->assertFalse(Storage::exists(self::AVATAR_PATH . $this->avatar));
-        $this->assertTrue(Storage::exists(self::AVATAR_PATH . $avatar->hashName()));
-        $this->assertDatabaseHas('users', array_merge($this->data, ['avatar_name' => $avatar->hashName()]));
+        $this->assertTrue(Storage::exists(self::AVATAR_PATH . $avatar2->hashName()));
+        $this->assertDatabaseHas('users', array_merge($this->data, ['avatar_name' => $avatar2->hashName()]));
         $this->assertDatabaseMissing('users', array($this->user));
     }
 
     public function test_password_can_be_updated()
     {
-        $data = array_merge($this->data, [
+        $dataWithPassword = array_merge($this->data, [
             'password' => 'qwertyuiop',
             'password_confirmation' => 'qwertyuiop',
         ]);
 
-        $response = $this->actingAs($this->user)->put(self::MAIN_URL, $data);
+        $response = $this->actingAs($this->user)->put(self::MAIN_URL, $dataWithPassword);
 
         $response->assertValid();
         $response->assertRedirect(self::MAIN_URL);
