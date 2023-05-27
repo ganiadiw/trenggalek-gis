@@ -61,18 +61,18 @@ class CreateCategoryTest extends TestCase
 
     public function test_super_admin_can_create_category_with_icon_marker()
     {
-        $data = array_merge($this->data, [
+        $this->data = array_merge($this->data, [
             'color' => 'green',
             'svg_name' => 'apple-whole',
         ]);
 
-        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, $data);
+        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, $this->data);
 
         $response->assertValid(['name', 'color', 'svg_name']);
         $response->assertRedirect(self::MAIN_URL);
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('categories', $data);
+        $this->assertDatabaseHas('categories', $this->data);
     }
 
     public function test_webgis_admin_cannot_create_category()

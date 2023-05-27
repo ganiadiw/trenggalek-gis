@@ -95,9 +95,9 @@ class CreateSubDistrictTest extends TestCase
 
     public function test_super_admin_can_create_sub_district_with_upload_geojson_file()
     {
-        $data = array_merge($this->data, ['geojson' => UploadedFile::fake()->create('3503010.geojson', 25, 'application/json')]);
+        $dataWithGeojsonFile = array_merge($this->data, ['geojson' => UploadedFile::fake()->create('3503010.geojson', 25, 'application/json')]);
 
-        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, $data);
+        $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, $dataWithGeojsonFile);
 
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
         $response->assertRedirect(self::MAIN_URL);

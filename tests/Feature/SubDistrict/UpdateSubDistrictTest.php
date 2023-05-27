@@ -65,6 +65,8 @@ class UpdateSubDistrictTest extends TestCase
 
     private $oldData;
 
+    private $updatedSubDistrict;
+
     const GEOJSON_PATH = 'public/geojson/';
 
     protected function setUp(): void
@@ -120,19 +122,19 @@ class UpdateSubDistrictTest extends TestCase
 
     public function test_super_admin_can_update_sub_district_with_upload_geojson_file()
     {
-        $data = array_merge($this->data, ['geojson' => UploadedFile::fake()->create('3503030.geojson', 25, 'application/json')]);
+        $dataWithGeojsonFile = array_merge($this->data, ['geojson' => UploadedFile::fake()->create('3503030.geojson', 25, 'application/json')]);
 
-        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->subDistrict->code, $data);
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->subDistrict->code, $dataWithGeojsonFile);
 
         $response->assertValid(['code', 'name', 'latitude', 'longitude', 'fill_color', 'geojson', 'geojson_text_area']);
         $response->assertRedirect(self::MAIN_URL . '3503030/edit');
         $response->assertSessionHasNoErrors();
 
-        $subDistrict = SubDistrict::where('code', 3503030)->first();
+        $this->updatedSubDistrict = SubDistrict::where('code', 3503030)->first();
 
-        $this->assertTrue(Storage::exists(self::GEOJSON_PATH . $subDistrict->geojson_name));
+        $this->assertTrue(Storage::exists(self::GEOJSON_PATH . $this->updatedSubDistrict->geojson_name));
         $this->assertFalse(Storage::exists(self::GEOJSON_PATH . $this->subDistrict->geojson_name));
-        $this->assertDatabaseHas('sub_districts', array_merge($this->data, ['geojson_name' => $subDistrict->geojson_name]));
+        $this->assertDatabaseHas('sub_districts', array_merge($this->data, ['geojson_name' => $this->updatedSubDistrict->geojson_name]));
         $this->assertDatabaseMissing('sub_districts', $this->oldData);
     }
 
@@ -144,11 +146,11 @@ class UpdateSubDistrictTest extends TestCase
         $response->assertRedirect(self::MAIN_URL . '3503030/edit');
         $response->assertSessionHasNoErrors();
 
-        $subDistrict = SubDistrict::where('code', 3503030)->first();
+        $this->updatedSubDistrict = SubDistrict::where('code', 3503030)->first();
 
-        $this->assertDatabaseHas('sub_districts', array_merge($this->data, ['geojson_name' => $subDistrict->geojson_name]));
+        $this->assertDatabaseHas('sub_districts', array_merge($this->data, ['geojson_name' => $this->updatedSubDistrict->geojson_name]));
         $this->assertDatabaseMissing('sub_districts', $this->oldData);
-        $this->assertTrue(Storage::exists(self::GEOJSON_PATH . $subDistrict->geojson_name));
+        $this->assertTrue(Storage::exists(self::GEOJSON_PATH . $this->updatedSubDistrict->geojson_name));
         $this->assertFalse(Storage::exists(self::GEOJSON_PATH . $this->subDistrict->geojson_name));
     }
 

@@ -69,18 +69,18 @@ class UpdateCategoryTest extends TestCase
 
     public function test_super_admin_can_update_category_with_icon_marker()
     {
-        $data = array_merge($this->data, [
+        $this->data = array_merge($this->data, [
             'color' => 'green',
             'svg_name' => 'apple-whole',
         ]);
 
-        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->category->slug, $data);
+        $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->category->slug, $this->data);
 
         $response->assertValid(['name', 'color', 'svg_name']);
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('categories', $data);
+        $this->assertDatabaseHas('categories', $this->data);
         $this->assertDatabaseMissing('categories', [
             'name' => $this->category->name,
         ]);

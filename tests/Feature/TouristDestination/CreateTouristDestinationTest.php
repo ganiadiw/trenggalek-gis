@@ -21,6 +21,12 @@ class CreateTouristDestinationTest extends TestCase
 
     const TMP_IMAGE_PATH = 'public/tmp/media/images';
 
+    const IMAGE1 = 'image1678273485413.png';
+
+    const IMAGE2 = 'image1678273485552.png';
+
+    const ATTRACTION_IMAGE_PATH = 'public/tourist-attractions/';
+
     private User $user;
 
     private Category $category;
@@ -111,8 +117,8 @@ class CreateTouristDestinationTest extends TestCase
         $touristDestinations = TouristDestination::with('TouristAttractions')->first();
 
         $this->assertTrue(Storage::exists(self::COVER_IMAGE_PATH . $touristDestinations->cover_image_name));
-        $this->assertTrue(Storage::exists('public/tourist-attractions/' . $touristDestinations->touristAttractions[0]->image_name));
-        $this->assertTrue(Storage::exists('public/tourist-attractions/' . $touristDestinations->touristAttractions[1]->image_name));
+        $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . $touristDestinations->touristAttractions[0]->image_name));
+        $this->assertTrue(Storage::exists(self::ATTRACTION_IMAGE_PATH . $touristDestinations->touristAttractions[1]->image_name));
         $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
         $this->assertDatabaseHas('tourist_attractions', [
             'id' => $touristDestinations->id,
@@ -138,19 +144,19 @@ class CreateTouristDestinationTest extends TestCase
     public function test_authenticated_user_can_create_tourist_destination_with_image_in_description_editor()
     {
         $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
-            'image' => UploadedFile::fake()->image('image1678273485413.png'),
+            'image' => UploadedFile::fake()->image(self::IMAGE1),
         ]);
         $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
-            'image' => UploadedFile::fake()->image('image1678273485552.png'),
+            'image' => UploadedFile::fake()->image(self::IMAGE2),
         ]);
 
         $this->assertDatabaseHas('temporary_files', [
             'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => 'image1678273485413.png',
+            'filename' => self::IMAGE1,
         ]);
         $this->assertDatabaseHas('temporary_files', [
             'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => 'image1678273485552.png',
+            'filename' => self::IMAGE2,
         ]);
         $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485413.png'));
         $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485552.png'));
@@ -160,10 +166,10 @@ class CreateTouristDestinationTest extends TestCase
             'media_files' => json_encode([
                 'used_images' => [
                     [
-                        'filename' => 'image1678273485413.png',
+                        'filename' => self::IMAGE1,
                     ],
                     [
-                        'filename' => 'image1678273485552.png',
+                        'filename' => self::IMAGE2,
                     ],
                 ],
                 'unused_images' => null,
@@ -187,15 +193,15 @@ class CreateTouristDestinationTest extends TestCase
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485413.png',
+            'file_name' => self::IMAGE1,
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => 'image1678273485413.png',
+            'filename' => self::IMAGE1,
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => 'image1678273485552.png',
+            'filename' => self::IMAGE2,
         ]);
         $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485413.png'));
         $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485552.png'));
@@ -204,19 +210,19 @@ class CreateTouristDestinationTest extends TestCase
     public function test_authenticated_user_can_create_tourist_destination_with_deleted_image_in_description_editor()
     {
         $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
-            'image' => UploadedFile::fake()->image('image1678273485413.png'),
+            'image' => UploadedFile::fake()->image(self::IMAGE1),
         ]);
         $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
-            'image' => UploadedFile::fake()->image('image1678273485552.png'),
+            'image' => UploadedFile::fake()->image(self::IMAGE2),
         ]);
 
         $this->assertDatabaseHas('temporary_files', [
             'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => 'image1678273485413.png',
+            'filename' => self::IMAGE1,
         ]);
         $this->assertDatabaseHas('temporary_files', [
             'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => 'image1678273485552.png',
+            'filename' => self::IMAGE2,
         ]);
         $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485413.png'));
         $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485552.png'));
@@ -226,12 +232,12 @@ class CreateTouristDestinationTest extends TestCase
             'media_files' => json_encode([
                 'used_images' => [
                     [
-                        'filename' => 'image1678273485413.png',
+                        'filename' => self::IMAGE1,
                     ],
                 ],
                 'unused_images' => [
                     [
-                        'filename' => 'image1678273485552.png',
+                        'filename' => self::IMAGE2,
                     ],
                 ],
             ]),
@@ -253,15 +259,15 @@ class CreateTouristDestinationTest extends TestCase
         $this->assertDatabaseHas('media', [
             'model_id' => $tourisDestination->id,
             'collection_name' => 'tourist-destinations',
-            'file_name' => 'image1678273485413.png',
+            'file_name' => self::IMAGE1,
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => 'image1678273485413.png',
+            'filename' => self::IMAGE1,
         ]);
         $this->assertDatabaseMissing('temporary_files', [
             'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => 'image1678273485552.png',
+            'filename' => self::IMAGE2,
         ]);
         $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485413.png'));
         $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/image1678273485552.png'));
