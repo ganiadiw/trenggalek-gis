@@ -143,23 +143,7 @@ class CreateTouristDestinationTest extends TestCase
 
     public function test_authenticated_user_can_create_tourist_destination_with_image_in_description_editor()
     {
-        $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
-            'image' => UploadedFile::fake()->image(self::IMAGE1),
-        ]);
-        $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
-            'image' => UploadedFile::fake()->image(self::IMAGE2),
-        ]);
-
-        $this->assertDatabaseHas('temporary_files', [
-            'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => self::IMAGE1,
-        ]);
-        $this->assertDatabaseHas('temporary_files', [
-            'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => self::IMAGE2,
-        ]);
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
+       $this->postImage();
 
         $description = [
             'description' => '<p>Pantai</p><img title="image1678273485413.png" src="../../storage/tmp/media/images/image1678273485413.png" alt=""><img title="image1678273485552.png" src="../../tmp/media/images/image1678273485552.png" alt="">',
@@ -179,53 +163,20 @@ class CreateTouristDestinationTest extends TestCase
         $response = $this->actingAs($this->user)->post(self::MAIN_URL, array_merge($this->data, $description));
 
         $response->assertValid();
-        $response->assertRedirect(self::MAIN_URL);
         $response->assertSessionHasNoErrors();
+        $response->assertRedirect(self::MAIN_URL);
 
-        $tourisDestination = TouristDestination::first();
         $dom = new DOMDocument();
+        $tourisDestination = TouristDestination::first();
         $dom->loadHTML($tourisDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $expectedDescription = '<p>Pantai<img title="image1678273485413.png" src="http://localhost:8000/storage/media/1/image1678273485413.png" alt=""><img title="image1678273485552.png" src="http://localhost:8000/storage/media/2/image1678273485552.png" alt=""></p>';
 
-        $this->assertEquals(trim($expectedDescription), trim($dom->saveHTML()));
-        $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
-        // Use Spatie Media Libary Package
-        $this->assertDatabaseHas('media', [
-            'model_id' => $tourisDestination->id,
-            'collection_name' => 'tourist-destinations',
-            'file_name' => self::IMAGE1,
-        ]);
-        $this->assertDatabaseMissing('temporary_files', [
-            'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => self::IMAGE1,
-        ]);
-        $this->assertDatabaseMissing('temporary_files', [
-            'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => self::IMAGE2,
-        ]);
-        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
-        $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
+        $this->assertValue($expectedDescription, $dom, $tourisDestination);
     }
 
     public function test_authenticated_user_can_create_tourist_destination_with_deleted_image_in_description_editor()
     {
-        $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
-            'image' => UploadedFile::fake()->image(self::IMAGE1),
-        ]);
-        $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
-            'image' => UploadedFile::fake()->image(self::IMAGE2),
-        ]);
-
-        $this->assertDatabaseHas('temporary_files', [
-            'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => self::IMAGE1,
-        ]);
-        $this->assertDatabaseHas('temporary_files', [
-            'foldername' => self::TMP_IMAGE_PATH,
-            'filename' => self::IMAGE2,
-        ]);
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
-        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
+        $this->postImage();
 
         $description = [
             'description' => '<p>Pantai</p><img title="image1678273485413.png" src="../../storage/tmp/media/images/image1678273485413.png" alt="">',
@@ -253,6 +204,41 @@ class CreateTouristDestinationTest extends TestCase
         $dom->loadHTML($tourisDestination->description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $expectedDescription = '<p>Pantai<img title="image1678273485413.png" src="http://localhost:8000/storage/media/1/image1678273485413.png" alt=""></p>';
 
+        $this->assertValue($expectedDescription, $dom, $tourisDestination);
+    }
+
+    public function test_guest_cannot_create_tourist_destination()
+    {
+        $response = $this->post(self::MAIN_URL, $this->data);
+
+        $response->assertRedirect('/login');
+
+        $this->assertGuest();
+    }
+
+    private function postImage()
+    {
+        $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
+            'image' => UploadedFile::fake()->image(self::IMAGE1),
+        ]);
+        $this->actingAs($this->user)->postJson(self::IMAGE_UPLOAD_URL, [
+            'image' => UploadedFile::fake()->image(self::IMAGE2),
+        ]);
+
+        $this->assertDatabaseHas('temporary_files', [
+            'foldername' => self::TMP_IMAGE_PATH,
+            'filename' => self::IMAGE1,
+        ]);
+        $this->assertDatabaseHas('temporary_files', [
+            'foldername' => self::TMP_IMAGE_PATH,
+            'filename' => self::IMAGE2,
+        ]);
+        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
+        $this->assertTrue(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
+    }
+
+    private function assertValue($expectedDescription, $dom, $tourisDestination)
+    {
         $this->assertEquals(trim($expectedDescription), trim($dom->saveHTML()));
         $this->assertDatabaseHas('tourist_destinations', $this->dataToCheck);
         // Use Spatie Media Libary Package
@@ -271,14 +257,5 @@ class CreateTouristDestinationTest extends TestCase
         ]);
         $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE1));
         $this->assertFalse(Storage::exists(self::TMP_IMAGE_PATH . '/' . self::IMAGE2));
-    }
-
-    public function test_guest_cannot_create_tourist_destination()
-    {
-        $response = $this->post(self::MAIN_URL, $this->data);
-
-        $response->assertRedirect('/login');
-
-        $this->assertGuest();
     }
 }
