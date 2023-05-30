@@ -67,7 +67,7 @@ class ProfileTest extends TestCase
 
         $this->assertTrue(Storage::exists(self::AVATAR_PATH . $this->user->avatar_name));
         $this->assertDatabaseHas('users', $this->data);
-        $this->assertDatabaseMissing('users', array($this->user));
+        $this->assertDatabaseMissing('users', [$this->user]);
     }
 
     public function test_profile_information_can_be_updated_with_change_avatar_and_remove_old_file()
@@ -83,7 +83,7 @@ class ProfileTest extends TestCase
         $this->assertFalse(Storage::exists(self::AVATAR_PATH . $this->avatar));
         $this->assertTrue(Storage::exists(self::AVATAR_PATH . $avatar2->hashName()));
         $this->assertDatabaseHas('users', array_merge($this->data, ['avatar_name' => $avatar2->hashName()]));
-        $this->assertDatabaseMissing('users', array($this->user));
+        $this->assertDatabaseMissing('users', [$this->user]);
     }
 
     public function test_password_can_be_updated()
@@ -100,6 +100,6 @@ class ProfileTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('users', $this->data);
-        $this->assertDatabaseMissing('users', array($this->user));
+        $this->assertDatabaseMissing('users', [$this->user]);
     }
 }

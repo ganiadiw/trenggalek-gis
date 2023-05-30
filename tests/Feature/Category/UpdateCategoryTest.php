@@ -17,7 +17,7 @@ class UpdateCategoryTest extends TestCase
     const MAIN_URL = '/dashboard/categories/';
 
     private $data = [
-        'name' => 'Wisata Pantai Pesisir'
+        'name' => 'Wisata Pantai Pesisir',
     ];
 
     public function setUp(): void

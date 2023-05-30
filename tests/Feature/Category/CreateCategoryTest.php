@@ -14,7 +14,7 @@ class CreateCategoryTest extends TestCase
     const MAIN_URL = '/dashboard/categories/';
 
     private $data = [
-        'name' => 'Wisata Pertanian'
+        'name' => 'Wisata Pertanian',
     ];
 
     public function setUp(): void
