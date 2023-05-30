@@ -128,7 +128,7 @@
                     </div>
                     <div>
                         <div class="w-full mt-6">
-                            <article class="w-full mt-6 prose text-justify text-gray-800 max-w-none">
+                            <article class="w-full mt-6 prose text-gray-800 max-w-none">
                                 {!! $touristDestination->description !!}
                             </article>
                         </div>
