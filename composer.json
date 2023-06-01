@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.8.1",
         "laravolt/avatar": "^4.1.7",
         "mews/purifier": "^3.4",
+        "propaganistas/laravel-disposable-email": "^2.2",
         "spatie/laravel-medialibrary": "^10.7.12",
         "yoeunes/toastr": "^2.3"
     },
