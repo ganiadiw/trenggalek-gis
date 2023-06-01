@@ -66,6 +66,7 @@ return [
     'image' => ':Attribute harus berupa gambar.',
     'in' => ':Attribute yang dipilih tidak valid.',
     'in_array' => ':Attribute tidak ada di dalam :other.',
+    'indisposable' => 'Domain email tidak valid, alamat email sekali pakai tidak diperbolehkan',
     'integer' => ':Attribute harus berupa bilangan bulat.',
     'ip' => ':Attribute harus berupa alamat IP yang valid.',
     'ipv4' => ':Attribute harus berupa alamat IPv4 yang valid.',
