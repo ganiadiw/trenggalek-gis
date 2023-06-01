@@ -22,7 +22,7 @@ class UpdateWebgisAdministratorTest extends TestCase
 
     private $data1 = [
         'name' => 'Hugo First Time',
-        'email' => 'hugofirsttime@example.com',
+        'email' => 'hugofirsttime@gmail.com',
         'username' => 'hugofirsttime',
         'address' => 'Desa Sumberbening, Kecamatan Dongko',
         'phone_number' => '081234567890',
@@ -33,7 +33,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         'username' => 'johndoe_mic',
         'address' => 'Desa Sumberbening, Kecamatan Dongko',
         'phone_number' => '081234567890',
-        'email' => 'michaeljohndoe@example.com',
+        'email' => 'michaeljohndoe@gmail.com',
     ];
 
     protected function setUp(): void
@@ -49,7 +49,7 @@ class UpdateWebgisAdministratorTest extends TestCase
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'avatar_path' => self::AVATAR_PATH . $avatar1,
             'avatar_name' => $avatar1,
             'is_admin' => 0,
@@ -57,7 +57,7 @@ class UpdateWebgisAdministratorTest extends TestCase
 
         $this->webgisAdmin2 = User::factory()->create([
             'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
+            'email' => 'johndoe@gmail.com',
             'username' => 'johndoe',
             'avatar_path' => self::AVATAR_PATH . $avatar2,
             'avatar_name' => $avatar2,
@@ -98,11 +98,11 @@ class UpdateWebgisAdministratorTest extends TestCase
 
         $this->assertTrue(Storage::exists(self::AVATAR_PATH . $this->webgisAdmin1->avatar_name));
         $this->assertDatabaseHas('users', [
-            'email' => 'hugofirsttime@example.com',
+            'email' => 'hugofirsttime@gmail.com',
             'username' => 'hugofirsttime',
         ]);
         $this->assertDatabaseMissing('users', [
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'username' => 'hugofirst',
         ]);
     }
@@ -121,12 +121,12 @@ class UpdateWebgisAdministratorTest extends TestCase
         $this->assertFalse(Storage::exists(self::AVATAR_PATH . $this->webgisAdmin1->avatar_name));
         $this->assertTrue(Storage::exists(self::AVATAR_PATH . $avatar->hashName()));
         $this->assertDatabaseHas('users', [
-            'email' => 'hugofirsttime@example.com',
+            'email' => 'hugofirsttime@gmail.com',
             'username' => 'hugofirsttime',
             'avatar_name' => $avatar->hashName(),
         ]);
         $this->assertDatabaseMissing('users', [
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'username' => 'hugofirst',
         ]);
     }

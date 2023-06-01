@@ -22,7 +22,7 @@ class PasswordUpdateTest extends TestCase
         $this->webgisAdmin = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'is_admin' => 0,
         ]);
 
@@ -46,7 +46,7 @@ class PasswordUpdateTest extends TestCase
     {
         $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->webgisAdmin->username, [
             'name' => 'Hugo First Time',
-            'email' => 'hugofirsttime@example.com',
+            'email' => 'hugofirsttime@gmail.com',
             'username' => 'hugofirsttime',
             'address' => 'Desa Sumberbening, Kecamatan Dongko',
             'phone_number' => '081234567890',
@@ -59,11 +59,11 @@ class PasswordUpdateTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('users', [
-            'email' => 'hugofirsttime@example.com',
+            'email' => 'hugofirsttime@gmail.com',
             'username' => 'hugofirsttime',
         ]);
         $this->assertDatabaseMissing('users', [
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'username' => 'hugofirst',
         ]);
     }

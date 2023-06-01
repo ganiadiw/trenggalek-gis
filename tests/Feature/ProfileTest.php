@@ -22,7 +22,7 @@ class ProfileTest extends TestCase
 
     private $data = [
         'name' => 'Hugo First Time',
-        'email' => 'hugofirsttime@example.com',
+        'email' => 'hugofirsttime@gmail.com',
         'username' => 'hugofirsttime',
         'address' => 'Desa Sumberbening, Kecamatan Dongko',
         'phone_number' => '081234567890',

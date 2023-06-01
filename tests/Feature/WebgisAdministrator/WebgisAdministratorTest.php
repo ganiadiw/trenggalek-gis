@@ -22,7 +22,7 @@ class WebgisAdministratorTest extends TestCase
         $this->webgisAdmin = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'is_admin' => 0,
         ]);
 
@@ -84,7 +84,7 @@ class WebgisAdministratorTest extends TestCase
         $this->assertEquals('hugofirst', $this->webgisAdmin->username);
         $this->assertEquals('Desa Gayam, Kecamatan Panggul', $this->webgisAdmin->address);
         $this->assertEquals('081234567890', $this->webgisAdmin->phone_number);
-        $this->assertEquals('hugofirst@example.com', $this->webgisAdmin->email);
+        $this->assertEquals('hugofirst@gmail.com', $this->webgisAdmin->email);
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
     }
 

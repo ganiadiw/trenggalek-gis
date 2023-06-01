@@ -33,7 +33,7 @@ class DeleteWebgisAdministratorTest extends TestCase
         $this->webgisAdmin1 = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'avatar_path' => self::AVATAR_PATH . $avatar1,
             'avatar_name' => $avatar1,
             'is_admin' => 0,
@@ -41,7 +41,7 @@ class DeleteWebgisAdministratorTest extends TestCase
 
         $this->webgisAdmin2 = User::factory()->create([
             'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
+            'email' => 'johndoe@gmail.com',
             'username' => 'johndoe',
             'avatar_path' => self::AVATAR_PATH . $avatar2,
             'avatar_name' => $avatar2,
@@ -62,7 +62,7 @@ class DeleteWebgisAdministratorTest extends TestCase
 
         $this->assertFalse(Storage::exists(self::AVATAR_PATH . $this->webgisAdmin2->avatar_name));
         $this->assertDatabaseMissing('users', [
-            'email' => 'johndoe@example.com',
+            'email' => 'johndoe@gmail.com',
         ]);
     }
 

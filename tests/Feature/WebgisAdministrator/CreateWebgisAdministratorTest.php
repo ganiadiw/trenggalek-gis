@@ -15,7 +15,7 @@ class CreateWebgisAdministratorTest extends TestCase
 
     private $data = [
         'name' => 'Lois Di Nominator',
-        'email' => 'loisdinominator@example.com',
+        'email' => 'loisdinominator@gmail.com',
         'username' => 'loisdinominator',
         'address' => 'Desa Cakul, Kecamatan Dongko',
         'phone_number' => '081234567890',
@@ -31,7 +31,7 @@ class CreateWebgisAdministratorTest extends TestCase
         $this->webgisAdmin = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'is_admin' => 0,
         ]);
 
@@ -64,7 +64,7 @@ class CreateWebgisAdministratorTest extends TestCase
         $response->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('users', [
-            'email' => 'loisdinominator@example.com',
+            'email' => 'loisdinominator@gmail.com',
             'username' => 'loisdinominator',
         ]);
     }

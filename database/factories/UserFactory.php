@@ -20,7 +20,7 @@ class UserFactory extends Factory
         return [
             'name' => 'Gani Adi Wiranata',
             'username' => 'ganiadiw',
-            'email' => 'ganiadiw@example.com',
+            'email' => 'ganiadwata@gmail.com',
             'address' => 'Desa Gayam, Kecamatan Panggul',
             'phone_number' => '081234567890',
             'email_verified_at' => now(),

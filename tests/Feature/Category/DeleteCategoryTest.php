@@ -24,7 +24,7 @@ class DeleteCategoryTest extends TestCase
         $this->webgisAdmin = User::factory()->create([
             'name' => 'Hugo First',
             'username' => 'hugofirst',
-            'email' => 'hugofirst@example.com',
+            'email' => 'hugofirst@gmail.com',
             'is_admin' => 0,
         ]);
         $this->category = Category::factory()->create();

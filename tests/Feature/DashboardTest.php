@@ -52,7 +52,7 @@ class DashboardTest extends TestCase
         $webgisAdmin = User::factory()->create([
             'name' => 'John Doe',
             'username' => 'johndoe',
-            'email' => 'johdoe@example.com',
+            'email' => 'johdoe@gmail.com',
             'is_admin' => 0,
         ]);
 
