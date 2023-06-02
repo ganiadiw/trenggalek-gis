@@ -27,8 +27,8 @@ class SubDistrictSeeder extends Seeder
             [
                 'code' => 3503020,
                 'name' => 'KECAMATAN MUNJUNGAN',
-                'latitude' => -8.24312247,
-                'longitude' => 111.45431483,
+                'latitude' => -8.30553772,
+                'longitude' => 111.57139241,
                 'geojson_path' => 'public/geojson/lkdYD-3503020.geojson',
                 'geojson_name' => 'lkdYD-3503020.geojson',
                 'fill_color' => '#609B61',
