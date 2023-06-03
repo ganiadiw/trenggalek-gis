@@ -2,7 +2,7 @@
     <div class="flex space-x-8">
         <div class="flex items-center -mt-2 w-28">
             @if (isset($guestPageSetting->value[$i]) &&
-                    Storage::exists('public/page-settings/' . $guestPageSetting->key . '/' . $guestPageSetting->value[$i]))
+                    Storage::exists('page-settings/' . $guestPageSetting->key . '/' . $guestPageSetting->value[$i]))
                 <img class="object-cover rounded-md"
                     src="{{ asset('storage/page-settings/' . $guestPageSetting->key . '/' . $guestPageSetting->value[$i]) }}"
                     alt="{{ $guestPageSetting->value[$i] }}">

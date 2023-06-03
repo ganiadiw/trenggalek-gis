@@ -18,14 +18,14 @@ class DeleteTouristDestinationTest extends TestCase
 
     const MAIN_URL = '/dashboard/tourist-destinations/';
 
-    const COVER_IMAGE_PATH = 'public/cover-images/';
+    const COVER_IMAGE_PATH = 'cover-images/';
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $image = UploadedFile::fake()->image('pantai-konang.jpg')->hashName();
-        Storage::disk('local')->put(self::COVER_IMAGE_PATH . $image, '');
+        Storage::put(self::COVER_IMAGE_PATH . $image, '');
 
         $this->user = User::factory()->create();
         Category::factory()->create();

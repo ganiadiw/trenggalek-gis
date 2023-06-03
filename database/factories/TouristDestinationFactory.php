@@ -28,7 +28,7 @@ class TouristDestinationFactory extends Factory
             'transportation_access' => 'Bisa diakses dengan bus, mobil, dan sepeda motor',
             'facility' => 'MCK, Mushola, Lahan Parkir',
             'cover_image_name' => 'image.jpg',
-            'cover_image_path' => '/storage/app/public/images/cover_image/image.jpg',
+            'cover_image_path' => '/cover_images/image.jpg',
             'latitude' => -8.27466803,
             'longitude' => 111.45297354,
         ];

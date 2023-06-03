@@ -66,7 +66,7 @@ class TouristDestinationController extends Controller
         if ($request->file('cover_image')) {
             $coverImage = $validated['cover_image'];
             $validated['cover_image_name'] = $coverImage->hashName();
-            $validated['cover_image_path'] = $coverImage->storeAs('public/cover-images', $validated['cover_image_name']);
+            $validated['cover_image_path'] = $coverImage->storeAs('cover-images', $validated['cover_image_name']);
         }
 
         $touristDestination = TouristDestination::create($validated);
@@ -83,7 +83,7 @@ class TouristDestinationController extends Controller
 
             foreach ($media->used_images as $item) {
                 $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
-                $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
+                $newImageSource = $touristDestination->addMedia(storage_path('app/public/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
                     ->toMediaCollection('tourist-destinations');
                 $temporaryFile->delete();
                 array_push($newImageSources, $newImageSource->getUrl());
@@ -145,7 +145,7 @@ class TouristDestinationController extends Controller
         if ($request->file('cover_image')) {
             $coverImage = $validated['cover_image'];
             $validated['cover_image_name'] = $coverImage->hashName();
-            $validated['cover_image_path'] = $coverImage->storeAs('public/cover-images', $validated['cover_image_name']);
+            $validated['cover_image_path'] = $coverImage->storeAs('cover-images', $validated['cover_image_name']);
 
             Storage::delete($touristDestination->cover_image_path);
         }
@@ -202,7 +202,7 @@ class TouristDestinationController extends Controller
 
             if (! $mediaLibrary) {
                 $temporaryFile = TemporaryFile::where('filename', $item->filename)->first();
-                $newImageSource = $touristDestination->addMedia(storage_path('app/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
+                $newImageSource = $touristDestination->addMedia(storage_path('app/public/' . $temporaryFile->foldername . '/' . $temporaryFile->filename))
                     ->toMediaCollection('tourist-destinations');
                 $temporaryFile->delete();
                 array_push($newImageSources, $newImageSource->getUrl());
@@ -258,7 +258,7 @@ class TouristDestinationController extends Controller
             if ($value != null) {
                 $tourisAttractionImage = $touristAttractionImages[$key];
                 $tourisAttractionImageName = str()->random(5) . '-' . $tourisAttractionImage->getClientOriginalName();
-                $tourisAttractionImagePath = $tourisAttractionImage->storeAs('public/tourist-attractions', $tourisAttractionImageName);
+                $tourisAttractionImagePath = $tourisAttractionImage->storeAs('tourist-attractions', $tourisAttractionImageName);
 
                 TouristAttraction::create([
                     'tourist_destination_id' => $touristDestination->id,

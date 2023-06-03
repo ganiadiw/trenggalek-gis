@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class GuestPageSettingController extends Controller
 {
-    const PAGE_SETTING_PATH = 'public/page-settings/';
+    const PAGE_SETTING_PATH = 'page-settings/';
 
     public function index()
     {

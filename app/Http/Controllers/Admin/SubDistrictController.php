@@ -14,8 +14,6 @@ use Illuminate\Support\Str;
 
 class SubDistrictController extends Controller
 {
-    const GEOJSON_PATH = 'public/geojson/';
-
     public function index(Request $request)
     {
         $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
@@ -50,11 +48,11 @@ class SubDistrictController extends Controller
         if ($request->file('geojson')) {
             $geojson = $validated['geojson'];
             $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
-            $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
+            $validated['geojson_path'] = $geojson->storeAs('geojson', $validated['geojson_name']);
         } else {
             $validated['geojson_name'] = Str::random(5) . '-' . $validated['code'] . '.geojson';
-            Storage::put(self::GEOJSON_PATH . $validated['geojson_name'], $request->geojson_text_area);
-            $validated['geojson_path'] = self::GEOJSON_PATH . $validated['geojson_name'];
+            Storage::put('geojson/' . $validated['geojson_name'], $request->geojson_text_area);
+            $validated['geojson_path'] = 'geojson/' . $validated['geojson_name'];
         }
 
         SubDistrict::create($validated);
@@ -87,7 +85,7 @@ class SubDistrictController extends Controller
         if ($request->file('geojson')) {
             $geojson = $validated['geojson'];
             $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
-            $validated['geojson_path'] = $geojson->storeAs('public/geojson', $validated['geojson_name']);
+            $validated['geojson_path'] = $geojson->storeAs('geojson', $validated['geojson_name']);
 
             if ($subDistrict->geojson_path != null) {
                 Storage::delete($subDistrict->geojson_path);
@@ -95,8 +93,8 @@ class SubDistrictController extends Controller
         }
         if ($request->geojson_text_area != null) {
             $validated['geojson_name'] = Str::random(5) . '-' . $validated['code'] . '.geojson';
-            Storage::put(self::GEOJSON_PATH . $validated['geojson_name'], $request->geojson_text_area);
-            $validated['geojson_path'] = self::GEOJSON_PATH . $validated['geojson_name'];
+            Storage::put('geojson/' . $validated['geojson_name'], $request->geojson_text_area);
+            $validated['geojson_path'] = 'geojson/' . $validated['geojson_name'];
 
             if ($subDistrict->geojson_path != null) {
                 Storage::delete($subDistrict->geojson_path);

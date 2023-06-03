@@ -18,9 +18,9 @@ class ImageTest extends TestCase
 
     const MAIN_URL = '/dashboard/images';
 
-    const TMP_IMAGE_PUBLIC_PATH = 'public/tmp/media/images';
+    const TMP_IMAGE_PUBLIC_PATH = 'tmp/media/images';
 
-    const ATTRACTION_IMAGE_PATH = 'public/tourist-attractions';
+    const ATTRACTION_IMAGE_PATH = 'tourist-attractions';
 
     const IMAGE1 = 'image1678273485413.png';
 
@@ -41,7 +41,7 @@ class ImageTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson([
-            'location' => '/storage/tmp/media/images/' . self::IMAGE1,
+            'location' => 'http://localhost:8000/storage/tmp/media/images/' . self::IMAGE1,
             'filename' => self::IMAGE1,
         ]);
         $this->assertDatabaseHas('temporary_files', [
@@ -53,7 +53,7 @@ class ImageTest extends TestCase
 
     public function test_authenticated_user_can_delete_a_temporary_image()
     {
-        Storage::disk('local')->put(self::TMP_IMAGE_PUBLIC_PATH . '/' . self::IMAGE1, '');
+        Storage::put(self::TMP_IMAGE_PUBLIC_PATH . '/' . self::IMAGE1, '');
         TemporaryFile::create([
             'foldername' => self::TMP_IMAGE_PUBLIC_PATH,
             'filename' => self::IMAGE1,
@@ -77,7 +77,7 @@ class ImageTest extends TestCase
         SubDistrict::factory()->create();
         Category::factory()->create();
         TouristDestination::factory()->create();
-        Storage::disk('local')->put(self::ATTRACTION_IMAGE_PATH . '/' . self::IMAGE2, '');
+        Storage::put(self::ATTRACTION_IMAGE_PATH . '/' . self::IMAGE2, '');
         $touristAttraction = TouristAttraction::create([
             'tourist_destination_id' => TouristDestination::first()->id,
             'name' => 'Tourist Attraction Name',
