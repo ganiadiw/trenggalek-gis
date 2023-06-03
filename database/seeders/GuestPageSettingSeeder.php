@@ -47,7 +47,7 @@ class GuestPageSettingSeeder extends Seeder
             ],
             [
                 'key' => 'about_page',
-                'value' => json_encode(['<p>Merupakan sistem informasi yang memberikan informasi tentang persebaran destinasi wisata yang ada di Kabupaten Trenggalek. Bertujuan sebagai sarana promosi wisata dan mempermudah akses informasi kepada wisatawan yang ingin berwisata di Kabupaten Trenggalek.</p>']),
+                'value' => json_encode(['<div>Merupakan sistem informasi yang memberikan informasi tentang persebaran destinasi wisata yang ada di Kabupaten Trenggalek. Bertujuan sebagai sarana promosi wisata dan mempermudah akses informasi kepada wisatawan yang ingin berwisata di Kabupaten Trenggalek.</div>']),
                 'input_type' => 'textarea',
                 'max_value' => 1,
             ],
