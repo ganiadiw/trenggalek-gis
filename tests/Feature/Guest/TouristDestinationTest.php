@@ -13,14 +13,14 @@ class TouristDestinationTest extends TestCase
 {
     private TouristDestination $touristDestination;
 
-    const COVER_IMAGE_PATH = 'public/cover-images/';
+    const COVER_IMAGE_PATH = 'cover-images/';
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $image = UploadedFile::fake()->image('pantai-konang.jpg')->hashName();
-        Storage::disk('local')->put(self::COVER_IMAGE_PATH . $image, '');
+        Storage::put(self::COVER_IMAGE_PATH . $image, '');
 
         Category::factory()->create();
         SubDistrict::factory()->create();

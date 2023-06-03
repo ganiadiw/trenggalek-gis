@@ -18,7 +18,7 @@ class ProfileTest extends TestCase
 
     const MAIN_URL = '/profile';
 
-    const AVATAR_PATH = 'public/avatars/';
+    const AVATAR_PATH = 'avatars/';
 
     private $data = [
         'name' => 'Hugo First Time',
@@ -34,7 +34,7 @@ class ProfileTest extends TestCase
 
         $this->avatar = UploadedFile::fake()->image('avatar1.png')->hashName();
 
-        Storage::disk('local')->put(self::AVATAR_PATH . $this->avatar, '');
+        Storage::put(self::AVATAR_PATH . $this->avatar, '');
 
         $this->user = User::factory()->create([
             'avatar_path' => self::AVATAR_PATH . $this->avatar,

@@ -21,7 +21,7 @@ class DeleteSubDistrictTest extends TestCase
 
     const MAIN_URL = '/dashboard/sub-districts/';
 
-    const GEOJSON_PATH = 'public/geojson/';
+    const GEOJSON_PATH = 'geojson/';
 
     protected function setUp(): void
     {

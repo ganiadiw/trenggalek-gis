@@ -19,11 +19,11 @@ class UpdateTouristDestinationTest extends TestCase
 
     const IMAGE_UPLOAD_URL = '/dashboard/images';
 
-    const COVER_IMAGE_PATH = 'public/cover-images/';
+    const COVER_IMAGE_PATH = 'cover-images/';
 
-    const TMP_IMAGE_PATH = 'public/tmp/media/images';
+    const TMP_IMAGE_PATH = 'tmp/media/images';
 
-    const ATTRACTION_IMAGE_PATH = 'public/tourist-attractions/';
+    const ATTRACTION_IMAGE_PATH = 'tourist-attractions/';
 
     private User $user;
 
@@ -46,7 +46,7 @@ class UpdateTouristDestinationTest extends TestCase
         parent::setUp();
 
         $image = UploadedFile::fake()->image('pantai-konang.jpg')->hashName();
-        Storage::disk('local')->put(self::COVER_IMAGE_PATH . $image, '');
+        Storage::put(self::COVER_IMAGE_PATH . $image, '');
 
         $this->user = User::factory()->create();
         Category::factory()->create();
@@ -92,8 +92,8 @@ class UpdateTouristDestinationTest extends TestCase
             'longitude' => 111.45297354,
         ];
 
-        Storage::disk('local')->put(self::ATTRACTION_IMAGE_PATH . 'attraction-1.jpg', '');
-        Storage::disk('local')->put(self::ATTRACTION_IMAGE_PATH . 'attraction-2.jpg', '');
+        Storage::put(self::ATTRACTION_IMAGE_PATH . 'attraction-1.jpg', '');
+        Storage::put(self::ATTRACTION_IMAGE_PATH . 'attraction-2.jpg', '');
 
         $this->touristAttraction1 = [
             'tourist_destination_id' => 1,
@@ -170,8 +170,8 @@ class UpdateTouristDestinationTest extends TestCase
         $this->touristDestination->addMedia($image1)->toMediaCollection('tourist-destinations');
         $this->touristDestination->addMedia($image2)->toMediaCollection('tourist-destinations');
 
-        $this->assertTrue(Storage::exists('public/media/1/image1678273485413.png'));
-        $this->assertTrue(Storage::exists('public/media/2/image1678273485552.png'));
+        $this->assertTrue(Storage::exists('media/1/image1678273485413.png'));
+        $this->assertTrue(Storage::exists('media/2/image1678273485552.png'));
 
         $description = [
             'description' => '<p>Pantai<img title="image1678273485413.png" src="http://localhost:8000/storage/media/1/image1678273485413.png" alt=""></p>',
@@ -214,7 +214,7 @@ class UpdateTouristDestinationTest extends TestCase
             'collection_name' => 'tourist-destinations',
             'file_name' => 'image1678273485552.png',
         ]);
-        $this->assertFalse(Storage::exists('public/media/2/image1678273485552.png'));
+        $this->assertFalse(Storage::exists('media/2/image1678273485552.png'));
     }
 
     public function test_authenticated_user_can_update_tourist_destination_with_add_new_image_in_description_editor()

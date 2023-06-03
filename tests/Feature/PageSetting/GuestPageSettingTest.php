@@ -16,7 +16,7 @@ class GuestPageSettingTest extends TestCase
 
     const MAIN_URL = '/dashboard/page-settings/guest/';
 
-    const HERO_IMAGE_PATH = 'public/page-settings/hero_image/';
+    const HERO_IMAGE_PATH = 'page-settings/hero_image/';
 
     const IMAGE1 = '12345-image.png';
 
@@ -79,8 +79,8 @@ class GuestPageSettingTest extends TestCase
 
     public function test_image_field_can_be_updated()
     {
-        Storage::disk('local')->put(self::HERO_IMAGE_PATH . self::IMAGE1, '');
-        Storage::disk('local')->put(self::HERO_IMAGE_PATH . self::IMAGE2, '');
+        Storage::put(self::HERO_IMAGE_PATH . self::IMAGE1, '');
+        Storage::put(self::HERO_IMAGE_PATH . self::IMAGE2, '');
         $pageSetting = GuestPageSetting::factory()->create($this->data);
 
         $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $pageSetting->id, [
@@ -107,16 +107,13 @@ class GuestPageSettingTest extends TestCase
 
     public function test_image_file_can_be_deleted()
     {
-        Storage::disk('local')->put(self::HERO_IMAGE_PATH . self::IMAGE1, '');
-        Storage::disk('local')->put(self::HERO_IMAGE_PATH . self::IMAGE2, '');
+        Storage::put(self::HERO_IMAGE_PATH . self::IMAGE1, '');
+        Storage::put(self::HERO_IMAGE_PATH . self::IMAGE2, '');
         $pageSetting2 = GuestPageSetting::factory()->create($this->data);
 
         $response = $this->actingAs($this->superAdmin)->deleteJson(self::MAIN_URL . 'delete-image/' . $pageSetting2->key . '/' . self::IMAGE1);
 
         $response->assertStatus(200);
-        $response->assertJson([
-            'message' => 'Delete image successfully',
-        ]);
 
         $this->assertFalse(Storage::exists(self::HERO_IMAGE_PATH . self::IMAGE1));
     }

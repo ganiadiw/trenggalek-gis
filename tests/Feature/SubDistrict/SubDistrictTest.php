@@ -36,7 +36,7 @@ class SubDistrictTest extends TestCase
         ]);
         $this->subDistrict = SubDistrict::factory()->create([
             'geojson_name' => $geojsonName,
-            'geojson_path' => 'public/geojson/' . $geojsonName,
+            'geojson_path' => 'geojson/' . $geojsonName,
         ]);
 
         $this->assertEquals(1, $this->superAdmin->is_admin);

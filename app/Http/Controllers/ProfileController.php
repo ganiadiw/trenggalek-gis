@@ -36,7 +36,7 @@ class ProfileController extends Controller
         if ($request->file('avatar')) {
             $avatar = $validated['avatar'];
             $validated['avatar_name'] = $avatar->hashName();
-            $validated['avatar_path'] = $avatar->storeAs('public/avatars', $validated['avatar_name']);
+            $validated['avatar_path'] = $avatar->storeAs('avatars', $validated['avatar_name']);
 
             if ($user->avatar_path != null) {
                 Storage::delete($user->avatar_path);

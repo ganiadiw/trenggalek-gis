@@ -23,14 +23,14 @@ class TouristDestinationTest extends TestCase
         parent::setUp();
 
         $image = UploadedFile::fake()->image('pantai-konang.jpg')->hashName();
-        Storage::disk('local')->put('public/cover-images/' . $image, '');
+        Storage::put('cover-images/' . $image, '');
 
         $this->user = User::factory()->create();
         Category::factory()->create();
         SubDistrict::factory()->create();
         $this->touristDestination = TouristDestination::factory()->create([
             'cover_image_name' => $image,
-            'cover_image_path' => 'public/cover-images/' . $image,
+            'cover_image_path' => 'cover-images/' . $image,
         ]);
     }
 

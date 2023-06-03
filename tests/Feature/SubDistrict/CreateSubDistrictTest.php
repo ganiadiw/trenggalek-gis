@@ -56,7 +56,7 @@ class CreateSubDistrictTest extends TestCase
 
     private $data2;
 
-    const GEOJSON_PATH = 'public/geojson/';
+    const GEOJSON_PATH = 'geojson/';
 
     protected function setUp(): void
     {

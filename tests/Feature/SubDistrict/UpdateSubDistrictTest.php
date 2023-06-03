@@ -67,7 +67,7 @@ class UpdateSubDistrictTest extends TestCase
 
     private $updatedSubDistrict;
 
-    const GEOJSON_PATH = 'public/geojson/';
+    const GEOJSON_PATH = 'geojson/';
 
     protected function setUp(): void
     {
