@@ -18,7 +18,7 @@ class DeleteWebgisAdministratorTest extends TestCase
 
     const MAIN_URL = '/dashboard/users/';
 
-    const AVATAR_PATH = 'public/avatars/';
+    const AVATAR_PATH = 'avatars/';
 
     protected function setUp(): void
     {
@@ -26,8 +26,8 @@ class DeleteWebgisAdministratorTest extends TestCase
 
         $avatar1 = UploadedFile::fake()->image('avatar1.png')->hashName();
         $avatar2 = UploadedFile::fake()->image('avatar2.png')->hashName();
-        Storage::disk('local')->put(self::AVATAR_PATH . $avatar1, '');
-        Storage::disk('local')->put(self::AVATAR_PATH . $avatar2, '');
+        Storage::put(self::AVATAR_PATH . $avatar1, '');
+        Storage::put(self::AVATAR_PATH . $avatar2, '');
 
         $this->superAdmin = User::factory()->create();
         $this->webgisAdmin1 = User::factory()->create([

@@ -35,7 +35,7 @@
                     <div class="swiper mySwiper2">
                         <div class="rounded-lg swiper-wrapper">
                             @foreach ($heroImages->value as $key => $heroImage)
-                                @if ($heroImage && Storage::exists('public/page-settings/hero_image/' . $heroImage))
+                                @if ($heroImage && Storage::exists('page-settings/hero_image/' . $heroImage))
                                     <div class="swiper-slide">
                                         <img class="rounded-lg"
                                             src="{{ asset('storage/page-settings/hero_image/' . $heroImage) }}"
@@ -57,7 +57,7 @@
                     <div class="swiper mySwiper1">
                         <div class="rounded-lg swiper-wrapper">
                             @foreach ($heroImages->value as $key => $heroImage)
-                                @if ($heroImage && Storage::exists('public/page-settings/hero_image/' . $heroImage))
+                                @if ($heroImage && Storage::exists('page-settings/hero_image/' . $heroImage))
                                     <div class="swiper-slide">
                                         <img class="rounded-lg"
                                             src="{{ asset('storage/page-settings/hero_image/' . $heroImage) }}"

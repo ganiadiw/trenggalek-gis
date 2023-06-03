@@ -17,15 +17,15 @@ class CreateTouristDestinationTest extends TestCase
 
     const IMAGE_UPLOAD_URL = '/dashboard/images';
 
-    const COVER_IMAGE_PATH = 'public/cover-images/';
+    const COVER_IMAGE_PATH = 'cover-images/';
 
-    const TMP_IMAGE_PATH = 'public/tmp/media/images';
+    const TMP_IMAGE_PATH = 'tmp/media/images';
 
     const IMAGE1 = 'image1678273485413.png';
 
     const IMAGE2 = 'image1678273485552.png';
 
-    const ATTRACTION_IMAGE_PATH = 'public/tourist-attractions/';
+    const ATTRACTION_IMAGE_PATH = 'tourist-attractions/';
 
     private User $user;
 
@@ -42,7 +42,7 @@ class CreateTouristDestinationTest extends TestCase
         parent::setUp();
 
         $image = UploadedFile::fake()->image('pantai-pelang.jpg')->hashName();
-        Storage::disk('local')->put(self::COVER_IMAGE_PATH . $image, '');
+        Storage::put(self::COVER_IMAGE_PATH . $image, '');
 
         $this->user = User::factory()->create();
         $this->category = Category::factory()->create();

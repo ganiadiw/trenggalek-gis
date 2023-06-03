@@ -17,7 +17,7 @@ class ImageController extends Controller
 
         $image = $request->file('image');
         $filename = $image->getClientOriginalName();
-        $folder = 'public/tmp/media/images';
+        $folder = 'tmp/media/images';
         $path = $image->storeAs($folder, $filename);
 
         TemporaryFile::create([
@@ -56,7 +56,7 @@ class ImageController extends Controller
             $touristAttraction = TouristAttraction::where('id', $request->id)->first();
             $image = $request->file('image');
             $imageName = str()->random(5) . '-' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('public/tourist-attractions', $imageName);
+            $imagePath = $image->storeAs('tourist-attractions', $imageName);
 
             Storage::delete($touristAttraction->image_path);
             $touristAttraction->update([
