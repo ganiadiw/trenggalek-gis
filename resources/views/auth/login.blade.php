@@ -8,8 +8,7 @@
         </x-slot>
 
         <x-slot name="title">
-            <h1 class="my-5 text-xl font-bold text-gray-700">Login - Sistem Informasi Pemetaan Destinasi Wisata Kabupaten
-                Trenggalek</h1>
+            <h1 class="my-5 text-xl font-bold text-gray-700">Login</h1>
         </x-slot>
 
         <!-- Session Status -->
