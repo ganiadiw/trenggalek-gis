@@ -38,8 +38,8 @@
     <div class="relative h-fit bg-slate-950">
         <div class="pt-14 md:pt-20 pb-14 md:pb-20 px-7 md:px-14 lg:px-28">
             {{-- Mobile Swipper --}}
-            <div class="h-[200px] md:h-[350px] w-full mb-10 xl:hidden">
-                @if ($heroImagesCount > 0)
+            @if ($heroImagesCount > 0)
+                <div class="h-[200px] md:h-[350px] w-full mb-10 xl:hidden">
                     <div class="swiper mySwiper2">
                         <div class="rounded-lg swiper-wrapper">
                             @foreach ($heroImages->value as $key => $heroImage)
@@ -53,15 +53,15 @@
                             @endforeach
                         </div>
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
             <div class="xl:max-w-xl">
                 <h1 class="text-4xl font-bold leading-[3rem] text-gray-100">{{ $welcomeMessage->value[0] }}</h1>
                 <p class="pr-10 mt-5 text-gray-200 right">{{ $shortDescription->value[0] }}</p>
             </div>
             {{-- XL Swipper --}}
-            <div class="2xl:w-[600px] xl:h-[300px] xl:w-[520px] absolute xl:-bottom-14 xl:right-24 hidden xl:block">
-                @if ($heroImagesCount > 0)
+            @if ($heroImagesCount > 0)
+                <div class="2xl:w-[600px] xl:h-[300px] xl:w-[520px] absolute xl:-bottom-14 xl:right-24 hidden xl:block">
                     <div class="swiper mySwiper1">
                         <div class="rounded-lg swiper-wrapper">
                             @foreach ($heroImages->value as $key => $heroImage)
@@ -78,8 +78,8 @@
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-pagination"></div>
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
         </div>
     </div>
     <div class="px-7 md:px-14 lg:px-28 mt-14">
