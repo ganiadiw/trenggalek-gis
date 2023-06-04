@@ -20,6 +20,14 @@
                 height: 100%;
                 object-fit: cover;
             }
+
+            .text-shadow-white {
+                text-shadow:
+                    1px 1px 0 white,
+                    -1px -1px 0 white,
+                    1px -1px 0 white,
+                    -1px 1px white;
+            }
         </style>
     @endsection
 
@@ -217,13 +225,13 @@
                         layer.bindTooltip('{{ $subDistrict->name }}', {
                             permanent: true,
                             direction: 'center',
-                            className: 'bg-inherit border-0 shadow-none text-gray-500 font-semibold whitespace-pre-wrap text-center text-[11px]'
+                            className: 'bg-inherit border-0 shadow-none z-0 text-opacity-75 text-gray-500 font-semibold whitespace-pre-wrap text-center text-[11px]'
                         });
                     }
                 }).addTo(map);
             @endforeach
 
-            let icon, marker, popUp;
+            let icon, marker, popUp, style, className;
             @foreach ($touristDestinations as $key => $touristDestination)
                 popUp = `<div>
                         <h1 class="mb-5 text-lg font-bold">{{ $touristDestination->name }}</h1>
@@ -284,6 +292,11 @@
                     </div>`
 
                 @if ($touristDestination->category && $touristDestination->category->svg_name)
+                    className = '.tooltip-text-color-' + '{{ $key }}' + ' ' + '{ color: {{ $touristDestination->category->hex_code }}; }';
+                    style = document.createElement('style');
+                    style.appendChild(document.createTextNode(className));
+                    document.head.appendChild(style);
+
                     icon = L.AwesomeMarkers.icon({
                                 icon: '{{ $touristDestination->category->svg_name }}',
                                 markerColor: '{{ $touristDestination->category->color }}'
@@ -297,7 +310,7 @@
                                 offset: [-20, -20],
                                 permanent: true,
                                 direction: 'left',
-                                className: 'bg-inherit border-0 shadow-none font-[720]' + ' ' + 'text-[{{ $touristDestination->category->hex_code }}]'
+                                className: 'bg-inherit z-10 text-shadow-white border-0 shadow-none font-[720]' + ' ' + 'tooltip-text-color-' + '{{ $key }}'
                             });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
@@ -307,7 +320,7 @@
                                 offset: [-35, 5],
                                 permanent: true,
                                 direction: 'left',
-                                className: 'bg-inherit border-0 shadow-none text-[#277fc9] font-[720]'
+                                className: 'bg-inherit z-10 text-shadow-white border-0 shadow-none text-[#277fc9] font-[720]'
                             });
                 @endif
 
