@@ -20,14 +20,14 @@ class CategorySeeder extends Seeder
                 'slug' => str()->slug('Wisata Pantai') . '-' . str()->random(5),
                 'color' => 'blue',
                 'svg_name' => 'bi bi-tsunami',
-                'hex_code' => '#71ae26',
+                'hex_code' => '#37a8da',
             ],
             [
                 'name' => 'Wisata Konservasi',
                 'slug' => str()->slug('Wisata Konservasi') . '-' . str()->random(5),
                 'color' => 'green',
                 'svg_name' => 'bi bi-globe-asia-australia',
-                'hex_code' => '#b8f471',
+                'hex_code' => '#71ae26',
             ],
             [
                 'name' => 'Wisata Agro',
