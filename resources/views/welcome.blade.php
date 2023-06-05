@@ -225,7 +225,7 @@
                         layer.bindTooltip('{{ $subDistrict->name }}', {
                             permanent: true,
                             direction: 'center',
-                            className: 'bg-inherit border-0 shadow-none z-0 text-slate-500/50 font-semibold whitespace-pre-wrap text-center text-xs'
+                            className: 'bg-inherit border-0 shadow-none z-0 text-gray-400 font-semibold whitespace-pre-wrap text-center text-xs'
                         });
                     }
                 }).addTo(map);
@@ -310,7 +310,7 @@
                                 offset: [19, -23],
                                 permanent: true,
                                 direction: 'right',
-                                className: 'bg-transparent z-10 w-32 whitespace-pre-line text-shadow-white border-0 shadow-none font-extrabold' + ' ' + 'tooltip-text-color-' + '{{ $key }}'
+                                className: 'bg-transparent z-10 w-32 whitespace-pre-wrap text-shadow-white border-0 shadow-none font-extrabold' + ' ' + 'tooltip-text-color-' + '{{ $key }}'
                             });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
@@ -320,7 +320,7 @@
                                 offset: [0, 2],
                                 permanent: true,
                                 direction: 'right',
-                                className: 'bg-inherit z-10 w-32 whitespace-pre-line text-shadow-white border-0 shadow-none text-[#277fc9] font-extrabold'
+                                className: 'bg-transparent z-10 w-32 whitespace-pre-wrap text-shadow-white border-0 shadow-none text-[#277fc9] font-extrabold'
                             });
                 @endif
 

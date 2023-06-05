@@ -254,7 +254,7 @@
                                 offset: [19, -23],
                                 permanent: true,
                                 direction: 'right',
-                                className: 'bg-transparent z-10 w-32 whitespace-pre-line text-shadow-white border-0 shadow-none font-extrabold' + ' ' + 'tooltip-text-color-' + '{{ $key }}'
+                                className: 'bg-transparent z-10 w-32 whitespace-pre-wrap text-shadow-white border-0 shadow-none font-extrabold' + ' ' + 'tooltip-text-color-' + '{{ $key }}'
                             });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
@@ -264,7 +264,7 @@
                                 offset: [0, 2],
                                 permanent: true,
                                 direction: 'right',
-                                className: 'bg-inherit z-10 w-32 whitespace-pre-line text-shadow-white border-0 shadow-none text-[#277fc9] font-extrabold'
+                                className: 'bg-transparent z-10 w-32 whitespace-pre-wrap text-shadow-white border-0 shadow-none text-[#277fc9] font-extrabold'
                             });
                 @endif
 
