@@ -209,7 +209,7 @@
                         layer.bindTooltip('{{ $subDistrict->name }}', {
                             permanent: true,
                             direction: 'center',
-                            className: 'bg-inherit border-0 shadow-none z-0 text-slate-500/50 font-semibold whitespace-pre-wrap text-center text-xs'
+                            className: 'bg-inherit border-0 shadow-none z-0 text-gray-400 font-semibold whitespace-pre-wrap text-center text-xs'
                         });
                     }
                 }).addTo(map);
