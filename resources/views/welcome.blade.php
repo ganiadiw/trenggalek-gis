@@ -214,21 +214,39 @@
                 },
             });
 
+            let geojsonLayer = L.featureGroup().addTo(map);
+            let markerLayer = L.featureGroup().addTo(map);
+            let labelMarkerLayer = L.featureGroup().addTo(map);
+            let label;
+
             @foreach ($subDistricts as $subDistrict)
                 new L.GeoJSON.AJAX(['{{ asset('storage/geojson/' . $subDistrict->geojson_name) }}'], {
                     style: {
-                        'color': '{{ $subDistrict->fill_color }}',
-                        'weight': 2,
-                        'opacity': 0.4,
+                        color: '{{ $subDistrict->fill_color }}',
+                        weight: 2,
+                        opacity: 0.4,
                     },
                     onEachFeature(feature, layer) {
-                        layer.bindTooltip('{{ $subDistrict->name }}', {
-                            permanent: true,
-                            direction: 'center',
-                            className: 'bg-inherit border-0 shadow-none z-0 text-gray-400 font-semibold whitespace-pre-wrap text-center text-xs'
+                        layer.on('mouseover', function (e) {
+                            layer.getElement().style.cursor = 'grab';
+                        });
+                        layer.on('mousedown', function (e) {
+                            layer.getElement().style.cursor = 'grabbing';
+                        });
+                        layer.on('mouseup', function (e) {
+                            layer.getElement().style.cursor = 'grab';
                         });
                     }
-                }).addTo(map);
+                }).addTo(geojsonLayer);
+
+                label = L.divIcon({
+                    className: 'font-semibold text-gray-400 whitespace-pre-wrap text-center text-xs cursor-grab',
+                    html: '<div class="absolute -left-7 -top-2">' + '{{ $subDistrict->name }}' + '</div>'
+                });
+
+                L.marker(['{{ $subDistrict->latitude }}', '{{ $subDistrict->longitude }}'], {
+                    icon: label
+                }).addTo(labelMarkerLayer);
             @endforeach
 
             let icon, marker, popUp, style, className;
@@ -304,7 +322,7 @@
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {
                                 icon: icon,
                             })
-                            .addTo(map)
+                            .addTo(markerLayer)
                             .bindPopup(popUp)
                             .bindTooltip('{{ $touristDestination->name }}', {
                                 offset: [19, -23],
@@ -314,7 +332,7 @@
                             });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
-                            .addTo(map)
+                            .addTo(markerLayer)
                             .bindPopup(popUp)
                             .bindTooltip('{{ $touristDestination->name }}', {
                                 offset: [0, 2],
