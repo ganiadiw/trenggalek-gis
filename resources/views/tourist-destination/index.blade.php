@@ -225,7 +225,7 @@
 
                 label = L.divIcon({
                     className: 'font-semibold text-gray-400 whitespace-pre-wrap text-center text-xs cursor-grab',
-                    html: '<div class="absolute -left-7 -top-2">' + '{{ $subDistrict->name }}' + '</div>'
+                    html: '<div class="absolute -mt-2 -ml-9">' + '{{ $subDistrict->name }}' + '</div>'
                 });
 
                 L.marker(['{{ $subDistrict->latitude }}', '{{ $subDistrict->longitude }}'], {
