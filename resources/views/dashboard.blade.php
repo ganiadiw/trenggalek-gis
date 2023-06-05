@@ -164,7 +164,7 @@
                         layer.bindTooltip('{{ $subDistrict->name }}', {
                             permanent: true,
                             direction: 'center',
-                            className: 'bg-inherit border-0 shadow-none z-0 text-opacity-75 text-gray-500 font-semibold whitespace-pre-wrap text-center text-[11px]'
+                            className: 'bg-inherit border-0 shadow-none z-0 text-slate-500/50 font-semibold whitespace-pre-wrap text-center text-xs'
                         });
                     }
                 }).addTo(map);
@@ -251,20 +251,20 @@
                             .addTo(map)
                             .bindPopup(popUp)
                             .bindTooltip('{{ $touristDestination->name }}', {
-                                offset: [-20, -20],
+                                offset: [19, -23],
                                 permanent: true,
-                                direction: 'left',
-                                className: 'bg-inherit z-10 text-shadow-white border-0 shadow-none font-[720]' + ' ' + 'tooltip-text-color-' + '{{ $key }}'
+                                direction: 'right',
+                                className: 'bg-transparent z-10 w-32 whitespace-pre-line text-shadow-white border-0 shadow-none font-extrabold' + ' ' + 'tooltip-text-color-' + '{{ $key }}'
                             });
                 @else
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}])
                             .addTo(map)
                             .bindPopup(popUp)
                             .bindTooltip('{{ $touristDestination->name }}', {
-                                offset: [-35, 5],
+                                offset: [0, 2],
                                 permanent: true,
-                                direction: 'left',
-                                className: 'bg-inherit border-0 shadow-none text-[#277fc9] font-[720]'
+                                direction: 'right',
+                                className: 'bg-inherit z-10 w-32 whitespace-pre-line text-shadow-white border-0 shadow-none text-[#277fc9] font-extrabold'
                             });
                 @endif
 
