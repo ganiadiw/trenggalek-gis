@@ -42,72 +42,81 @@
                             <div>
                                 <h2 class="font-semibold">Alamat Destinasi
                                     Wisata</h2>
-                                <p id="address" class="flex mt-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        class="w-5 mt-1 text-red-700" fill="currentColor" class="mr-2 bi bi-geo-alt-fill"
-                                        viewBox="0 0 16 16">
-                                        <path
-                                            d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-                                    </svg>
-                                    <span class="ml-2">{{ $touristDestination->address }}</span>
-                                </p>
+                                <div id="address" class="flex mt-2">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 text-red-500 icon icon-tabler icon-tabler-map-pin-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" stroke-width="0" fill="currentColor"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-2">{{ $touristDestination->address }}</div>
+                                </div>
                             </div>
                             <div>
                                 <h2 class="font-semibold text-gray-900">Wilayah Kecamatan</h2>
-                                <p id="address" class="flex mt-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 icon icon-tabler icon-tabler-map"
-                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="1"
-                                        stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <polyline points="3 7 9 4 15 7 21 4 21 17 15 20 9 17 3 20 3 7"></polyline>
-                                        <line x1="9" y1="4" x2="9" y2="17"></line>
-                                        <line x1="15" y1="7" x2="15" y2="20"></line>
-                                    </svg>
-                                    <span class="ml-2">{{ $touristDestination->subDistrict->name }}</span>
-                                </p>
+                                <div id="address" class="flex mt-2">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 icon icon-tabler icon-tabler-map"
+                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="1"
+                                            stroke="#16a34a" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <polyline points="3 7 9 4 15 7 21 4 21 17 15 20 9 17 3 20 3 7"></polyline>
+                                            <line x1="9" y1="4" x2="9" y2="17"></line>
+                                            <line x1="15" y1="7" x2="15" y2="20"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-2">{{ $touristDestination->subDistrict->name }}</div>
+                                </div>
                             </div>
                             <div>
                                 <h2 class="font-semibold">Kategori Destinasi
                                     Wisata</h2>
-                                <p id="category" class="flex mt-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="w-5 text-orange-400 icon icon-tabler icon-tabler-category" width="24"
-                                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M4 4h6v6h-6z"></path>
-                                        <path d="M14 4h6v6h-6z"></path>
-                                        <path d="M4 14h6v6h-6z"></path>
-                                        <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-                                    </svg>
-                                    <span class="ml-2">{{ $touristDestination->category->name ?? 'Belum Berkategori'}}</span>
-                                </p>
+                                <div id="category" class="flex mt-2">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            class="w-5 text-orange-400 icon icon-tabler icon-tabler-category" width="24"
+                                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                            fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M4 4h6v6h-6z"></path>
+                                            <path d="M14 4h6v6h-6z"></path>
+                                            <path d="M4 14h6v6h-6z"></path>
+                                            <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-2">{{ $touristDestination->category->name ?? 'Belum Berkategori'}}</div>
+                                </div>
                             </div>
                             <div>
                                 <h2 class="font-semibold">Jarak dari Pusat Kota</h2>
-                                <p id="distance" class="flex mt-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        class="w-5 mt-1 text-green-700" fill="currentColor" class="bi bi-geo-fill"
-                                        viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd"
-                                            d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z" />
-                                    </svg>
-                                    <span class="ml-2">{{ $touristDestination->distance_from_city_center }}</span>
-                                </p>
+                                <div id="distance" class="flex mt-2">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            class="w-5 mt-1 text-green-700" fill="currentColor" class="bi bi-geo-fill"
+                                            viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-2">{{ $touristDestination->distance_from_city_center }}</div>
+                                </div>
                             </div>
                             <div>
                                 <h2 class="font-semibold">Pengelola</h2>
-                                <p id="manager" class="flex mt-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        class="w-5 mt-1 text-stone-700" fill="currentColor" class="bi bi-building"
-                                        viewBox="0 0 16 16">
-                                        <path
-                                            d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z" />
-                                        <path
-                                            d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1Zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3V1Z" />
-                                    </svg>
-                                    <span class="ml-2">{{ $touristDestination->manager }}</span>
-                                </p>
+                                <div id="manager" class="flex mt-2">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 icon icon-tabler icon-tabler-users-group text-stone-700" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                            <path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1"></path>
+                                            <path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                            <path d="M17 10h2a2 2 0 0 1 2 2v1"></path>
+                                            <path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                            <path d="M3 13v-1a2 2 0 0 1 2 -2h2"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-2">{{ $touristDestination->manager }}</div>
+                                </div>
                             </div>
                         </div>
                         <div class="mt-5">
