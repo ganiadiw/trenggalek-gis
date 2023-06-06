@@ -102,6 +102,20 @@
                                 </div>
                             </div>
                             <div>
+                                <label class="font-semibold text-gray-900">Akses Transportasi</label>
+                                <div id="distance" class="flex mt-2 text-sm">
+                                    <div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 icon text-neutral-600 icon-tabler icon-tabler-car" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-2">{{ $touristDestination->transportation_access }}</div>
+                                </div>
+                            </div>
+                            <div>
                                 <h2 class="font-semibold">Pengelola</h2>
                                 <div id="manager" class="flex mt-2">
                                     <div>
