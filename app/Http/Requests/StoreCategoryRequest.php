@@ -27,7 +27,7 @@ class StoreCategoryRequest extends FormRequest
             'name' => ['required', 'max:255'],
             'slug' => ['required', 'max:255'],
             'marker_text_color' => ['required_with:custom_marker'],
-            'custom_marker' => ['required_with:marker_text_color', 'image', 'mimes:png'],
+            'custom_marker' => ['required_with:marker_text_color', 'image', 'mimes:png', 'max:1024'],
         ];
     }
 

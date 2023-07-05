@@ -26,7 +26,7 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'name' => ['required', 'max:255'],
             'marker_text_color' => ['nullable'],
-            'custom_marker' => ['nullable', 'image', 'mimes:png'],
+            'custom_marker' => ['nullable', 'image', 'mimes:png', 'max:1024'],
         ];
     }
 
