@@ -4,6 +4,8 @@ namespace Tests\Feature\Category;
 
 use App\Models\Category;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class UpdateCategoryTest extends TestCase
@@ -18,6 +20,7 @@ class UpdateCategoryTest extends TestCase
 
     private $data = [
         'name' => 'Wisata Pantai Pesisir',
+        'marker_text_color' => null,
     ];
 
     public function setUp(): void
@@ -31,7 +34,11 @@ class UpdateCategoryTest extends TestCase
             'email' => 'hugofirst@gmail.com',
             'is_admin' => 0,
         ]);
-        $this->category = Category::factory()->create();
+        $this->category = Category::factory()->create([
+            'marker_text_color' => '#E6AA2C',
+            'custom_marker_name' => 'marker.png',
+            'custom_marker_path' => 'categories/custom-marker/marker.png',
+        ]);
 
         $this->assertEquals(1, $this->superAdmin->is_admin);
         $this->assertEquals(0, $this->webgisAdmin->is_admin);
@@ -69,20 +76,25 @@ class UpdateCategoryTest extends TestCase
 
     public function test_super_admin_can_update_category_with_icon_marker()
     {
+        $customMarker = UploadedFile::fake()->image('marker.png');
+
         $this->data = array_merge($this->data, [
-            'color' => 'green',
-            'svg_name' => 'apple-whole',
+            'marker_text_color' => '#C6AA2C',
+            'custom_marker' => $customMarker,
         ]);
 
         $response = $this->actingAs($this->superAdmin)->put(self::MAIN_URL . $this->category->slug, $this->data);
 
-        $response->assertValid(['name', 'color', 'svg_name']);
+        $response->assertValid(['name', 'marker_text_color', 'custom_marker_name']);
         $response->assertRedirect(url()->previous());
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('categories', $this->data);
-        $this->assertDatabaseMissing('categories', [
-            'name' => $this->category->name,
+        $this->assertTrue(Storage::exists('categories/custom-marker/' . $customMarker->hashName()));
+        $this->assertFalse(Storage::exists('categories/custom-marker/' . $this->category->custom_marker_path));
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Wisata Pantai Pesisir',
+            'marker_text_color' => '#C6AA2C',
+            'custom_marker_name' => $customMarker->hashName(),
         ]);
     }
 

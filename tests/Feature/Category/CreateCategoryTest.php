@@ -3,6 +3,8 @@
 namespace Tests\Feature\Category;
 
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CreateCategoryTest extends TestCase
@@ -61,18 +63,25 @@ class CreateCategoryTest extends TestCase
 
     public function test_super_admin_can_create_category_with_icon_marker()
     {
+        $customMarker = UploadedFile::fake()->image('marker.png');
+
         $this->data = array_merge($this->data, [
-            'color' => 'green',
-            'svg_name' => 'apple-whole',
+            'marker_text_color' => '#C6AA2C',
+            'custom_marker' => $customMarker,
         ]);
 
         $response = $this->actingAs($this->superAdmin)->post(self::MAIN_URL, $this->data);
 
-        $response->assertValid(['name', 'color', 'svg_name']);
+        $response->assertValid(['name', 'marker_text_color', 'custom_marker_name']);
         $response->assertRedirect(self::MAIN_URL);
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('categories', $this->data);
+        $this->assertTrue(Storage::exists('categories/custom-marker/' . $customMarker->hashName()));
+        $this->assertDatabaseHas('categories', [
+            'name' => 'Wisata Pertanian',
+            'marker_text_color' => '#C6AA2C',
+            'custom_marker_name' => $customMarker->hashName(),
+        ]);
     }
 
     public function test_webgis_admin_cannot_create_category()
