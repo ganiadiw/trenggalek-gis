@@ -25,7 +25,7 @@ class CategoryController extends Controller
             'search_value' => 'required',
         ]);
 
-        $categories = Category::select('id', 'name', 'slug','marker_text_color', 'custom_marker_name', 'custom_marker_path')
+        $categories = Category::select('id', 'name', 'slug', 'marker_text_color', 'custom_marker_name', 'custom_marker_path')
             ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
             ->orderBy('name', 'asc')->withCount('touristDestinations')
             ->paginate(10)->withQueryString();

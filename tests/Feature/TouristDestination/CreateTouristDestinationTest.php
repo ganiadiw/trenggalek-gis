@@ -143,7 +143,7 @@ class CreateTouristDestinationTest extends TestCase
 
     public function test_authenticated_user_can_create_tourist_destination_with_image_in_description_editor()
     {
-       $this->postImage();
+        $this->postImage();
 
         $description = [
             'description' => '<p>Pantai</p><img title="image1678273485413.png" src="../../storage/tmp/media/images/image1678273485413.png" alt=""><img title="image1678273485552.png" src="../../tmp/media/images/image1678273485552.png" alt="">',
