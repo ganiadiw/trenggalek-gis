@@ -201,11 +201,13 @@
                 }
             }).addTo(sideMap);
 
-            @if ($touristDestination->category && $touristDestination->category->svg_name)
-                icon = L.AwesomeMarkers.icon({
-                            icon: '{{ $touristDestination->category->svg_name }}',
-                            markerColor: '{{ $touristDestination->category->color }}'
-                        });
+            @if ($touristDestination->category && $touristDestination->category->custom_marker_name)
+                icon = L.icon({
+                        iconUrl: '{{ asset('storage/categories/custom-marker/' . $touristDestination->category->custom_marker_name) }}',
+                        iconSize: [30, 30],
+                        iconAnchor: [13, 35],
+                    });
+                
                 marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {icon: icon})
                         .addTo(sideMap);
             @else

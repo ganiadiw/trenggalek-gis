@@ -309,16 +309,18 @@
                         </a>
                     </div>`
 
-                @if ($touristDestination->category && $touristDestination->category->svg_name)
-                    className = '.tooltip-text-color-' + '{{ $key }}' + ' ' + '{ color: {{ $touristDestination->category->hex_code }}; }';
+                @if ($touristDestination->category && $touristDestination->category->custom_marker_name)
+                    className = '.tooltip-text-color-' + '{{ $key }}' + ' ' + '{ color: {{ $touristDestination->category->marker_text_color }}; }';
                     style = document.createElement('style');
                     style.appendChild(document.createTextNode(className));
                     document.head.appendChild(style);
 
-                    icon = L.AwesomeMarkers.icon({
-                                icon: '{{ $touristDestination->category->svg_name }}',
-                                markerColor: '{{ $touristDestination->category->color }}'
-                            });
+                    icon = L.icon({
+                        iconUrl: '{{ asset('storage/categories/custom-marker/' . $touristDestination->category->custom_marker_name) }}',
+                        iconSize: [30, 30],
+                        iconAnchor: [13, 35],
+                    });
+
                     marker = L.marker([{{ $touristDestination->latitude }}, {{ $touristDestination->longitude }}], {
                                 icon: icon,
                             })

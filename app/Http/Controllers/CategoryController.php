@@ -6,12 +6,13 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::select('id', 'name', 'slug', 'color', 'svg_name')
+        $categories = Category::select('id', 'name', 'slug', 'marker_text_color', 'custom_marker_name', 'custom_marker_path')
                         ->orderBy('name', 'asc')->withCount('touristDestinations')->paginate(10);
 
         return view('category.index', compact('categories'));
@@ -24,7 +25,7 @@ class CategoryController extends Controller
             'search_value' => 'required',
         ]);
 
-        $categories = Category::select('id', 'name', 'slug', 'color', 'svg_name')
+        $categories = Category::select('id', 'name', 'slug','marker_text_color', 'custom_marker_name', 'custom_marker_path')
             ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
             ->orderBy('name', 'asc')->withCount('touristDestinations')
             ->paginate(10)->withQueryString();
@@ -41,11 +42,10 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
 
-        if (isset($validated['color'])) {
-            $matchedColor = collect(Category::COLORS)->first(function ($item) use ($validated) {
-                return $item['name'] === $validated['color'];
-            });
-            $validated['hex_code'] = $matchedColor['hex_code'];
+        if (isset($validated['marker_text_color']) && $request->file('custom_marker')) {
+            $customMarker = $validated['custom_marker'];
+            $validated['custom_marker_name'] = $customMarker->hashName();
+            $validated['custom_marker_path'] = $customMarker->storeAs('categories/custom-marker', $validated['custom_marker_name']);
         }
 
         Category::create($validated);
@@ -69,22 +69,17 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
 
-        if (isset($validated['color'])) {
-            $matchedColor = collect(Category::COLORS)->first(function ($item) use ($validated) {
-                return $item['name'] === $validated['color'];
-            });
-            $validated['hex_code'] = $matchedColor['hex_code'];
+        if ($validated['marker_text_color'] && isset($validated['custom_marker'])) {
+            $customMarker = $validated['custom_marker'];
+            $validated['custom_marker_name'] = $customMarker->hashName();
+            $validated['custom_marker_path'] = $customMarker->storeAs('categories/custom-marker', $validated['custom_marker_name']);
 
-            $category->update($validated);
+            if ($category->custom_marker_path) {
+                Storage::delete($category->custom_marker_path);
+            }
         }
 
-        if (! isset($validated['color'])) {
-            $validated['color'] = null;
-            $validated['svg_name'] = null;
-            $validated['hex_code'] = null;
-
-            $category->update($validated);
-        }
+        $category->update($validated);
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 

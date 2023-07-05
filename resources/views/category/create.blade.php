@@ -4,7 +4,7 @@
             <div class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg">
                 <h1 class="w-full text-lg font-bold">Tambah Data Kategori Destinasi Wisata</h1>
                 <div class="w-full mt-5">
-                    <form method="POST" action="{{ route('dashboard.categories.store') }}">
+                    <form method="POST" action="{{ route('dashboard.categories.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="grid">
                             <div>
@@ -32,36 +32,20 @@
                                                     </svg>
                                                 </button>
                                             </blockquote>
-                                            <div class="mb-3">
-                                                <label for="color" class="block mb-2 text-sm font-medium text-gray-900">Pilih Warna Marker</label>
-                                                <select id="color" name="color" class="w-full px-4 text-sm text-gray-900 border-gray-300 rounded-md bg-gray-50" x-bind:required="svgName !== null && svgName !== ''">
-                                                    <option value="" disabled selected>Pilih Warna</option>
-                                                    @foreach (\App\Models\Category::COLORS as $key => $color)
-                                                        <option value="{{ $color['name'] }}"
-                                                            @selected(old('color') == $color['name'])
-                                                            class="text-sm font-normal text-gray-900">
-                                                            <span>
-                                                                {{ $color['label'] }}
-                                                            </span>
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <x-input-error-validation error="color" />
-                                            </div>
-                                            <div class="w-full">
-                                                <label for="svg_name" class="block mb-2 text-sm font-medium text-gray-900">Nama SVG Icon</label>
-                                                <input type="text" x-model="svgName" name="svg_name" value="{{ old('svg_name') }}" id="svg_name"
-                                                    class="block w-full px-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                                                    placeholder="bi bi-tree-fill" autocomplete="off">
-                                                <x-input-error-validation error="svg_name" />
-                                            </div>
                                             <div class="mt-3">
-                                                <p class="flex items-center mb-2 text-sm font-medium text-gray-900">
-                                                    Live SVG Icon Preview (akan tampil jika nama icon benar) :
-                                                    <span class="ml-3">
-                                                        <em class="w-10" x-bind:class="svgName"></em>
-                                                    </span>
-                                                </p>
+                                                <div class="mb-3">
+                                                    <label for="markerTextColor" class="block mb-2 text-sm">Warna Teks Marker</label>
+                                                    <div class="flex items-center">
+                                                        <div class="color-picker"></div>
+                                                        <input type="text" name="marker_text_color" value="{{ old('marker_text_color') }}"
+                                                            id="markerTextColor"
+                                                            class="ml-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                                            placeholder="#06b6d4" autocomplete="off">
+                                                    </div>
+                                                    <x-input-error-validation error="marker_text_color" />
+                                                </div>
+                                                <x-input-default-form type="file" name="custom_marker" id="customMarker"
+                                                    labelTitle="Upload marker kustom (file .png)" error='custom_marker' />
                                             </div>
                                         </div>
                                     </div>
@@ -130,4 +114,33 @@
             </div>
         </div>
     </div>
+
+    @push('cdn-script')
+        <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+        <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+    @endpush
+
+    @section('script')
+        @include('category.js.color-picker')
+        <script>
+            FilePond.registerPlugin(
+                FilePondPluginImagePreview,
+                FilePondPluginFileValidateType,
+                FilePondPluginFileValidateSize,
+            );
+
+            const inputCustomMarker = document.querySelector('input[id="customMarker"]');
+            FilePond.create(inputCustomMarker, {
+                storeAsFile: true,
+                acceptedFileTypes: ['image/png'],
+                labelFileTypeNotAllowed: 'Format gambar tidak didukung, gunakan  .png, .jpg atau .jpeg',
+                fileValidateTypeLabelExpectedTypes: '',
+                labelMaxFileSizeExceeded: 'Ukuran gambar terlalu besar',
+                maxFileSize: '2048KB',
+                labelMaxFileSize: 'Maksimal berukuran 2048 KB',
+            });
+        </script>
+    @endsection
 </x-app-layout>

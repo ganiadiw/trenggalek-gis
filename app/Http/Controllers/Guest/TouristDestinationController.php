@@ -12,7 +12,7 @@ class TouristDestinationController extends Controller
         $touristDestination['facility'] = explode(', ', $touristDestination->facility);
         $touristDestination->load([
             'touristAttractions',
-            'category:id,name,color,svg_name,hex_code',
+            'category:id,name,marker_text_color,custom_marker_name,custom_marker_path',
             'subDistrict:id,code,name,latitude,longitude,geojson_path,geojson_name,fill_color',
         ]);
 

@@ -4,7 +4,7 @@
             <div class="px-8 py-6 mt-5 bg-white border-2 rounded-md shadow-lg">
                 <h1 class="w-full text-lg font-bold">Edit Data Kategori Destinasi Wisata</h1>
                 <div class="w-full mt-5">
-                    <form method="POST" action="{{ route('dashboard.categories.update', ['category' => $category]) }}">
+                    <form method="POST" action="{{ route('dashboard.categories.update', ['category' => $category]) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="grid">
@@ -23,7 +23,7 @@
                                                 <p class="text-[13px] font-medium italic leading-relaxed text-yellow-500">
                                                     Bersifat opsional. Jika tidak menambahkan icon, maka icon default akan digunakan atau menggunakan icon yang sebelumnya sudah didaftarkan. Warna teks nama destinasi wisata yang ditampilkan pada peta juga akan sesuai dengan warna marker yang dipilih.
                                                 </p>
-                                                <div x-data="{ showAlert: false }">
+                                                <div>
                                                     <button type="button" @click="openModalInstruction = ! openModalInstruction" class="hover:bg-green-600 mb-1 flex items-center text-gray-100 text-[13px] mt-3 font-semibold bg-green-500 px-2.5 py-2 rounded-md">
                                                         Baca Cara Penggunaan
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2 icon icon-tabler icon-tabler-info-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -33,47 +33,33 @@
                                                             <path d="M11 12h1v4h1"></path>
                                                         </svg>
                                                     </button>
-                                                    <button type="button" @click="svgName = ''; selectedColor = ''; showAlert = true" class="hover:bg-red-600 mb-1 flex items-center text-gray-100 text-[13px] mt-3 font-semibold bg-red-500 px-2.5 py-2 rounded-md">
-                                                        Hapus Kustom Marker Saat Ini
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2 icon icon-tabler icon-tabler-trash-x-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                            <path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567l1.292 1.293l-1.292 1.293l-.083 .094a1 1 0 0 0 1.497 1.32l1.293 -1.292l1.293 1.292l.094 .083a1 1 0 0 0 1.32 -1.497l-1.292 -1.293l1.292 -1.293l.083 -.094a1 1 0 0 0 -1.497 -1.32l-1.293 1.292l-1.293 -1.292l-.094 -.083z" stroke-width="0" fill="currentColor"></path>
-                                                            <path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005h4z" stroke-width="0" fill="currentColor"></path>
-                                                        </svg>
-                                                    </button>
-                                                    <p x-show="showAlert" class="py-1 text-sm text-green-500">Klik simpan untuk menyimpan perubahan</p>
                                                 </div>
                                             </blockquote>
-                                            <div class="mb-3">
-                                                <label for="color" class="block mb-2 text-sm font-medium text-gray-900">Pilih Warna Marker</label>
-                                                <select x-model="selectedColor" id="color" name="color" class="w-full px-4 text-sm text-gray-900 border-gray-300 rounded-md bg-gray-50" x-bind:required="svgName !== null && svgName !== ''">
-                                                    <option value="" disabled selected>Pilih Warna</option>
-                                                    @foreach (\App\Models\Category::COLORS as $key => $color)
-                                                        <option value="{{ $color['name'] }}"
-                                                            x-bind:selected="selectedColor === '{{ $color['name'] }}'"
-                                                            class="text-sm font-normal text-gray-900">
-                                                            <span>
-                                                                {{ $color['label'] }}
-                                                            </span>
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <x-input-error-validation error="color" />
-                                            </div>
-                                            <div class="w-full">
-                                                <label for="svg_name" class="block mb-2 text-sm font-medium text-gray-900">Nama SVG Icon</label>
-                                                <input type="text" x-model="svgName" name="svg_name" value="{{ old('svg_name') }}" id="svg_name"
-                                                    class="block w-full px-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                                                    placeholder="fa-solid fa-tree" autocomplete="off">
-                                                <x-input-error-validation error="svg_name" />
-                                            </div>
                                             <div class="mt-3">
-                                                <p class="flex items-center mb-2 text-sm font-medium text-gray-900">
-                                                    Live SVG Icon Preview (akan tampil jika nama icon benar) :
-                                                    <span class="ml-3">
-                                                        <em class="w-10" x-bind:class="svgName"></em>
-                                                    </span>
-                                                </p>
+                                                <div class="mb-3">
+                                                    <label for="markerTextColor" class="block mb-2 text-sm">Warna Teks Marker</label>
+                                                    <div class="flex items-center">
+                                                        <div class="color-picker"></div>
+                                                        <input type="text" name="marker_text_color" value="{{ old('marker_text_color', $category->marker_text_color) }}"
+                                                            id="markerTextColor"
+                                                            class="ml-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-4"
+                                                            placeholder="#06b6d4" autocomplete="off">
+                                                    </div>
+                                                    <x-input-error-validation error="marker_text_color" />
+                                                </div>
+                                                <div>
+                                                    @if ($category->custom_marker_name != null)
+                                                        <div class="mb-3">
+                                                            <label for="coverImagePreview"
+                                                                class="block mb-2 text-sm italic font-medium text-gray-900">Marker kustom saat ini</label>
+                                                            <img class="rounded-[4px] w-10" id="coverImagePreview"
+                                                                src="{{ asset('storage/categories/custom-marker/' . $category->custom_marker_name) }}"
+                                                                alt="{{ $category->custom_marker_name }}">
+                                                        </div>
+                                                    @endif
+                                                    <x-input-default-form type="file" name="custom_marker" id="customMarker"
+                                                        labelTitle="Upload marker kustom (file .png)" error='custom_marker' />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -142,4 +128,33 @@
             </div>
         </div>
     </div>
+
+    @push('cdn-script')
+        <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+        <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+    @endpush
+
+    @section('script')
+        @include('category.js.color-picker')
+        <script>
+            FilePond.registerPlugin(
+                FilePondPluginImagePreview,
+                FilePondPluginFileValidateType,
+                FilePondPluginFileValidateSize,
+            );
+
+            const inputCustomMarker = document.querySelector('input[id="customMarker"]');
+            FilePond.create(inputCustomMarker, {
+                storeAsFile: true,
+                acceptedFileTypes: ['image/png'],
+                labelFileTypeNotAllowed: 'Format gambar tidak didukung, gunakan  .png, .jpg atau .jpeg',
+                fileValidateTypeLabelExpectedTypes: '',
+                labelMaxFileSizeExceeded: 'Ukuran gambar terlalu besar',
+                maxFileSize: '2048KB',
+                labelMaxFileSize: 'Maksimal berukuran 2048 KB',
+            });
+        </script>
+    @endsection
 </x-app-layout>

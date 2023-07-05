@@ -27,28 +27,8 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name' => ['required', 'max:255'],
             'slug' => ['required', 'max:255'],
-            'color' => ['required_with:svg_name', Rule::in([
-                'red',
-                'darkred',
-                'lightred',
-                'orange',
-                'beige',
-                'green',
-                'darkgreen',
-                'lightgreen',
-                'blue',
-                'darkblue',
-                'lightblue',
-                'purple',
-                'darkpurple',
-                'pink',
-                'cadetblue',
-                'white',
-                'gray',
-                'lightgray',
-                'black',
-            ])],
-            'svg_name' => ['required_with:color', 'max:255'],
+            'marker_text_color' => ['required_with:custom_marker'],
+            'custom_marker' => ['required_with:marker_text_color', 'image', 'mimes:png'],
         ];
     }
 
@@ -56,8 +36,8 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'Nama Kategori',
-            'color' => 'Warna',
-            'svg_name' => 'Nama SVG Icon',
+            'marker_text_color' => 'Warna Teks',
+            'custom_marker' => 'Icon Marker Kustom',
         ];
     }
 
