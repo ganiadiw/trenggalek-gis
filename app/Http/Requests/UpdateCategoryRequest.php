@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateCategoryRequest extends FormRequest
 {
@@ -26,28 +25,8 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'color' => ['required_with:svg_name', Rule::in([
-                'red',
-                'darkred',
-                'lightred',
-                'orange',
-                'beige',
-                'green',
-                'darkgreen',
-                'lightgreen',
-                'blue',
-                'darkblue',
-                'lightblue',
-                'purple',
-                'darkpurple',
-                'pink',
-                'cadetblue',
-                'white',
-                'gray',
-                'lightgray',
-                'black',
-            ])],
-            'svg_name' => ['required_with:color', 'max:255'],
+            'marker_text_color' => ['nullable'],
+            'custom_marker' => ['nullable', 'image', 'mimes:png', 'max:1024'],
         ];
     }
 
@@ -55,8 +34,8 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'Nama Kategori',
-            'color' => 'Warna',
-            'svg_name' => 'Nama SVG Icon',
+            'marker_text_color' => 'Warna Teks',
+            'custom_marker' => 'Icon Marker Kustom',
         ];
     }
 }
