@@ -69,7 +69,10 @@
                                         Jumlah Destinasi Wisata
                                     </th>
                                     <th scope="col" class="px-3 py-3">
-                                        Custom Marker
+                                        Warna Teks Marker
+                                    </th>
+                                    <th scope="col" class="px-3 py-3">
+                                        Marker Kustom Icon
                                     </th>
                                     <th scope="col" class="flex justify-center px-3 py-3">
                                         Aksi
@@ -88,10 +91,16 @@
                                         <td class="px-3 py-4">
                                             {{ $category->tourist_destinations_count }}
                                         </td>
-                                        @if ($category->svg_name)
-                                            <td class="px-3 py-4">Ya | {{ $category->svg_name }} | {{ $category->color }}</td>
+                                        @if ($category->marker_text_color)
+                                            <td class="px-3 py-4"><span style="background-color: {{ $category->marker_text_color }};" class="px-2"></span> <span class="mx-2">|</span> <span>{{ $category->marker_text_color }}</span></td>
                                         @else
-                                            <td class="px-3 py-4">Tidak ada custom icon</td>
+                                            <td class="px-3 py-4">Tidak ada custom marker</td>
+                                        @endif
+
+                                        @if ($category->custom_marker_name)
+                                            <td class="px-3 py-4"><img class="w-8 h-8" src="{{ asset('storage/categories/custom-marker/' . $category->custom_marker_name) }}" alt="{{ $category->custom_marker_name }}"></td>
+                                        @else
+                                            <td class="px-3 py-4">Tidak ada custom marker</td>
                                         @endif
                                         <td class="px-3 py-4">
                                             <x-action-button

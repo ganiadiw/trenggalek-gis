@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('slug', 255)->unique();
-            $table->string('color')->nullable();
-            $table->string('svg_name')->nullable();
-            $table->string('hex_code')->nullable();
+            $table->string('marker_text_color')->nullable();
+            $table->string('custom_marker_name')->nullable();
+            $table->string('custom_marker_path')->nullable();
             $table->timestamps();
         });
     }
