@@ -51,7 +51,7 @@ Or you can directly run the migration and database seeder commands together
 php artisan migrate:fresh --seed
 ```
 
-# Tech stacks that I used
+# Tech Stacks that I Used
 
 - [Laravel](https://laravel.com/docs/9.x/) framework version 9.x
 - [Laravel Breeze](https://laravel.com/docs/9.x/starter-kits#laravel-breeze) for authentication scaffolding
