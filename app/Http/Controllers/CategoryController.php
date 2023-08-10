@@ -2,93 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchCategoryRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Services\CategoryService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function __construct(protected CategoryService $categoryService)
     {
-        $categories = Category::select('id', 'name', 'slug', 'marker_text_color', 'custom_marker_name', 'custom_marker_path')
-                        ->orderBy('name', 'asc')->withCount('touristDestinations')->paginate(10);
+    }
+
+    public function index(): View
+    {
+        $categories = $this->categoryService->getAllWithPaginate('name', 'ASC', 10);
 
         return view('category.index', compact('categories'));
     }
 
-    public function search(Request $request)
+    public function search(SearchCategoryRequest $request): View
     {
-        $validated = $request->validate([
-            'column_name' => 'required',
-            'search_value' => 'required',
-        ]);
+        $validated = $request->validated();
 
-        $categories = Category::select('id', 'name', 'slug', 'marker_text_color', 'custom_marker_name', 'custom_marker_path')
-            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
-            ->orderBy('name', 'asc')->withCount('touristDestinations')
-            ->paginate(10)->withQueryString();
+        $categories = $this->categoryService->search($validated['column_name'], $validated['search_value'], 'name', 'ASC', 10);
 
         return view('category.index', compact('categories'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('category.create');
     }
 
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-
-        if (isset($validated['marker_text_color']) && $request->file('custom_marker')) {
-            $customMarker = $validated['custom_marker'];
-            $validated['custom_marker_name'] = $customMarker->hashName();
-            $validated['custom_marker_path'] = $customMarker->storeAs('categories/custom-marker', $validated['custom_marker_name']);
-        }
-
-        Category::create($validated);
+        $this->categoryService->create($request->validated());
 
         toastr()->success('Data berhasil ditambahkan', 'Sukses');
 
         return redirect(route('dashboard.categories.index'));
     }
 
-    public function show(Category $category)
+    public function show(Category $category): View
     {
         return view('category.show', compact('category'));
     }
 
-    public function edit(Category $category)
+    public function edit(Category $category): View
     {
         return view('category.edit', compact('category'));
     }
 
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
-        $validated = $request->validated();
-
-        if ($validated['marker_text_color'] && isset($validated['custom_marker'])) {
-            $customMarker = $validated['custom_marker'];
-            $validated['custom_marker_name'] = $customMarker->hashName();
-            $validated['custom_marker_path'] = $customMarker->storeAs('categories/custom-marker', $validated['custom_marker_name']);
-
-            if ($category->custom_marker_path) {
-                Storage::delete($category->custom_marker_path);
-            }
-        }
-
-        $category->update($validated);
+        $this->categoryService->update($category, $request->validated());
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
         return back();
     }
 
-    public function destroy(Category $category)
+    public function destroy(Category $category): RedirectResponse
     {
-        $category->delete();
+        $this->categoryService->delete($category);
 
         toastr()->success('Data berhasil dihapus', 'Sukses');
 
