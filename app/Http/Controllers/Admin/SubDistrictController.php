@@ -3,68 +3,59 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchByColumnRequest;
 use App\Http\Requests\StoreSubDistrictRequest;
 use App\Http\Requests\UpdateSubDistrictRequest;
 use App\Models\Category;
 use App\Models\SubDistrict;
-use App\Models\TouristDestination;
-use Illuminate\Http\Request;
+use App\Services\SubDistrictService;
+use App\Services\TouristDestinationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SubDistrictController extends Controller
 {
     const GEOJSON_PATH = 'geojson/';
 
-    public function index(Request $request)
+    public function __construct(
+        protected SubDistrictService $subDistrictService,
+        protected TouristDestinationService $touristDestinationService
+        ) {
+    }
+
+    public function index(): View
     {
-        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
-            ->orderBy('code', 'asc')->withCount('touristDestinations')->paginate(10);
+        $subDistricts = $this->subDistrictService->getAllWithPaginate('name');
 
         return view('sub-district.index', compact('subDistricts'));
     }
 
-    public function search(Request $request)
+    public function search(SearchByColumnRequest $request): View
     {
-        $validated = $request->validate([
-            'column_name' => 'required',
-            'search_value' => 'required',
-        ]);
+        $validated = $request->validated();
 
-        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude')
-            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
-            ->orderBy('code', 'asc')->withCount('touristDestinations')->paginate(10)->withQueryString();
+        $subDistricts = $this->subDistrictService->search($validated['column_name'], $validated['search_value'], 'name');
 
         return view('sub-district.index', compact('subDistricts'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('sub-district.create');
     }
 
-    public function store(StoreSubDistrictRequest $request)
+    public function store(StoreSubDistrictRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-
-        if ($request->file('geojson')) {
-            $geojson = $validated['geojson'];
-            $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
-            $validated['geojson_path'] = $geojson->storeAs('geojson', $validated['geojson_name']);
-        } else {
-            $validated['geojson_name'] = Str::random(5) . '-' . $validated['code'] . '.geojson';
-            Storage::put(self::GEOJSON_PATH . $validated['geojson_name'], $request->geojson_text_area);
-            $validated['geojson_path'] = self::GEOJSON_PATH . $validated['geojson_name'];
-        }
-
-        SubDistrict::create($validated);
+        $this->subDistrictService->create($request->validated());
 
         toastr()->success('Data berhasil ditambahkan', 'Sukses');
 
         return redirect(route('dashboard.sub-districts.index'));
     }
 
-    public function show(SubDistrict $subDistrict)
+    public function show(SubDistrict $subDistrict): View
     {
         $subDistrict->load('touristDestinations:sub_district_id,id,name,category_id');
         $touristDestinationsId = $subDistrict->touristDestinations->pluck('category_id')->unique();
@@ -75,42 +66,21 @@ class SubDistrictController extends Controller
         return view('sub-district.show', compact('subDistrict'));
     }
 
-    public function edit(SubDistrict $subDistrict)
+    public function edit(SubDistrict $subDistrict): View
     {
         return view('sub-district.edit', compact('subDistrict'));
     }
 
-    public function update(UpdateSubDistrictRequest $request, SubDistrict $subDistrict)
+    public function update(UpdateSubDistrictRequest $request, SubDistrict $subDistrict): RedirectResponse
     {
-        $validated = $request->validated();
-
-        if ($request->file('geojson')) {
-            $geojson = $validated['geojson'];
-            $validated['geojson_name'] = Str::random(5) . '-' . $geojson->getClientOriginalName();
-            $validated['geojson_path'] = $geojson->storeAs('geojson', $validated['geojson_name']);
-
-            if ($subDistrict->geojson_path != null) {
-                Storage::delete($subDistrict->geojson_path);
-            }
-        }
-        if ($request->geojson_text_area != null) {
-            $validated['geojson_name'] = Str::random(5) . '-' . $validated['code'] . '.geojson';
-            Storage::put(self::GEOJSON_PATH . $validated['geojson_name'], $request->geojson_text_area);
-            $validated['geojson_path'] = self::GEOJSON_PATH . $validated['geojson_name'];
-
-            if ($subDistrict->geojson_path != null) {
-                Storage::delete($subDistrict->geojson_path);
-            }
-        }
-
-        $subDistrict->update($validated);
+        $this->subDistrictService->update($subDistrict, $request->validated());
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
         return redirect()->route('dashboard.sub-districts.edit', ['sub_district' => $subDistrict]);
     }
 
-    public function destroy(SubDistrict $subDistrict)
+    public function destroy(SubDistrict $subDistrict): RedirectResponse
     {
         abort_if(! auth()->user()->is_admin, 403);
 
@@ -120,49 +90,34 @@ class SubDistrictController extends Controller
             return redirect(route('dashboard.sub-districts.related-tourist-destination', ['sub_district' => $subDistrict]));
         }
 
-        if ($subDistrict->geojson_path != null) {
-            Storage::delete($subDistrict->geojson_path);
-        }
-        $subDistrict->delete();
+        $this->subDistrictService->delete($subDistrict);
 
         toastr()->success('Data berhasil dihapus', 'Sukses');
 
         return back();
     }
 
-    public function download(SubDistrict $subDistrict)
+    public function download(SubDistrict $subDistrict): StreamedResponse
     {
         return Storage::download($subDistrict->geojson_path);
     }
 
-    public function relatedTouristDestination(SubDistrict $subDistrict)
+    public function relatedTouristDestination(SubDistrict $subDistrict): View
     {
-        $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
-                                ->where('sub_district_id', $subDistrict->id)
-                                ->orderBy('name', 'asc');
-
         return view('sub-district.related-tourist-destination', [
-            'touristDestinations' => $touristDestinations->paginate(10),
-            'touristDestinationMapping' => $touristDestinations->get(),
+            'touristDestinations' => $this->touristDestinationService->getBySubDistrictWithPaginate($subDistrict->id, 'name'),
+            'touristDestinationMapping' => $this->touristDestinationService->getBySubDistrict($subDistrict->id, 'name'),
             'subDistrict' => $subDistrict,
         ]);
     }
 
-    public function relatedTouristDestinationSearch(SubDistrict $subDistrict, Request $request)
+    public function relatedTouristDestinationSearch(SubDistrict $subDistrict, SearchByColumnRequest $request): View
     {
-        $validated = $request->validate([
-            'column_name' => 'required',
-            'search_value' => 'required',
-        ]);
-
-        $touristDestinations = TouristDestination::select('slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
-            ->where('sub_district_id', $subDistrict->id)
-            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
-            ->orderBy('name', 'asc');
+        $validated = $request->validated();
 
         return view('sub-district.related-tourist-destination', [
-            'touristDestinations' => $touristDestinations->paginate(10)->withQueryString(),
-            'touristDestinationMapping' => $touristDestinations->get(),
+            'touristDestinations' => $this->touristDestinationService->searchBySubDistrictWithPaginate($subDistrict->id, $validated['column_name'], $validated['search_value'], 'name'),
+            'touristDestinationMapping' => $this->touristDestinationService->searchBySubDistrict($subDistrict->id, $validated['column_name'], $validated['search_value'], 'name'),
             'subDistrict' => $subDistrict,
         ]);
     }

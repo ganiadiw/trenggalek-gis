@@ -2,64 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchByColumnRequest;
 use App\Http\Requests\StoreTouristDestinationRequest;
 use App\Http\Requests\UpdateTouristDestinationRequest;
-use App\Models\Category;
-use App\Models\SubDistrict;
 use App\Models\TemporaryFile;
 use App\Models\TouristAttraction;
 use App\Models\TouristDestination;
+use App\Services\CategoryService;
+use App\Services\SubDistrictService;
+use App\Services\TouristDestinationService;
 use DOMDocument;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class TouristDestinationController extends Controller
 {
-    public function index()
-    {
-        $touristDestinations = TouristDestination::with('category:id,name,marker_text_color,custom_marker_name,custom_marker_path')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
-            ->orderBy('name', 'asc');
-        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')
-            ->orderBy('code', 'asc')->get();
+    public function __construct(
+        protected TouristDestinationService $touristDestinationService,
+        protected SubDistrictService $subDistrictService,
+        protected CategoryService $categoryService
+        ){
+    }
 
+    public function index(): View
+    {
         return view('tourist-destination.index', [
-            'touristDestinationsDataTable' => $touristDestinations->paginate(10),
-            'touristDestinations' => $touristDestinations->get(),
-            'subDistricts' => $subDistricts,
+            'touristDestinationsDataTable' => $this->touristDestinationService->getWithCategoryWithPaginate(),
+            'touristDestinations' => $this->touristDestinationService->getAll(),
+            'subDistricts' => $this->subDistrictService->getAllWithCountTouristDestination(),
         ]);
     }
 
-    public function search(Request $request)
+    public function search(SearchByColumnRequest $request): View
     {
-        $validated = $request->validate([
-            'column_name' => 'required',
-            'search_value' => 'required',
-        ]);
-
-        $touristDestinations = TouristDestination::with('category:id,name,color,svg_name,hex_code')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')
-            ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
-            ->orderBy('name', 'asc');
-
-        $subDistricts = SubDistrict::select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')
-            ->orderBy('code', 'asc')->get();
+        $validated = $request->validated();
 
         return view('tourist-destination.index', [
-            'touristDestinationsDataTable' => $touristDestinations->paginate(10)->withQueryString(),
-            'touristDestinations' => $touristDestinations->get(),
-            'subDistricts' => $subDistricts,
+            'touristDestinationsDataTable' => $this->touristDestinationService->searchWithPaginate($validated['column_name'], $validated['search_value']),
+            'touristDestinations' => $this->touristDestinationService->search($validated['column_name'], $validated['search_value']),
+            'subDistricts' =>  $this->subDistrictService->getAllWithCountTouristDestination(),
         ]);
     }
 
-    public function create()
+    public function create(): View
     {
-        $subDistricts = SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy('name', 'ASC')->get();
-        $categories = Category::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $subDistricts = $this->subDistrictService->getAll();
+        $categories = $this->categoryService->getAll();
 
         return view('tourist-destination.create', compact('subDistricts', 'categories'));
     }
 
-    public function store(StoreTouristDestinationRequest $request)
+    public function store(StoreTouristDestinationRequest $request): RedirectResponse
     {
         $validated = $request->safe()->except(['media_files']);
 
@@ -120,25 +115,25 @@ class TouristDestinationController extends Controller
         return redirect(route('dashboard.tourist-destinations.index'));
     }
 
-    public function show(TouristDestination $touristDestination)
+    public function show(TouristDestination $touristDestination): RedirectResponse
     {
         return redirect(route('guest.tourist-destinations.show', ['tourist_destination' => $touristDestination]));
     }
 
-    public function edit(TouristDestination $touristDestination)
+    public function edit(TouristDestination $touristDestination): View
     {
         $touristDestination->load([
             'subDistrict:id,name',
             'category:id,name',
             'touristAttractions:id,tourist_destination_id,name,image_name,image_path,caption',
         ]);
-        $subDistricts = SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy('name', 'ASC')->get();
-        $categories = Category::select('id', 'name')->orderBy('name', 'ASC')->get();
+        $subDistricts = $this->subDistrictService->getAll();
+        $categories = $this->categoryService->getAll();
 
         return view('tourist-destination.edit', compact('touristDestination', 'subDistricts', 'categories'));
     }
 
-    public function update(UpdateTouristDestinationRequest $request, TouristDestination $touristDestination)
+    public function update(UpdateTouristDestinationRequest $request, TouristDestination $touristDestination): RedirectResponse
     {
         $validated = $request->safe()->except(['media_files']);
 
@@ -242,10 +237,9 @@ class TouristDestinationController extends Controller
         });
     }
 
-    public function destroy(TouristDestination $touristDestination)
+    public function destroy(TouristDestination $touristDestination): RedirectResponse
     {
-        Storage::delete($touristDestination->cover_image_path);
-        $touristDestination->delete();
+        $this->touristDestinationService->delete($touristDestination);
 
         toastr()->success('Data berhasil dihapus', 'Sukses');
 

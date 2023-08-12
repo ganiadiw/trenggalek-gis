@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SearchCategoryRequest;
+use App\Http\Requests\SearchByColumnRequest;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
@@ -23,7 +23,7 @@ class CategoryController extends Controller
         return view('category.index', compact('categories'));
     }
 
-    public function search(SearchCategoryRequest $request): View
+    public function search(SearchByColumnRequest $request): View
     {
         $validated = $request->validated();
 

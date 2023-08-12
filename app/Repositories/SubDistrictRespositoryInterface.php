@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\Category;
+use App\Models\SubDistrict;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-interface CategoryRepositoryInterface
+interface SubDistrictRespositoryInterface
 {
     public function getAll(string $orderBy, string $orderType): Collection;
 
@@ -16,9 +16,9 @@ interface CategoryRepositoryInterface
 
     public function search(string $columnName, string $searchValue, string $orderBy, string $orderType, int $perPage): LengthAwarePaginator;
 
-    public function create(array $data): Category;
+    public function create(array $data): SubDistrict;
 
-    public function update(Category $category, array $data): bool;
+    public function update(SubDistrict $subDistrict, array $data): bool;
 
-    public function delete(Category $category): bool;
+    public function delete(SubDistrict $subDistrict): bool;
 }

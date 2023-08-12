@@ -5,12 +5,23 @@ namespace App\Services;
 use App\Models\Category;
 use App\Repositories\CategoryRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryService
 {
     public function __construct(protected CategoryRepository $categoryRespository)
     {
+    }
+
+    public function getAll(string $orderBy = 'name', string $orderType = 'ASC'): Collection
+    {
+        return $this->categoryRespository->getAll($orderBy, $orderType);
+    }
+
+    public function getAllWithCountTouristDestination(): Collection
+    {
+        return $this->categoryRespository->getAllWithCountTouristDestination();
     }
 
     public function getAllWithPaginate(string $orderBy, string $orderType, int $perPage): LengthAwarePaginator
