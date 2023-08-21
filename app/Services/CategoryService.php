@@ -24,12 +24,12 @@ class CategoryService
         return $this->categoryRespository->getAllWithCountTouristDestination();
     }
 
-    public function getAllWithPaginate(string $orderBy, string $orderType, int $perPage): LengthAwarePaginator
+    public function getAllWithPaginate(string $orderBy = 'name', string $orderType = 'ASC', int $perPage = 10): LengthAwarePaginator
     {
         return $this->categoryRespository->getAllWithPaginate($orderBy, $orderType, $perPage);
     }
 
-    public function search(string $columnName, string $searchValue, string $orderBy, string $orderType, int $perPage): LengthAwarePaginator
+    public function search(string $columnName, string $searchValue, string $orderBy = 'name', string $orderType = 'ASC', int $perPage = 10): LengthAwarePaginator
     {
         return $this->categoryRespository->search($columnName, $searchValue, $orderBy, $orderType, $perPage);
     }
