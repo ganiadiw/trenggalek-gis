@@ -66,6 +66,16 @@ class TouristDestinationRespository implements TouristDestinationRepositoryInter
                 ->orderBy($orderBy, $orderType)->get();
     }
 
+    public function create(array $data): TouristDestination
+    {
+        return TouristDestination::query()->create($data);
+    }
+
+    public function update(TouristDestination $touristDestination, array $data): bool
+    {
+        return $touristDestination->update($data);
+    }
+
     public function delete(TouristDestination $touristDestination): bool
     {
         return $touristDestination->delete();

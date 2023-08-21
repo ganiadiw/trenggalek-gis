@@ -62,6 +62,10 @@ class CategoryService
 
     public function delete(Category $category): bool
     {
+        if (Storage::exists($category->custom_marker_path)) {
+            Storage::delete($category->custom_marker_path);
+        }
+
         return $this->categoryRespository->delete($category);
     }
 }

@@ -12,6 +12,7 @@ class SubDistrictRespository implements SubDistrictRespositoryInterface
     {
         return SubDistrict::select('id', 'name', 'geojson_name', 'fill_color', 'latitude', 'longitude')->orderBy($orderBy, $orderType)->get();
     }
+
     public function getAllWithCountTouristDestination(): Collection
     {
         return SubDistrict::query()->select('name', 'code', 'latitude', 'longitude', 'geojson_name', 'fill_color')->withCount('touristDestinations')->get();

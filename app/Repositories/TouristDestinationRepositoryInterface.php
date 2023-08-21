@@ -24,5 +24,9 @@ interface TouristDestinationRepositoryInterface
 
     public function searchBySubDistrict(string $subDistrictId, string $columnName, string $searchValue, string $orderBy, string $orderType, int $perPage): Collection;
 
+    public function create(array $data): TouristDestination;
+
+    public function update(TouristDestination $touristDestination, array $data): bool;
+
     public function delete(TouristDestination $touristDestination): bool;
 }
