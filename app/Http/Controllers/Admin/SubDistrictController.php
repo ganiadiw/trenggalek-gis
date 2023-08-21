@@ -27,7 +27,7 @@ class SubDistrictController extends Controller
 
     public function index(): View
     {
-        $subDistricts = $this->subDistrictService->getAllWithPaginate('name');
+        $subDistricts = $this->subDistrictService->getAllWithPaginate();
 
         return view('sub-district.index', compact('subDistricts'));
     }

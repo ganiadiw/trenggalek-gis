@@ -18,7 +18,7 @@ class CategoryController extends Controller
 
     public function index(): View
     {
-        $categories = $this->categoryService->getAllWithPaginate('name', 'ASC', 10);
+        $categories = $this->categoryService->getAllWithPaginate();
 
         return view('category.index', compact('categories'));
     }
@@ -27,7 +27,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
 
-        $categories = $this->categoryService->search($validated['column_name'], $validated['search_value'], 'name', 'ASC', 10);
+        $categories = $this->categoryService->search($validated['column_name'], $validated['search_value']);
 
         return view('category.index', compact('categories'));
     }
