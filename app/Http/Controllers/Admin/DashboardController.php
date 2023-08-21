@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\SubDistrict;
-use App\Models\TouristDestination;
 use App\Models\User;
 use App\Services\CategoryService;
 use App\Services\SubDistrictService;
@@ -17,8 +14,7 @@ class DashboardController extends Controller
         protected SubDistrictService $subDistrictService,
         protected TouristDestinationService $touristDestinationService,
         protected CategoryService $categoryService
-    )
-    {
+    ) {
     }
 
     public function __invoke()

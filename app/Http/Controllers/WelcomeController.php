@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\GuestPageSetting;
-use App\Models\SubDistrict;
-use App\Models\TouristDestination;
 use App\Services\CategoryService;
 use App\Services\GuestPageSettingService;
 use App\Services\SubDistrictService;
@@ -19,9 +15,9 @@ class WelcomeController extends Controller
         protected CategoryService $categoryService,
         protected TouristDestinationService $touristDestinationService,
         protected GuestPageSettingService $guestPageSettingService
-    )
-    {
+    ) {
     }
+
     public function index(): View
     {
         $heroImages = $this->guestPageSettingService->getByKey('hero_image');
