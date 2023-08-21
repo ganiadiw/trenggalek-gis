@@ -2,74 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TemporaryFile;
-use App\Models\TouristAttraction;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\TemporaryImageRequest;
+use App\Http\Requests\UpdateTouristAttractionImageRequest;
+use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
 
 class ImageController extends Controller
 {
-    public function store(Request $request)
+    public function store(TemporaryImageRequest $request, ImageService $imageService): JsonResponse
     {
-        $request->validate([
-            'image' => ['image', 'mimes:png,jpg,jpeg'],
-        ]);
+        $result = $imageService->storeTemporaryImage($request->validated(['image']));
 
-        $image = $request->file('image');
-        $filename = $image->getClientOriginalName();
-        $folder = 'tmp/media/images';
-        $path = $image->storeAs($folder, $filename);
-
-        TemporaryFile::create([
-            'foldername' => $folder,
-            'filename' => $filename,
-        ]);
-
-        return response()->json([
-            'location' => Storage::url($path),
-            'filename' => $filename,
-        ]);
+        return response()->json($result);
     }
 
-    public function destroy($filename)
+    public function destroy($filename): JsonResponse
     {
-        $temporaryFile = TemporaryFile::where('filename', $filename)->first();
+        $imageService = new ImageService();
 
-        if ($temporaryFile) {
-            Storage::delete($temporaryFile->foldername . '/' . $temporaryFile->filename);
-            $temporaryFile->delete();
+        $result = $imageService->deleteTemporaryImage($filename);
 
-            return response()->json([
-                'message' => 'Delete temporary file was successfully',
-            ]);
-        }
+        return response()->json($result);
     }
 
-    public function updateTouristAttraction(Request $request)
+    public function updateTouristAttraction(UpdateTouristAttractionImageRequest $request): JsonResponse
     {
-        $request->validate([
-            'id' => ['required'],
-            'image' => ['image', 'mimes:png,jpg,jpeg'],
-        ]);
+        $validated = $request->validated();
+        $imageService = new ImageService();
 
-        if ($request->file('image')) {
-            $touristAttraction = TouristAttraction::where('id', $request->id)->first();
-            $image = $request->file('image');
-            $imageName = str()->random(5) . '-' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('tourist-attractions', $imageName);
+        $result = $imageService->updateTouristAttractionImage($validated['image'], $validated['id']);
 
-            Storage::delete($touristAttraction->image_path);
-            $touristAttraction->update([
-                'image_name' => $imageName,
-                'image_path' => $imagePath,
-            ]);
-
-            return response()->json([
-                'message' => 'Update image was successfully',
-                'image_name' => $imageName,
-                'image_path' => $imagePath,
-                'public_path' => asset('storage/tourist-attractions/' . $imageName),
-            ]);
-        }
+        return response()->json($result);
     }
 }

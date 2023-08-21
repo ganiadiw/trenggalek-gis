@@ -5,20 +5,26 @@ namespace App\Http\Controllers\Admin\PageSetting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GuestSettingRequest;
 use App\Models\GuestPageSetting;
+use App\Services\GuestPageSettingService;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class GuestPageSettingController extends Controller
 {
     const PAGE_SETTING_PATH = 'page-settings/';
 
-    public function index()
+    public function __construct(protected GuestPageSettingService $guestPageSettingService)
     {
-        $settings = GuestPageSetting::select('id', 'key', 'value', 'input_type')->orderBy('key', 'ASC')->get();
+    }
+
+    public function index(): View
+    {
+        $settings = $this->guestPageSettingService->getAll();
 
         return view('page-setting.guest.index', compact('settings'));
     }
 
-    public function edit(GuestPageSetting $guestPageSetting)
+    public function edit(GuestPageSetting $guestPageSetting): View
     {
         return view('page-setting.guest.edit', compact('guestPageSetting'));
     }

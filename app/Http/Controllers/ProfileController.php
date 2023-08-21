@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Services\UserService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function __construct(protected UserService $userService)
+    {
+    }
+
     /**
      * Display the user's profile form.
-     *
-     * @return \Illuminate\View\View
      */
-    public function edit(Request $request)
+    public function edit(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
@@ -24,30 +27,10 @@ class ProfileController extends Controller
 
     /**
      * Update the user's profile information.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProfileUpdateRequest $request)
+    public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $user = $request->user();
-
-        $validated = $request->except(['password', 'password_confirmation']);
-
-        if ($request->file('avatar')) {
-            $avatar = $validated['avatar'];
-            $validated['avatar_name'] = $avatar->hashName();
-            $validated['avatar_path'] = $avatar->storeAs('avatars', $validated['avatar_name']);
-
-            if ($user->avatar_path != null) {
-                Storage::delete($user->avatar_path);
-            }
-        }
-
-        if ($request->password) {
-            $validated['password'] = Hash::make($request->password);
-        }
-
-        $user->update($validated);
+        $this->userService->update($request->user(), $request->validated());
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 

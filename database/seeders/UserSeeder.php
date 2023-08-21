@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
                 'address' => 'Desa Gayam, Kecamatan Panggul, Kabupaten Trenggalek',
                 'phone_number' => '082245815497',
                 'is_admin' => 1,
-                'password' => Hash::make('@sandiwisatatrenggalek28'),
+                'password' => Hash::make('password'),
             ],
             [
                 'name' => 'Super Admin',
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
                 'address' => 'Kecamatan Trenggalek',
                 'phone_number' => '081234567890',
                 'is_admin' => 1,
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('password'),
             ],
             [
                 'name' => 'Webgis Admin',
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
                 'address' => 'Kecamatan Karangan',
                 'phone_number' => '081234567891',
                 'is_admin' => 0,
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('password'),
             ],
         ]);
     }

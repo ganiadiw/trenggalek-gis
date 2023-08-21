@@ -2,31 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\GuestPageSetting;
-use App\Models\SubDistrict;
-use App\Models\TouristDestination;
+use App\Services\CategoryService;
+use App\Services\GuestPageSettingService;
+use App\Services\SubDistrictService;
+use App\Services\TouristDestinationService;
+use Illuminate\Contracts\View\View;
 
 class WelcomeController extends Controller
 {
-    public function index()
+    public function __construct(
+        protected SubDistrictService $subDistrictService,
+        protected CategoryService $categoryService,
+        protected TouristDestinationService $touristDestinationService,
+        protected GuestPageSettingService $guestPageSettingService
+    ) {
+    }
+
+    public function index(): View
     {
-        $heroImages = GuestPageSetting::where('key', 'hero_image')->select('key', 'value')->first();
+        $heroImages = $this->guestPageSettingService->getByKey('hero_image');
 
         $heroImagesCount = count(array_filter($heroImages->value, function ($value) {
             return $value !== null;
         }));
 
         return view('welcome', [
-            'pageTitle' => GuestPageSetting::where('key', 'page_title')->select('key', 'value')->first(),
-            'welcomeMessage' => GuestPageSetting::where('key', 'welcome_message')->select('key', 'value')->first(),
-            'shortDescription' => GuestPageSetting::where('key', 'short_description')->select('key', 'value')->first(),
+            'pageTitle' => $this->guestPageSettingService->getByKey('page_title'),
+            'welcomeMessage' => $this->guestPageSettingService->getByKey('welcome_message'),
+            'shortDescription' => $this->guestPageSettingService->getByKey('short_description'),
             'heroImages' => $heroImages,
             'heroImagesCount' => $heroImagesCount,
-            'aboutPage' => GuestPageSetting::where('key', 'about_page')->select('key', 'value')->first(),
-            'subDistricts' => SubDistrict::select('name', 'geojson_path', 'geojson_name', 'fill_color', 'latitude', 'longitude')->get(),
-            'categories' => Category::select('name', 'marker_text_color', 'custom_marker_name', 'custom_marker_path')->withCount('touristDestinations')->get(),
-            'touristDestinations' => TouristDestination::with('category:id,name,marker_text_color,custom_marker_name,custom_marker_path')->select('id', 'category_id', 'slug', 'name', 'address', 'manager', 'distance_from_city_center', 'latitude', 'longitude')->get(),
+            'aboutPage' => $this->guestPageSettingService->getByKey('about_page'),
+            'subDistricts' => $this->subDistrictService->getAll(),
+            'categories' => $this->categoryService->getAllWithCountTouristDestination(),
+            'touristDestinations' => $this->touristDestinationService->getAll(),
         ]);
     }
 }
