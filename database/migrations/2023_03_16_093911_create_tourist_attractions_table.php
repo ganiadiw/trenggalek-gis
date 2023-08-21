@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tourist_attractions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tourist_destination_id')->constrained();
+            $table->foreignId('tourist_destination_id')->constrained()->onDelete('CASCADE');
             $table->string('name', 255);
             $table->string('image_name', 255);
             $table->string('image_path', 255);

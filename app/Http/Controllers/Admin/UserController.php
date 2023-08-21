@@ -3,55 +3,51 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchByColumnRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use App\Services\UserService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index()
+    public function __construct(protected UserService $userService)
     {
-        $users = User::select('name', 'avatar_name', 'username', 'email', 'is_admin')
-            ->orderBy('is_admin', 'desc')->orderBy('name', 'asc')->paginate(10);
+    }
+
+    public function index(): View
+    {
+        $users = $this->userService->getAllWithPaginate();
 
         return view('webgis-admin.index', compact('users'));
     }
 
-    public function search(Request $request)
+    public function search(SearchByColumnRequest $request): View
     {
-        $validated = $request->validate([
-            'column_name' => 'required',
-            'search_value' => 'required',
-        ]);
+        $validated = $request->validated();
 
-        $users = User::select('name', 'avatar_name', 'username', 'email', 'is_admin')
-                    ->where($validated['column_name'], 'like', '%' . $validated['search_value'] . '%')
-                    ->orderBy('is_admin', 'desc')->orderBy($validated['column_name'], 'asc')
-                    ->paginate(10)->withQueryString();
+        $users = $this->userService->search($validated['column_name'], $validated['search_value']);
 
         return view('webgis-admin.index', compact('users'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('webgis-admin.create');
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-        $validated['password'] = Hash::make($validated['password']);
-        User::create($validated);
+        $this->userService->create($request->validated());
 
         toastr()->success('Data berhasil ditambahkan', 'Sukses');
 
         return redirect(route('dashboard.users.index'));
     }
 
-    public function show(User $user)
+    public function show(User $user): View
     {
         return view('webgis-admin.show', compact('user'));
     }
@@ -65,39 +61,22 @@ class UserController extends Controller
         return view('webgis-admin.edit', compact('user'));
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
         $this->authorize('update', $user);
-        $validated = $request->except(['password', 'password_confirmation']);
 
-        if ($request->file('avatar')) {
-            $avatar = $validated['avatar'];
-            $validated['avatar_name'] = $avatar->hashName();
-            $validated['avatar_path'] = $avatar->storeAs('avatars', $validated['avatar_name']);
-
-            if ($user->avatar_path != null) {
-                Storage::delete($user->avatar_path);
-            }
-        }
-
-        if ($request->password) {
-            $validated['password'] = Hash::make($request->password);
-        }
-
-        $user->update($validated);
+        $this->userService->update($user, $request->validated());
 
         toastr()->success('Data berhasil diperbarui', 'Sukses');
 
         return redirect()->route('dashboard.users.edit', ['user' => $user]);
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         abort_if($user->is_admin, 403);
-        if ($user->avatar_path != null) {
-            Storage::delete($user->avatar_path);
-        }
-        $user->delete();
+
+        $this->userService->delete($user);
 
         toastr()->success('Data berhasil dihapus', 'Sukses');
 

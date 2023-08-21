@@ -4,6 +4,7 @@ namespace Tests\Feature\TouristDestination;
 
 use App\Models\Category;
 use App\Models\SubDistrict;
+use App\Models\TouristAttraction;
 use App\Models\TouristDestination;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -49,6 +50,40 @@ class DeleteTouristDestinationTest extends TestCase
             'name' => 'Pantai Konang',
             'address' => 'Desa Nglebeng, Kecamatan Panggul',
             'slug' => $this->touristDestination->slug,
+        ]);
+    }
+
+    public function test_tourist_attractions_can_be_deleted_when_tourist_destination_is_deleted()
+    {
+        $image = UploadedFile::fake()->image('atraksi-1.jpg')->hashName();
+
+        $touristAttraction = TouristAttraction::query()->create([
+            'tourist_destination_id' => $this->touristDestination->id,
+            'name' => 'Gardu Pandang',
+            'image_name' => $image,
+            'image_path' => 'tourist-attractions/' . $image,
+            'caption' => 'Gardu pandang yang indah',
+        ]);
+
+        $response = $this->actingAs($this->user)->delete(self::MAIN_URL . $this->touristDestination->slug);
+
+        $response->assertRedirect(url()->previous());
+        $response->assertSessionHasNoErrors();
+
+        $this->assertFalse(Storage::exists(self::COVER_IMAGE_PATH . $this->touristDestination->cover_image_name));
+        $this->assertFalse(Storage::exists('tourist-attractions/' . $image));
+        $this->assertDatabaseMissing('tourist_destinations', [
+            'id' => $this->touristDestination->id,
+            'name' => 'Pantai Konang',
+            'address' => 'Desa Nglebeng, Kecamatan Panggul',
+            'slug' => $this->touristDestination->slug,
+        ]);
+        $this->assertDatabaseMissing('tourist_attractions', [
+            'id' => $touristAttraction->id,
+            'name' => 'Gardu Pandang',
+            'image_name' => $image,
+            'image_path' => 'tourist-attractions/' . $image,
+            'caption' => 'Gardu pandang yang indah',
         ]);
     }
 
