@@ -26,7 +26,7 @@ class SubDistrictService
         return $this->subDistrictRespository->getAllWithCountTouristDestination();
     }
 
-    public function getAllWithPaginate(string $orderBy, string $orderType = 'ASC', int $perPage = 10): LengthAwarePaginator
+    public function getAllWithPaginate(string $orderBy = 'code', string $orderType = 'ASC', int $perPage = 10): LengthAwarePaginator
     {
         return $this->subDistrictRespository->getAllWithPaginate($orderBy, $orderType, $perPage);
     }
@@ -61,7 +61,9 @@ class SubDistrictService
             $this->deleteGoejsonFileIfExist($subDistrict->geojson_path);
         }
 
-        $data = array_merge($data, $result);
+        if (isset($result)) {
+            $data = array_merge($data, $result);
+        }
 
         return $this->subDistrictRespository->update($subDistrict, $data);
     }
@@ -96,13 +98,4 @@ class SubDistrictService
 
         return $this->subDistrictRespository->delete($subDistrict);
     }
-
-    // public function getRelatedTouristDestination(SubDistrict $subDistrict): Collection
-    // {
-    //     // return [
-    //     //     'touristDestinations' => $this->subDistrictRespository->getRelatedTouristDestination($subDistrict)->paginate(10),
-    //     //     'touristDestinationMapping' => $this->subDistrictRespository->getRelatedTouristDestination($subDistrict)->get(),
-    //     // ]
-    //     return $this->subDistrictRespository->getRelatedTouristDestination($subDistrict);
-    // }
 }
